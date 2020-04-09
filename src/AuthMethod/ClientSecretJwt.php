@@ -6,6 +6,11 @@ namespace Facile\OpenIDClient\AuthMethod;
 
 use function array_merge;
 use function class_exists;
+use function Facile\OpenIDClient\base64url_encode;
+use Facile\OpenIDClient\Client\ClientInterface as OpenIDClient;
+use Facile\OpenIDClient\Exception\InvalidArgumentException;
+use Facile\OpenIDClient\Exception\LogicException;
+use function Facile\OpenIDClient\jose_secret_key;
 use Jose\Component\Core\AlgorithmManager;
 use Jose\Component\Signature\Algorithm\HS256;
 use Jose\Component\Signature\JWSBuilder;
@@ -14,11 +19,6 @@ use Jose\Component\Signature\Serializer\JWSSerializer;
 use function json_encode;
 use function random_bytes;
 use function time;
-use function Facile\OpenIDClient\base64url_encode;
-use Facile\OpenIDClient\Client\ClientInterface as OpenIDClient;
-use Facile\OpenIDClient\Exception\InvalidArgumentException;
-use Facile\OpenIDClient\Exception\LogicException;
-use function Facile\OpenIDClient\jose_secret_key;
 
 final class ClientSecretJwt extends AbstractJwtAuth
 {

@@ -5,6 +5,10 @@ declare(strict_types=1);
 namespace Facile\OpenIDClient\AuthMethod;
 
 use function array_merge;
+use Facile\OpenIDClient\AlgorithmManagerBuilder;
+use function Facile\OpenIDClient\base64url_encode;
+use Facile\OpenIDClient\Client\ClientInterface as OpenIDClient;
+use Facile\OpenIDClient\Exception\RuntimeException;
 use Jose\Component\Core\JWK;
 use Jose\Component\Core\JWKSet;
 use Jose\Component\Signature\JWSBuilder;
@@ -13,10 +17,6 @@ use Jose\Component\Signature\Serializer\JWSSerializer;
 use function json_encode;
 use function random_bytes;
 use function time;
-use Facile\OpenIDClient\AlgorithmManagerBuilder;
-use function Facile\OpenIDClient\base64url_encode;
-use Facile\OpenIDClient\Client\ClientInterface as OpenIDClient;
-use Facile\OpenIDClient\Exception\RuntimeException;
 
 final class PrivateKeyJwt extends AbstractJwtAuth
 {

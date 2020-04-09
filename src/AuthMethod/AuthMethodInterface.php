@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Facile\OpenIDClient\AuthMethod;
 
-use Psr\Http\Message\RequestInterface;
 use Facile\OpenIDClient\Client\ClientInterface as OpenIDClient;
+use Psr\Http\Message\RequestInterface;
 
 interface AuthMethodInterface
 {

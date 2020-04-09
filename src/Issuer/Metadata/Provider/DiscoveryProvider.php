@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace Facile\OpenIDClient\Issuer\Metadata\Provider;
 
 use function array_key_exists;
+use Facile\OpenIDClient\Exception\RuntimeException;
+use function Facile\OpenIDClient\parse_metadata_response;
 use function preg_match;
 use Psr\Http\Client\ClientExceptionInterface;
 use Psr\Http\Client\ClientInterface;
@@ -12,8 +14,6 @@ use Psr\Http\Message\RequestFactoryInterface;
 use Psr\Http\Message\UriFactoryInterface;
 use function rtrim;
 use function strpos;
-use Facile\OpenIDClient\Exception\RuntimeException;
-use function Facile\OpenIDClient\parse_metadata_response;
 
 final class DiscoveryProvider implements DiscoveryProviderInterface
 {

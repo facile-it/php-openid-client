@@ -4,6 +4,13 @@ declare(strict_types=1);
 
 namespace Facile\OpenIDClient\Service;
 
+use Facile\OpenIDClient\Client\ClientInterface as OpenIDClient;
+use Facile\OpenIDClient\Exception\InvalidArgumentException;
+use Facile\OpenIDClient\Exception\OAuth2Exception;
+use Facile\OpenIDClient\Exception\RuntimeException;
+use Facile\OpenIDClient\Token\TokenSetInterface;
+use Facile\OpenIDClient\Token\TokenVerifierBuilderInterface;
+use Facile\OpenIDClient\Token\UserInfoVerifierBuilder;
 use Http\Discovery\Psr17FactoryDiscovery;
 use Http\Discovery\Psr18ClientDiscovery;
 use function http_build_query;
@@ -13,13 +20,6 @@ use Psr\Http\Client\ClientExceptionInterface;
 use Psr\Http\Client\ClientInterface;
 use Psr\Http\Message\RequestFactoryInterface;
 use function sprintf;
-use Facile\OpenIDClient\Client\ClientInterface as OpenIDClient;
-use Facile\OpenIDClient\Exception\InvalidArgumentException;
-use Facile\OpenIDClient\Exception\OAuth2Exception;
-use Facile\OpenIDClient\Exception\RuntimeException;
-use Facile\OpenIDClient\Token\TokenSetInterface;
-use Facile\OpenIDClient\Token\TokenVerifierBuilderInterface;
-use Facile\OpenIDClient\Token\UserInfoVerifierBuilder;
 
 class UserinfoService
 {

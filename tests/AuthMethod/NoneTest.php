@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace Facile\OpenIDClientTest\AuthMethod;
 
+use Facile\OpenIDClient\AuthMethod\None;
+use Facile\OpenIDClient\Client\ClientInterface;
 use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\StreamInterface;
-use Facile\OpenIDClient\AuthMethod\None;
-use Facile\OpenIDClient\Client\ClientInterface;
 
 class NoneTest extends TestCase
 {

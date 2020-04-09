@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Facile\OpenIDClientTest\functions;
 
-use PHPUnit\Framework\TestCase;
 use function Facile\OpenIDClient\jose_secret_key;
+use PHPUnit\Framework\TestCase;
 
 class JoseSecretKeyTest extends TestCase
 {

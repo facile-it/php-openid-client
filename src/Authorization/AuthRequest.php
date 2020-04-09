@@ -10,8 +10,8 @@ use function array_flip;
 use function array_keys;
 use function array_merge;
 use function count;
-use function implode;
 use Facile\OpenIDClient\Exception\InvalidArgumentException;
+use function implode;
 
 final class AuthRequest implements AuthRequestInterface
 {

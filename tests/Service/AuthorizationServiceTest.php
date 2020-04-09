@@ -4,12 +4,6 @@ declare(strict_types=1);
 
 namespace Facile\OpenIDClientTest\Service;
 
-use PHPUnit\Framework\TestCase;
-use Psr\Http\Client\ClientInterface;
-use Psr\Http\Message\RequestFactoryInterface;
-use Psr\Http\Message\RequestInterface;
-use Psr\Http\Message\ResponseInterface;
-use Psr\Http\Message\StreamInterface;
 use Facile\OpenIDClient\AuthMethod\AuthMethodFactoryInterface;
 use Facile\OpenIDClient\AuthMethod\AuthMethodInterface;
 use Facile\OpenIDClient\Client\ClientInterface as OpenIDClient;
@@ -21,6 +15,12 @@ use Facile\OpenIDClient\Token\IdTokenVerifierBuilderInterface;
 use Facile\OpenIDClient\Token\TokenSetFactoryInterface;
 use Facile\OpenIDClient\Token\TokenSetInterface;
 use Facile\OpenIDClient\Token\TokenVerifierBuilderInterface;
+use PHPUnit\Framework\TestCase;
+use Psr\Http\Client\ClientInterface;
+use Psr\Http\Message\RequestFactoryInterface;
+use Psr\Http\Message\RequestInterface;
+use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\StreamInterface;
 
 class AuthorizationServiceTest extends TestCase
 {

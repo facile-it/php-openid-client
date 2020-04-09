@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Facile\OpenIDClientTest\Issuer\Metadata;
 
-use PHPUnit\Framework\TestCase;
 use Facile\OpenIDClient\Issuer\Metadata\IssuerMetadata;
+use PHPUnit\Framework\TestCase;
 
 class IssuerMetadataTest extends TestCase
 {

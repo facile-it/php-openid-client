@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Facile\OpenIDClientTest\Client\Metadata;
 
-use PHPUnit\Framework\TestCase;
 use Facile\OpenIDClient\Client\Metadata\ClientMetadata;
 use Facile\OpenIDClient\Exception\InvalidArgumentException;
+use PHPUnit\Framework\TestCase;
 
 class ClientMetadataTest extends TestCase
 {

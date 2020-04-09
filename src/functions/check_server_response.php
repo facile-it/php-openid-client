@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Facile\OpenIDClient;
 
-use Psr\Http\Message\ResponseInterface;
 use Facile\OpenIDClient\Exception\OAuth2Exception;
+use Psr\Http\Message\ResponseInterface;
 
 /**
  * @param ResponseInterface $response

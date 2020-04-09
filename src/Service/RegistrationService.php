@@ -9,17 +9,17 @@ use function array_flip;
 use function array_intersect_key;
 use function array_key_exists;
 use function array_merge;
+use function Facile\OpenIDClient\check_server_response;
+use Facile\OpenIDClient\Exception\InvalidArgumentException;
+use Facile\OpenIDClient\Exception\RuntimeException;
+use Facile\OpenIDClient\Issuer\IssuerInterface;
+use function Facile\OpenIDClient\parse_metadata_response;
 use Http\Discovery\Psr17FactoryDiscovery;
 use Http\Discovery\Psr18ClientDiscovery;
 use function json_encode;
 use Psr\Http\Client\ClientExceptionInterface;
 use Psr\Http\Client\ClientInterface;
 use Psr\Http\Message\RequestFactoryInterface;
-use function Facile\OpenIDClient\check_server_response;
-use Facile\OpenIDClient\Exception\InvalidArgumentException;
-use Facile\OpenIDClient\Exception\RuntimeException;
-use Facile\OpenIDClient\Issuer\IssuerInterface;
-use function Facile\OpenIDClient\parse_metadata_response;
 
 /**
  * Dynamic Client Registration Protocol

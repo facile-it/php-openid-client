@@ -4,6 +4,11 @@ declare(strict_types=1);
 
 namespace Facile\OpenIDClientTest\Claims;
 
+use function Facile\OpenIDClient\base64url_encode;
+use Facile\OpenIDClient\Claims\DistributedParser;
+use Facile\OpenIDClient\Client\ClientInterface;
+use Facile\OpenIDClient\Issuer\IssuerBuilderInterface;
+use Facile\OpenIDClient\Issuer\IssuerInterface;
 use function implode;
 use Jose\Component\Core\AlgorithmManager;
 use Jose\Component\Signature\JWSVerifier;
@@ -14,11 +19,6 @@ use Psr\Http\Message\RequestFactoryInterface;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\StreamInterface;
-use function Facile\OpenIDClient\base64url_encode;
-use Facile\OpenIDClient\Claims\DistributedParser;
-use Facile\OpenIDClient\Client\ClientInterface;
-use Facile\OpenIDClient\Issuer\IssuerBuilderInterface;
-use Facile\OpenIDClient\Issuer\IssuerInterface;
 
 class DistributedClaimsTest extends TestCase
 {

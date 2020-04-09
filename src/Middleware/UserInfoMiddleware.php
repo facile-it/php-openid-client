@@ -4,15 +4,15 @@ declare(strict_types=1);
 
 namespace Facile\OpenIDClient\Middleware;
 
-use Psr\Http\Message\ResponseInterface;
-use Psr\Http\Message\ServerRequestInterface;
-use Psr\Http\Server\MiddlewareInterface;
-use Psr\Http\Server\RequestHandlerInterface;
 use Facile\OpenIDClient\Client\ClientInterface;
 use Facile\OpenIDClient\Exception\LogicException;
 use Facile\OpenIDClient\Exception\RuntimeException;
 use Facile\OpenIDClient\Service\UserinfoService;
 use Facile\OpenIDClient\Token\TokenSetInterface;
+use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface;
+use Psr\Http\Server\MiddlewareInterface;
+use Psr\Http\Server\RequestHandlerInterface;
 
 class UserInfoMiddleware implements MiddlewareInterface
 {

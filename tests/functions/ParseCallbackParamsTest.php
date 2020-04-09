@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace Facile\OpenIDClientTest\functions;
 
+use Facile\OpenIDClient\Exception\RuntimeException;
+use function Facile\OpenIDClient\parse_callback_params;
 use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Message\StreamInterface;
 use Psr\Http\Message\UriInterface;
-use Facile\OpenIDClient\Exception\RuntimeException;
-use function Facile\OpenIDClient\parse_callback_params;
 
 class ParseCallbackParamsTest extends TestCase
 {

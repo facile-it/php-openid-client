@@ -9,6 +9,9 @@ use Dflydev\FigCookies\Cookies;
 use Dflydev\FigCookies\FigResponseCookies;
 use Dflydev\FigCookies\Modifier\SameSite;
 use Dflydev\FigCookies\SetCookie;
+use Facile\OpenIDClient\Exception\LogicException;
+use Facile\OpenIDClient\Session\AuthSession;
+use Facile\OpenIDClient\Session\AuthSessionInterface;
 use function is_array;
 use function json_decode;
 use function json_encode;
@@ -16,9 +19,6 @@ use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\MiddlewareInterface;
 use Psr\Http\Server\RequestHandlerInterface;
-use Facile\OpenIDClient\Exception\LogicException;
-use Facile\OpenIDClient\Session\AuthSession;
-use Facile\OpenIDClient\Session\AuthSessionInterface;
 
 class SessionCookieMiddleware implements MiddlewareInterface
 {

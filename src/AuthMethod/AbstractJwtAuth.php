@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace Facile\OpenIDClient\AuthMethod;
 
 use function array_merge;
+use Facile\OpenIDClient\Client\ClientInterface as OpenIDClient;
 use function http_build_query;
 use Psr\Http\Message\RequestInterface;
-use Facile\OpenIDClient\Client\ClientInterface as OpenIDClient;
 
 abstract class AbstractJwtAuth implements AuthMethodInterface
 {

@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Facile\OpenIDClientTest\Authorization;
 
-use PHPUnit\Framework\TestCase;
 use Facile\OpenIDClient\Authorization\AuthRequest;
+use PHPUnit\Framework\TestCase;
 
 class AuthRequestTest extends TestCase
 {

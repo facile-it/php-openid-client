@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Facile\OpenIDClientTest\Exception;
 
-use PHPUnit\Framework\TestCase;
 use Facile\OpenIDClient\Exception\ExceptionInterface;
 use Facile\OpenIDClient\Exception\RuntimeException;
+use PHPUnit\Framework\TestCase;
 
 class RuntimeExceptionTest extends TestCase
 {

@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace Facile\OpenIDClientTest\functions;
 
-use PHPUnit\Framework\TestCase;
-use Psr\Http\Message\ResponseInterface;
-use Psr\Http\Message\StreamInterface;
 use Facile\OpenIDClient\Exception\InvalidArgumentException;
 use Facile\OpenIDClient\Exception\OAuth2Exception;
 use Facile\OpenIDClient\Exception\RemoteException;
 use function Facile\OpenIDClient\parse_metadata_response;
+use PHPUnit\Framework\TestCase;
+use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\StreamInterface;
 
 class ParseMetadataResponseTest extends TestCase
 {

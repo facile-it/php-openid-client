@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace Facile\OpenIDClient;
 
+use Facile\OpenIDClient\Exception\RuntimeException;
 use function in_array;
 use function parse_str;
 use Psr\Http\Message\ServerRequestInterface;
 use function strtoupper;
-use Facile\OpenIDClient\Exception\RuntimeException;
 
 /**
  * @param ServerRequestInterface $serverRequest

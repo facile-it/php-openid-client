@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Facile\OpenIDClientTest\Issuer\Metadata\Provider;
 
+use Facile\OpenIDClient\Issuer\Metadata\Provider\DiscoveryProvider;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Prophecy\ObjectProphecy;
 use Psr\Http\Client\ClientInterface;
@@ -13,7 +14,6 @@ use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\StreamInterface;
 use Psr\Http\Message\UriFactoryInterface;
 use Psr\Http\Message\UriInterface;
-use Facile\OpenIDClient\Issuer\Metadata\Provider\DiscoveryProvider;
 
 class DiscoveryProviderTest extends TestCase
 {

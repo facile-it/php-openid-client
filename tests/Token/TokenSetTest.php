@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Facile\OpenIDClientTest\Token;
 
-use PHPUnit\Framework\TestCase;
 use Facile\OpenIDClient\Token\TokenSet;
+use PHPUnit\Framework\TestCase;
 
 class TokenSetTest extends TestCase
 {

@@ -4,15 +4,15 @@ declare(strict_types=1);
 
 namespace Facile\OpenIDClient\Service;
 
+use Facile\OpenIDClient\Client\ClientInterface as OpenIDClient;
+use Facile\OpenIDClient\Exception\RuntimeException;
+use function Facile\OpenIDClient\get_endpoint_uri;
+use function Facile\OpenIDClient\parse_metadata_response;
 use Http\Discovery\Psr17FactoryDiscovery;
 use Http\Discovery\Psr18ClientDiscovery;
 use Psr\Http\Client\ClientExceptionInterface;
 use Psr\Http\Client\ClientInterface;
 use Psr\Http\Message\RequestFactoryInterface;
-use Facile\OpenIDClient\Client\ClientInterface as OpenIDClient;
-use Facile\OpenIDClient\Exception\RuntimeException;
-use function Facile\OpenIDClient\get_endpoint_uri;
-use function Facile\OpenIDClient\parse_metadata_response;
 
 /**
  * RFC 7662 Token Introspection

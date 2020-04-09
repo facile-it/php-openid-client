@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Facile\OpenIDClientTest\AuthMethod;
 
-use PHPUnit\Framework\TestCase;
 use Facile\OpenIDClient\AuthMethod\AuthMethodFactory;
 use Facile\OpenIDClient\AuthMethod\AuthMethodInterface;
 use Facile\OpenIDClient\Exception\InvalidArgumentException;
+use PHPUnit\Framework\TestCase;
 
 class AuthMethodFactoryTest extends TestCase
 {

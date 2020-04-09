@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Facile\OpenIDClientTest\Session;
 
-use PHPUnit\Framework\TestCase;
 use Facile\OpenIDClient\Session\AuthSession;
+use PHPUnit\Framework\TestCase;
 
 class AuthSessionTest extends TestCase
 {

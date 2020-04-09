@@ -4,15 +4,15 @@ declare(strict_types=1);
 
 namespace Facile\OpenIDClient\Service;
 
+use function Facile\OpenIDClient\check_server_response;
+use Facile\OpenIDClient\Client\ClientInterface as OpenIDClient;
+use Facile\OpenIDClient\Exception\RuntimeException;
+use function Facile\OpenIDClient\get_endpoint_uri;
 use Http\Discovery\Psr17FactoryDiscovery;
 use Http\Discovery\Psr18ClientDiscovery;
 use Psr\Http\Client\ClientExceptionInterface;
 use Psr\Http\Client\ClientInterface;
 use Psr\Http\Message\RequestFactoryInterface;
-use function Facile\OpenIDClient\check_server_response;
-use Facile\OpenIDClient\Client\ClientInterface as OpenIDClient;
-use Facile\OpenIDClient\Exception\RuntimeException;
-use function Facile\OpenIDClient\get_endpoint_uri;
 
 /**
  * RFC 7009 Token Revocation

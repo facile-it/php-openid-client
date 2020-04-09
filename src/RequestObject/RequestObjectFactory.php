@@ -6,6 +6,11 @@ namespace Facile\OpenIDClient\RequestObject;
 
 use function array_filter;
 use function array_merge;
+use Facile\OpenIDClient\AlgorithmManagerBuilder;
+use function Facile\OpenIDClient\base64url_encode;
+use Facile\OpenIDClient\Client\ClientInterface;
+use Facile\OpenIDClient\Exception\RuntimeException;
+use function Facile\OpenIDClient\jose_secret_key;
 use function implode;
 use Jose\Component\Core\AlgorithmManager;
 use Jose\Component\Core\JWKSet;
@@ -22,11 +27,6 @@ use function preg_match;
 use function random_bytes;
 use function strpos;
 use function time;
-use Facile\OpenIDClient\AlgorithmManagerBuilder;
-use function Facile\OpenIDClient\base64url_encode;
-use Facile\OpenIDClient\Client\ClientInterface;
-use Facile\OpenIDClient\Exception\RuntimeException;
-use function Facile\OpenIDClient\jose_secret_key;
 
 class RequestObjectFactory
 {

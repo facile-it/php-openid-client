@@ -5,6 +5,13 @@ declare(strict_types=1);
 namespace Facile\OpenIDClientTest\RequestObject;
 
 use Facile\JoseVerifier\JWK\JwksProviderInterface;
+use function Facile\OpenIDClient\base64url_decode;
+use function Facile\OpenIDClient\base64url_encode;
+use Facile\OpenIDClient\Client\ClientInterface;
+use Facile\OpenIDClient\Client\Metadata\ClientMetadataInterface;
+use Facile\OpenIDClient\Issuer\IssuerInterface;
+use Facile\OpenIDClient\Issuer\Metadata\IssuerMetadataInterface;
+use Facile\OpenIDClient\RequestObject\RequestObjectFactory;
 use Jose\Component\Core\AlgorithmManager;
 use Jose\Component\Core\JWK;
 use Jose\Component\Encryption\Algorithm\KeyEncryption\RSAOAEP;
@@ -18,13 +25,6 @@ use Jose\Component\Signature\Serializer\JWSSerializer;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
 use Prophecy\Prophecy\ObjectProphecy;
-use function Facile\OpenIDClient\base64url_decode;
-use function Facile\OpenIDClient\base64url_encode;
-use Facile\OpenIDClient\Client\ClientInterface;
-use Facile\OpenIDClient\Client\Metadata\ClientMetadataInterface;
-use Facile\OpenIDClient\Issuer\IssuerInterface;
-use Facile\OpenIDClient\Issuer\Metadata\IssuerMetadataInterface;
-use Facile\OpenIDClient\RequestObject\RequestObjectFactory;
 
 class RequestObjectFactoryTest extends TestCase
 {

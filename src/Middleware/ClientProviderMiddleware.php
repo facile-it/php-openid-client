@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace Facile\OpenIDClient\Middleware;
 
+use Facile\OpenIDClient\Client\ClientInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\MiddlewareInterface;
 use Psr\Http\Server\RequestHandlerInterface;
-use Facile\OpenIDClient\Client\ClientInterface;
 
 class ClientProviderMiddleware implements MiddlewareInterface
 {

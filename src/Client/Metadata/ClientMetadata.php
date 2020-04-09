@@ -11,8 +11,8 @@ use function array_key_exists;
 use function array_keys;
 use function array_merge;
 use function count;
-use function implode;
 use Facile\OpenIDClient\Exception\InvalidArgumentException;
+use function implode;
 
 final class ClientMetadata implements ClientMetadataInterface
 {

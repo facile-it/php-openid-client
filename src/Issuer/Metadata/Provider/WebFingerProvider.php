@@ -7,20 +7,20 @@ namespace Facile\OpenIDClient\Issuer\Metadata\Provider;
 use function array_key_exists;
 use function array_pop;
 use function explode;
+use Facile\OpenIDClient\Exception\InvalidArgumentException;
+use Facile\OpenIDClient\Exception\RuntimeException;
+use function Facile\OpenIDClient\parse_metadata_response;
 use function http_build_query;
 use function is_array;
 use function is_string;
 use function parse_url;
+use function preg_match;
+use function preg_replace;
 use Psr\Http\Client\ClientExceptionInterface;
 use Psr\Http\Client\ClientInterface;
 use Psr\Http\Message\RequestFactoryInterface;
 use Psr\Http\Message\UriFactoryInterface;
-use function preg_match;
-use function preg_replace;
 use function strpos;
-use Facile\OpenIDClient\Exception\InvalidArgumentException;
-use Facile\OpenIDClient\Exception\RuntimeException;
-use function Facile\OpenIDClient\parse_metadata_response;
 use function substr;
 
 final class WebFingerProvider implements RemoteProviderInterface, WebFingerProviderInterface

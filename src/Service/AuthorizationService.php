@@ -7,17 +7,6 @@ namespace Facile\OpenIDClient\Service;
 use function array_filter;
 use function array_key_exists;
 use function array_merge;
-use Http\Discovery\Psr17FactoryDiscovery;
-use Http\Discovery\Psr18ClientDiscovery;
-use function http_build_query;
-use function is_array;
-use function is_string;
-use function json_encode;
-use JsonSerializable;
-use Psr\Http\Client\ClientExceptionInterface;
-use Psr\Http\Client\ClientInterface;
-use Psr\Http\Message\RequestFactoryInterface;
-use Psr\Http\Message\ServerRequestInterface;
 use Facile\OpenIDClient\Client\ClientInterface as OpenIDClient;
 use Facile\OpenIDClient\Exception\InvalidArgumentException;
 use Facile\OpenIDClient\Exception\OAuth2Exception;
@@ -33,6 +22,17 @@ use Facile\OpenIDClient\Token\TokenSetFactory;
 use Facile\OpenIDClient\Token\TokenSetFactoryInterface;
 use Facile\OpenIDClient\Token\TokenSetInterface;
 use Facile\OpenIDClient\Token\TokenVerifierBuilderInterface;
+use Http\Discovery\Psr17FactoryDiscovery;
+use Http\Discovery\Psr18ClientDiscovery;
+use function http_build_query;
+use function is_array;
+use function is_string;
+use function json_encode;
+use JsonSerializable;
+use Psr\Http\Client\ClientExceptionInterface;
+use Psr\Http\Client\ClientInterface;
+use Psr\Http\Message\RequestFactoryInterface;
+use Psr\Http\Message\ServerRequestInterface;
 
 /**
  * OAuth 2.0

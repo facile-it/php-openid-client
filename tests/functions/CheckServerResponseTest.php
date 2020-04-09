@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace Facile\OpenIDClientTest\functions;
 
-use PHPUnit\Framework\TestCase;
-use Psr\Http\Message\ResponseInterface;
-use Psr\Http\Message\StreamInterface;
 use function Facile\OpenIDClient\check_server_response;
 use Facile\OpenIDClient\Exception\OAuth2Exception;
 use Facile\OpenIDClient\Exception\RemoteException;
+use PHPUnit\Framework\TestCase;
+use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\StreamInterface;
 
 class CheckServerResponseTest extends TestCase
 {

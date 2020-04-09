@@ -5,10 +5,10 @@ declare(strict_types=1);
 namespace Facile\OpenIDClient\Client;
 
 use Facile\JoseVerifier\JWK\JwksProviderInterface;
-use Psr\Http\Client\ClientInterface as HttpClient;
 use Facile\OpenIDClient\AuthMethod\AuthMethodFactoryInterface;
 use Facile\OpenIDClient\Client\Metadata\ClientMetadataInterface;
 use Facile\OpenIDClient\Issuer\IssuerInterface;
+use Psr\Http\Client\ClientInterface as HttpClient;
 
 interface ClientInterface
 {

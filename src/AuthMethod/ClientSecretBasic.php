@@ -5,10 +5,10 @@ declare(strict_types=1);
 namespace Facile\OpenIDClient\AuthMethod;
 
 use function base64_encode;
-use function http_build_query;
-use Psr\Http\Message\RequestInterface;
 use Facile\OpenIDClient\Client\ClientInterface as OpenIDClient;
 use Facile\OpenIDClient\Exception\InvalidArgumentException;
+use function http_build_query;
+use Psr\Http\Message\RequestInterface;
 
 final class ClientSecretBasic implements AuthMethodInterface
 {

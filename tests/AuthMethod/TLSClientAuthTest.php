@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace Facile\OpenIDClientTest\AuthMethod;
 
-use PHPUnit\Framework\TestCase;
-use Psr\Http\Message\RequestInterface;
-use Psr\Http\Message\StreamInterface;
 use Facile\OpenIDClient\AuthMethod\TLSClientAuth;
 use Facile\OpenIDClient\Client\ClientInterface;
 use Facile\OpenIDClient\Client\Metadata\ClientMetadataInterface;
+use PHPUnit\Framework\TestCase;
+use Psr\Http\Message\RequestInterface;
+use Psr\Http\Message\StreamInterface;
 
 class TLSClientAuthTest extends TestCase
 {

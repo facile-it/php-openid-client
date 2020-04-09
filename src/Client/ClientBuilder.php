@@ -6,8 +6,6 @@ namespace Facile\OpenIDClient\Client;
 
 use Facile\JoseVerifier\JWK\JwksProviderInterface;
 use Facile\JoseVerifier\JWK\MemoryJwksProvider;
-use Http\Discovery\Psr18ClientDiscovery;
-use Psr\Http\Client\ClientInterface as HttpClient;
 use Facile\OpenIDClient\AuthMethod\AuthMethodFactory;
 use Facile\OpenIDClient\AuthMethod\AuthMethodFactoryInterface;
 use Facile\OpenIDClient\AuthMethod\ClientSecretBasic;
@@ -20,6 +18,8 @@ use Facile\OpenIDClient\AuthMethod\TLSClientAuth;
 use Facile\OpenIDClient\Client\Metadata\ClientMetadataInterface;
 use Facile\OpenIDClient\Exception\InvalidArgumentException;
 use Facile\OpenIDClient\Issuer\IssuerInterface;
+use Http\Discovery\Psr18ClientDiscovery;
+use Psr\Http\Client\ClientInterface as HttpClient;
 
 class ClientBuilder
 {

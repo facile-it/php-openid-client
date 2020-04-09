@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Facile\OpenIDClientTest\Exception;
 
-use PHPUnit\Framework\TestCase;
 use Facile\OpenIDClient\Exception\ExceptionInterface;
 use Facile\OpenIDClient\Exception\LogicException;
+use PHPUnit\Framework\TestCase;
 
 class LogicExceptionTest extends TestCase
 {

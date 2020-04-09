@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Facile\OpenIDClient;
 
+use Facile\OpenIDClient\Exception\InvalidArgumentException;
 use function is_array;
 use function json_decode;
 use Psr\Http\Message\ResponseInterface;
-use Facile\OpenIDClient\Exception\InvalidArgumentException;
 
 /**
  * @param ResponseInterface $response

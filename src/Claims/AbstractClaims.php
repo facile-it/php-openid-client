@@ -9,13 +9,6 @@ use function array_flip;
 use function array_key_exists;
 use function count;
 use function explode;
-use Jose\Component\Core\AlgorithmManager;
-use Jose\Component\Core\JWKSet;
-use Jose\Component\Signature\JWSVerifier;
-use Jose\Component\Signature\Serializer\CompactSerializer;
-use Jose\Component\Signature\Serializer\JWSSerializer;
-use function json_decode;
-use function sprintf;
 use Facile\OpenIDClient\AlgorithmManagerBuilder;
 use function Facile\OpenIDClient\base64url_decode;
 use Facile\OpenIDClient\Client\ClientInterface as OpenIDClient;
@@ -23,6 +16,13 @@ use Facile\OpenIDClient\Exception\InvalidArgumentException;
 use Facile\OpenIDClient\Exception\RuntimeException;
 use Facile\OpenIDClient\Issuer\IssuerBuilder;
 use Facile\OpenIDClient\Issuer\IssuerBuilderInterface;
+use Jose\Component\Core\AlgorithmManager;
+use Jose\Component\Core\JWKSet;
+use Jose\Component\Signature\JWSVerifier;
+use Jose\Component\Signature\Serializer\CompactSerializer;
+use Jose\Component\Signature\Serializer\JWSSerializer;
+use function json_decode;
+use function sprintf;
 
 abstract class AbstractClaims
 {

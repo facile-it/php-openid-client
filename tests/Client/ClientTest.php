@@ -5,11 +5,11 @@ declare(strict_types=1);
 namespace Facile\OpenIDClientTest\Client;
 
 use Facile\JoseVerifier\JWK\JwksProviderInterface;
-use PHPUnit\Framework\TestCase;
 use Facile\OpenIDClient\AuthMethod\AuthMethodFactoryInterface;
 use Facile\OpenIDClient\Client\Client;
 use Facile\OpenIDClient\Client\Metadata\ClientMetadataInterface;
 use Facile\OpenIDClient\Issuer\IssuerInterface;
+use PHPUnit\Framework\TestCase;
 
 class ClientTest extends TestCase
 {

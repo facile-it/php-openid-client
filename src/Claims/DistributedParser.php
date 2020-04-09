@@ -5,6 +5,9 @@ declare(strict_types=1);
 namespace Facile\OpenIDClient\Claims;
 
 use function array_filter;
+use function Facile\OpenIDClient\check_server_response;
+use Facile\OpenIDClient\Client\ClientInterface as OpenIDClient;
+use Facile\OpenIDClient\Issuer\IssuerBuilderInterface;
 use Http\Discovery\Psr17FactoryDiscovery;
 use Http\Discovery\Psr18ClientDiscovery;
 use function is_array;
@@ -15,9 +18,6 @@ use Psr\Http\Client\ClientInterface;
 use Psr\Http\Message\RequestFactoryInterface;
 use Psr\Http\Message\ResponseInterface;
 use Throwable;
-use function Facile\OpenIDClient\check_server_response;
-use Facile\OpenIDClient\Client\ClientInterface as OpenIDClient;
-use Facile\OpenIDClient\Issuer\IssuerBuilderInterface;
 
 final class DistributedParser extends AbstractClaims implements DistributedParserInterface
 {

@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Facile\OpenIDClientTest\Issuer\Metadata\Provider;
 
+use Facile\OpenIDClient\Issuer\Metadata\Provider\DiscoveryProviderInterface;
+use Facile\OpenIDClient\Issuer\Metadata\Provider\WebFingerProvider;
 use function http_build_query;
 use function json_encode;
 use PHPUnit\Framework\TestCase;
@@ -14,8 +16,6 @@ use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\StreamInterface;
 use Psr\Http\Message\UriFactoryInterface;
 use Psr\Http\Message\UriInterface;
-use Facile\OpenIDClient\Issuer\Metadata\Provider\DiscoveryProviderInterface;
-use Facile\OpenIDClient\Issuer\Metadata\Provider\WebFingerProvider;
 
 class WebFingerProviderTest extends TestCase
 {

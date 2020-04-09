@@ -5,6 +5,11 @@ declare(strict_types=1);
 namespace Facile\OpenIDClientTest\Claims;
 
 use Facile\JoseVerifier\JWK\JwksProviderInterface;
+use Facile\OpenIDClient\Claims\AggregateParser;
+use Facile\OpenIDClient\Client\ClientInterface;
+use Facile\OpenIDClient\Issuer\IssuerBuilderInterface;
+use Facile\OpenIDClient\Issuer\IssuerInterface;
+use Facile\OpenIDClient\Issuer\Metadata\IssuerMetadataInterface;
 use Jose\Component\Core\AlgorithmManager;
 use Jose\Component\Core\JWK;
 use Jose\Component\KeyManagement\JWKFactory;
@@ -17,11 +22,6 @@ use Jose\Component\Signature\Serializer\JWSSerializer;
 use function json_encode;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
-use Facile\OpenIDClient\Claims\AggregateParser;
-use Facile\OpenIDClient\Client\ClientInterface;
-use Facile\OpenIDClient\Issuer\IssuerBuilderInterface;
-use Facile\OpenIDClient\Issuer\IssuerInterface;
-use Facile\OpenIDClient\Issuer\Metadata\IssuerMetadataInterface;
 
 class AggregatedClaimsTest extends TestCase
 {
