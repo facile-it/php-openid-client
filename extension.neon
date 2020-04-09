@@ -1,0 +1,6 @@
+parameters:
+  typeAliases:
+    OpenIDClientMetadata: "array<string, mixed>"
+    OpenIDIssuerMetadata: "array<string, mixed>"
+    OpenIDDiscoveryConfiguration: "array<string, mixed>"
+    OpenIDJwkSet: "array{keys: array<int, array<string, mixed>>}"

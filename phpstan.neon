@@ -1,0 +1,13 @@
+parameters:
+    level: max
+    fileExtensions:
+        - php
+    inferPrivatePropertyTypeFromConstructor: true
+    excludes_analyse:
+        - %currentWorkingDirectory%/.phpstorm.meta.php
+        - %currentWorkingDirectory%/vendor/*
+    paths:
+        - %currentWorkingDirectory%/src
+
+includes:
+  - extension.neon
