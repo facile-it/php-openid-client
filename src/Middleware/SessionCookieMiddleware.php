@@ -30,10 +30,14 @@ class SessionCookieMiddleware implements MiddlewareInterface
     /** @var null|int */
     private $cookieMaxAge;
 
-    public function __construct(string $cookieName = 'openid', ?int $cookieMaxAge = null)
+    /** @var bool */
+    private $secure;
+
+    public function __construct(string $cookieName = 'openid', ?int $cookieMaxAge = null, bool $secure = true)
     {
         $this->cookieName = $cookieName;
         $this->cookieMaxAge = $cookieMaxAge;
+        $this->secure = $secure;
     }
 
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
@@ -63,9 +67,12 @@ class SessionCookieMiddleware implements MiddlewareInterface
             ->withValue($cookieValue)
             ->withMaxAge($this->cookieMaxAge)
             ->withHttpOnly()
-            ->withSecure()
             ->withPath('/')
             ->withSameSite(SameSite::strict());
+
+        if ($this->secure) {
+            $sessionCookie = $sessionCookie->withSecure();
+        }
 
         $response = FigResponseCookies::set($response, $sessionCookie);
 
