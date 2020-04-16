@@ -181,11 +181,17 @@ class AuthorizationService
             throw new InvalidArgumentException('A redirect_uri should be provided');
         }
 
-        $tokenSet = $this->grant($client, [
+        $params = [
             'grant_type' => 'authorization_code',
             'code' => $code,
             'redirect_uri' => $redirectUri,
-        ]);
+        ];
+
+        if ($authSession && null !== $authSession->getCodeVerifier()) {
+            $params['code_verifier'] = $authSession->getCodeVerifier();
+        }
+
+        $tokenSet = $this->grant($client, $params);
 
         $idToken = $tokenSet->getIdToken();
 
