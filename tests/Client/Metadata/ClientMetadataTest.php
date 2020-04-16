@@ -6,6 +6,8 @@ namespace Facile\OpenIDClientTest\Client\Metadata;
 
 use Facile\OpenIDClient\Client\Metadata\ClientMetadata;
 use Facile\OpenIDClient\Exception\InvalidArgumentException;
+use function json_decode;
+use function json_encode;
 use PHPUnit\Framework\TestCase;
 
 class ClientMetadataTest extends TestCase
@@ -306,6 +308,6 @@ class ClientMetadataTest extends TestCase
         ];
         $metadata = new ClientMetadata('foo', ['redirect_uris' => ['bar']]);
 
-        static::assertSame($expected, $metadata->jsonSerialize());
+        static::assertSame($expected, json_decode(json_encode($metadata), true));
     }
 }

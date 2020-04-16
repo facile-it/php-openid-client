@@ -12,6 +12,8 @@ use Facile\OpenIDClient\ConformanceTest\RpTest\AbstractRpTest;
 use Facile\OpenIDClient\ConformanceTest\TestInfo;
 use Facile\OpenIDClient\Service\AuthorizationService;
 use function Facile\OpenIDClient\base64url_encode;
+use function json_decode;
+use function json_encode;
 
 /**
  * Use the 'private_key_jwt' method to authenticate at the Authorization Server when using the token endpoint.
@@ -34,7 +36,7 @@ class RpTokenEndpointPrivateKeyJwtTest extends AbstractRpTest
 
         $client = $this->registerClient($testInfo, [
             'token_endpoint_auth_method' => 'private_key_jwt',
-            'jwks' => $publicJwks->jsonSerialize(),
+            'jwks' => json_decode(json_encode($publicJwks), true),
         ], $jwks);
 
         $authorizationService = new AuthorizationService();

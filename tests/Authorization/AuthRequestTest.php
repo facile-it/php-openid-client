@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace Facile\OpenIDClientTest\Authorization;
 
 use Facile\OpenIDClient\Authorization\AuthRequest;
+use function json_decode;
+use function json_encode;
 use PHPUnit\Framework\TestCase;
 
 class AuthRequestTest extends TestCase
@@ -29,7 +31,7 @@ class AuthRequestTest extends TestCase
             'redirect_uri' => 'bar',
         ]);
 
-        $array = $authRequest->jsonSerialize();
+        $array = json_decode(json_encode($authRequest), true);
 
         static::assertSame('foo', $array['client_id']);
         static::assertSame('bar', $array['redirect_uri']);

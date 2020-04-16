@@ -14,6 +14,8 @@ use Facile\OpenIDClient\Session\AuthSession;
 use Facile\OpenIDClient\RequestObject\RequestObjectFactory;
 use Facile\OpenIDClient\Service\AuthorizationService;
 use function Facile\OpenIDClient\base64url_encode;
+use function json_decode;
+use function json_encode;
 
 /**
  * Fetch the issuer's keys from the 'jwks_uri' and make an encrypted authentication request using the issuer's
@@ -44,7 +46,7 @@ class RPKeyRotationOPEncKeyTest extends AbstractRpTest
             'request_object_signing_alg' => 'RS256',
             'request_object_encryption_alg' => 'RSA-OAEP',
             'request_object_encryption_enc' => 'A128CBC-HS256',
-            'jwks' => $publicJwks->jsonSerialize(),
+            'jwks' => json_decode(json_encode($publicJwks), true),
         ], $jwks);
 
         Assert::assertSame('RS256', $client->getMetadata()->get('request_object_signing_alg'));

@@ -8,6 +8,8 @@ use Facile\OpenIDClient\Exception\ExceptionInterface;
 use Facile\OpenIDClient\Exception\InvalidArgumentException;
 use Facile\OpenIDClient\Exception\OAuth2Exception;
 use Facile\OpenIDClient\Exception\RemoteException;
+use function json_decode;
+use function json_encode;
 use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\StreamInterface;
@@ -105,6 +107,6 @@ class OAuth2ExceptionTest extends TestCase
         $exception = OAuth2Exception::fromParameters($params);
 
         static::assertInstanceOf(ExceptionInterface::class, $exception);
-        static::assertSame($params, $exception->jsonSerialize());
+        static::assertSame($params, json_decode(json_encode($exception), true));
     }
 }

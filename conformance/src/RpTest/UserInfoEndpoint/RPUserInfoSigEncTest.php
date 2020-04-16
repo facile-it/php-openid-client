@@ -14,6 +14,8 @@ use Facile\OpenIDClient\Session\AuthSession;
 use Facile\OpenIDClient\Service\AuthorizationService;
 use Facile\OpenIDClient\Service\UserinfoService;
 use function Facile\OpenIDClient\base64url_encode;
+use function json_decode;
+use function json_encode;
 
 /**
  * Request signed UserInfo.
@@ -40,7 +42,7 @@ class RPUserInfoSigEncTest extends AbstractRpTest
         $client = $this->registerClient($testInfo, [
             'userinfo_signed_response_alg' => 'RS256',
             'userinfo_encrypted_response_alg' => 'RSA1_5',
-            'jwks' => $publicJwks->jsonSerialize(),
+            'jwks' => json_decode(json_encode($publicJwks), true),
         ], $jwks);
 
         Assert::assertSame('RS256', $client->getMetadata()->get('userinfo_signed_response_alg'));

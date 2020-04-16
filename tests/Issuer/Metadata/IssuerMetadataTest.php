@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace Facile\OpenIDClientTest\Issuer\Metadata;
 
 use Facile\OpenIDClient\Issuer\Metadata\IssuerMetadata;
+use function json_decode;
+use function json_encode;
 use PHPUnit\Framework\TestCase;
 
 class IssuerMetadataTest extends TestCase
@@ -23,7 +25,7 @@ class IssuerMetadataTest extends TestCase
             'jwks_uri' => 'foo-jwks',
         ];
 
-        static::assertSame($expected, $metadata->jsonSerialize());
+        static::assertSame($expected, json_decode(json_encode($metadata), true));
     }
 
     public function testFromArray(): void

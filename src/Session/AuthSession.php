@@ -14,6 +14,12 @@ final class AuthSession implements AuthSessionInterface
     /** @var null|string */
     private $nonce;
 
+    /** @var null|string */
+    private $codeVerifier;
+
+    /** @var array<string, mixed> */
+    private $customs = [];
+
     public function getState(): ?string
     {
         return $this->state;
@@ -22,6 +28,19 @@ final class AuthSession implements AuthSessionInterface
     public function getNonce(): ?string
     {
         return $this->nonce;
+    }
+
+    public function getCodeVerifier(): ?string
+    {
+        return $this->codeVerifier;
+    }
+
+    /**
+     * @return array<string, mixed>
+     */
+    public function getCustoms(): array
+    {
+        return $this->customs;
     }
 
     public function setState(?string $state): void
@@ -34,11 +53,26 @@ final class AuthSession implements AuthSessionInterface
         $this->nonce = $nonce;
     }
 
+    public function setCodeVerifier(?string $codeVerifier): void
+    {
+        $this->codeVerifier = $codeVerifier;
+    }
+
+    /**
+     * @param array<string, mixed> $customs
+     */
+    public function setCustoms(array $customs): void
+    {
+        $this->customs = $customs;
+    }
+
     public static function fromArray(array $array): AuthSessionInterface
     {
         $session = new static();
         $session->setState($array['state'] ?? null);
         $session->setNonce($array['nonce'] ?? null);
+        $session->setCodeVerifier($array['code_verifier'] ?? null);
+        $session->setCustoms($array['customs'] ?? []);
 
         return $session;
     }
@@ -51,6 +85,8 @@ final class AuthSession implements AuthSessionInterface
         return array_filter([
             'state' => $this->getState(),
             'nonce' => $this->getNonce(),
+            'code_verifier' => $this->getCodeVerifier(),
+            'customs' => $this->getCustoms(),
         ]);
     }
 }

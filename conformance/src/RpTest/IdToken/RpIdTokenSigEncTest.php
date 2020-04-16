@@ -13,6 +13,8 @@ use Facile\OpenIDClient\ConformanceTest\TestInfo;
 use Facile\OpenIDClient\Session\AuthSession;
 use Facile\OpenIDClient\Service\AuthorizationService;
 use function Facile\OpenIDClient\base64url_encode;
+use function json_decode;
+use function json_encode;
 
 /**
  * Request an signed ID Token. Verify the signature on the ID Token using the keys published by the Issuer.
@@ -40,7 +42,7 @@ class RpIdTokenSigEncTest extends AbstractRpTest
         $client = $this->registerClient($testInfo, [
             'id_token_signed_response_alg' => 'RS256',
             'id_token_encrypted_response_alg' => 'RSA1_5',
-            'jwks' => $publicJwks->jsonSerialize(),
+            'jwks' => json_decode(json_encode($publicJwks), true),
         ], $jwks);
 
         Assert::assertSame('RS256', $client->getMetadata()->get('id_token_signed_response_alg'));

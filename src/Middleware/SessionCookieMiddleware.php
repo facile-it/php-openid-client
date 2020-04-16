@@ -57,7 +57,7 @@ class SessionCookieMiddleware implements MiddlewareInterface
         $response = $handler->handle($request->withAttribute(self::SESSION_ATTRIBUTE, $authSession));
 
         /** @var string $cookieValue */
-        $cookieValue = json_encode($authSession->jsonSerialize());
+        $cookieValue = json_encode($authSession);
 
         $sessionCookie = SetCookie::create($this->cookieName)
             ->withValue($cookieValue)

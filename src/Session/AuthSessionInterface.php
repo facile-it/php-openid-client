@@ -12,9 +12,23 @@ interface AuthSessionInterface extends JsonSerializable
 
     public function getNonce(): ?string;
 
+    public function getCodeVerifier(): ?string;
+
+    /**
+     * @return array<string, mixed>
+     */
+    public function getCustoms(): array;
+
     public function setState(?string $state): void;
 
     public function setNonce(?string $nonce): void;
+
+    public function setCodeVerifier(?string $codeVerifier): void;
+
+    /**
+     * @param array<string, mixed> $customs
+     */
+    public function setCustoms(array $customs): void;
 
     /**
      * @param array<string, mixed> $array
