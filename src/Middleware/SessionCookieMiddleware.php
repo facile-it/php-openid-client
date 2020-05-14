@@ -20,6 +20,9 @@ use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\MiddlewareInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 
+/**
+ * @deprecated Use a custom Middleware to store AuthSession
+ */
 class SessionCookieMiddleware implements MiddlewareInterface
 {
     public const SESSION_ATTRIBUTE = AuthSessionInterface::class;
