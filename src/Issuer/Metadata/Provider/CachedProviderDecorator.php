@@ -4,11 +4,12 @@ declare(strict_types=1);
 
 namespace Facile\OpenIDClient\Issuer\Metadata\Provider;
 
-use Base64Url\Base64Url;
 use function is_array;
 use function json_decode;
 use function json_encode;
 use Psr\SimpleCache\CacheInterface;
+use function sha1;
+use function substr;
 
 final class CachedProviderDecorator implements RemoteProviderInterface
 {
@@ -37,7 +38,7 @@ final class CachedProviderDecorator implements RemoteProviderInterface
         $this->cache = $cache;
         $this->cacheTtl = $cacheTtl;
         $this->cacheIdGenerator = $cacheIdGenerator ?? static function (string $uri): string {
-            return Base64Url::encode($uri);
+            return substr(sha1($uri), 0, 65);
         };
     }
 

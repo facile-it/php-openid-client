@@ -187,7 +187,7 @@ class AuthorizationService
             'redirect_uri' => $redirectUri,
         ];
 
-        if ($authSession && null !== $authSession->getCodeVerifier()) {
+        if (null !== $authSession && null !== $authSession->getCodeVerifier()) {
             $params['code_verifier'] = $authSession->getCodeVerifier();
         }
 
