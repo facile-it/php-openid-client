@@ -6,6 +6,7 @@ namespace Facile\OpenIDClientTest\AuthMethod;
 
 use Facile\OpenIDClient\AuthMethod\None;
 use Facile\OpenIDClient\Client\ClientInterface;
+use Facile\OpenIDClient\Client\Metadata\ClientMetadata;
 use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\StreamInterface;
@@ -25,8 +26,11 @@ class NoneTest extends TestCase
         $stream = $this->prophesize(StreamInterface::class);
         $request = $this->prophesize(RequestInterface::class);
         $client = $this->prophesize(ClientInterface::class);
+        $clientMetadata = new ClientMetadata('clientId');
 
-        $stream->write('foo=bar')->shouldBeCalled();
+        $client->getMetadata()->willReturn($clientMetadata);
+
+        $stream->write('client_id=clientId&foo=bar')->shouldBeCalled();
 
         $request->getBody()->willReturn($stream->reveal());
 
