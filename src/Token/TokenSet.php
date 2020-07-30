@@ -155,6 +155,7 @@ final class TokenSet implements TokenSetInterface, JsonSerializable
             'code_verifier' => $this->codeVerifier,
         ];
 
+        /** @phpstan-ignore-next-line */
         return array_filter($data, static function ($value): bool {
             return null !== $value;
         });
