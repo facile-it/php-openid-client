@@ -10,7 +10,7 @@ use Facile\OpenIDClient\ConformanceTest\RpTest\AbstractRpTest;
 use Facile\OpenIDClient\ConformanceTest\TestInfo;
 use Facile\OpenIDClient\Session\AuthSession;
 use Facile\OpenIDClient\Service\AuthorizationService;
-use Facile\OpenIDClient\Service\UserinfoService;
+use Facile\OpenIDClient\Service\UserInfoService;
 use function Facile\OpenIDClient\base64url_encode;
 
 /**
@@ -31,7 +31,7 @@ class RPClaimsDistributedTest extends AbstractRpTest
         $client = $this->registerClient($testInfo);
 
         $authorizationService = new AuthorizationService();
-        $userInfoService = new UserinfoService();
+        $userInfoService = new UserInfoService();
         $distributedClaims = new DistributedParser();
 
         $authSession = AuthSession::fromArray([

@@ -56,19 +56,23 @@ If you need other algorithms you should install it manually.
 
 For a basic usage you shouldn't require any other dependency package.
 
+Every builder have methods to customize instances with other dependencies.
+
 ```php
 
 use Facile\OpenIDClient\Client\ClientBuilder;
 use Facile\OpenIDClient\Issuer\IssuerBuilder;
 use Facile\OpenIDClient\Client\Metadata\ClientMetadata;
-use Facile\OpenIDClient\Service\AuthorizationService;
-use Facile\OpenIDClient\Service\UserinfoService;
+use Facile\OpenIDClient\Service\Builder\AuthorizationServiceBuilder;
+use Facile\OpenIDClient\Service\Builder\UserInfoServiceBuilder;
 use Psr\Http\Message\ServerRequestInterface;
 
 $issuer = (new IssuerBuilder())
     ->build('https://example.com/.well-known/openid-configuration');
 $clientMetadata = ClientMetadata::fromArray([
-    'client_id' => 'client-id', 
+    'client_id' => 'client-id',
+    'client_secret' => 'my-client-secret',
+    'token_endpoint_auth_method' => 'client_secret_basic', // the auth method tor the token endpoint
     'redirect_uris' => [
         'https://my-rp.com/callback',    
     ],
@@ -80,7 +84,7 @@ $client = (new ClientBuilder())
 
 // Authorization
 
-$authorizationService = new AuthorizationService();
+$authorizationService = (new AuthorizationServiceBuilder())->build();
 $redirectAuthorizationUri = $authorizationService->getAuthorizationUri(
     $client,
     ['login_hint' => 'user_username'] // custom params
@@ -107,20 +111,22 @@ $tokenSet = $authorizationService->refresh($client, $tokenSet->getRefreshToken()
 
 
 // Get user info
-
-$userinfoService = new UserinfoService();
-$userinfo = $userinfoService->getUserInfo($client, $tokenSet);
+$userInfoService = (new UserInfoServiceBuilder())->build();
+$userInfo = $userInfoService->getUserInfo($client, $tokenSet);
 
 ```
 
 
 ## Client registration
 
+See [OpenID Connect Dynamic Client Registration 1.0](https://openid.net/specs/openid-connect-registration-1_0.html) 
+and [RFC7591 OAuth 2.0 Dynamic Client Registration Protocol](https://tools.ietf.org/html/rfc7591).
+
 ```php
 
-use Facile\OpenIDClient\Service\RegistrationService;
+use Facile\OpenIDClient\Service\Builder\RegistrationServiceBuilder;
 
-$registration = new RegistrationService();
+$registration = (new RegistrationServiceBuilder())->build();
 
 // registration
 $metadata = $registration->register(
@@ -152,10 +158,12 @@ $registration->delete($metadata['registration_client_uri'], $metadata['registrat
 
 ## Token Introspection
 
-```php
-use Facile\OpenIDClient\Service\IntrospectionService;
+See [RFC7662 - OAuth 2.0 Token Introspection](https://tools.ietf.org/html/rfc7662).
 
-$service = new IntrospectionService();
+```php
+use Facile\OpenIDClient\Service\Builder\IntrospectionServiceBuilder;
+
+$service = (new IntrospectionServiceBuilder())->build();
 
 $params = $service->introspect($client, $token);
 ```
@@ -163,10 +171,12 @@ $params = $service->introspect($client, $token);
 
 ## Token Revocation
 
-```php
-use Facile\OpenIDClient\Service\RevocationService;
+See [RFC7009 - OAuth 2.0 Token Revocation](https://tools.ietf.org/html/rfc7009).
 
-$service = new RevocationService();
+```php
+use Facile\OpenIDClient\Service\Builder\RevocationServiceBuilder;
+
+$service = (new RevocationServiceBuilder())->build();
 
 $params = $service->revoke($client, $token);
 ```
@@ -174,7 +184,7 @@ $params = $service->revoke($client, $token);
 
 ## Request Object
 
-You can create a request object authorization request with the
+You can create a [request object](https://openid.net/specs/openid-connect-core-1_0.html#RequestUriParameter) authorization request with the
 `Facile\OpenIDClient\RequestObject\RequestObjectFactory` class.
 
 This will create a signed (and optionally encrypted) JWT token based on
@@ -184,7 +194,7 @@ your client metadata.
 use Facile\OpenIDClient\RequestObject\RequestObjectFactory;
 
 $factory = new RequestObjectFactory();
-$requestObject = $factory->create($client, [/* custom params to include in the JWT*/]);
+$requestObject = $factory->create($client, [/* custom claims to include in the JWT*/]);
 ```
 
 Then you can use it to create the AuthRequest:
@@ -202,7 +212,7 @@ $authRequest = AuthRequest::fromParams([
 
 ## Aggregated and Distributed Claims
 
-The library can handle aggregated and distributed claims:
+The library can handle [aggregated and distributed claims](https://openid.net/specs/openid-connect-core-1_0.html#AggregatedDistributedClaims):
 
 ```php
 use Facile\OpenIDClient\Claims\AggregateParser;
@@ -210,10 +220,10 @@ use Facile\OpenIDClient\Claims\DistributedParser;
 
 $aggregatedParser = new AggregateParser();
 
-$claims = $aggregatedParser->unpack($client, $userinfo);
+$claims = $aggregatedParser->unpack($client, $userInfo);
 
 $distributedParser = new DistributedParser();
-$claims = $distributedParser->fetch($client, $userinfo);
+$claims = $distributedParser->fetch($client, $userInfo);
 ````
 
 
@@ -224,7 +234,7 @@ There are some middlewares and handles available:
 ### SessionCookieMiddleware
 
 This middleware should always be on top of middlewares chain to provide
-a cookie session for `state` and `nonce` parameters.
+a session for `state` and `nonce` parameters.
 
 To use it you should install the `dflydev/fig-cookies` package:
 
@@ -234,8 +244,11 @@ $ composer require "dflydev/fig-cookies:^2.0"
 
 ```php
 use Facile\OpenIDClient\Middleware\SessionCookieMiddleware;
+use Psr\SimpleCache\CacheInterface;
 
-$middleware = new SessionCookieMiddleware();
+// Use your PSR-16 simple-cache implementation to persist sessions
+/** @var CacheInterface $cache */
+$middleware = new SessionCookieMiddleware($cache/* , $cookieName = "openid", $ttl = 300 */);
 ```
 
 The middleware provides a `Facile\OpenIDClient\Session\AuthSessionInterface`
@@ -314,15 +327,17 @@ with user infos as array.
 
 ```php
 use Facile\OpenIDClient\Middleware\UserInfoMiddleware;
-use Facile\OpenIDClient\Service\UserinfoService;
+use Facile\OpenIDClient\Service\UserInfoService;
 
-/** @var UserinfoService $userinfoService */
-$userinfoService = $container->get(UserinfoService::class);
-$middleware = new UserInfoMiddleware($userinfoService);
+/** @var UserInfoService $userInfoService */
+$userInfoService = $container->get(UserInfoService::class);
+$middleware = new UserInfoMiddleware($userInfoService);
 ```
 
 
 ## Performance improvements for production environment
+
+It's important to use a cache to avoid to fetch issuer configuration and keys on every request.
 
 ```php
 use Psr\SimpleCache\CacheInterface;
@@ -331,7 +346,7 @@ use Facile\OpenIDClient\Issuer\Metadata\Provider\MetadataProviderBuilder;
 use Facile\JoseVerifier\JWK\JwksProviderBuilder;
 
 /** @var CacheInterface $cache */
-$cache = $container->get('my-cache-implementation');
+$cache = $container->get(CacheInterface::class); // get your simple-cache implementation
 
 $metadataProviderBuilder = (new MetadataProviderBuilder())
     ->setCache($cache)

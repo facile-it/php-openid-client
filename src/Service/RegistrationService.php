@@ -14,8 +14,6 @@ use Facile\OpenIDClient\Exception\InvalidArgumentException;
 use Facile\OpenIDClient\Exception\RuntimeException;
 use Facile\OpenIDClient\Issuer\IssuerInterface;
 use function Facile\OpenIDClient\parse_metadata_response;
-use Http\Discovery\Psr17FactoryDiscovery;
-use Http\Discovery\Psr18ClientDiscovery;
 use function json_encode;
 use Psr\Http\Client\ClientExceptionInterface;
 use Psr\Http\Client\ClientInterface;
@@ -44,11 +42,11 @@ class RegistrationService
     ];
 
     public function __construct(
-        ?ClientInterface $client = null,
-        ?RequestFactoryInterface $requestFactory = null
+        ClientInterface $client,
+        RequestFactoryInterface $requestFactory
     ) {
-        $this->client = $client ?? Psr18ClientDiscovery::find();
-        $this->requestFactory = $requestFactory ?? Psr17FactoryDiscovery::findRequestFactory();
+        $this->client = $client;
+        $this->requestFactory = $requestFactory;
     }
 
     /**

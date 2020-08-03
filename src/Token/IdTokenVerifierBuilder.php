@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Facile\OpenIDClient\Token;
 
+use Facile\JoseVerifier\IdTokenVerifierInterface;
 use Facile\OpenIDClient\Client\ClientInterface;
 
 class IdTokenVerifierBuilder implements IdTokenVerifierBuilderInterface
@@ -28,7 +29,7 @@ class IdTokenVerifierBuilder implements IdTokenVerifierBuilderInterface
         return $this;
     }
 
-    public function build(ClientInterface $client): \Facile\JoseVerifier\IdTokenVerifierInterface
+    public function build(ClientInterface $client): IdTokenVerifierInterface
     {
         $builder = new \Facile\JoseVerifier\IdTokenVerifierBuilder();
 

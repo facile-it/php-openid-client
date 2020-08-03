@@ -10,9 +10,6 @@ use Facile\OpenIDClient\Exception\OAuth2Exception;
 use Facile\OpenIDClient\Exception\RuntimeException;
 use Facile\OpenIDClient\Token\TokenSetInterface;
 use Facile\OpenIDClient\Token\TokenVerifierBuilderInterface;
-use Facile\OpenIDClient\Token\UserInfoVerifierBuilder;
-use Http\Discovery\Psr17FactoryDiscovery;
-use Http\Discovery\Psr18ClientDiscovery;
 use function http_build_query;
 use function is_array;
 use function json_decode;
@@ -21,7 +18,7 @@ use Psr\Http\Client\ClientInterface;
 use Psr\Http\Message\RequestFactoryInterface;
 use function sprintf;
 
-class UserinfoService
+class UserInfoService
 {
     /** @var ClientInterface */
     private $client;
@@ -33,13 +30,13 @@ class UserinfoService
     private $userInfoVerifierBuilder;
 
     public function __construct(
-        ?TokenVerifierBuilderInterface $userInfoVerifierBuilder = null,
-        ?ClientInterface $client = null,
-        ?RequestFactoryInterface $requestFactory = null
+        TokenVerifierBuilderInterface $userInfoVerifierBuilder,
+        ClientInterface $client,
+        RequestFactoryInterface $requestFactory
     ) {
-        $this->userInfoVerifierBuilder = $userInfoVerifierBuilder ?? new UserInfoVerifierBuilder();
-        $this->client = $client ?? Psr18ClientDiscovery::find();
-        $this->requestFactory = $requestFactory ?? Psr17FactoryDiscovery::findRequestFactory();
+        $this->userInfoVerifierBuilder = $userInfoVerifierBuilder;
+        $this->client = $client;
+        $this->requestFactory = $requestFactory;
     }
 
     /**

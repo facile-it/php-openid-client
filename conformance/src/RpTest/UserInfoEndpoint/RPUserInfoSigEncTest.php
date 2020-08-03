@@ -12,7 +12,7 @@ use Facile\OpenIDClient\ConformanceTest\RpTest\AbstractRpTest;
 use Facile\OpenIDClient\ConformanceTest\TestInfo;
 use Facile\OpenIDClient\Session\AuthSession;
 use Facile\OpenIDClient\Service\AuthorizationService;
-use Facile\OpenIDClient\Service\UserinfoService;
+use Facile\OpenIDClient\Service\UserInfoService;
 use function Facile\OpenIDClient\base64url_encode;
 use function json_decode;
 use function json_encode;
@@ -51,7 +51,7 @@ class RPUserInfoSigEncTest extends AbstractRpTest
 
         // Get authorization redirect uri
         $authorizationService = new AuthorizationService();
-        $userInfoService = new UserinfoService();
+        $userInfoService = new UserInfoService();
 
         $authSession = AuthSession::fromArray([
             'nonce' => base64url_encode(\random_bytes(32)),

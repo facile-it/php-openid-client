@@ -7,7 +7,7 @@ namespace Facile\OpenIDClient\Middleware;
 use Facile\OpenIDClient\Client\ClientInterface;
 use Facile\OpenIDClient\Exception\LogicException;
 use Facile\OpenIDClient\Exception\RuntimeException;
-use Facile\OpenIDClient\Service\UserinfoService;
+use Facile\OpenIDClient\Service\UserInfoService;
 use Facile\OpenIDClient\Token\TokenSetInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -18,17 +18,17 @@ class UserInfoMiddleware implements MiddlewareInterface
 {
     public const USERINFO_ATTRIBUTE = self::class;
 
-    /** @var UserinfoService */
-    private $userinfoService;
+    /** @var UserInfoService */
+    private $userInfoService;
 
     /** @var null|ClientInterface */
     private $client;
 
     public function __construct(
-        UserinfoService $userinfoService,
+        UserInfoService $userInfoService,
         ?ClientInterface $client = null
     ) {
-        $this->userinfoService = $userinfoService;
+        $this->userInfoService = $userInfoService;
         $this->client = $client;
     }
 
@@ -45,7 +45,7 @@ class UserInfoMiddleware implements MiddlewareInterface
             throw new RuntimeException('Unable to get token response attribute');
         }
 
-        $claims = $this->userinfoService->getUserInfo($client, $tokenSet);
+        $claims = $this->userInfoService->getUserInfo($client, $tokenSet);
 
         return $handler->handle($request->withAttribute(self::USERINFO_ATTRIBUTE, $claims));
     }

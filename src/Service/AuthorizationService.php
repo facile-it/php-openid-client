@@ -15,15 +15,10 @@ use function Facile\OpenIDClient\get_endpoint_uri;
 use function Facile\OpenIDClient\parse_callback_params;
 use function Facile\OpenIDClient\parse_metadata_response;
 use Facile\OpenIDClient\Session\AuthSessionInterface;
-use Facile\OpenIDClient\Token\IdTokenVerifierBuilder;
 use Facile\OpenIDClient\Token\IdTokenVerifierBuilderInterface;
-use Facile\OpenIDClient\Token\ResponseVerifierBuilder;
-use Facile\OpenIDClient\Token\TokenSetFactory;
 use Facile\OpenIDClient\Token\TokenSetFactoryInterface;
 use Facile\OpenIDClient\Token\TokenSetInterface;
 use Facile\OpenIDClient\Token\TokenVerifierBuilderInterface;
-use Http\Discovery\Psr17FactoryDiscovery;
-use Http\Discovery\Psr18ClientDiscovery;
 use function http_build_query;
 use function is_array;
 use function is_string;
@@ -54,20 +49,20 @@ class AuthorizationService
     private $idTokenVerifierBuilder;
 
     /** @var TokenVerifierBuilderInterface */
-    private $responseVerifiierBuilder;
+    private $responseVerifierBuilder;
 
     public function __construct(
-        ?TokenSetFactoryInterface $tokenSetFactory = null,
-        ?ClientInterface $client = null,
-        ?RequestFactoryInterface $requestFactory = null,
-        ?IdTokenVerifierBuilderInterface $idTokenVerifierBuilder = null,
-        ?TokenVerifierBuilderInterface $responseVerifierBuilder = null
+        TokenSetFactoryInterface $tokenSetFactory,
+        ClientInterface $client,
+        RequestFactoryInterface $requestFactory,
+        IdTokenVerifierBuilderInterface $idTokenVerifierBuilder,
+        TokenVerifierBuilderInterface $responseVerifierBuilder
     ) {
-        $this->tokenSetFactory = $tokenSetFactory ?? new TokenSetFactory();
-        $this->client = $client ?? Psr18ClientDiscovery::find();
-        $this->requestFactory = $requestFactory ?? Psr17FactoryDiscovery::findRequestFactory();
-        $this->idTokenVerifierBuilder = $idTokenVerifierBuilder ?? new IdTokenVerifierBuilder();
-        $this->responseVerifiierBuilder = $responseVerifierBuilder ?? new ResponseVerifierBuilder();
+        $this->tokenSetFactory = $tokenSetFactory;
+        $this->client = $client;
+        $this->requestFactory = $requestFactory;
+        $this->idTokenVerifierBuilder = $idTokenVerifierBuilder;
+        $this->responseVerifierBuilder = $responseVerifierBuilder;
     }
 
     /**
@@ -113,6 +108,8 @@ class AuthorizationService
     /**
      * @param ServerRequestInterface $serverRequest
      * @param OpenIDClient $client
+     *
+     * @throws OAuth2Exception
      *
      * @return array<string, mixed>
      */
@@ -160,6 +157,17 @@ class AuthorizationService
         return $this->fetchToken($client, $tokenSet, $redirectUri, $authSession, $maxAge);
     }
 
+    /**
+     * @param OpenIDClient $client
+     * @param TokenSetInterface $tokenSet
+     * @param string|null $redirectUri
+     * @param AuthSessionInterface|null $authSession
+     * @param int|null $maxAge
+     *
+     * @throws OAuth2Exception
+     *
+     * @return TokenSetInterface
+     */
     public function fetchToken(
         OpenIDClient $client,
         TokenSetInterface $tokenSet,
@@ -243,6 +251,8 @@ class AuthorizationService
      * @param OpenIDClient $client
      * @param array<string, mixed> $params
      *
+     * @throws OAuth2Exception
+     *
      * @return TokenSetInterface
      */
     public function grant(OpenIDClient $client, array $params = []): TokenSetInterface
@@ -274,6 +284,8 @@ class AuthorizationService
      * @param OpenIDClient $client
      * @param array<string, mixed> $params
      *
+     * @throw OAuth2Exception
+     *
      * @return array<string, mixed>
      */
     private function processResponseParams(OpenIDClient $client, array $params): array
@@ -283,7 +295,7 @@ class AuthorizationService
         }
 
         if (array_key_exists('response', $params)) {
-            $params = $this->responseVerifiierBuilder->build($client)
+            $params = $this->responseVerifierBuilder->build($client)
                 ->verify($params['response']);
         }
 

@@ -11,7 +11,7 @@ use Facile\OpenIDClient\ConformanceTest\TestInfo;
 use Facile\OpenIDClient\Exception\InvalidArgumentException;
 use Facile\OpenIDClient\Session\AuthSession;
 use Facile\OpenIDClient\Service\AuthorizationService;
-use Facile\OpenIDClient\Service\UserinfoService;
+use Facile\OpenIDClient\Service\UserInfoService;
 use function Facile\OpenIDClient\base64url_encode;
 
 /**

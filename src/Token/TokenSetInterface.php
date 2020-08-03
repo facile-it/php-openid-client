@@ -6,6 +6,13 @@ namespace Facile\OpenIDClient\Token;
 
 interface TokenSetInterface
 {
+    /**
+     * Get all attributes
+     *
+     * @return array<string, mixed>
+     */
+    public function getAttributes(): array;
+
     public function getTokenType(): ?string;
 
     public function getAccessToken(): ?string;

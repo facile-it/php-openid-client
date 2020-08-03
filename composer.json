@@ -94,7 +94,6 @@
         "web-token/jwt-signature-algorithm-experimental": "^2.0",
         "web-token/jwt-signature-algorithm-hmac": "^2.0",
         "web-token/jwt-signature-algorithm-none": "^2.0",
-        "web-token/jwt-signature-algorithm-rsa": "^2.0",
         "laminas/laminas-config-aggregator": "^1.1",
         "laminas/laminas-servicemanager": "^3.4",
         "laminas/laminas-component-installer": "^2.1",
@@ -105,6 +104,7 @@
         "symfony/console": "^4.3 || ^5.0"
     },
     "suggest": {
+        "facile-it/php-oauth2-http-client": "To use a PSR HTTP client to interact with OAuth2/OpenID protected APIs",
         "web-token/jwt-signature-algorithm-hmac": "To use the client_secret_jwt auth method and symmetric key signature",
         "dflydev/fig-cookies": "To use the SessionCookieMiddleware"
     },
