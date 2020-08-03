@@ -79,6 +79,7 @@
         "phpstan/phpstan": "^0.12.18",
         "phpstan/phpstan-deprecation-rules": "^0.12.2",
         "phpstan/phpstan-strict-rules": "^0.12.2",
+        "phpspec/prophecy": "^1.10.3",
         "phpunit/phpunit": "^8.2 || ~9.0.2",
         "web-token/jwt-encryption-algorithm-aescbc": "^2.0",
         "web-token/jwt-encryption-algorithm-aesgcm": "^2.0",
