@@ -12,6 +12,7 @@ Full OpenID client implementation.
 
 Most of the library code is based on the awesome [`node-openid-client`](https://github.com/panva/node-openid-client).
 
+**The PHP extension `gmp` could be required.**
 
 ## Implemented specs and features
 
