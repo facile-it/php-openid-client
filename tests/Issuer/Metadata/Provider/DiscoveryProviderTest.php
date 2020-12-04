@@ -38,7 +38,7 @@ class DiscoveryProviderTest extends TestCase
     /**
      * @param string $uri
      */
-    private function prepareForDiscovery(string $uri): void
+    private function prepareForDiscovery(string $uri, string $baseUri = ''): void
     {
         $client = $this->client;
         $requestFactory = $this->requestFactory;
@@ -51,7 +51,7 @@ class DiscoveryProviderTest extends TestCase
 
         $response->getBody()->willReturn($stream->reveal());
         $response->getStatusCode()->willReturn(200);
-        $stream->__toString()->willReturn('{"issuer":"https://openid-uri"}');
+        $stream->__toString()->willReturn('{"issuer":"https://openid-uri' . $baseUri . '"}');
 
         $request1->withHeader('accept', 'application/json')
             ->shouldBeCalled()
@@ -59,11 +59,11 @@ class DiscoveryProviderTest extends TestCase
 
         $uri1 = $this->prophesize(UriInterface::class);
 
-        $uri1->getPath()->willReturn('/.well-known/openid-configuration');
+        $uri1->getPath()->willReturn($baseUri . '/.well-known/openid-configuration');
 
-        $uri1->__toString()->willReturn('https://example.com/.well-known/openid-configuration');
+        $uri1->__toString()->willReturn('https://example.com' . $baseUri . '/.well-known/openid-configuration');
 
-        $requestFactory->createRequest('GET', 'https://example.com/.well-known/openid-configuration')
+        $requestFactory->createRequest('GET', 'https://example.com' . $baseUri . '/.well-known/openid-configuration')
             ->willReturn($request1->reveal());
 
         $client->sendRequest($request2->reveal())
@@ -105,6 +105,42 @@ class DiscoveryProviderTest extends TestCase
         $this->prepareForDiscovery('https://example.com/.well-known/openid-configuration');
 
         static::assertSame(['issuer' => 'https://openid-uri'], $provider->discovery($uri));
+    }
+
+    public function testDiscoveryWithBaseUri(): void
+    {
+        $client = $this->client;
+        $requestFactory = $this->requestFactory;
+        $uriFactory = $this->uriFactory;
+
+        $baseUri = '/realms/office';
+        $uri = 'https://example.com' . $baseUri;
+        $provider = new DiscoveryProvider(
+            $client->reveal(),
+            $requestFactory->reveal(),
+            $uriFactory->reveal()
+        );
+
+        $uri2 = $this->prophesize(UriInterface::class);
+        $uri2->__toString()->willReturn('https://example.com' . $baseUri);
+        $uri2->getPath()->willReturn($baseUri);
+
+        $uriFactory->createUri('https://example.com' . $baseUri)
+            ->willReturn($uri2->reveal());
+
+        $uriOpenid = $this->prophesize(UriInterface::class);
+        $uriOpenid->__toString()->willReturn('https://example.com' . $baseUri . '/.well-known/openid-configuration');
+        $uri2->withPath($baseUri . '/.well-known/openid-configuration')
+            ->willReturn($uriOpenid->reveal());
+
+        $uriOAuth = $this->prophesize(UriInterface::class);
+        $uriOAuth->__toString()->willReturn('https://example.com' . $baseUri . '/.well-known/openid-configuration');
+        $uri2->withPath($baseUri . '/.well-known/oauth-authorization-server')
+            ->willReturn($uriOAuth->reveal());
+
+        $this->prepareForDiscovery('https://example.com' . $baseUri . '/.well-known/openid-configuration', $baseUri);
+
+        static::assertSame(['issuer' => 'https://openid-uri' . $baseUri], $provider->discovery($uri));
     }
 
     public function testDiscoveryWithWellKnown(): void
