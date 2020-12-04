@@ -37,7 +37,7 @@ final class RemoteProvider implements RemoteProviderInterface
 
         foreach ($providers as $provider) {
             try {
-                $data = $provider->fetch($uri);
+                return $provider->fetch($uri);
             } catch (ExceptionInterface $e) {
                 $lastException = $e;
             }

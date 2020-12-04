@@ -58,7 +58,7 @@ final class DiscoveryProvider implements DiscoveryProviderInterface
             $uri->withPath(rtrim($uriPath, '/') . self::OIDC_DISCOVERY),
             $uri->withPath('/' === $uriPath
                 ? self::OAUTH2_DISCOVERY
-                : self::OAUTH2_DISCOVERY . $uriPath),
+                : rtrim($uriPath, '/') . self::OAUTH2_DISCOVERY),
         ];
 
         foreach ($uris as $wellKnownUri) {
