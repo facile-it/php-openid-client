@@ -7,7 +7,7 @@ namespace Facile\OpenIDClient\Token;
 use Facile\JoseVerifier\IdTokenVerifierInterface;
 use Facile\OpenIDClient\Client\ClientInterface;
 
-class IdTokenVerifierBuilder implements IdTokenVerifierBuilderInterface
+final class IdTokenVerifierBuilder implements IdTokenVerifierBuilderInterface
 {
     /** @var bool */
     private $aadIssValidation = false;

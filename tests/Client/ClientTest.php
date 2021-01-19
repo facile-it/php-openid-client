@@ -9,7 +9,7 @@ use Facile\OpenIDClient\AuthMethod\AuthMethodFactoryInterface;
 use Facile\OpenIDClient\Client\Client;
 use Facile\OpenIDClient\Client\Metadata\ClientMetadataInterface;
 use Facile\OpenIDClient\Issuer\IssuerInterface;
-use PHPUnit\Framework\TestCase;
+use Facile\OpenIDClientTest\TestCase;
 
 class ClientTest extends TestCase
 {

@@ -24,10 +24,13 @@ final class CachedProviderDecorator implements RemoteProviderInterface
 
     /**
      * @var callable
-     * @phpstan-var callable(string): string
+     * @psalm-var callable(string): string
      */
     private $cacheIdGenerator;
 
+    /**
+     * @psalm-param null|callable(string): string $cacheIdGenerator
+     */
     public function __construct(
         RemoteProviderInterface $provider,
         CacheInterface $cache,
@@ -46,7 +49,12 @@ final class CachedProviderDecorator implements RemoteProviderInterface
     {
         $cacheId = ($this->cacheIdGenerator)($uri);
 
-        if (is_array($data = json_decode($this->cache->get($cacheId) ?? '', true))) {
+        /** @var string $cached */
+        $cached = $this->cache->get($cacheId) ?? '';
+        /** @var null|string|array<mixed> $data */
+        $data = json_decode($cached, true);
+
+        if (is_array($data)) {
             return $data;
         }
 

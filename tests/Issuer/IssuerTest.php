@@ -7,7 +7,7 @@ namespace Facile\OpenIDClientTest\Issuer;
 use Facile\JoseVerifier\JWK\JwksProviderInterface;
 use Facile\OpenIDClient\Issuer\Issuer;
 use Facile\OpenIDClient\Issuer\Metadata\IssuerMetadataInterface;
-use PHPUnit\Framework\TestCase;
+use Facile\OpenIDClientTest\TestCase;
 
 class IssuerTest extends TestCase
 {

@@ -7,7 +7,7 @@ namespace Facile\OpenIDClientTest\Issuer\Metadata\Provider;
 use Facile\OpenIDClient\Exception\RuntimeException;
 use Facile\OpenIDClient\Issuer\Metadata\Provider\RemoteProvider;
 use Facile\OpenIDClient\Issuer\Metadata\Provider\RemoteProviderInterface;
-use PHPUnit\Framework\TestCase;
+use Facile\OpenIDClientTest\TestCase;
 
 class RemoteProviderTest extends TestCase
 {

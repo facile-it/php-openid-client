@@ -13,10 +13,10 @@ use Psr\SimpleCache\CacheInterface;
 
 class MetadataProviderBuilder
 {
-    /** @var DiscoveryProviderInterface */
+    /** @var null|DiscoveryProviderInterface */
     private $discoveryProvider;
 
-    /** @var WebFingerProviderInterface */
+    /** @var null|WebFingerProviderInterface */
     private $webFingerProvider;
 
     /** @var ClientInterface|null */
@@ -95,7 +95,7 @@ class MetadataProviderBuilder
 
     public function buildUriFactory(): UriFactoryInterface
     {
-        return $this->uriFactory ?? Psr17FactoryDiscovery::findUrlFactory();
+        return $this->uriFactory ?? Psr17FactoryDiscovery::findUriFactory();
     }
 
     private function buildDiscoveryProvider(): DiscoveryProviderInterface

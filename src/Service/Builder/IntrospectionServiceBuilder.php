@@ -6,7 +6,7 @@ namespace Facile\OpenIDClient\Service\Builder;
 
 use Facile\OpenIDClient\Service\IntrospectionService;
 
-class IntrospectionServiceBuilder extends AbstractServiceBuilder
+final class IntrospectionServiceBuilder extends AbstractServiceBuilder
 {
     public function build(): IntrospectionService
     {

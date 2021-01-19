@@ -8,7 +8,7 @@ use Facile\OpenIDClient\Client\Metadata\ClientMetadata;
 use Facile\OpenIDClient\Exception\InvalidArgumentException;
 use function json_decode;
 use function json_encode;
-use PHPUnit\Framework\TestCase;
+use Facile\OpenIDClientTest\TestCase;
 
 class ClientMetadataTest extends TestCase
 {
@@ -277,11 +277,13 @@ class ClientMetadataTest extends TestCase
     {
         $metadata = new ClientMetadata('foo', ['redirect_uris' => ['bar']]);
 
-        static::assertFalse($metadata->get('require_auth_time'));
-        static::assertFalse($metadata->get('tls_client_certificate_bound_access_tokens'));
-        static::assertSame(['code'], $metadata->get('response_types'));
-        static::assertSame([], $metadata->get('post_logout_redirect_uris'));
-        static::assertSame('RS256', $metadata->get('id_token_signed_response_alg'));
+        static::assertNull($metadata->get('require_auth_time'));
+        static::assertNull($metadata->get('tls_client_certificate_bound_access_tokens'));
+        static::assertNull($metadata->get('response_types'));
+        static::assertSame(['code'], $metadata->getResponseTypes());
+        static::assertNull($metadata->get('post_logout_redirect_uris'));
+        static::assertNull($metadata->get('id_token_signed_response_alg'));
+        static::assertSame('RS256', $metadata->getIdTokenSignedResponseAlg());
         static::assertSame('client_secret_basic', $metadata->getTokenEndpointAuthMethod());
     }
 
@@ -303,8 +305,8 @@ class ClientMetadataTest extends TestCase
     public function testJsonSerialize(): void
     {
         $expected = [
-            'client_id' => 'foo',
             'redirect_uris' => ['bar'],
+            'client_id' => 'foo',
         ];
         $metadata = new ClientMetadata('foo', ['redirect_uris' => ['bar']]);
 

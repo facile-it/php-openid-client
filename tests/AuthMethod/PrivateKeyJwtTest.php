@@ -17,7 +17,7 @@ use Jose\Component\Signature\JWS;
 use Jose\Component\Signature\JWSBuilder;
 use Jose\Component\Signature\Serializer\JWSSerializer;
 use function json_decode;
-use PHPUnit\Framework\TestCase;
+use Facile\OpenIDClientTest\TestCase;
 use Prophecy\Argument;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\StreamInterface;

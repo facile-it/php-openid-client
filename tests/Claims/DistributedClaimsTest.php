@@ -13,7 +13,7 @@ use function implode;
 use Jose\Component\Core\AlgorithmManager;
 use Jose\Component\Signature\JWSVerifier;
 use function json_encode;
-use PHPUnit\Framework\TestCase;
+use Facile\OpenIDClientTest\TestCase;
 use Psr\Http\Client\ClientInterface as HttpClient;
 use Psr\Http\Message\RequestFactoryInterface;
 use Psr\Http\Message\RequestInterface;

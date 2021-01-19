@@ -8,7 +8,7 @@ use Facile\OpenIDClient\AuthMethod\ClientSecretPost;
 use Facile\OpenIDClient\Client\ClientInterface;
 use Facile\OpenIDClient\Client\Metadata\ClientMetadataInterface;
 use Facile\OpenIDClient\Exception\InvalidArgumentException;
-use PHPUnit\Framework\TestCase;
+use Facile\OpenIDClientTest\TestCase;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\StreamInterface;
 

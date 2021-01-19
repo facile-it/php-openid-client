@@ -4,13 +4,16 @@ declare(strict_types=1);
 
 namespace Facile\OpenIDClient\Issuer\Metadata\Provider;
 
+/**
+ * @psalm-type DiscoveryConfigurationObject = array<string, mixed>
+ */
 interface DiscoveryProviderInterface extends RemoteProviderInterface
 {
     /**
      * @param string $url
      *
      * @return array<string, mixed>
-     * @phpstan-return OpenIDDiscoveryConfiguration
+     * @psalm-return DiscoveryConfigurationObject
      */
     public function discovery(string $url): array;
 }

@@ -17,7 +17,7 @@ use Psr\Http\Message\RequestFactoryInterface;
  *
  * @link https://tools.ietf.org/html/rfc7662 RFC 7662
  */
-class IntrospectionService
+final class IntrospectionService
 {
     /** @var ClientInterface */
     private $client;

@@ -7,7 +7,7 @@ namespace Facile\OpenIDClientTest\AuthMethod;
 use Facile\OpenIDClient\AuthMethod\AuthMethodFactory;
 use Facile\OpenIDClient\AuthMethod\AuthMethodInterface;
 use Facile\OpenIDClient\Exception\InvalidArgumentException;
-use PHPUnit\Framework\TestCase;
+use Facile\OpenIDClientTest\TestCase;
 
 class AuthMethodFactoryTest extends TestCase
 {

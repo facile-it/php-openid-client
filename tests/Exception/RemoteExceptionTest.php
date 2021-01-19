@@ -6,7 +6,7 @@ namespace Facile\OpenIDClientTest\Exception;
 
 use Facile\OpenIDClient\Exception\ExceptionInterface;
 use Facile\OpenIDClient\Exception\RemoteException;
-use PHPUnit\Framework\TestCase;
+use Facile\OpenIDClientTest\TestCase;
 use Psr\Http\Message\ResponseInterface;
 
 class RemoteExceptionTest extends TestCase

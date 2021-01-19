@@ -6,6 +6,9 @@ namespace Facile\OpenIDClient\Session;
 
 use JsonSerializable;
 
+/**
+ * @psalm-type AuthSessionType = array{state?: string, nonce?: string, code_verifier?: string, customs?: array<string, mixed>}
+ */
 interface AuthSessionInterface extends JsonSerializable
 {
     public function getState(): ?string;
@@ -34,6 +37,14 @@ interface AuthSessionInterface extends JsonSerializable
      * @param array<string, mixed> $array
      *
      * @return static
+     *
+     * @psalm-param AuthSessionType $array
      */
     public static function fromArray(array $array): self;
+
+    /**
+     * @return array<string, mixed>
+     * @psalm-return AuthSessionType
+     */
+    public function jsonSerialize(): array;
 }

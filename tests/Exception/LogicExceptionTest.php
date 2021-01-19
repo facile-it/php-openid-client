@@ -6,7 +6,7 @@ namespace Facile\OpenIDClientTest\Exception;
 
 use Facile\OpenIDClient\Exception\ExceptionInterface;
 use Facile\OpenIDClient\Exception\LogicException;
-use PHPUnit\Framework\TestCase;
+use Facile\OpenIDClientTest\TestCase;
 
 class LogicExceptionTest extends TestCase
 {

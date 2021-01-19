@@ -12,7 +12,7 @@ use Facile\OpenIDClient\Token\TokenSetFactory;
 use Facile\OpenIDClient\Token\TokenSetFactoryInterface;
 use Facile\OpenIDClient\Token\TokenVerifierBuilderInterface;
 
-class AuthorizationServiceBuilder extends AbstractServiceBuilder
+final class AuthorizationServiceBuilder extends AbstractServiceBuilder
 {
     /** @var null|TokenSetFactoryInterface */
     private $tokenSetFactory;

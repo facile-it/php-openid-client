@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Facile\OpenIDClientTest\Issuer\Metadata\Provider;
 
 use Facile\OpenIDClient\Issuer\Metadata\Provider\DiscoveryProvider;
-use PHPUnit\Framework\TestCase;
+use Facile\OpenIDClientTest\TestCase;
 use Prophecy\Prophecy\ObjectProphecy;
 use Psr\Http\Client\ClientInterface;
 use Psr\Http\Message\RequestFactoryInterface;

@@ -6,6 +6,11 @@ namespace Facile\OpenIDClient\Client\Metadata;
 
 use JsonSerializable;
 
+/**
+ * @psalm-import-type ClientMetadataObject from \Facile\JoseVerifier\Psalm\PsalmTypes
+ * @psalm-import-type JWKObject from \Facile\JoseVerifier\Psalm\PsalmTypes
+ * @psalm-import-type JWKSetObject from \Facile\JoseVerifier\Psalm\PsalmTypes
+ */
 interface ClientMetadataInterface extends JsonSerializable
 {
     /**
@@ -68,18 +73,19 @@ interface ClientMetadataInterface extends JsonSerializable
 
     /**
      * @return array|null
-     * @phpstan-return OpenIDJwkSet|null
+     * @psalm-return JWKSetObject|null
      */
     public function getJwks(): ?array;
 
     /**
      * @return array<string, mixed>
+     * @psalm-return ClientMetadataObject
      */
     public function jsonSerialize(): array;
 
     /**
      * @return array<string, mixed>
-     * @phpstan-return OpenIDClientMetadata
+     * @psalm-return ClientMetadataObject
      */
     public function toArray(): array;
 }

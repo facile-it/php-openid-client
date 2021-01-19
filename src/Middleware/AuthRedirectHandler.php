@@ -52,6 +52,7 @@ class AuthRedirectHandler implements RequestHandlerInterface
             throw new RuntimeException('Unable to find a valid attribute for ' . AuthRequestInterface::class);
         }
 
+        /** @var null|AuthSessionInterface $authSession */
         $authSession = $request->getAttribute(AuthSessionInterface::class);
 
         if ($authSession instanceof AuthSessionInterface) {

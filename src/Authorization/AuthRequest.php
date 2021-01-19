@@ -13,9 +13,15 @@ use function count;
 use Facile\OpenIDClient\Exception\InvalidArgumentException;
 use function implode;
 
+/**
+ * @psalm-type AuthRequestParams = array{client_id: string, redirect_uri: string, scope: string, response_type: string, response_mode: string, state?: string, nonce?: string, display?: string, prompt?: string, max_age?: int, ui_locales?: string, id_token_hint?: string, login_hint?: string, acr_values?: string, request?: string, code_challenge?: string, code_challenge_method?: string}
+ */
 final class AuthRequest implements AuthRequestInterface
 {
-    /** @var array<string, mixed> */
+    /**
+     * @var array<string, mixed>
+     * @psalm-var AuthRequestParams
+     */
     private $params;
 
     /** @var string[] */
@@ -39,12 +45,13 @@ final class AuthRequest implements AuthRequestInterface
             'response_type' => 'code',
             'response_mode' => 'query',
         ];
-        /** @var array<string, mixed> $merged */
+        /** @var AuthRequestParams $merged */
         $merged = array_merge($defaults, $params);
 
+        $merged['client_id'] = $clientId;
+        $merged['redirect_uri'] = $redirectUri;
+
         $this->params = $merged;
-        $this->params['client_id'] = $clientId;
-        $this->params['redirect_uri'] = $redirectUri;
     }
 
     /**
@@ -52,7 +59,7 @@ final class AuthRequest implements AuthRequestInterface
      *
      * @return static
      *
-     * @phpstan-param array{client_id: string, redirect_uri: string} $params
+     * @psalm-param array{client_id: string, redirect_uri: string} $params
      */
     public static function fromParams(array $params): self
     {
@@ -253,7 +260,10 @@ final class AuthRequest implements AuthRequestInterface
     public function withParams(array $params): AuthRequestInterface
     {
         $instance = clone $this;
-        $instance->params = array_merge($instance->params, $params);
+        /** @var AuthRequestParams $params */
+        $params = array_merge($instance->params, $params);
+
+        $instance->params = $params;
 
         if (0 === count(array_diff_key($instance->params, array_flip(self::$requiredKeys)))) {
             throw new InvalidArgumentException(implode(', ', self::$requiredKeys) . ' should be provided');

@@ -7,7 +7,7 @@ namespace Facile\OpenIDClientTest\AuthMethod;
 use Facile\OpenIDClient\AuthMethod\SelfSignedTLSClientAuth;
 use Facile\OpenIDClient\Client\ClientInterface;
 use Facile\OpenIDClient\Client\Metadata\ClientMetadataInterface;
-use PHPUnit\Framework\TestCase;
+use Facile\OpenIDClientTest\TestCase;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\StreamInterface;
 

@@ -77,9 +77,6 @@ final class AuthSession implements AuthSessionInterface
         return $session;
     }
 
-    /**
-     * @return array<string, mixed>
-     */
     public function jsonSerialize(): array
     {
         return array_filter([

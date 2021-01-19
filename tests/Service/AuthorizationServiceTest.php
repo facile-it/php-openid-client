@@ -15,7 +15,7 @@ use Facile\OpenIDClient\Token\IdTokenVerifierBuilderInterface;
 use Facile\OpenIDClient\Token\TokenSetFactoryInterface;
 use Facile\OpenIDClient\Token\TokenSetInterface;
 use Facile\OpenIDClient\Token\TokenVerifierBuilderInterface;
-use PHPUnit\Framework\TestCase;
+use Facile\OpenIDClientTest\TestCase;
 use Psr\Http\Client\ClientInterface;
 use Psr\Http\Message\RequestFactoryInterface;
 use Psr\Http\Message\RequestInterface;

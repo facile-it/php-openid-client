@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Facile\OpenIDClientTest\functions;
 
 use function Facile\OpenIDClient\base64url_encode;
-use PHPUnit\Framework\TestCase;
+use Facile\OpenIDClientTest\TestCase;
 
 class Base64UrlEncodeTest extends TestCase
 {

@@ -15,6 +15,9 @@ use Psr\Http\Message\UriFactoryInterface;
 use function rtrim;
 use function strpos;
 
+/**
+ * @psalm-import-type DiscoveryConfigurationObject from DiscoveryProviderInterface
+ */
 final class DiscoveryProvider implements DiscoveryProviderInterface
 {
     private const OIDC_DISCOVERY = '/.well-known/openid-configuration';
@@ -48,7 +51,7 @@ final class DiscoveryProvider implements DiscoveryProviderInterface
     public function discovery(string $url): array
     {
         $uri = $this->uriFactory->createUri($url);
-        $uriPath = $uri->getPath() ?? '/';
+        $uriPath = $uri->getPath() ?: '/';
 
         if (false !== strpos($uriPath, '/.well-known/')) {
             return $this->fetchOpenIdConfiguration((string) $uri);
@@ -75,7 +78,7 @@ final class DiscoveryProvider implements DiscoveryProviderInterface
      * @param string $uri
      *
      * @return array<mixed, string>
-     * @phpstan-return OpenIDDiscoveryConfiguration
+     * @psalm-return DiscoveryConfigurationObject
      */
     private function fetchOpenIdConfiguration(string $uri): array
     {
@@ -83,6 +86,7 @@ final class DiscoveryProvider implements DiscoveryProviderInterface
             ->withHeader('accept', 'application/json');
 
         try {
+            /** @var DiscoveryConfigurationObject $data */
             $data = parse_metadata_response($this->client->sendRequest($request));
         } catch (ClientExceptionInterface $e) {
             throw new RuntimeException('Unable to fetch provider metadata', 0, $e);

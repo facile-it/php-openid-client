@@ -9,6 +9,9 @@ use Facile\OpenIDClient\Client\ClientInterface;
 use function is_array;
 use Throwable;
 
+/**
+ * @psalm-import-type TokenSetClaimsType from \Facile\OpenIDClient\Token\TokenSetInterface
+ */
 final class AggregateParser extends AbstractClaims implements AggregatedParserInterface
 {
     public function unpack(ClientInterface $client, array $claims): array
@@ -24,15 +27,15 @@ final class AggregateParser extends AbstractClaims implements AggregatedParserIn
             return $claims;
         }
 
-        /** @var array<string, mixed> $aggregatedSources */
+        /** @var array<string, array{JWT: string}> $aggregatedSources */
         $aggregatedSources = array_filter($claimSources, static function ($value): bool {
-            return null !== ($value['JWT'] ?? null);
+            return is_string($value['JWT'] ?? null);
         });
 
         $claimPayloads = [];
         foreach ($aggregatedSources as $sourceName => $source) {
             try {
-                $claimPayloads[$sourceName] = $this->claimJWT($client, (string) $source['JWT']);
+                $claimPayloads[$sourceName] = $this->claimJWT($client, $source['JWT']);
                 unset($claims['_claim_sources'][$sourceName]);
             } catch (Throwable $e) {
                 throw $e;

@@ -17,6 +17,7 @@ use Facile\OpenIDClient\Exception\RuntimeException;
  */
 function get_endpoint_uri(OpenIDClient $client, string $endpointMetadata): string
 {
+    /** @var string|null $authMethod */
     $authMethod = $client->getMetadata()->get($endpointMetadata . '_auth_method');
 
     $endpoint = null;
@@ -27,6 +28,7 @@ function get_endpoint_uri(OpenIDClient $client, string $endpointMetadata): strin
             ->getMtlsEndpointAliases()['token_endpoint'] ?? null;
     }
 
+    /** @var string|null $endpoint */
     $endpoint = $endpoint ?? $client->getIssuer()->getMetadata()->get($endpointMetadata);
 
     if (! is_string($endpoint)) {

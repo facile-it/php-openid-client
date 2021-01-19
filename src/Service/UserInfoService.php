@@ -18,7 +18,10 @@ use Psr\Http\Client\ClientInterface;
 use Psr\Http\Message\RequestFactoryInterface;
 use function sprintf;
 
-class UserInfoService
+/**
+ * @psalm-import-type TokenSetClaimsType from TokenSetInterface
+ */
+final class UserInfoService
 {
     /** @var ClientInterface */
     private $client;
@@ -97,9 +100,11 @@ class UserInfoService
         }
 
         if ($expectJwt) {
+            /** @var TokenSetClaimsType $payload */
             $payload = $this->userInfoVerifierBuilder->build($client)
                 ->verify((string) $response->getBody());
         } else {
+            /** @var false|TokenSetClaimsType $payload */
             $payload = json_decode((string) $response->getBody(), true);
         }
 
@@ -114,6 +119,7 @@ class UserInfoService
         }
 
         // check expected sub
+        /** @var string|null $expectedSub */
         $expectedSub = $tokenSet->claims()['sub'] ?? null;
 
         if (null === $expectedSub) {
@@ -122,7 +128,7 @@ class UserInfoService
 
         if ($expectedSub !== ($payload['sub'] ?? null)) {
             throw new RuntimeException(
-                sprintf('Userinfo sub mismatch, expected %s, got: %s', $expectedSub, $payload['sub'] ?? null)
+                sprintf('Userinfo sub mismatch, expected %s, got: %s', $expectedSub, $payload['sub'] ?? '')
             );
         }
 

@@ -17,7 +17,7 @@ use Psr\Http\Message\RequestFactoryInterface;
  *
  * @link https://tools.ietf.org/html/rfc7009 RFC 7009
  */
-class RevocationService
+final class RevocationService
 {
     /** @var ClientInterface */
     private $client;

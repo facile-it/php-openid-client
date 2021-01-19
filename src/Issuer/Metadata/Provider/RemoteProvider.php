@@ -29,7 +29,6 @@ final class RemoteProvider implements RemoteProviderInterface
     public function fetch(string $uri): array
     {
         $lastException = null;
-        $data = null;
 
         $providers = array_filter($this->providers, static function (RemoteProviderInterface $provider) use ($uri): bool {
             return $provider->isAllowedUri($uri);
@@ -41,10 +40,6 @@ final class RemoteProvider implements RemoteProviderInterface
             } catch (ExceptionInterface $e) {
                 $lastException = $e;
             }
-        }
-
-        if (null !== $data) {
-            return $data;
         }
 
         throw new RuntimeException('Unable to fetch issuer metadata', 0, $lastException);

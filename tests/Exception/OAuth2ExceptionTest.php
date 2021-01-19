@@ -10,7 +10,7 @@ use Facile\OpenIDClient\Exception\OAuth2Exception;
 use Facile\OpenIDClient\Exception\RemoteException;
 use function json_decode;
 use function json_encode;
-use PHPUnit\Framework\TestCase;
+use Facile\OpenIDClientTest\TestCase;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\StreamInterface;
 

@@ -22,6 +22,9 @@ use Psr\Http\Server\MiddlewareInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 use Psr\SimpleCache\CacheInterface;
 
+/**
+ * @psalm-import-type AuthSessionType from AuthSessionInterface
+ */
 class SessionCookieMiddleware implements MiddlewareInterface
 {
     public const SESSION_ATTRIBUTE = AuthSessionInterface::class;
@@ -52,7 +55,9 @@ class SessionCookieMiddleware implements MiddlewareInterface
         $sessionCookie = $cookies->get($this->cookieName);
 
         $sessionId = null !== $sessionCookie ? $sessionCookie->getValue() : null;
+        /** @var string|null $sessionValue */
         $sessionValue = null !== $sessionId ? $this->cache->get($sessionId) : null;
+        /** @var false|AuthSessionType $data */
         $data = null !== $sessionValue ? json_decode($sessionValue, true) : [];
 
         if (! is_array($data)) {

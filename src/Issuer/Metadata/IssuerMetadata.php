@@ -14,11 +14,14 @@ use function count;
 use Facile\OpenIDClient\Exception\InvalidArgumentException;
 use function implode;
 
+/**
+ * @psalm-import-type IssuerMetadataObject from \Facile\JoseVerifier\Psalm\PsalmTypes
+ */
 final class IssuerMetadata implements IssuerMetadataInterface
 {
     /**
      * @var array<string, mixed>
-     * @phpstan-var OpenIDIssuerMetadata
+     * @psalm-var IssuerMetadataObject
      */
     private $metadata;
 
@@ -27,59 +30,6 @@ final class IssuerMetadata implements IssuerMetadataInterface
         'issuer',
         'authorization_endpoint',
         'jwks_uri',
-    ];
-
-    /** @var array<string, mixed> */
-    private static $defaults = [
-        'scopes_supported' => ['openid'],
-        'response_types_supported' => ['code', 'id_token', 'token id_token'],
-        'response_modes_supported' => ['query', 'fragment'],
-        'grant_types_supported' => ['authorization_code', 'implicit'],
-        'acr_values_supported' => [],
-        'subject_types_supported' => ['public'],
-        'display_values_supported' => [],
-        'claim_types_supported' => ['normal'],
-        'claim_supported' => [],
-
-        'claims_parameter_supported' => false,
-        'request_parameter_supported' => false,
-        'request_uri_parameter_supported' => true,
-        'require_request_uri_registration' => false,
-        'token_endpoint_auth_methods_supported' => ['client_secret_basic'],
-        'token_endpoint_auth_signing_alg_values_supported' => ['RS256'],
-
-        'id_token_signing_alg_values_supported' => ['RS256'],
-        'id_token_encryption_alg_values_supported' => [],
-        'id_token_encryption_enc_values_supported' => [],
-
-        'userinfo_signing_alg_values_supported' => ['RS256'],
-        'userinfo_encryption_alg_values_supported' => [],
-        'userinfo_encryption_enc_values_supported' => [],
-
-        'authorization_signing_alg_values_supported' => ['RS256'],
-        'authorization_encryption_alg_values_supported' => [],
-        'authorization_encryption_enc_values_supported' => [],
-
-        'introspection_endpoint_auth_methods_supported' => ['client_secret_basic'],
-        'introspection_endpoint_auth_signing_alg_values_supported' => ['RS256'],
-
-        'introspection_signing_alg_values_supported' => ['RS256'],
-        'introspection_encryption_alg_values_supported' => [],
-        'introspection_encryption_enc_values_supported' => [],
-
-        'request_object_signing_alg_values_supported' => ['RS256'],
-        'request_object_encryption_alg_values_supported' => [],
-        'request_object_encryption_enc_values_supported' => [],
-
-        'revocation_endpoint_auth_methods_supported' => [],
-        'revocation_signing_alg_values_supported' => ['RS256'],
-
-        'frontchannel_logout_supported' => false,
-        'frontchannel_logout_session_supported' => false,
-        'backchannel_logout_supported' => false,
-        'backchannel_logout_session_supported' => false,
-        'tls_client_certificate_bound_access_tokens' => false,
-        'mtls_endpoint_aliases' => [],
     ];
 
     /**
@@ -102,9 +52,9 @@ final class IssuerMetadata implements IssuerMetadataInterface
             'jwks_uri' => $jwksUri,
         ];
 
-        $defaults = self::$defaults;
-
-        $this->metadata = array_merge($defaults, $claims, $requiredClaims);
+        /** @var IssuerMetadataObject $merged */
+        $merged = array_merge($claims, $requiredClaims);
+        $this->metadata = $merged;
     }
 
     /**
@@ -112,7 +62,7 @@ final class IssuerMetadata implements IssuerMetadataInterface
      *
      * @return static
      *
-     * @phpstan-param OpenIDIssuerMetadata $claims
+     * @psalm-param IssuerMetadataObject $claims
      */
     public static function fromArray(array $claims): self
     {
@@ -129,505 +79,310 @@ final class IssuerMetadata implements IssuerMetadataInterface
         );
     }
 
-    /**
-     * @return string
-     */
     public function getIssuer(): string
     {
         return $this->metadata['issuer'];
     }
 
-    /**
-     * @return string
-     */
     public function getAuthorizationEndpoint(): string
     {
         return $this->metadata['authorization_endpoint'];
     }
 
-    /**
-     * @return string|null
-     */
     public function getTokenEndpoint(): ?string
     {
-        return $this->metadata['token_endpoint'];
+        return $this->metadata['token_endpoint'] ?? null;
     }
 
-    /**
-     * @return string|null
-     */
     public function getUserinfoEndpoint(): ?string
     {
-        return $this->metadata['userinfo_endpoint'];
+        return $this->metadata['userinfo_endpoint'] ?? null;
     }
 
-    /**
-     * @return string|null
-     */
     public function getRegistrationEndpoint(): ?string
     {
-        return $this->metadata['registration_endpoint'];
+        return $this->metadata['registration_endpoint'] ?? null;
     }
 
-    /**
-     * @return string
-     */
     public function getJwksUri(): string
     {
         return $this->metadata['jwks_uri'];
     }
 
-    /**
-     * @return string[]
-     */
-    public function getScopesSupported(): array
+    public function getScopesSupported(): ?array
     {
-        return $this->metadata['scopes_supported'];
+        return $this->metadata['scopes_supported'] ?? null;
     }
 
-    /**
-     * @return string[]
-     */
     public function getResponseTypesSupported(): array
     {
         return $this->metadata['response_types_supported'];
     }
 
-    /**
-     * @return string[]
-     */
     public function getResponseModesSupported(): array
     {
-        return $this->metadata['response_modes_supported'];
+        return $this->metadata['response_modes_supported'] ?? ['query', 'fragment'];
     }
 
-    /**
-     * @return string[]
-     */
     public function getGrantTypesSupported(): array
     {
-        return $this->metadata['grant_types_supported'];
+        return $this->metadata['grant_types_supported'] ?? ['authorization_code', 'implicit'];
     }
 
-    /**
-     * @return string[]
-     */
-    public function getAcrValuesSupported(): array
+    public function getAcrValuesSupported(): ?array
     {
-        return $this->metadata['acr_values_supported'];
+        return $this->metadata['acr_values_supported'] ?? null;
     }
 
-    /**
-     * @return string[]
-     */
     public function getSubjectTypesSupported(): array
     {
-        return $this->metadata['subject_types_supported'];
+        return $this->metadata['subject_types_supported'] ?? ['public'];
     }
 
-    /**
-     * @return string[]
-     */
-    public function getDisplayValuesSupported(): array
+    public function getDisplayValuesSupported(): ?array
     {
-        return $this->metadata['display_values_supported'];
+        return $this->metadata['display_values_supported'] ?? null;
     }
 
-    /**
-     * @return string[]
-     */
     public function getClaimTypesSupported(): array
     {
-        return $this->metadata['claim_types_supported'];
+        return $this->metadata['claim_types_supported'] ?? ['normal'];
     }
 
-    /**
-     * @return string[]
-     */
-    public function getClaimSupported(): array
+    public function getClaimsSupported(): ?array
     {
-        return $this->metadata['claim_supported'];
+        return $this->metadata['claims_supported'] ?? null;
     }
 
-    /**
-     * @return string|null
-     */
     public function getServiceDocumentation(): ?string
     {
-        return $this->metadata['service_documentation'];
+        return $this->metadata['service_documentation'] ?? null;
     }
 
-    /**
-     * @return string[]|null
-     */
     public function getClaimsLocalesSupported(): ?array
     {
-        return $this->metadata['claims_locales_supported'];
+        return $this->metadata['claims_locales_supported'] ?? null;
     }
 
-    /**
-     * @return string[]|null
-     */
     public function getUiLocalesSupported(): ?array
     {
-        return $this->metadata['ui_locales_supported'];
+        return $this->metadata['ui_locales_supported'] ?? null;
     }
 
-    /**
-     * @return bool
-     */
     public function isClaimsParameterSupported(): bool
     {
-        return $this->metadata['claims_parameter_supported'];
+        return $this->metadata['claims_parameter_supported'] ?? false;
     }
 
-    /**
-     * @return bool
-     */
     public function isRequestParameterSupported(): bool
     {
-        return $this->metadata['request_parameter_supported'];
+        return $this->metadata['request_parameter_supported'] ?? false;
     }
 
-    /**
-     * @return bool
-     */
     public function isRequestUriParameterSupported(): bool
     {
-        return $this->metadata['request_uri_parameter_supported'];
+        return $this->metadata['request_uri_parameter_supported'] ?? false;
     }
 
-    /**
-     * @return bool
-     */
     public function isRequireRequestUriRegistration(): bool
     {
-        return $this->metadata['require_request_uri_registration'];
+        return $this->metadata['require_request_uri_registration'] ?? true;
     }
 
-    /**
-     * @return string|null
-     */
     public function getOpPolicyUri(): ?string
     {
-        return $this->metadata['op_policy_uri'];
+        return $this->metadata['op_policy_uri'] ?? null;
     }
 
-    /**
-     * @return string|null
-     */
     public function getOpTosUri(): ?string
     {
-        return $this->metadata['op_tos_uri'];
+        return $this->metadata['op_tos_uri'] ?? null;
     }
 
-    /**
-     * @return string[]|null
-     */
     public function getCodeChallengeMethodsSupported(): ?array
     {
-        return $this->metadata['code_challenge_methods_supported'];
+        return $this->metadata['code_challenge_methods_supported'] ?? null;
     }
 
-    /**
-     * @return string|null
-     */
-    public function getSignedMetadata(): ?string
-    {
-        return $this->metadata['signed_metadata'];
-    }
-
-    /**
-     * @return string[]
-     */
     public function getTokenEndpointAuthMethodsSupported(): array
     {
-        return $this->metadata['token_endpoint_auth_methods_supported'];
+        return $this->metadata['token_endpoint_auth_methods_supported'] ?? ['client_secret_basic'];
     }
 
-    /**
-     * @return string[]
-     */
     public function getTokenEndpointAuthSigningAlgValuesSupported(): array
     {
-        return $this->metadata['token_endpoint_auth_signing_alg_values_supported'];
+        /** @var list<non-empty-string> $default */
+        $default = ['RS256'];
+
+        return $this->metadata['token_endpoint_auth_signing_alg_values_supported'] ?? $default;
     }
 
-    /**
-     * @return string[]
-     */
     public function getIdTokenSigningAlgValuesSupported(): array
     {
-        return $this->metadata['id_token_signing_alg_values_supported'];
+        /** @var list<non-empty-string> $default */
+        $default = ['RS256'];
+
+        return $this->metadata['id_token_signing_alg_values_supported'] ?? $default;
     }
 
-    /**
-     * @return string[]
-     */
     public function getIdTokenEncryptionAlgValuesSupported(): array
     {
-        return $this->metadata['id_token_encryption_alg_values_supported'];
+        return $this->metadata['id_token_encryption_alg_values_supported'] ?? [];
     }
 
-    /**
-     * @return string[]
-     */
     public function getIdTokenEncryptionEncValuesSupported(): array
     {
-        return $this->metadata['id_token_encryption_enc_values_supported'];
+        return $this->metadata['id_token_encryption_enc_values_supported'] ?? [];
     }
 
-    /**
-     * @return string[]
-     */
     public function getUserinfoSigningAlgValuesSupported(): array
     {
-        return $this->metadata['userinfo_signing_alg_values_supported'];
+        return $this->metadata['userinfo_signing_alg_values_supported'] ?? [];
     }
 
-    /**
-     * @return string[]
-     */
     public function getUserinfoEncryptionAlgValuesSupported(): array
     {
-        return $this->metadata['userinfo_encryption_alg_values_supported'];
+        return $this->metadata['userinfo_encryption_alg_values_supported'] ?? [];
     }
 
-    /**
-     * @return string[]
-     */
     public function getUserinfoEncryptionEncValuesSupported(): array
     {
-        return $this->metadata['userinfo_encryption_enc_values_supported'];
+        return $this->metadata['userinfo_encryption_enc_values_supported'] ?? [];
     }
 
-    /**
-     * @return string[]
-     */
     public function getAuthorizationSigningAlgValuesSupported(): array
     {
-        return $this->metadata['authorization_signing_alg_values_supported'];
+        return $this->metadata['authorization_signing_alg_values_supported'] ?? [];
     }
 
-    /**
-     * @return string[]
-     */
     public function getAuthorizationEncryptionAlgValuesSupported(): array
     {
-        return $this->metadata['authorization_encryption_alg_values_supported'];
+        return $this->metadata['authorization_encryption_alg_values_supported'] ?? [];
     }
 
-    /**
-     * @return string[]
-     */
     public function getAuthorizationEncryptionEncValuesSupported(): array
     {
-        return $this->metadata['authorization_encryption_enc_values_supported'];
+        return $this->metadata['authorization_encryption_enc_values_supported'] ?? [];
     }
 
-    /**
-     * @return string|null
-     */
     public function getIntrospectionEndpoint(): ?string
     {
-        return $this->metadata['introspection_endpoint'];
+        return $this->metadata['introspection_endpoint'] ?? null;
     }
 
-    /**
-     * @return string[]
-     */
     public function getIntrospectionEndpointAuthMethodsSupported(): array
     {
-        return $this->metadata['introspection_endpoint_auth_methods_supported'];
+        return $this->metadata['introspection_endpoint_auth_methods_supported'] ?? [];
     }
 
-    /**
-     * @return string[]
-     */
     public function getIntrospectionEndpointAuthSigningAlgValuesSupported(): array
     {
-        return $this->metadata['introspection_endpoint_auth_signing_alg_values_supported'];
+        return $this->metadata['introspection_endpoint_auth_signing_alg_values_supported'] ?? [];
     }
 
-    /**
-     * @return string[]
-     */
     public function getIntrospectionSigningAlgValuesSupported(): array
     {
-        return $this->metadata['introspection_signing_alg_values_supported'];
+        return $this->metadata['introspection_signing_alg_values_supported'] ?? [];
     }
 
-    /**
-     * @return string[]
-     */
     public function getIntrospectionEncryptionAlgValuesSupported(): array
     {
-        return $this->metadata['introspection_encryption_alg_values_supported'];
+        return $this->metadata['introspection_encryption_alg_values_supported'] ?? [];
     }
 
-    /**
-     * @return string[]
-     */
     public function getIntrospectionEncryptionEncValuesSupported(): array
     {
-        return $this->metadata['introspection_encryption_enc_values_supported'];
+        return $this->metadata['introspection_encryption_enc_values_supported'] ?? [];
     }
 
-    /**
-     * @return string[]
-     */
     public function getRequestObjectSigningAlgValuesSupported(): array
     {
-        return $this->metadata['request_object_signing_alg_values_supported'];
+        /** @var list<non-empty-string> $default */
+        $default = ['none', 'RS256'];
+
+        return $this->metadata['request_object_signing_alg_values_supported'] ?? $default;
     }
 
-    /**
-     * @return string[]
-     */
     public function getRequestObjectEncryptionAlgValuesSupported(): array
     {
-        return $this->metadata['request_object_encryption_alg_values_supported'];
+        return $this->metadata['request_object_encryption_alg_values_supported'] ?? [];
     }
 
-    /**
-     * @return string[]
-     */
     public function getRequestObjectEncryptionEncValuesSupported(): array
     {
-        return $this->metadata['request_object_encryption_enc_values_supported'];
+        return $this->metadata['request_object_encryption_enc_values_supported'] ?? [];
     }
 
-    /**
-     * @return string|null
-     */
     public function getRevocationEndpoint(): ?string
     {
-        return $this->metadata['revocation_endpoint'];
+        return $this->metadata['revocation_endpoint'] ?? null;
     }
 
-    /**
-     * @return string[]
-     */
     public function getRevocationEndpointAuthMethodsSupported(): array
     {
-        return $this->metadata['revocation_endpoint_auth_methods_supported'];
+        return $this->metadata['revocation_endpoint_auth_methods_supported'] ?? [];
     }
 
-    /**
-     * @return string[]
-     */
     public function getRevocationEndpointAuthSigningAlgValuesSupported(): array
     {
-        return $this->metadata['revocation_endpoint_auth_signing_alg_values_supported'];
+        return $this->metadata['revocation_endpoint_auth_signing_alg_values_supported'] ?? [];
     }
 
-    /**
-     * @return string|null
-     */
     public function getCheckSessionIframe(): ?string
     {
-        return $this->metadata['check_session_iframe'];
+        return $this->metadata['check_session_iframe'] ?? null;
     }
 
-    /**
-     * @return string|null
-     */
     public function getEndSessionIframe(): ?string
     {
-        return $this->metadata['end_session_iframe'];
+        return $this->metadata['end_session_iframe'] ?? null;
     }
 
-    /**
-     * @return bool
-     */
     public function isFrontchannelLogoutSupported(): bool
     {
-        return $this->metadata['frontchannel_logout_supported'];
+        return $this->metadata['frontchannel_logout_supported'] ?? false;
     }
 
-    /**
-     * @return bool
-     */
     public function isFrontchannelLogoutSessionSupported(): bool
     {
-        return $this->metadata['frontchannel_logout_session_supported'];
+        return $this->metadata['frontchannel_logout_session_supported'] ?? false;
     }
 
-    /**
-     * @return bool
-     */
     public function isBackchannelLogoutSupported(): bool
     {
-        return $this->metadata['backchannel_logout_supported'];
+        return $this->metadata['backchannel_logout_supported'] ?? false;
     }
 
-    /**
-     * @return bool
-     */
     public function isBackchannelLogoutSessionSupported(): bool
     {
-        return $this->metadata['backchannel_logout_session_supported'];
+        return $this->metadata['backchannel_logout_session_supported'] ?? false;
     }
 
-    /**
-     * @return bool
-     */
     public function isTlsClientCertificateBoundAccessTokens(): bool
     {
-        return $this->metadata['tls_client_certificate_bound_access_tokens'];
+        return $this->metadata['tls_client_certificate_bound_access_tokens'] ?? false;
     }
 
-    /**
-     * @return array<string, string>
-     */
     public function getMtlsEndpointAliases(): array
     {
-        return $this->metadata['mtls_endpoint_aliases'];
+        return $this->metadata['mtls_endpoint_aliases'] ?? [];
     }
 
-    /**
-     * @return array<string, mixed>
-     */
-    private function getFilteredClaims(): array
-    {
-        return array_filter($this->metadata, static function ($value, string $key): bool {
-            return array_key_exists($key, self::$requiredKeys)
-                || $value !== (self::$defaults[$key] ?? null);
-        }, ARRAY_FILTER_USE_BOTH);
-    }
-
-    /**
-     * @return array<string, mixed>
-     */
     public function jsonSerialize(): array
     {
-        return $this->getFilteredClaims();
+        return $this->metadata;
     }
 
-    /**
-     * @return array<string, mixed>
-     * @phpstan-return OpenIDIssuerMetadata
-     */
     public function toArray(): array
     {
-        return $this->getFilteredClaims();
+        return $this->metadata;
     }
 
-    /**
-     * @param string $name
-     *
-     * @return bool
-     */
     public function has(string $name): bool
     {
         return array_key_exists($name, $this->metadata);
     }
 
-    /**
-     * @param string $name
-     *
-     * @return mixed|null
-     */
     public function get(string $name)
     {
         return $this->metadata[$name] ?? null;

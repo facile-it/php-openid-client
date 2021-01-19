@@ -24,6 +24,9 @@ use Jose\Component\Signature\Serializer\JWSSerializer;
 use function json_decode;
 use function sprintf;
 
+/**
+ * @psalm-import-type TokenSetClaimsType from \Facile\OpenIDClient\Token\TokenSetInterface
+ */
 abstract class AbstractClaims
 {
     /** @var IssuerBuilderInterface */
@@ -60,7 +63,9 @@ abstract class AbstractClaims
     {
         $issuer = $client->getIssuer();
 
+        /** @var null|array<string, mixed> $header */
         $header = json_decode(base64url_decode(explode('.', $jwt)[0] ?? '{}'), true);
+        /** @var array<string, mixed> $payload */
         $payload = json_decode(base64url_decode(explode('.', $jwt)[1] ?? '{}'), true);
 
         /** @var null|string $alg */
@@ -104,9 +109,12 @@ abstract class AbstractClaims
     /**
      * @param array<string, mixed> $claims
      * @param array<string, string> $sourceNames
-     * @param array<string, array<string, string>> $sources
+     * @param array<string, array<string, mixed>> $sources
      *
      * @return array<string, mixed>
+     *
+     * @psalm-param TokenSetClaimsType $claims
+     * @psalm-return TokenSetClaimsType
      */
     protected function assignClaims(array $claims, array $sourceNames, array $sources): array
     {
@@ -115,11 +123,14 @@ abstract class AbstractClaims
                 continue;
             }
 
-            if (null === ($sources[$inSource][$claim] ?? null)) {
+            if (! array_key_exists($claim, $sources[$inSource])) {
                 throw new RuntimeException(sprintf('Unable to find claim "%s" in source "%s"', $claim, $inSource));
             }
 
-            $claims[$claim] = $sources[$inSource][$claim];
+            /** @var scalar $value */
+            $value = $sources[$inSource][$claim];
+            $claims[$claim] = $value;
+            /** @var TokenSetClaimsType $claims */
             $claims['_claim_names'] = array_diff_key($claims['_claim_names'] ?? [], array_flip([$claim]));
         }
 
@@ -130,14 +141,19 @@ abstract class AbstractClaims
      * @param array<string, mixed> $claims
      *
      * @return array<string, mixed>
+     *
+     * @psalm-param TokenSetClaimsType $claims
+     * @psalm-return TokenSetClaimsType
      */
     protected function cleanClaims(array $claims): array
     {
         if (array_key_exists('_claim_names', $claims) && 0 === count($claims['_claim_names'] ?? [])) {
+            /** @var TokenSetClaimsType $claims */
             $claims = array_diff_key($claims, array_flip(['_claim_names']));
         }
 
         if (array_key_exists('_claim_sources', $claims) && 0 === count($claims['_claim_sources'] ?? [])) {
+            /** @var TokenSetClaimsType $claims */
             $claims = array_diff_key($claims, array_flip(['_claim_sources']));
         }
 

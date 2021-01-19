@@ -8,10 +8,10 @@ use Facile\OpenIDClient\Service\UserInfoService;
 use Facile\OpenIDClient\Token\TokenVerifierBuilderInterface;
 use Facile\OpenIDClient\Token\UserInfoVerifierBuilder;
 
-class UserInfoServiceBuilder extends AbstractServiceBuilder
+final class UserInfoServiceBuilder extends AbstractServiceBuilder
 {
-    /** @var TokenVerifierBuilderInterface */
-    private $userInfoVerifierBuilder;
+    /** @var TokenVerifierBuilderInterface|null */
+    private $userInfoVerifierBuilder = null;
 
     protected function getUserInfoVerifierBuilder(): TokenVerifierBuilderInterface
     {

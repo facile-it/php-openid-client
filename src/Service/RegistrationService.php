@@ -25,7 +25,7 @@ use Psr\Http\Message\RequestFactoryInterface;
  * @link https://tools.ietf.org/html/rfc7591
  * @link https://openid.net/specs/openid-connect-registration-1_0.html
  */
-class RegistrationService
+final class RegistrationService
 {
     /** @var ClientInterface */
     private $client;

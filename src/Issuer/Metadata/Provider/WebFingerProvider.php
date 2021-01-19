@@ -80,8 +80,8 @@ final class WebFingerProvider implements RemoteProviderInterface, WebFingerProvi
         /** @var string|int|null $port */
         $port = $parsedUrl['port'] ?? null;
 
-        if ((int) $port > 0) {
-            $host .= ':' . $port;
+        if (((int) $port) > 0) {
+            $host .= ':' . ((int) $port);
         }
 
         $webFingerUrl = $this->uriFactory->createUri('https://' . $host . self::WEBFINGER)
@@ -96,6 +96,7 @@ final class WebFingerProvider implements RemoteProviderInterface, WebFingerProvi
             throw new RuntimeException('Unable to fetch provider metadata', 0, $e);
         }
 
+        /** @var array<array-key, null|array{rel?: string, href?: string}> $links */
         $links = $data['links'] ?? [];
         $href = null;
         foreach ($links as $link) {

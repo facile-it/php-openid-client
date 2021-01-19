@@ -22,7 +22,7 @@ use Jose\Component\Signature\Algorithm\RS256;
 use Jose\Component\Signature\JWS;
 use Jose\Component\Signature\JWSBuilder;
 use Jose\Component\Signature\Serializer\JWSSerializer;
-use PHPUnit\Framework\TestCase;
+use Facile\OpenIDClientTest\TestCase;
 use Prophecy\Argument;
 use Prophecy\Prophecy\ObjectProphecy;
 

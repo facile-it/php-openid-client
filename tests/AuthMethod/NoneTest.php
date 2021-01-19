@@ -7,7 +7,7 @@ namespace Facile\OpenIDClientTest\AuthMethod;
 use Facile\OpenIDClient\AuthMethod\None;
 use Facile\OpenIDClient\Client\ClientInterface;
 use Facile\OpenIDClient\Client\Metadata\ClientMetadata;
-use PHPUnit\Framework\TestCase;
+use Facile\OpenIDClientTest\TestCase;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\StreamInterface;
 

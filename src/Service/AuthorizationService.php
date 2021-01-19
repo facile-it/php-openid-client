@@ -33,8 +33,10 @@ use Psr\Http\Message\ServerRequestInterface;
  * OAuth 2.0
  *
  * @link https://tools.ietf.org/html/rfc6749 RFC 6749
+ *
+ * @psalm-import-type TokenSetMixedType from TokenSetInterface
  */
-class AuthorizationService
+final class AuthorizationService
 {
     /** @var TokenSetFactoryInterface */
     private $tokenSetFactory;
@@ -70,6 +72,9 @@ class AuthorizationService
      * @param array<string, mixed> $params
      *
      * @return string
+     *
+     * @template P as (array{scope?: string, response_type?: string, redirect_uri?: string, claims?: array<string, string>|JsonSerializable}&array<string, mixed>)|array<empty, empty>
+     * @psalm-param P $params
      */
     public function getAuthorizationUri(OpenIDClient $client, array $params = []): string
     {
@@ -88,6 +93,10 @@ class AuthorizationService
             return null !== $value;
         });
 
+        /**
+         * @var string $key
+         * @var mixed $value
+         */
         foreach ($params as $key => $value) {
             if (null === $value) {
                 unset($params[$key]);
@@ -112,6 +121,8 @@ class AuthorizationService
      * @throws OAuth2Exception
      *
      * @return array<string, mixed>
+     *
+     * @psalm-return TokenSetMixedType
      */
     public function getCallbackParams(ServerRequestInterface $serverRequest, OpenIDClient $client): array
     {
@@ -126,6 +137,8 @@ class AuthorizationService
      * @param int|null $maxAge
      *
      * @return TokenSetInterface
+     *
+     * @psalm-param TokenSetMixedType $params
      */
     public function callback(
         OpenIDClient $client,
@@ -275,32 +288,64 @@ class AuthorizationService
             throw new RuntimeException('Unable to get token response', 0, $e);
         }
 
-        $params = $this->processResponseParams($client, parse_metadata_response($response));
+        /** @var TokenSetMixedType|array{error?: string}|array{response?: string} $data */
+        $data = parse_metadata_response($response);
+        $params = $this->processResponseParams($client, $data);
 
         return $this->tokenSetFactory->fromArray($params);
+    }
+
+    /**
+     * @param array<string, mixed> $params
+     * @return bool
+     *
+     * @template P as array<string, mixed>
+     * @psalm-param P $params
+     * @psalm-assert-if-true array{response: string} $params
+     */
+    private function isResponseObject(array $params): bool
+    {
+        return array_key_exists('response', $params);
+    }
+
+    /**
+     * @throws OAuth2Exception
+     *
+     * @template P as array<string, mixed>
+     * @template OE as array{error: string, error_description?: string, error_uri?: string}
+     * @psalm-param OE|P $params
+     * @psalm-assert P $params
+     */
+    private function assertOAuth2Error(array $params): void
+    {
+        if (array_key_exists('error', $params)) {
+            throw OAuth2Exception::fromParameters($params);
+        }
     }
 
     /**
      * @param OpenIDClient $client
      * @param array<string, mixed> $params
      *
-     * @throw OAuth2Exception
+     * @throws OAuth2Exception
      *
      * @return array<string, mixed>
+     *
+     * @template R as array<string, mixed>
+     * @template ResObject as array{response: string}
+     * @psalm-param R $params
+     * @psalm-return (R is ResObject ? TokenSetMixedType : R)
      */
     private function processResponseParams(OpenIDClient $client, array $params): array
     {
-        if (array_key_exists('error', $params)) {
-            throw OAuth2Exception::fromParameters($params);
-        }
+        $this->assertOAuth2Error($params);
 
-        if (array_key_exists('response', $params)) {
+        if ($this->isResponseObject($params)) {
+            /** @var TokenSetMixedType|ResObject $params */
             $params = $this->responseVerifierBuilder->build($client)
                 ->verify($params['response']);
-        }
 
-        if (array_key_exists('error', $params)) {
-            throw OAuth2Exception::fromParameters($params);
+            $this->assertOAuth2Error($params);
         }
 
         return $params;

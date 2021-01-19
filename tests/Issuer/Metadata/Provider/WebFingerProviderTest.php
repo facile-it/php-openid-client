@@ -8,7 +8,7 @@ use Facile\OpenIDClient\Issuer\Metadata\Provider\DiscoveryProviderInterface;
 use Facile\OpenIDClient\Issuer\Metadata\Provider\WebFingerProvider;
 use function http_build_query;
 use function json_encode;
-use PHPUnit\Framework\TestCase;
+use Facile\OpenIDClientTest\TestCase;
 use Psr\Http\Client\ClientInterface;
 use Psr\Http\Message\RequestFactoryInterface;
 use Psr\Http\Message\RequestInterface;

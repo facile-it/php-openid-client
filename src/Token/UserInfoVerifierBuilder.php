@@ -6,7 +6,7 @@ namespace Facile\OpenIDClient\Token;
 
 use Facile\OpenIDClient\Client\ClientInterface;
 
-class UserInfoVerifierBuilder implements TokenVerifierBuilderInterface
+final class UserInfoVerifierBuilder implements TokenVerifierBuilderInterface
 {
     /** @var bool */
     private $aadIssValidation = false;

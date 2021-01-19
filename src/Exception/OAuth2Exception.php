@@ -33,7 +33,7 @@ class OAuth2Exception extends RuntimeException implements JsonSerializable
      */
     public static function fromResponse(ResponseInterface $response, Throwable $previous = null): self
     {
-        /** @phpstan-var false|array<string, mixed>  $data */
+        /** @psalm-var false|array{error: string, error_description?: string, error_uri?: string}  $data */
         $data = json_decode((string) $response->getBody(), true);
 
         if (! is_array($data) || ! isset($data['error'])) {
@@ -48,6 +48,8 @@ class OAuth2Exception extends RuntimeException implements JsonSerializable
      * @param Throwable|null $previous
      *
      * @return self
+     *
+     * @psalm-param array{error?: string, error_description?: string, error_uri?: string} $params
      */
     public static function fromParameters(array $params, Throwable $previous = null): self
     {
@@ -107,7 +109,8 @@ class OAuth2Exception extends RuntimeException implements JsonSerializable
     }
 
     /**
-     * @return array{error: string, error_description?: string, error_uri?: string}
+     * @return array<string, mixed>
+     * @psalm-return array{error: string, error_description?: string, error_uri?: string}
      */
     public function jsonSerialize(): array
     {
@@ -115,12 +118,14 @@ class OAuth2Exception extends RuntimeException implements JsonSerializable
             'error' => $this->getError(),
         ];
 
-        if (null !== $this->getDescription()) {
-            $data['error_description'] = $this->getDescription();
+        $description = $this->getDescription();
+        if (null !== $description) {
+            $data['error_description'] = $description;
         }
 
-        if (null !== $this->getErrorUri()) {
-            $data['error_uri'] = $this->getErrorUri();
+        $errorUri = $this->getErrorUri();
+        if (null !== $errorUri) {
+            $data['error_uri'] = $errorUri;
         }
 
         return $data;

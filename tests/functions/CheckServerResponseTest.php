@@ -7,7 +7,7 @@ namespace Facile\OpenIDClientTest\functions;
 use function Facile\OpenIDClient\check_server_response;
 use Facile\OpenIDClient\Exception\OAuth2Exception;
 use Facile\OpenIDClient\Exception\RemoteException;
-use PHPUnit\Framework\TestCase;
+use Facile\OpenIDClientTest\TestCase;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\StreamInterface;
 

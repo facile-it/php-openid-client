@@ -7,7 +7,7 @@ namespace Facile\OpenIDClientTest\Session;
 use Facile\OpenIDClient\Session\AuthSession;
 use function json_decode;
 use function json_encode;
-use PHPUnit\Framework\TestCase;
+use Facile\OpenIDClientTest\TestCase;
 
 class AuthSessionTest extends TestCase
 {

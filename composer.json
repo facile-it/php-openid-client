@@ -10,13 +10,6 @@
         }
     ],
     "minimum-stability": "stable",
-    "extra": {
-        "phpstan": {
-            "includes": [
-                "extension.neon"
-            ]
-        }
-    },
     "config": {
         "sort-packages": true
     },
@@ -30,9 +23,9 @@
         "identity"
     ],
     "require": {
-        "php": "^7.2",
+        "php": "^7.2 || ^8.0",
         "ext-json": "*",
-        "facile-it/php-jose-verifier": "^0.1.0 || ^0.2.0",
+        "facile-it/php-jose-verifier": "^0.3.x-dev",
         "php-http/discovery": "^1.6",
         "psr/http-client": "^1.0",
         "psr/http-client-implementation": "^1.0",
@@ -73,7 +66,6 @@
     "require-dev": {
         "dflydev/fig-cookies": "^2.0",
         "friendsofphp/php-cs-fixer": "^2.15",
-        "jangregor/phpstan-prophecy": "^0.6.2",
         "laminas/laminas-component-installer": "^2.1",
         "laminas/laminas-config-aggregator": "^1.1",
         "laminas/laminas-di": "^3.1",
@@ -83,12 +75,10 @@
         "php-http/curl-client": "^2.0",
         "php-http/guzzle6-adapter": "^2.0",
         "phpspec/prophecy": "^1.10.3",
-        "phpstan/extension-installer": "^1.0",
-        "phpstan/phpstan": "^0.12.18",
-        "phpstan/phpstan-deprecation-rules": "^0.12.2",
-        "phpstan/phpstan-strict-rules": "^0.12.2",
-        "phpunit/phpunit": "^8.2 || ~9.0.2",
+        "phpspec/prophecy-phpunit": "^1.1 || ^2.0",
+        "phpunit/phpunit": "^8.5.14 || ^9.3",
         "symfony/console": "^4.3 || ^5.0",
+        "vimeo/psalm": "^4.3",
         "web-token/jwt-encryption-algorithm-aescbc": "^2.0",
         "web-token/jwt-encryption-algorithm-aesgcm": "^2.0",
         "web-token/jwt-encryption-algorithm-aesgcmkw": "^2.0",
@@ -112,12 +102,12 @@
     "scripts": {
         "cs-check": "php-cs-fixer fix --dry-run --diff --allow-risky=yes",
         "cs-fix": "php-cs-fixer fix --diff --allow-risky=yes",
-        "phpstan": "phpstan analyse --no-progress",
+        "psalm": "psalm",
         "test": "phpunit",
         "test-coverage": "phpunit --coverage-text",
         "check": [
             "@cs-check",
-            "@phpstan",
+            "@psalm",
             "@test"
         ]
     }

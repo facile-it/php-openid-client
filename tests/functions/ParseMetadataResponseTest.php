@@ -8,7 +8,7 @@ use Facile\OpenIDClient\Exception\InvalidArgumentException;
 use Facile\OpenIDClient\Exception\OAuth2Exception;
 use Facile\OpenIDClient\Exception\RemoteException;
 use function Facile\OpenIDClient\parse_metadata_response;
-use PHPUnit\Framework\TestCase;
+use Facile\OpenIDClientTest\TestCase;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\StreamInterface;
 

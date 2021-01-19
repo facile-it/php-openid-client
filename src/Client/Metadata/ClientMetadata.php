@@ -14,9 +14,15 @@ use function count;
 use Facile\OpenIDClient\Exception\InvalidArgumentException;
 use function implode;
 
+/**
+ * @psalm-import-type ClientMetadataObject from \Facile\JoseVerifier\Psalm\PsalmTypes
+ */
 final class ClientMetadata implements ClientMetadataInterface
 {
-    /** @var array<string, mixed> */
+    /**
+     * @var array<string, mixed>
+     * @psalm-var ClientMetadataObject
+     */
     private $metadata;
 
     /** @var string[] */
@@ -25,40 +31,16 @@ final class ClientMetadata implements ClientMetadataInterface
     ];
 
     /** @var array<string, mixed> */
-    private static $defaults = [
-        'client_id' => null,
-        'redirect_uris' => [],
-        'client_secret' => null,
-        'jwks' => null,
-        'jwks_uri' => null,
-        'id_token_signed_response_alg' => 'RS256',
-        'id_token_encrypted_response_alg' => null,
-        'id_token_encrypted_response_enc' => null,
-        'userinfo_signed_response_alg' => null,
-        'userinfo_encrypted_response_alg' => null,
-        'userinfo_encrypted_response_enc' => null,
-        'response_types' => ['code'],
-        'post_logout_redirect_uris' => [],
-        'require_auth_time' => false,
-        'request_object_signing_alg' => null,
-        'request_object_encryption_alg' => null,
-        'request_object_encryption_enc' => null,
-        'token_endpoint_auth_method' => 'client_secret_basic',
-        //'introspection_endpoint_auth_method' => 'client_secret_basic',
-        //'revocation_endpoint_auth_method' => 'client_secret_basic',
-        'token_endpoint_auth_signing_alg' => null,
-        'introspection_endpoint_auth_signing_alg' => null,
-        'revocation_endpoint_auth_signing_alg' => null,
-        'tls_client_certificate_bound_access_tokens' => false,
-    ];
+    private static $defaults = [];
 
     /**
      * IssuerMetadata constructor.
      *
      * @param string $clientId
      * @param array<string, mixed> $claims
+     * @psalm-param ClientMetadataObject|array<empty, empty> $claims
      */
-    public function __construct(string $clientId, $claims = [])
+    public function __construct(string $clientId, array $claims = [])
     {
         $requiredClaims = [
             'client_id' => $clientId,
@@ -66,7 +48,9 @@ final class ClientMetadata implements ClientMetadataInterface
 
         $defaults = self::$defaults;
 
-        $this->metadata = array_merge($defaults, $claims, $requiredClaims);
+        /** @var ClientMetadataObject $merged */
+        $merged = array_merge($defaults, $claims, $requiredClaims);
+        $this->metadata = $merged;
     }
 
     /**
@@ -74,7 +58,7 @@ final class ClientMetadata implements ClientMetadataInterface
      *
      * @return static
      *
-     * @phpstan-param OpenIDClientMetadata $claims
+     * @psalm-param ClientMetadataObject $claims
      */
     public static function fromArray(array $claims): self
     {
@@ -110,7 +94,7 @@ final class ClientMetadata implements ClientMetadataInterface
 
     public function getTokenEndpointAuthMethod(): string
     {
-        return $this->metadata['token_endpoint_auth_method'];
+        return $this->metadata['token_endpoint_auth_method'] ?? 'client_secret_basic';
     }
 
     public function getAuthorizationSignedResponseAlg(): ?string
@@ -130,7 +114,7 @@ final class ClientMetadata implements ClientMetadataInterface
 
     public function getIdTokenSignedResponseAlg(): string
     {
-        return $this->metadata['id_token_signed_response_alg'];
+        return $this->metadata['id_token_signed_response_alg'] ?? 'RS256';
     }
 
     public function getIdTokenEncryptedResponseAlg(): ?string
@@ -183,40 +167,19 @@ final class ClientMetadata implements ClientMetadataInterface
         return $this->metadata['revocation_endpoint_auth_method'] ?? $this->getTokenEndpointAuthMethod();
     }
 
-    /**
-     * @return array|null
-     * @phpstan-return array{keys: array<int, array<string, mixed>>}
-     */
     public function getJwks(): ?array
     {
         return $this->metadata['jwks'] ?? null;
     }
 
-    /**
-     * @return array<string, mixed>
-     */
-    private function getFilteredClaims(): array
-    {
-        return array_filter($this->metadata, static function ($value, string $key): bool {
-            return array_key_exists($key, self::$requiredKeys)
-                || $value !== (self::$defaults[$key] ?? null);
-        }, ARRAY_FILTER_USE_BOTH);
-    }
-
-    /**
-     * @return array<string, mixed>
-     */
     public function jsonSerialize(): array
     {
-        return $this->getFilteredClaims();
+        return $this->toArray();
     }
 
-    /**
-     * @return array<string, mixed>
-     */
     public function toArray(): array
     {
-        return $this->getFilteredClaims();
+        return $this->metadata;
     }
 
     /**

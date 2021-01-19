@@ -79,8 +79,14 @@ class ClientBuilder
             return $this->jwksProvider;
         }
 
-        if (null !== $this->clientMetadata && null !== $this->clientMetadata->getJwks()) {
-            new MemoryJwksProvider($this->clientMetadata->getJwks());
+        if (null === $this->clientMetadata) {
+            return new MemoryJwksProvider(['keys' => []]);
+        }
+
+        $jwks = $this->clientMetadata->getJwks();
+
+        if (null !== $jwks) {
+            new MemoryJwksProvider($jwks);
         }
 
         return new MemoryJwksProvider(['keys' => []]);

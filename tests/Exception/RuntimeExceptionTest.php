@@ -6,7 +6,7 @@ namespace Facile\OpenIDClientTest\Exception;
 
 use Facile\OpenIDClient\Exception\ExceptionInterface;
 use Facile\OpenIDClient\Exception\RuntimeException;
-use PHPUnit\Framework\TestCase;
+use Facile\OpenIDClientTest\TestCase;
 
 class RuntimeExceptionTest extends TestCase
 {

@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace Facile\OpenIDClient\Issuer\Metadata\Provider;
 
+/**
+ * @psalm-import-type IssuerMetadataObject from \Facile\JoseVerifier\Psalm\PsalmTypes
+ */
 interface RemoteProviderInterface
 {
     public function isAllowedUri(string $uri): bool;
@@ -12,7 +15,7 @@ interface RemoteProviderInterface
      * @param string $uri
      *
      * @return array<string, mixed>
-     * @phpstan-return OpenIDDiscoveryConfiguration
+     * @psalm-return IssuerMetadataObject
      */
     public function fetch(string $uri): array;
 }

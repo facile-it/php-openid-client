@@ -6,7 +6,7 @@ namespace Facile\OpenIDClient\Service\Builder;
 
 use Facile\OpenIDClient\Service\RevocationService;
 
-class RevocationServiceBuilder extends AbstractServiceBuilder
+final class RevocationServiceBuilder extends AbstractServiceBuilder
 {
     public function build(): RevocationService
     {

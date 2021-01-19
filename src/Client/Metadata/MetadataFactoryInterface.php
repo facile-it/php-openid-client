@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace Facile\OpenIDClient\Client\Metadata;
 
+/**
+ * @psalm-import-type ClientMetadataObject from \Facile\JoseVerifier\Psalm\PsalmTypes
+ */
 interface MetadataFactoryInterface
 {
     /**
@@ -11,7 +14,7 @@ interface MetadataFactoryInterface
      *
      * @return ClientMetadataInterface
      *
-     * @phpstan-param OpenIDClientMetadata $metadata
+     * @psalm-param ClientMetadataObject $metadata
      */
     public function fromArray(array $metadata): ClientMetadataInterface;
 }

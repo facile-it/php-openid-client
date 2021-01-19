@@ -14,13 +14,13 @@ class AlgorithmManagerBuilder
 {
     /**
      * @var string[]
-     * @phpstan-var class-string<\Jose\Component\Core\Algorithm>[]
+     * @psalm-var list<class-string<\Jose\Component\Core\Algorithm>>
      */
     private $algorithmClasses;
 
     /**
      * @param string[]|null $algorithmClasses
-     * @phpstan-param null|class-string<\Jose\Component\Core\Algorithm>[] $algorithmClasses
+     * @psalm-param null|list<class-string<\Jose\Component\Core\Algorithm>> $algorithmClasses
      */
     public function __construct(?array $algorithmClasses = null)
     {
@@ -34,7 +34,7 @@ class AlgorithmManagerBuilder
 
     /**
      * @return string[]
-     * @phpstan-return class-string<\Jose\Component\Core\Algorithm>[]
+     * @psalm-return list<class-string<\Jose\Component\Core\Algorithm>>
      */
     private function getAlgorithms(): array
     {

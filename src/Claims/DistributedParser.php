@@ -54,7 +54,7 @@ final class DistributedParser extends AbstractClaims implements DistributedParse
             return $claims;
         }
 
-        /** @var array<string, mixed> $distributedSources */
+        /** @var array<string, array{endpoint: string}> $distributedSources */
         $distributedSources = array_filter($claimSources, static function ($value): bool {
             return null !== ($value['endpoint'] ?? null);
         });
@@ -62,7 +62,7 @@ final class DistributedParser extends AbstractClaims implements DistributedParse
         /** @var array<string, ResponseInterface> $responses */
         $responses = [];
         foreach ($distributedSources as $sourceName => $source) {
-            $request = $this->requestFactory->createRequest('GET', (string) $source['endpoint'])
+            $request = $this->requestFactory->createRequest('GET', $source['endpoint'])
                 ->withHeader('accept', 'application/jwt');
 
             $accessToken = $source['access_token'] ?? ($accessTokens[$sourceName] ?? null);
