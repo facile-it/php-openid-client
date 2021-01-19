@@ -62,16 +62,18 @@ jobs:
           - "7.2"
           - "7.3"
           - "7.4"
-          - "8.0"
         deps:
-          - "lowest"
-          - "latest"
+          - "--prefer-lowest"
+          - ""
         coverage:
           - "false"
         include:
           - php-version: "7.4"
-            deps: "latest"
+            deps: ""
             coverage: "true"
+        include:
+          - php-version: "8.0"
+            deps: "--ignore-platform-req=php"
 
     steps:
       - name: "Checkout"
@@ -95,16 +97,7 @@ jobs:
           restore-keys: "php-${{ matrix.php-version }}-composer-"
 
       - name: "Install dependencies with composer"
-        run: "composer update --no-interaction --no-progress --no-suggest --prefer-dist"
-        if: "${{ matrix.deps != 'lowest' }}"
-
-      - name: "Install lowest possible dependencies with composer"
-        run: "composer update --no-interaction --no-progress --no-suggest --prefer-dist --prefer-lowest"
-        if: "${{ matrix.deps == 'lowest' }}"
-
-      - name: "Install phpspec/prophecy-phpunit"
-        run: "composer require --dev phpspec/prophecy-phpunit --no-update"
-        if: "${{ matrix.php-version != '7.2' }}"
+        run: "composer update --no-interaction --no-progress --no-suggest --prefer-dist ${{ matrix.deps }}"
 
       - name: "Run PHPUnit"
         run: "vendor/bin/phpunit -c phpunit.xml.dist"
