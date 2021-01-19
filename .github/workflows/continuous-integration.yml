@@ -71,7 +71,6 @@ jobs:
           - php-version: "7.4"
             deps: ""
             coverage: "true"
-        include:
           - php-version: "8.0"
             deps: "--ignore-platform-req=php"
 
