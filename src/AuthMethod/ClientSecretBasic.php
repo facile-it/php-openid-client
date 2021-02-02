@@ -31,7 +31,7 @@ final class ClientSecretBasic implements AuthMethodInterface
 
         $request = $request->withHeader(
             'Authorization',
-            'Basic ' . base64_encode($clientId . ':' . $clientSecret)
+            'Basic ' . base64_encode(urlencode($clientId) . ':' . urlencode($clientSecret))
         );
 
         $request->getBody()->write(http_build_query($claims));

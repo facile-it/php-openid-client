@@ -32,10 +32,10 @@ class ClientSecretBasicTest extends TestCase
         $metadata = $this->prophesize(ClientMetadataInterface::class);
 
         $client->getMetadata()->willReturn($metadata->reveal());
-        $metadata->getClientId()->willReturn('foo');
-        $metadata->getClientSecret()->willReturn('bar');
+        $metadata->getClientId()->willReturn('fooo');
+        $metadata->getClientSecret()->willReturn('bar%');
 
-        $request->withHeader('Authorization', 'Basic ' . base64_encode('foo:bar'))
+        $request->withHeader('Authorization', 'Basic ' . base64_encode('fooo:bar%25'))
             ->shouldBeCalled()
             ->willReturn($requestWithHeader->reveal());
 
