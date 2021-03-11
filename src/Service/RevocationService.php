@@ -48,10 +48,8 @@ final class RevocationService
         $tokenRequest = $this->requestFactory->createRequest('POST', $endpointUri)
             ->withHeader('content-type', 'application/x-www-form-urlencoded');
 
+        $params['token'] = $token;
         $tokenRequest = $authMethod->createRequest($tokenRequest, $client, $params);
-        $tokenRequest->getBody()->write(http_build_query(array_merge($params, [
-            'token' => $token,
-        ])));
 
         $httpClient = $client->getHttpClient() ?? $this->client;
 
