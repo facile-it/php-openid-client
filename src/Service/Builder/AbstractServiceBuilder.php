@@ -17,14 +17,18 @@ abstract class AbstractServiceBuilder
     /** @var null|RequestFactoryInterface */
     private $requestFactory;
 
-    public function setHttpClient(ClientInterface $httpClient): void
+    public function setHttpClient(ClientInterface $httpClient): self
     {
         $this->httpClient = $httpClient;
+
+        return $this;
     }
 
-    public function setRequestFactory(RequestFactoryInterface $requestFactory): void
+    public function setRequestFactory(RequestFactoryInterface $requestFactory): self
     {
         $this->requestFactory = $requestFactory;
+
+        return $this;
     }
 
     protected function getHttpClient(): ClientInterface
