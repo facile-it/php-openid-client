@@ -1,4 +1,4 @@
-name: "Continuous Integration"
+# https://help.github.com/en/categories/automating-your-workflow-with-github-actions
 
 on:
   pull_request:
@@ -12,100 +12,86 @@ on:
   schedule:
     - cron: "42 9 * * 1"
 
+name: "Continuous Integration"
+
 jobs:
-  psalm:
-    name: "Static Analysis"
-    runs-on: "ubuntu-20.04"
+    run:
+        name: "Grumphp"
+        runs-on: ${{ matrix.operating-system }}
+        strategy:
+            fail-fast: false
+            matrix:
+                operating-system: [ubuntu-latest, windows-latest, macOS-latest]
+                php-versions: ['7.4']
 
-    strategy:
-      matrix:
-        php-version:
-          - "7.4"
+        steps:
+            - name: Set git to use LF
+              run: |
+                  git config --global core.autocrlf false
+                  git config --global core.eol lf
 
-    steps:
-      - name: "Checkout"
-        uses: "actions/checkout@v2"
-        with:
-          fetch-depth: 2
+            - name: Checkout
+              uses: actions/checkout@master
+              with:
+                  fetch-depth: 1
 
-      - name: "Install PHP"
-        uses: "shivammathur/setup-php@v2"
-        with:
-          php-version: "${{ matrix.php-version }}"
+            - name: Install PHP
+              uses: shivammathur/setup-php@master
+              with:
+                  php-version: ${{ matrix.php-versions }}
+                  coverage: "pcov"
+                  ini-values: "zend.assertions=1"
+                  extensions: bcmath,gmp,mbstring,xdebug
 
-      - name: "Cache dependencies installed with composer"
-        uses: "actions/cache@v2"
-        with:
-          path: "~/.composer/cache"
-          key: "php-${{ matrix.php-version }}-composer-${{ hashFiles('composer.lock') }}"
-          restore-keys: "php-${{ matrix.php-version }}-composer-"
+            - name: Get Composer Cache Directory
+              id: composer-cache
+              run: echo "::set-output name=dir::$(composer config cache-files-dir)"
 
-      - name: "Install dependencies with composer"
-        run: "composer update --no-interaction --no-progress --no-suggest --prefer-dist"
+            - name: Cache dependencies
+              uses: actions/cache@v2.1.4
+              with:
+                  path: ${{ steps.composer-cache.outputs.dir }}
+                  key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.json') }}
+                  restore-keys: ${{ runner.os }}-composer-
 
-      - name: "Run psalm"
-        run: "vendor/bin/psalm --long-progress --output-format=github --report=psalm.sarif"
+            - name: Install dependencies
+              run: composer install --no-progress --no-suggest --prefer-dist --optimize-autoloader
 
-      - name: "Upload SARIF file"
-        uses: github/codeql-action/upload-sarif@v1
-        continue-on-error: true
-        with:
-          sarif_file: psalm.sarif
+            - name: Run Grumphp
+              run: vendor/bin/grumphp run
 
-  phpunit:
-    name: "PHPUnit"
-    runs-on: "ubuntu-20.04"
+            - name: "Run PHPUnit with coverage"
+              run: "vendor/bin/phpunit -c phpunit.xml.dist --coverage-clover=coverage.xml"
+              if: "${{ matrix.coverage == 'true' }}"
 
-    strategy:
-      matrix:
-        php-version:
-          - "7.2"
-          - "7.3"
-          - "7.4"
-        deps:
-          - "--prefer-lowest"
-          - ""
-        coverage:
-          - "false"
-        include:
-          - php-version: "7.4"
-            deps: ""
-            coverage: "true"
-          - php-version: "8.0"
-            deps: "--ignore-platform-req=php"
+            - name: "Upload coverage"
+              run: "wget https://scrutinizer-ci.com/ocular.phar && php ocular.phar code-coverage:upload --format=php-clover ./coverage.xml"
+              if: "${{ matrix.coverage == 'true' }}"
 
-    steps:
-      - name: "Checkout"
-        uses: "actions/checkout@v2"
-        with:
-          fetch-depth: 2
+            - name: Send PSALM data
+              run: vendor/bin/psalm --shepherd --stats src/
+              continue-on-error: true
 
-      - name: "Install PHP"
-        uses: "shivammathur/setup-php@v2"
-        with:
-          php-version: "${{ matrix.php-version }}"
-          coverage: "pcov"
-          ini-values: "zend.assertions=1"
-          extensions: "bcmath gmp"
+            - name: "Upload SARIF file"
+              uses: github/codeql-action/upload-sarif@v1
+              continue-on-error: true
+              with:
+                sarif_file: psalm.sarif
 
-      - name: "Cache dependencies installed with composer"
-        uses: "actions/cache@v2"
-        with:
-          path: "~/.composer/cache"
-          key: "php-${{ matrix.php-version }}-composer-${{ hashFiles('composer.lock') }}"
-          restore-keys: "php-${{ matrix.php-version }}-composer-"
+            - name: Send Scrutinizer data
+              run: |
+                  wget https://scrutinizer-ci.com/ocular.phar
+                  php ocular.phar code-coverage:upload --format=php-clover build/logs/clover.xml
+              continue-on-error: true
 
-      - name: "Install dependencies with composer"
-        run: "composer update --no-interaction --no-progress --no-suggest --prefer-dist ${{ matrix.deps }}"
+            - name: Infection score report
+              run: |
+                  vendor/bin/infection run -j 2
+              continue-on-error: true
 
-      - name: "Run PHPUnit"
-        run: "vendor/bin/phpunit -c phpunit.xml.dist"
-        if: "${{ matrix.coverage != 'true' }}"
-
-      - name: "Run PHPUnit with coverage"
-        run: "vendor/bin/phpunit -c phpunit.xml.dist --coverage-clover=coverage.xml"
-        if: "${{ matrix.coverage == 'true' }}"
-
-      - name: "Upload coverage"
-        run: "wget https://scrutinizer-ci.com/ocular.phar && php ocular.phar code-coverage:upload --format=php-clover ./coverage.xml"
-        if: "${{ matrix.coverage == 'true' }}"
+            - name: PHP Insights report
+              run: |
+                  rm -rf composer.lock vendor
+                  composer require nunomaduro/phpinsights --dev
+                  vendor/bin/phpinsights analyse src/ -n
+              continue-on-error: true
