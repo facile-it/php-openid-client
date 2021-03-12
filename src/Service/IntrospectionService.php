@@ -45,7 +45,7 @@ final class IntrospectionService
         $endpointUri = get_endpoint_uri($client, 'introspection_endpoint');
 
         $authMethod = $client->getAuthMethodFactory()
-            ->create($client->getMetadata()->getRevocationEndpointAuthMethod());
+            ->create($client->getMetadata()->getIntrospectionEndpointAuthMethod());
 
         $tokenRequest = $this->requestFactory->createRequest('POST', $endpointUri)
             ->withHeader('content-type', 'application/x-www-form-urlencoded');
