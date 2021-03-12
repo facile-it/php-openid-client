@@ -66,8 +66,8 @@ interface AuthRequestInterface extends JsonSerializable
     public function getNonce(): ?string;
 
     /**
-     * Space delimited case sensitive list of ASCII string values that specifies whether the Authorization Server prompts
-     * the End-User for reauthentication and consent.
+     * Space delimited case sensitive list of ASCII string values that specifies whether the
+     * Authorization Server prompts the End-User for reauthentication and consent.
      *
      * The defined values are:
      * - none

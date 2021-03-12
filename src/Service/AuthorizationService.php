@@ -30,6 +30,8 @@ use function is_array;
 use function is_string;
 use function json_encode;
 
+// phpcs:disable Generic.Files.LineLength.TooLong
+
 /**
  * OAuth 2.0.
  *

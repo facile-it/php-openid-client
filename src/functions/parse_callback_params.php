@@ -10,6 +10,8 @@ use Psr\Http\Message\ServerRequestInterface;
 use function in_array;
 use function parse_str;
 
+// phpcs:disable Generic.Files.LineLength.TooLong
+
 /**
  * @return array<string, mixed>
  *

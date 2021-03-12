@@ -55,7 +55,9 @@ class SessionCookieMiddleware implements MiddlewareInterface
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
     {
         if (!class_exists(Cookies::class)) {
-            throw new LogicException('To use the SessionCookieMiddleware you should install dflydev/fig-cookies package');
+            throw new LogicException(
+                'To use the SessionCookieMiddleware you should install dflydev/fig-cookies package'
+            );
         }
 
         $cookies = Cookies::fromRequest($request);

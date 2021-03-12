@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Facile\OpenIDClient\Token;
 
+// phpcs:disable Generic.Files.LineLength.TooLong
+
 /**
  * @psalm-type TokenSetType = array{code?: string, state?: string, token_type?: string, access_token?: string, id_token?: string, refresh_token?: string, expires_in?: int, code_verifier?: string}
  * @psalm-type TokenSetClaimsType = array{sub?: string, _claim_names?: array<string, string>, _claim_sources?: array<string, array{JWT?: string, endpoint?: string, access_token?: string}>}

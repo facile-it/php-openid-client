@@ -16,7 +16,8 @@ use Throwable;
 use function Facile\OpenIDClient\base64url_encode;
 
 /**
- * Make a UserInfo Request and verify the 'sub' value of the UserInfo Response by comparing it with the ID Token's 'sub' value.
+ * Make a UserInfo Request and verify the 'sub' value of the UserInfo Response by
+ * comparing it with the ID Token's 'sub' value.
  *
  * Identify the invalid 'sub' value and reject the UserInfo Response.
  *

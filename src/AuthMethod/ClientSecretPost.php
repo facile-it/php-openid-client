@@ -21,7 +21,9 @@ final class ClientSecretPost implements AuthMethodInterface
         $clientSecret = $client->getMetadata()->getClientSecret();
 
         if (null === $clientSecret) {
-            throw new InvalidArgumentException($this->getSupportedMethod() . ' cannot be used without client_secret metadata');
+            throw new InvalidArgumentException(
+                $this->getSupportedMethod() . ' cannot be used without client_secret metadata'
+            );
         }
 
         $clientId = $client->getMetadata()->getClientId();

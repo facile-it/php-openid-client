@@ -56,8 +56,19 @@ final class RpTest extends Command
     protected function configure(): void
     {
         $this->setName('test')
-            ->addOption('profile', 'p', InputOption::VALUE_OPTIONAL | InputOption::VALUE_IS_ARRAY, 'Profile', $this->testsProvider->getAvailableProfiles())
-            ->addOption('test-id', 't', InputOption::VALUE_OPTIONAL | InputOption::VALUE_IS_ARRAY, 'Filter test to execute')
+            ->addOption(
+                'profile',
+                'p',
+                InputOption::VALUE_OPTIONAL | InputOption::VALUE_IS_ARRAY,
+                'Profile',
+                $this->testsProvider->getAvailableProfiles()
+            )
+            ->addOption(
+                'test-id',
+                't',
+                InputOption::VALUE_OPTIONAL | InputOption::VALUE_IS_ARRAY,
+                'Filter test to execute'
+            )
             ->addOption('show-implementation', 'i', InputOption::VALUE_NONE, 'Whether to show implementation')
             ->addOption('show-environment', 'e', InputOption::VALUE_NONE, 'Whether to show environment')
             ->addOption('show-remote-logs', 'l', InputOption::VALUE_NONE, 'Whether to show remote logs')
@@ -111,7 +122,10 @@ final class RpTest extends Command
                 $counters['executed'][] = $testName;
 
                 $startTime = new DateTimeImmutable();
-                $output->writeln("<comment>Test started at:</comment> <info>{$startTime->format(DateTimeImmutable::RFC3339)}</info>", OutputInterface::VERBOSITY_DEBUG);
+                $output->writeln(
+                    "<comment>Test started at:</comment> <info>{$startTime->format(DateTimeImmutable::RFC3339)}</info>",
+                    OutputInterface::VERBOSITY_DEBUG
+                );
                 $output->writeln('Executing test ' . $testName . '...', OutputInterface::VERBOSITY_DEBUG);
 
                 $count = 0;
@@ -120,10 +134,16 @@ final class RpTest extends Command
                     $result = $this->testRunner->run($test, $testInfo);
                 } while (null !== $result->getException() && ++$count < $retries);
 
-                $output->writeln("<comment>Test:</comment> <info>{$testName}</info>", OutputInterface::VERBOSITY_NORMAL);
+                $output->writeln(
+                    "<comment>Test:</comment> <info>{$testName}</info>",
+                    OutputInterface::VERBOSITY_NORMAL
+                );
 
                 if (1 < $count) {
-                    $output->writeln("<comment>Attempts:</comment> <info>{$count}</info>", OutputInterface::VERBOSITY_NORMAL);
+                    $output->writeln(
+                        "<comment>Attempts:</comment> <info>{$count}</info>",
+                        OutputInterface::VERBOSITY_NORMAL
+                    );
                 }
 
                 if ($showEnvironment) {
@@ -143,11 +163,20 @@ final class RpTest extends Command
 
                 if ($exception = $result->getException()) {
                     $counters['errors'][] = $testName;
-                    $output->writeln('<comment>Result:</comment> <error>Test failed!</error>', OutputInterface::VERBOSITY_NORMAL);
-                    $output->writeln((string) $exception, OutputInterface::VERBOSITY_DEBUG);
+                    $output->writeln(
+                        '<comment>Result:</comment> <error>Test failed!</error>',
+                        OutputInterface::VERBOSITY_NORMAL
+                    );
+                    $output->writeln(
+                        (string) $exception,
+                        OutputInterface::VERBOSITY_DEBUG
+                    );
                 } else {
                     $counters['success'][] = $testName;
-                    $output->writeln('<comment>Result:</comment> <info>Test OK</info>', OutputInterface::VERBOSITY_NORMAL);
+                    $output->writeln(
+                        '<comment>Result:</comment> <info>Test OK</info>',
+                        OutputInterface::VERBOSITY_NORMAL
+                    );
                 }
 
                 $this->printSeparator($output, OutputInterface::VERBOSITY_NORMAL);
@@ -159,9 +188,27 @@ final class RpTest extends Command
         }
 
         $output->writeln('<info>--- SUMMARY ---</info>', OutputInterface::VERBOSITY_NORMAL);
-        $output->writeln(sprintf('<comment>Executed:</comment> <info>%d</info>', count($counters['executed'])), OutputInterface::VERBOSITY_NORMAL);
-        $output->writeln(sprintf('<comment>Success:</comment> <info>%d</info>', count($counters['success'])), OutputInterface::VERBOSITY_NORMAL);
-        $output->writeln(sprintf('<comment>Errors:</comment> <info>%d</info>', count($counters['errors'])), OutputInterface::VERBOSITY_NORMAL);
+        $output->writeln(
+            sprintf(
+                '<comment>Executed:</comment> <info>%d</info>',
+                count($counters['executed'])
+            ),
+            OutputInterface::VERBOSITY_NORMAL
+        );
+        $output->writeln(
+            sprintf(
+                '<comment>Success:</comment> <info>%d</info>',
+                count($counters['success'])
+            ),
+            OutputInterface::VERBOSITY_NORMAL
+        );
+        $output->writeln(
+            sprintf(
+                '<comment>Errors:</comment> <info>%d</info>',
+                count($counters['errors'])
+            ),
+            OutputInterface::VERBOSITY_NORMAL
+        );
 
         if (count($counters['errors'])) {
             $this->printSeparator($output, OutputInterface::VERBOSITY_NORMAL);

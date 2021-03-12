@@ -14,6 +14,8 @@ use function array_merge;
 use function count;
 use function implode;
 
+// phpcs:disable Generic.Files.LineLength.TooLong
+
 /**
  * @psalm-type AuthRequestParams = array{client_id: string, redirect_uri: string, scope: string, response_type: string, response_mode: string, state?: string, nonce?: string, display?: string, prompt?: string, max_age?: int, ui_locales?: string, id_token_hint?: string, login_hint?: string, acr_values?: string, request?: string, code_challenge?: string, code_challenge_method?: string}
  */

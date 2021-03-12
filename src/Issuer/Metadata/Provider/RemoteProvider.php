@@ -28,9 +28,12 @@ final class RemoteProvider implements RemoteProviderInterface
     {
         $lastException = null;
 
-        $providers = array_filter($this->providers, static function (RemoteProviderInterface $provider) use ($uri): bool {
-            return $provider->isAllowedUri($uri);
-        });
+        $providers = array_filter(
+            $this->providers,
+            static function (RemoteProviderInterface $provider) use ($uri): bool {
+                return $provider->isAllowedUri($uri);
+            }
+        );
 
         foreach ($providers as $provider) {
             try {

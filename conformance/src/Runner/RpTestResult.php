@@ -33,8 +33,12 @@ class RpTestResult
     /**
      * RpTestResult constructor.
      */
-    public function __construct(RpTestInterface $test, TestInfo $testInfo, string $implementation, ?Throwable $exception = null)
-    {
+    public function __construct(
+        RpTestInterface $test,
+        TestInfo $testInfo,
+        string $implementation,
+        ?Throwable $exception = null
+    ) {
         $this->test = $test;
         $this->testInfo = $testInfo;
         $this->implementation = $implementation;

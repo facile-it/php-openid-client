@@ -61,8 +61,14 @@ abstract class AbstractRpTestCase extends TestCase
         $logFilePath = __DIR__ . '/../log/' . ltrim($profile, '@') . '/' . $testName . '.txt';
         $dirname = dirname($logFilePath);
 
-        if (!file_exists($dirname) && !mkdir($concurrentDirectory = $dirname, 0777, true) && !is_dir($concurrentDirectory)) {
-            throw new RuntimeException(sprintf('Directory "%s" was not created', $concurrentDirectory));
+        $fileExist = file_exists($dirname);
+        $mkdir = mkdir($concurrentDirectory = $dirname, 0777, true);
+        $isDir = is_dir($concurrentDirectory);
+
+        if (!$fileExist && !$mkdir && !$isDir) {
+            throw new RuntimeException(
+                sprintf('Directory "%s" was not created', $concurrentDirectory)
+            );
         }
 
         file_put_contents($logFilePath, $log);

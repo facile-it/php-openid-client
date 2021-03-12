@@ -12,7 +12,8 @@ use PHPUnit\Framework\AssertionFailedError;
 use Throwable;
 
 /**
- * Retrieve OpenID Provider Configuration Information for OpenID Provider from the .well-known/openid-configuration path.
+ * Retrieve OpenID Provider Configuration Information for OpenID Provider from
+ * the .well-known/openid-configuration path.
  * Verify that the issuer in the provider configuration matches the one returned by WebFinger.
  *
  * Identify that the issuers are not matching and reject the provider configuration.

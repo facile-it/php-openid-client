@@ -6,6 +6,8 @@ namespace Facile\OpenIDClient\Session;
 
 use JsonSerializable;
 
+// phpcs:disable Generic.Files.LineLength.TooLong
+
 /**
  * @psalm-type AuthSessionType = array{state?: string, nonce?: string, code_verifier?: string, customs?: array<string, mixed>}
  */

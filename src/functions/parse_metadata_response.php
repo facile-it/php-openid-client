@@ -10,6 +10,8 @@ use Psr\Http\Message\ResponseInterface;
 use function is_array;
 use function json_decode;
 
+// phpcs:disable Generic.Files.LineLength.TooLong
+
 /**
  * @return array<string, mixed>
  *

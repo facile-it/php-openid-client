@@ -54,7 +54,9 @@ final class ClientSecretJwt extends AbstractJwtAuth
         $clientSecret = $client->getMetadata()->getClientSecret();
 
         if (null === $clientSecret) {
-            throw new InvalidArgumentException($this->getSupportedMethod() . ' cannot be used without client_secret metadata');
+            throw new InvalidArgumentException(
+                $this->getSupportedMethod() . ' cannot be used without client_secret metadata'
+            );
         }
 
         $clientId = $client->getMetadata()->getClientId();
@@ -94,7 +96,10 @@ final class ClientSecretJwt extends AbstractJwtAuth
         }
 
         if (!class_exists(HS256::class)) {
-            throw new LogicException('To use the client_secret_jwt auth method you should install web-token/jwt-signature-algorithm-hmac package');
+            throw new LogicException(
+                'To use the client_secret_jwt auth method you should install ' .
+                'web-token/jwt-signature-algorithm-hmac package'
+            );
         }
 
         return $this->jwsBuilder = new JWSBuilder(new AlgorithmManager([new HS256()]));

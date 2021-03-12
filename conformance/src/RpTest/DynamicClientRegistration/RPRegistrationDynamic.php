@@ -24,7 +24,13 @@ final class RPRegistrationDynamic extends AbstractRpTest
     {
         $clientRegistrationService = new RegistrationService();
 
-        $configUri = sprintf('%s/%s/%s/.well-known/openid-configuration', $testInfo->getRoot(), $testInfo->getRpId(), $this->getTestId());
+        $configUri = sprintf(
+            '%s/%s/%s/.well-known/openid-configuration',
+            $testInfo->getRoot(),
+            $testInfo->getRpId(),
+            $this->getTestId()
+        );
+
         $issuer = (new IssuerBuilder())
             ->build($configUri);
 

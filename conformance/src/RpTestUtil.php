@@ -78,8 +78,18 @@ class RpTestUtil
 
     private function mkdir(string $dirname): void
     {
-        if (!file_exists($dirname) && !mkdir($concurrentDirectory = $dirname, 0777, true) && !is_dir($concurrentDirectory)) {
-            throw new RuntimeException(sprintf('Directory "%s" was not created', $concurrentDirectory));
+        if (true === file_exists($dirname)) {
+            return;
         }
+
+        if (true === mkdir($concurrentDirectory = $dirname, 0777, true)) {
+            return;
+        }
+
+        if (true === is_dir($concurrentDirectory)) {
+            return;
+        }
+
+        throw new RuntimeException(sprintf('Directory "%s" was not created', $concurrentDirectory));
     }
 }
