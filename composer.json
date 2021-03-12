@@ -1,18 +1,7 @@
 {
     "name": "facile-it/php-openid-client",
-    "description": "OpenID (OIDC) Client",
     "type": "library",
-    "license": "MIT",
-    "authors": [
-        {
-            "name": "Thomas Vargiu",
-            "email": "thomas.vargiu@facile.it"
-        }
-    ],
-    "minimum-stability": "stable",
-    "config": {
-        "sort-packages": true
-    },
+    "description": "OpenID (OIDC) Client",
     "keywords": [
         "openid",
         "openid connect",
@@ -21,6 +10,13 @@
         "token",
         "authentication",
         "identity"
+    ],
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Thomas Vargiu",
+            "email": "thomas.vargiu@facile.it"
+        }
     ],
     "require": {
         "php": "^7.2 || ^8.0",
@@ -42,29 +38,9 @@
         "web-token/jwt-signature": "^2.0",
         "web-token/jwt-signature-algorithm-rsa": "^2.0"
     },
-    "autoload": {
-        "files": [
-            "src/functions/base64url_decode.php",
-            "src/functions/base64url_encode.php",
-            "src/functions/check_server_response.php",
-            "src/functions/derived_key.php",
-            "src/functions/get_endpoint_uri.php",
-            "src/functions/jose_secret_key.php",
-            "src/functions/parse_callback_params.php",
-            "src/functions/parse_metadata_response.php"
-        ],
-        "psr-4": {
-            "Facile\\OpenIDClient\\": "src/"
-        }
-    },
-    "autoload-dev": {
-        "psr-4": {
-            "Facile\\OpenIDClientTest\\": "tests/",
-            "Facile\\OpenIDClient\\ConformanceTest\\": "conformance/src/"
-        }
-    },
     "require-dev": {
         "dflydev/fig-cookies": "^2.0",
+        "drupol/php-conventions": "^3.0",
         "friendsofphp/php-cs-fixer": "^2.15",
         "laminas/laminas-component-installer": "^2.1",
         "laminas/laminas-config-aggregator": "^1.1",
@@ -95,20 +71,46 @@
         "web-token/jwt-signature-algorithm-none": "^2.0"
     },
     "suggest": {
+        "dflydev/fig-cookies": "To use the SessionCookieMiddleware",
         "facile-it/php-oauth2-http-client": "To use a PSR HTTP client to interact with OAuth2/OpenID protected APIs",
-        "web-token/jwt-signature-algorithm-hmac": "To use the client_secret_jwt auth method and symmetric key signature",
-        "dflydev/fig-cookies": "To use the SessionCookieMiddleware"
+        "web-token/jwt-signature-algorithm-hmac": "To use the client_secret_jwt auth method and symmetric key signature"
     },
+    "config": {
+        "sort-packages": true
+    },
+    "autoload": {
+        "psr-4": {
+            "Facile\\OpenIDClient\\": "src/"
+        },
+        "files": [
+            "src/functions/base64url_decode.php",
+            "src/functions/base64url_encode.php",
+            "src/functions/check_server_response.php",
+            "src/functions/derived_key.php",
+            "src/functions/get_endpoint_uri.php",
+            "src/functions/jose_secret_key.php",
+            "src/functions/parse_callback_params.php",
+            "src/functions/parse_metadata_response.php"
+        ]
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Facile\\OpenIDClientTest\\": "tests/",
+            "Facile\\OpenIDClient\\ConformanceTest\\": "conformance/src/"
+        }
+    },
+    "minimum-stability": "stable",
     "scripts": {
-        "cs-check": "php-cs-fixer fix --dry-run --diff --allow-risky=yes",
-        "cs-fix": "php-cs-fixer fix --diff --allow-risky=yes",
-        "psalm": "psalm",
-        "test": "phpunit",
-        "test-coverage": "phpunit --coverage-text",
         "check": [
             "@cs-check",
             "@psalm",
             "@test"
-        ]
+        ],
+        "cs-check": "php-cs-fixer fix --dry-run --diff --allow-risky=yes",
+        "cs-fix": "php-cs-fixer fix --diff --allow-risky=yes",
+        "grumphp": "grumphp",
+        "psalm": "psalm",
+        "test": "phpunit",
+        "test-coverage": "phpunit --coverage-text"
     }
 }

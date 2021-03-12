@@ -1,0 +1,10 @@
+imports:
+  - { resource: vendor/drupol/php-conventions/config/php73/grumphp.yml }
+
+parameters:
+  tasks.phpcsfixer.config: .php_cs.dist
+  extra_tasks:
+    psalm:
+      show_info: true
+    phpunit: ~
+
