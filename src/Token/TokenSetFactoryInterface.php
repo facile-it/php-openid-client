@@ -12,8 +12,6 @@ interface TokenSetFactoryInterface
     /**
      * @param array<string, mixed> $array
      *
-     * @return TokenSetInterface
-     *
      * @psalm-param TokenSetMixedType $array
      */
     public function fromArray(array $array): TokenSetInterface;

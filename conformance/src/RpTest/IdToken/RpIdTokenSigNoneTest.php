@@ -4,10 +4,11 @@ declare(strict_types=1);
 
 namespace Facile\OpenIDClient\ConformanceTest\RpTest\IdToken;
 
-use PHPUnit\Framework\Assert;
 use Facile\OpenIDClient\ConformanceTest\RpTest\AbstractRpTest;
 use Facile\OpenIDClient\ConformanceTest\TestInfo;
 use Facile\OpenIDClient\Service\AuthorizationService;
+use PHPUnit\Framework\Assert;
+
 use function Facile\OpenIDClient\base64url_encode;
 
 /**
@@ -15,15 +16,12 @@ use function Facile\OpenIDClient\base64url_encode;
  * This test is only applicable when response_type='code'.
  *
  * Accept the ID Token after doing ID Token validation.
+ *
+ * @internal
+ * @coversNothing
  */
-class RpIdTokenSigNoneTest extends AbstractRpTest
+final class RpIdTokenSigNoneTest extends AbstractRpTest
 {
-
-    public function getTestId(): string
-    {
-        return 'rp-id_token-sig-none';
-    }
-
     public function execute(TestInfo $testInfo): void
     {
         $client = $this->registerClient($testInfo, ['id_token_signed_response_alg' => 'none']);
@@ -34,7 +32,7 @@ class RpIdTokenSigNoneTest extends AbstractRpTest
         $authorizationService = new AuthorizationService();
         $uri = $authorizationService->getAuthorizationUri($client, [
             'response_type' => $testInfo->getResponseType(),
-            'nonce' => base64url_encode(\random_bytes(32)),
+            'nonce' => base64url_encode(random_bytes(32)),
         ]);
 
         // Simulate a redirect and create the server request
@@ -44,5 +42,10 @@ class RpIdTokenSigNoneTest extends AbstractRpTest
         $tokenSet = $authorizationService->callback($client, $params);
 
         Assert::assertNotNull($tokenSet->getIdToken());
+    }
+
+    public function getTestId(): string
+    {
+        return 'rp-id_token-sig-none';
     }
 }

@@ -5,14 +5,12 @@ declare(strict_types=1);
 namespace Facile\OpenIDClient;
 
 use Facile\OpenIDClient\Exception\RuntimeException;
+use Psr\Http\Message\ServerRequestInterface;
+
 use function in_array;
 use function parse_str;
-use Psr\Http\Message\ServerRequestInterface;
-use function strtoupper;
 
 /**
- * @param ServerRequestInterface $serverRequest
- *
  * @return array<string, mixed>
  *
  * @template P as array{error?: string, error_description?: string, error_uri?: string, response?: string}&array<string, mixed>
@@ -20,9 +18,9 @@ use function strtoupper;
  */
 function parse_callback_params(ServerRequestInterface $serverRequest): array
 {
-    $method = strtoupper($serverRequest->getMethod());
+    $method = mb_strtoupper($serverRequest->getMethod());
 
-    if (! in_array($method, ['GET', 'POST'], true)) {
+    if (!in_array($method, ['GET', 'POST'], true)) {
         throw new RuntimeException('Invalid callback method');
     }
 

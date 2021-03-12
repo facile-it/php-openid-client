@@ -4,10 +4,12 @@ declare(strict_types=1);
 
 namespace Facile\OpenIDClient\Claims;
 
-use function array_filter;
 use Facile\OpenIDClient\Client\ClientInterface;
-use function is_array;
 use Throwable;
+
+use function array_filter;
+use function is_array;
+use function is_string;
 
 /**
  * @psalm-import-type TokenSetClaimsType from \Facile\OpenIDClient\Token\TokenSetInterface
@@ -19,11 +21,11 @@ final class AggregateParser extends AbstractClaims implements AggregatedParserIn
         $claimSources = $claims['_claim_sources'] ?? null;
         $claimNames = $claims['_claim_names'] ?? null;
 
-        if (! is_array($claimSources)) {
+        if (!is_array($claimSources)) {
             return $claims;
         }
 
-        if (! is_array($claimNames)) {
+        if (!is_array($claimNames)) {
             return $claims;
         }
 
@@ -33,6 +35,7 @@ final class AggregateParser extends AbstractClaims implements AggregatedParserIn
         });
 
         $claimPayloads = [];
+
         foreach ($aggregatedSources as $sourceName => $source) {
             try {
                 $claimPayloads[$sourceName] = $this->claimJWT($client, $source['JWT']);

@@ -8,11 +8,15 @@ use Facile\OpenIDClient\Exception\ExceptionInterface;
 use Facile\OpenIDClient\Exception\RuntimeException;
 use Facile\OpenIDClientTest\TestCase;
 
-class RuntimeExceptionTest extends TestCase
+/**
+ * @internal
+ * @coversNothing
+ */
+final class RuntimeExceptionTest extends TestCase
 {
     public function testException(): void
     {
         $exception = new RuntimeException();
-        static::assertInstanceOf(ExceptionInterface::class, $exception);
+        self::assertInstanceOf(ExceptionInterface::class, $exception);
     }
 }

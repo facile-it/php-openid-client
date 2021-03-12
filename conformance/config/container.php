@@ -1,7 +1,9 @@
 <?php
 
-use Psr\Container\ContainerInterface;
+declare(strict_types=1);
+
 use Laminas\ServiceManager\ServiceManager;
+use Psr\Container\ContainerInterface;
 
 /** @var array $config */
 $config = require __DIR__ . '/config.php';

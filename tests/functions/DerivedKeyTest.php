@@ -4,23 +4,23 @@ declare(strict_types=1);
 
 namespace Facile\OpenIDClientTest\functions;
 
-use function Facile\OpenIDClient\derived_key;
 use Facile\OpenIDClientTest\TestCase;
+use function Facile\OpenIDClient\derived_key;
 
-class DerivedKeyTest extends TestCase
+/**
+ * @internal
+ * @coversNothing
+ */
+final class DerivedKeyTest extends TestCase
 {
     /**
      * @dataProvider valuesProvider
-     *
-     * @param string $secret
-     * @param int $length
-     * @param string $expected
      */
     public function testDerivedKey(string $secret, int $length, string $expected): void
     {
         $jwk = derived_key($secret, $length);
-        static::assertSame('oct', $jwk->get('kty'));
-        static::assertSame($expected, $jwk->get('k'));
+        self::assertSame('oct', $jwk->get('kty'));
+        self::assertSame($expected, $jwk->get('k'));
     }
 
     public function valuesProvider(): array

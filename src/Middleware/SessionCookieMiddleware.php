@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Facile\OpenIDClient\Middleware;
 
-use function class_exists;
 use Dflydev\FigCookies\Cookies;
 use Dflydev\FigCookies\FigResponseCookies;
 use Dflydev\FigCookies\Modifier\SameSite;
@@ -13,14 +12,16 @@ use Facile\OpenIDClient\Exception\LogicException;
 use Facile\OpenIDClient\Exception\RuntimeException;
 use Facile\OpenIDClient\Session\AuthSession;
 use Facile\OpenIDClient\Session\AuthSessionInterface;
-use function is_array;
-use function json_decode;
-use function json_encode;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\MiddlewareInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 use Psr\SimpleCache\CacheInterface;
+
+use function class_exists;
+use function is_array;
+use function json_decode;
+use function json_encode;
 
 /**
  * @psalm-import-type AuthSessionType from AuthSessionInterface
@@ -29,14 +30,20 @@ class SessionCookieMiddleware implements MiddlewareInterface
 {
     public const SESSION_ATTRIBUTE = AuthSessionInterface::class;
 
-    /** @var string */
+    /**
+     * @var CacheInterface
+     */
+    private $cache;
+
+    /**
+     * @var string
+     */
     private $cookieName;
 
-    /** @var int */
+    /**
+     * @var int
+     */
     private $ttl;
-
-    /** @var CacheInterface */
-    private $cache;
 
     public function __construct(CacheInterface $cache, string $cookieName = 'openid', int $ttl = 300)
     {
@@ -47,7 +54,7 @@ class SessionCookieMiddleware implements MiddlewareInterface
 
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
     {
-        if (! class_exists(Cookies::class)) {
+        if (!class_exists(Cookies::class)) {
             throw new LogicException('To use the SessionCookieMiddleware you should install dflydev/fig-cookies package');
         }
 
@@ -57,10 +64,10 @@ class SessionCookieMiddleware implements MiddlewareInterface
         $sessionId = null !== $sessionCookie ? $sessionCookie->getValue() : null;
         /** @var string|null $sessionValue */
         $sessionValue = null !== $sessionId ? $this->cache->get($sessionId) : null;
-        /** @var false|AuthSessionType $data */
+        /** @var AuthSessionType|false $data */
         $data = null !== $sessionValue ? json_decode($sessionValue, true) : [];
 
-        if (! is_array($data)) {
+        if (!is_array($data)) {
             $data = [];
         }
 
@@ -84,8 +91,6 @@ class SessionCookieMiddleware implements MiddlewareInterface
             ->withPath('/')
             ->withSameSite(SameSite::strict());
 
-        $response = FigResponseCookies::set($response, $sessionCookie);
-
-        return $response;
+        return FigResponseCookies::set($response, $sessionCookie);
     }
 }

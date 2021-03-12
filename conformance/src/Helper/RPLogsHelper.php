@@ -12,10 +12,14 @@ use Psr\Http\Message\ResponseInterface;
 
 class RPLogsHelper
 {
-    /** @var ClientInterface */
+    /**
+     * @var ClientInterface
+     */
     private $client;
 
-    /** @var RequestFactoryInterface */
+    /**
+     * @var RequestFactoryInterface
+     */
     private $requestFactory;
 
     public function __construct(?ClientInterface $client = null, ?RequestFactoryInterface $requestFactory = null)
@@ -29,7 +33,7 @@ class RPLogsHelper
         $request = $this->requestFactory->createRequest('GET', $root . '/log/' . $rpId);
         $response = $this->client->sendRequest($request);
 
-        if (! \preg_match('/Clear all test logs/', (string) $response->getBody())) {
+        if (!preg_match('/Clear all test logs/', (string) $response->getBody())) {
             return;
         }
 
@@ -38,23 +42,23 @@ class RPLogsHelper
         $this->client->sendRequest($request);
     }
 
-    public function getLog(string $root, string $rpId, string $testId): ?ResponseInterface
-    {
-        $request = $this->requestFactory->createRequest('GET', $root . '/log/' . $rpId . '/' . $testId . '.txt');
-
-        return $this->client->sendRequest($request);
-    }
-
     public function downloadLogs(string $root, string $rpId): ?ResponseInterface
     {
         $request = $this->requestFactory->createRequest('GET', $root . '/log/' . $rpId);
         $response = $this->client->sendRequest($request);
 
-        if (! \preg_match('/Download tar file/', (string) $response->getBody())) {
+        if (!preg_match('/Download tar file/', (string) $response->getBody())) {
             return null;
         }
 
         $request = $this->requestFactory->createRequest('GET', $root . '/mktar/' . $rpId);
+
+        return $this->client->sendRequest($request);
+    }
+
+    public function getLog(string $root, string $rpId, string $testId): ?ResponseInterface
+    {
+        $request = $this->requestFactory->createRequest('GET', $root . '/log/' . $rpId . '/' . $testId . '.txt');
 
         return $this->client->sendRequest($request);
     }

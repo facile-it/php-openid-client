@@ -4,18 +4,17 @@ declare(strict_types=1);
 
 namespace Facile\OpenIDClient\ConformanceTest\RpTest\ResponseTypeAndResponseMode;
 
-use PHPUnit\Framework\Assert;
 use Facile\OpenIDClient\ConformanceTest\RpTest\AbstractRpTest;
 use Facile\OpenIDClient\ConformanceTest\TestInfo;
 use Facile\OpenIDClient\Service\AuthorizationService;
+use PHPUnit\Framework\Assert;
 
-class RPResponseTypeCodeTest extends AbstractRpTest
+/**
+ * @internal
+ * @coversNothing
+ */
+final class RPResponseTypeCodeTest extends AbstractRpTest
 {
-    public function getTestId(): string
-    {
-        return 'rp-response_type-code';
-    }
-
     public function execute(TestInfo $testInfo): void
     {
         $client = $this->registerClient($testInfo);
@@ -31,5 +30,10 @@ class RPResponseTypeCodeTest extends AbstractRpTest
         $params = $authorizationService->getCallbackParams($serverRequest, $client);
 
         Assert::assertArrayHasKey('code', $params);
+    }
+
+    public function getTestId(): string
+    {
+        return 'rp-response_type-code';
     }
 }

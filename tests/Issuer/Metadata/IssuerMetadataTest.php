@@ -5,98 +5,16 @@ declare(strict_types=1);
 namespace Facile\OpenIDClientTest\Issuer\Metadata;
 
 use Facile\OpenIDClient\Issuer\Metadata\IssuerMetadata;
+use Facile\OpenIDClientTest\TestCase;
 use function json_decode;
 use function json_encode;
-use Facile\OpenIDClientTest\TestCase;
 
-class IssuerMetadataTest extends TestCase
+/**
+ * @internal
+ * @coversNothing
+ */
+final class IssuerMetadataTest extends TestCase
 {
-    public function testJsonSerialize(): void
-    {
-        $metadata = new IssuerMetadata(
-            'foo-issuer',
-            'foo-endpoint',
-            'foo-jwks'
-        );
-
-        $expected = [
-            'issuer' => 'foo-issuer',
-            'authorization_endpoint' => 'foo-endpoint',
-            'jwks_uri' => 'foo-jwks',
-        ];
-
-        static::assertSame($expected, json_decode(json_encode($metadata), true));
-    }
-
-    public function testFromArray(): void
-    {
-        $metadata = IssuerMetadata::fromArray([
-            'issuer' => 'foo',
-            'authorization_endpoint' => 'foo-endpoint',
-            'jwks_uri' => 'foo-jwks',
-        ]);
-
-        static::assertInstanceOf(IssuerMetadata::class, $metadata);
-        static::assertSame('foo', $metadata->getIssuer());
-        static::assertSame('foo-endpoint', $metadata->getAuthorizationEndpoint());
-        static::assertSame('foo-jwks', $metadata->getJwksUri());
-    }
-
-    public function testGet(): void
-    {
-        $metadata = new IssuerMetadata(
-            'foo-issuer',
-            'foo-endpoint',
-            'foo-jwks',
-            [
-                'foo' => 'bar',
-            ]
-        );
-
-        static::assertSame('foo-issuer', $metadata->get('issuer'));
-        static::assertSame('bar', $metadata->get('foo'));
-        static::assertNull($metadata->get('foo2'));
-    }
-
-    public function testHas(): void
-    {
-        $metadata = new IssuerMetadata(
-            'foo-issuer',
-            'foo-endpoint',
-            'foo-jwks',
-            [
-                'foo' => 'bar',
-            ]
-        );
-
-        static::assertTrue($metadata->has('issuer'));
-        static::assertTrue($metadata->has('foo'));
-        static::assertFalse($metadata->has('foo2'));
-    }
-
-    /**
-     * @dataProvider getClaimGetterProvider
-     *
-     * @param string $claim
-     * @param string $methodName
-     * @param mixed $value
-     */
-    public function testGetters(string $claim, string $methodName, $value): void
-    {
-        $metadata = new IssuerMetadata(
-            'foo',
-            'foo',
-            'foo',
-            [
-                $claim => $value,
-            ]
-        );
-
-        /** @var callable $callable */
-        $callable = [$metadata, $methodName];
-        static::assertSame($value, $callable());
-    }
-
     public function getClaimGetterProvider(): array
     {
         return [
@@ -169,5 +87,89 @@ class IssuerMetadataTest extends TestCase
             'tls_client_certificate_bound_access_tokens_false' => ['tls_client_certificate_bound_access_tokens', 'isTlsClientCertificateBoundAccessTokens', false],
             'mtls_endpoint_aliases' => ['mtls_endpoint_aliases', 'getMtlsEndpointAliases', ['foo' => 'foo', 'bar' => 'bar']],
         ];
+    }
+
+    public function testFromArray(): void
+    {
+        $metadata = IssuerMetadata::fromArray([
+            'issuer' => 'foo',
+            'authorization_endpoint' => 'foo-endpoint',
+            'jwks_uri' => 'foo-jwks',
+        ]);
+
+        self::assertInstanceOf(IssuerMetadata::class, $metadata);
+        self::assertSame('foo', $metadata->getIssuer());
+        self::assertSame('foo-endpoint', $metadata->getAuthorizationEndpoint());
+        self::assertSame('foo-jwks', $metadata->getJwksUri());
+    }
+
+    public function testGet(): void
+    {
+        $metadata = new IssuerMetadata(
+            'foo-issuer',
+            'foo-endpoint',
+            'foo-jwks',
+            [
+                'foo' => 'bar',
+            ]
+        );
+
+        self::assertSame('foo-issuer', $metadata->get('issuer'));
+        self::assertSame('bar', $metadata->get('foo'));
+        self::assertNull($metadata->get('foo2'));
+    }
+
+    /**
+     * @dataProvider getClaimGetterProvider
+     *
+     * @param mixed $value
+     */
+    public function testGetters(string $claim, string $methodName, $value): void
+    {
+        $metadata = new IssuerMetadata(
+            'foo',
+            'foo',
+            'foo',
+            [
+                $claim => $value,
+            ]
+        );
+
+        /** @var callable $callable */
+        $callable = [$metadata, $methodName];
+        self::assertSame($value, $callable());
+    }
+
+    public function testHas(): void
+    {
+        $metadata = new IssuerMetadata(
+            'foo-issuer',
+            'foo-endpoint',
+            'foo-jwks',
+            [
+                'foo' => 'bar',
+            ]
+        );
+
+        self::assertTrue($metadata->has('issuer'));
+        self::assertTrue($metadata->has('foo'));
+        self::assertFalse($metadata->has('foo2'));
+    }
+
+    public function testJsonSerialize(): void
+    {
+        $metadata = new IssuerMetadata(
+            'foo-issuer',
+            'foo-endpoint',
+            'foo-jwks'
+        );
+
+        $expected = [
+            'issuer' => 'foo-issuer',
+            'authorization_endpoint' => 'foo-endpoint',
+            'jwks_uri' => 'foo-jwks',
+        ];
+
+        self::assertSame($expected, json_decode(json_encode($metadata), true));
     }
 }

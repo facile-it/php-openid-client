@@ -4,14 +4,16 @@ declare(strict_types=1);
 
 namespace Facile\OpenIDClient\ConformanceTest\RpTest\ResponseTypeAndResponseMode;
 
-use PHPUnit\Framework\Assert;
-use PHPUnit\Framework\AssertionFailedError;
 use Facile\OpenIDClient\ConformanceTest\RpTest\AbstractRpTest;
 use Facile\OpenIDClient\ConformanceTest\TestInfo;
 use Facile\OpenIDClient\Exception\OAuth2Exception;
-use Facile\OpenIDClient\Session\AuthSession;
 use Facile\OpenIDClient\Service\AuthorizationService;
+use Facile\OpenIDClient\Session\AuthSession;
 use Laminas\Diactoros\ServerRequestFactory;
+use PHPUnit\Framework\Assert;
+use PHPUnit\Framework\AssertionFailedError;
+use Throwable;
+
 use function Facile\OpenIDClient\base64url_encode;
 
 /**
@@ -19,15 +21,12 @@ use function Facile\OpenIDClient\base64url_encode;
  * results in the test suite returning an error because the requested conditions cannot be met.
  *
  * The HTML form post authorization error response is consumed, resulting in an error screen shown to the user.
+ *
+ * @internal
+ * @coversNothing
  */
-class RPResponseModeFormPostErrorTest extends AbstractRpTest
+final class RPResponseModeFormPostErrorTest extends AbstractRpTest
 {
-
-    public function getTestId(): string
-    {
-        return 'rp-response_mode-form_post-error';
-    }
-
     public function execute(TestInfo $testInfo): void
     {
         $client = $this->registerClient($testInfo);
@@ -36,7 +35,7 @@ class RPResponseModeFormPostErrorTest extends AbstractRpTest
         $authorizationService = new AuthorizationService();
 
         $authSession = AuthSession::fromArray([
-            'nonce' => base64url_encode(\random_bytes(32)),
+            'nonce' => base64url_encode(random_bytes(32)),
         ]);
 
         $uri = $authorizationService->getAuthorizationUri($client, [
@@ -52,8 +51,8 @@ class RPResponseModeFormPostErrorTest extends AbstractRpTest
         $response = $this->httpGet($uri);
         $body = (string) $response->getBody();
 
-        \preg_match_all('/<input type="hidden" name="(\w+)" value="([^"]+)"\/>/', $body, $matches);
-        $requestBody = \http_build_query(\array_combine($matches[1], $matches[2]));
+        preg_match_all('/<input type="hidden" name="(\w+)" value="([^"]+)"\/>/', $body, $matches);
+        $requestBody = http_build_query(array_combine($matches[1], $matches[2]));
 
         $serverRequest = $serverRequestFactory->createServerRequest('POST', 'http://redirect.dev', [
             'content-type' => 'application/x-www-form-urlencoded',
@@ -62,11 +61,17 @@ class RPResponseModeFormPostErrorTest extends AbstractRpTest
 
         try {
             $authorizationService->getCallbackParams($serverRequest, $client);
+
             throw new AssertionFailedError('No assertions');
         } catch (OAuth2Exception $e) {
             Assert::assertSame('login_required', $e->getError());
-        } catch (\Throwable $e) {
+        } catch (Throwable $e) {
             throw new AssertionFailedError('No assertions');
         }
+    }
+
+    public function getTestId(): string
+    {
+        return 'rp-response_mode-form_post-error';
     }
 }

@@ -8,7 +8,9 @@ use Facile\OpenIDClient\Exception\InvalidArgumentException;
 
 final class AuthMethodFactory implements AuthMethodFactoryInterface
 {
-    /** @var AuthMethodInterface[] */
+    /**
+     * @var AuthMethodInterface[]
+     */
     private $methods = [];
 
     /**

@@ -4,14 +4,14 @@ declare(strict_types=1);
 
 namespace Facile\OpenIDClient\ConformanceTest\RpTest\NonceRequestParameter;
 
-use PHPUnit\Framework\Assert;
-use PHPUnit\Framework\AssertionFailedError;
 use Facile\OpenIDClient\ConformanceTest\RpTest\AbstractRpTest;
 use Facile\OpenIDClient\ConformanceTest\TestInfo;
 use Facile\OpenIDClient\Exception\InvalidArgumentException;
-use Facile\OpenIDClient\Session\AuthSession;
 use Facile\OpenIDClient\Service\AuthorizationService;
-use Facile\OpenIDClient\Service\UserInfoService;
+use Facile\OpenIDClient\Session\AuthSession;
+use PHPUnit\Framework\Assert;
+use PHPUnit\Framework\AssertionFailedError;
+
 use function Facile\OpenIDClient\base64url_encode;
 
 /**
@@ -20,15 +20,12 @@ use function Facile\OpenIDClient\base64url_encode;
  *
  * An ID Token, either from the Authorization Endpoint or from the Token Endpoint, containing the same 'nonce' value
  * as passed in the authentication request when using hybrid flow or implicit flow.
+ *
+ * @internal
+ * @coversNothing
  */
-class RpNonceUnlessCodeFlowTest extends AbstractRpTest
+final class RpNonceUnlessCodeFlowTest extends AbstractRpTest
 {
-
-    public function getTestId(): string
-    {
-        return 'rp-nonce-unless-code-flow';
-    }
-
     public function execute(TestInfo $testInfo): void
     {
         $client = $this->registerClient($testInfo);
@@ -45,7 +42,7 @@ class RpNonceUnlessCodeFlowTest extends AbstractRpTest
             Assert::assertRegExp('/nonce MUST be provided for implicit and hybrid flows/', $e->getMessage());
         }
 
-        $nonce = base64url_encode(\random_bytes(32));
+        $nonce = base64url_encode(random_bytes(32));
         $authSession = AuthSession::fromArray(['nonce' => $nonce]);
 
         $uri = $authorizationService->getAuthorizationUri($client, [
@@ -59,5 +56,10 @@ class RpNonceUnlessCodeFlowTest extends AbstractRpTest
         $tokenSet = $authorizationService->callback($client, $params, null, $authSession);
 
         Assert::assertTrue(true);
+    }
+
+    public function getTestId(): string
+    {
+        return 'rp-nonce-unless-code-flow';
     }
 }

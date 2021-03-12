@@ -5,13 +5,12 @@ declare(strict_types=1);
 namespace Facile\OpenIDClientTest\RequestObject;
 
 use Facile\JoseVerifier\JWK\JwksProviderInterface;
-use function Facile\OpenIDClient\base64url_decode;
-use function Facile\OpenIDClient\base64url_encode;
 use Facile\OpenIDClient\Client\ClientInterface;
 use Facile\OpenIDClient\Client\Metadata\ClientMetadataInterface;
 use Facile\OpenIDClient\Issuer\IssuerInterface;
 use Facile\OpenIDClient\Issuer\Metadata\IssuerMetadataInterface;
 use Facile\OpenIDClient\RequestObject\RequestObjectFactory;
+use Facile\OpenIDClientTest\TestCase;
 use Jose\Component\Core\AlgorithmManager;
 use Jose\Component\Core\JWK;
 use Jose\Component\Encryption\Algorithm\KeyEncryption\RSAOAEP;
@@ -22,41 +21,66 @@ use Jose\Component\Signature\Algorithm\RS256;
 use Jose\Component\Signature\JWS;
 use Jose\Component\Signature\JWSBuilder;
 use Jose\Component\Signature\Serializer\JWSSerializer;
-use Facile\OpenIDClientTest\TestCase;
 use Prophecy\Argument;
 use Prophecy\Prophecy\ObjectProphecy;
+use function Facile\OpenIDClient\base64url_decode;
+use function Facile\OpenIDClient\base64url_encode;
 
-class RequestObjectFactoryTest extends TestCase
+/**
+ * @internal
+ * @coversNothing
+ */
+final class RequestObjectFactoryTest extends TestCase
 {
-    /** @var ObjectProphecy|AlgorithmManager */
+    /**
+     * @var AlgorithmManager|ObjectProphecy
+     */
     private $algorithmManager;
 
-    /** @var ObjectProphecy|JWSBuilder */
-    private $jwsBuilder;
-
-    /** @var ObjectProphecy|JWEBuilder */
-    private $jweBuilder;
-
-    /** @var ObjectProphecy|JWSSerializer */
-    private $jwsSerializer;
-
-    /** @var ObjectProphecy|JWESerializer */
-    private $jweSerializer;
-
-    /** @var ObjectProphecy|ClientInterface */
+    /**
+     * @var ClientInterface|ObjectProphecy
+     */
     private $client;
 
-    /** @var ObjectProphecy|ClientMetadataInterface */
+    /**
+     * @var ClientMetadataInterface|ObjectProphecy
+     */
     private $clientMetadata;
 
-    /** @var ObjectProphecy|IssuerInterface */
+    /**
+     * @var RequestObjectFactory
+     */
+    private $factory;
+
+    /**
+     * @var IssuerInterface|ObjectProphecy
+     */
     private $issuer;
 
-    /** @var ObjectProphecy|IssuerMetadataInterface */
+    /**
+     * @var IssuerMetadataInterface|ObjectProphecy
+     */
     private $issuerMetadata;
 
-    /** @var RequestObjectFactory */
-    private $factory;
+    /**
+     * @var JWEBuilder|ObjectProphecy
+     */
+    private $jweBuilder;
+
+    /**
+     * @var JWESerializer|ObjectProphecy
+     */
+    private $jweSerializer;
+
+    /**
+     * @var JWSBuilder|ObjectProphecy
+     */
+    private $jwsBuilder;
+
+    /**
+     * @var JWSSerializer|ObjectProphecy
+     */
+    private $jwsSerializer;
 
     protected function setUp(): void
     {
@@ -94,67 +118,6 @@ class RequestObjectFactoryTest extends TestCase
         );
     }
 
-    public function testMinimalConstructor(): void
-    {
-        $factory = new RequestObjectFactory();
-        self::assertInstanceOf(RequestObjectFactory::class, $factory);
-    }
-
-    public function testCreateWithNoSignAndNoEnc(): void
-    {
-        $this->clientMetadata->get('request_object_signing_alg')->willReturn('none');
-        $this->clientMetadata->get('request_object_encryption_alg')->willReturn(null);
-        $this->clientMetadata->get('request_object_encryption_enc')->willReturn(null);
-
-        $token = $this->factory->create($this->client->reveal(), ['foo' => 'bar']);
-
-        [$header, $payload] = \explode('.', $token);
-        $header = \json_decode(base64url_decode($header), true);
-        $payload = \json_decode(base64url_decode($payload), true);
-
-        self::assertSame('none', $header['alg'] ?? null);
-        self::assertSame('client-id', $payload['iss'] ?? null);
-        self::assertSame('client-id', $payload['client_id'] ?? null);
-        self::assertSame('http://issuer.com', $payload['aud'] ?? null);
-        self::assertSame('bar', $payload['foo'] ?? null);
-        self::assertIsString($payload['jti'] ?? null);
-        self::assertIsInt($payload['iat'] ?? null);
-        self::assertIsInt($payload['exp'] ?? null);
-    }
-
-    public function testCreateWithSymSignAndNoEnc(): void
-    {
-        $this->clientMetadata->get('request_object_signing_alg')->willReturn('HS256');
-        $this->clientMetadata->get('request_object_encryption_alg')->willReturn(null);
-        $this->clientMetadata->get('request_object_encryption_enc')->willReturn(null);
-
-        $jws = $this->prophesize(JWS::class);
-
-        $this->jwsBuilder->create()->willReturn($this->jwsBuilder->reveal());
-        $this->jwsBuilder->withPayload(Argument::type('string'))->willReturn($this->jwsBuilder->reveal());
-        $this->jwsBuilder->addSignature(Argument::allOf(
-            Argument::type(JWK::class),
-            Argument::that(function (JWK $jwk) {
-                return $jwk->get('k') === base64url_encode('client-secret');
-            }),
-            Argument::that(function (JWK $jwk) {
-                return $jwk->get('kty') === 'oct';
-            })
-        ), [
-            'alg' => 'HS256',
-            'typ' => 'JWT',
-        ])
-            ->willReturn($this->jwsBuilder->reveal());
-        $this->jwsBuilder->build()->willReturn($jws->reveal());
-
-        $this->jwsSerializer->serialize($jws->reveal(), 0)
-            ->willReturn('token');
-
-        $token = $this->factory->create($this->client->reveal(), ['foo' => 'bar']);
-
-        self::assertSame('token', $token);
-    }
-
     public function testCreateWithAsymSignAndNoEnc(): void
     {
         $this->clientMetadata->get('request_object_signing_alg')->willReturn('RS256');
@@ -177,7 +140,7 @@ class RequestObjectFactoryTest extends TestCase
 
         $this->jwsBuilder->create()->willReturn($this->jwsBuilder->reveal());
         $this->jwsBuilder->withPayload(Argument::type('string'))->willReturn($this->jwsBuilder->reveal());
-        $this->jwsBuilder->addSignature(Argument::that(function (JWK $key) {
+        $this->jwsBuilder->addSignature(Argument::that(static function (JWK $key) {
             return 'some-key-id' === $key->get('kid');
         }), [
             'alg' => 'RS256',
@@ -188,41 +151,6 @@ class RequestObjectFactoryTest extends TestCase
         $this->jwsBuilder->build()->willReturn($jws->reveal());
 
         $this->jwsSerializer->serialize($jws->reveal(), 0)
-            ->willReturn('token');
-
-        $token = $this->factory->create($this->client->reveal(), ['foo' => 'bar']);
-
-        self::assertSame('token', $token);
-    }
-
-    public function testCreateWithNoSignAndSymEnc(): void
-    {
-        $this->clientMetadata->get('request_object_signing_alg')->willReturn('none');
-        $this->clientMetadata->get('request_object_encryption_alg')->willReturn('ASY1');
-        $this->clientMetadata->get('request_object_encryption_enc')->willReturn('ASY2');
-
-        $jwe = $this->prophesize(JWE::class);
-
-        $this->jweBuilder->create()->willReturn($this->jweBuilder->reveal());
-        $this->jweBuilder->withPayload(Argument::type('string'))->willReturn($this->jweBuilder->reveal());
-        $this->jweBuilder->withSharedProtectedHeader([
-            'alg' => 'ASY1',
-            'enc' => 'ASY2',
-            'cty' => 'JWT',
-        ])->willReturn($this->jweBuilder->reveal());
-        $this->jweBuilder->addRecipient(Argument::allOf(
-            Argument::type(JWK::class),
-            Argument::that(function (JWK $jwk) {
-                return $jwk->get('k') === base64url_encode('client-secret');
-            }),
-            Argument::that(function (JWK $jwk) {
-                return $jwk->get('kty') === 'oct';
-            })
-        ))
-            ->willReturn($this->jweBuilder->reveal());
-        $this->jweBuilder->build()->willReturn($jwe->reveal());
-
-        $this->jweSerializer->serialize($jwe->reveal(), 0)
             ->willReturn('token');
 
         $token = $this->factory->create($this->client->reveal(), ['foo' => 'bar']);
@@ -257,7 +185,7 @@ class RequestObjectFactoryTest extends TestCase
             'cty' => 'JWT',
             'kid' => 'some-key-id',
         ])->willReturn($this->jweBuilder->reveal());
-        $this->jweBuilder->addRecipient(Argument::that(function (JWK $key) {
+        $this->jweBuilder->addRecipient(Argument::that(static function (JWK $key) {
             return 'some-key-id' === $key->get('kid');
         }))
             ->willReturn($this->jweBuilder->reveal());
@@ -269,5 +197,101 @@ class RequestObjectFactoryTest extends TestCase
         $token = $this->factory->create($this->client->reveal(), ['foo' => 'bar']);
 
         self::assertSame('token', $token);
+    }
+
+    public function testCreateWithNoSignAndNoEnc(): void
+    {
+        $this->clientMetadata->get('request_object_signing_alg')->willReturn('none');
+        $this->clientMetadata->get('request_object_encryption_alg')->willReturn(null);
+        $this->clientMetadata->get('request_object_encryption_enc')->willReturn(null);
+
+        $token = $this->factory->create($this->client->reveal(), ['foo' => 'bar']);
+
+        [$header, $payload] = explode('.', $token);
+        $header = json_decode(base64url_decode($header), true);
+        $payload = json_decode(base64url_decode($payload), true);
+
+        self::assertSame('none', $header['alg'] ?? null);
+        self::assertSame('client-id', $payload['iss'] ?? null);
+        self::assertSame('client-id', $payload['client_id'] ?? null);
+        self::assertSame('http://issuer.com', $payload['aud'] ?? null);
+        self::assertSame('bar', $payload['foo'] ?? null);
+        self::assertIsString($payload['jti'] ?? null);
+        self::assertIsInt($payload['iat'] ?? null);
+        self::assertIsInt($payload['exp'] ?? null);
+    }
+
+    public function testCreateWithNoSignAndSymEnc(): void
+    {
+        $this->clientMetadata->get('request_object_signing_alg')->willReturn('none');
+        $this->clientMetadata->get('request_object_encryption_alg')->willReturn('ASY1');
+        $this->clientMetadata->get('request_object_encryption_enc')->willReturn('ASY2');
+
+        $jwe = $this->prophesize(JWE::class);
+
+        $this->jweBuilder->create()->willReturn($this->jweBuilder->reveal());
+        $this->jweBuilder->withPayload(Argument::type('string'))->willReturn($this->jweBuilder->reveal());
+        $this->jweBuilder->withSharedProtectedHeader([
+            'alg' => 'ASY1',
+            'enc' => 'ASY2',
+            'cty' => 'JWT',
+        ])->willReturn($this->jweBuilder->reveal());
+        $this->jweBuilder->addRecipient(Argument::allOf(
+            Argument::type(JWK::class),
+            Argument::that(static function (JWK $jwk) {
+                return $jwk->get('k') === base64url_encode('client-secret');
+            }),
+            Argument::that(static function (JWK $jwk) {
+                return $jwk->get('kty') === 'oct';
+            })
+        ))
+            ->willReturn($this->jweBuilder->reveal());
+        $this->jweBuilder->build()->willReturn($jwe->reveal());
+
+        $this->jweSerializer->serialize($jwe->reveal(), 0)
+            ->willReturn('token');
+
+        $token = $this->factory->create($this->client->reveal(), ['foo' => 'bar']);
+
+        self::assertSame('token', $token);
+    }
+
+    public function testCreateWithSymSignAndNoEnc(): void
+    {
+        $this->clientMetadata->get('request_object_signing_alg')->willReturn('HS256');
+        $this->clientMetadata->get('request_object_encryption_alg')->willReturn(null);
+        $this->clientMetadata->get('request_object_encryption_enc')->willReturn(null);
+
+        $jws = $this->prophesize(JWS::class);
+
+        $this->jwsBuilder->create()->willReturn($this->jwsBuilder->reveal());
+        $this->jwsBuilder->withPayload(Argument::type('string'))->willReturn($this->jwsBuilder->reveal());
+        $this->jwsBuilder->addSignature(Argument::allOf(
+            Argument::type(JWK::class),
+            Argument::that(static function (JWK $jwk) {
+                return $jwk->get('k') === base64url_encode('client-secret');
+            }),
+            Argument::that(static function (JWK $jwk) {
+                return $jwk->get('kty') === 'oct';
+            })
+        ), [
+            'alg' => 'HS256',
+            'typ' => 'JWT',
+        ])
+            ->willReturn($this->jwsBuilder->reveal());
+        $this->jwsBuilder->build()->willReturn($jws->reveal());
+
+        $this->jwsSerializer->serialize($jws->reveal(), 0)
+            ->willReturn('token');
+
+        $token = $this->factory->create($this->client->reveal(), ['foo' => 'bar']);
+
+        self::assertSame('token', $token);
+    }
+
+    public function testMinimalConstructor(): void
+    {
+        $factory = new RequestObjectFactory();
+        self::assertInstanceOf(RequestObjectFactory::class, $factory);
     }
 }

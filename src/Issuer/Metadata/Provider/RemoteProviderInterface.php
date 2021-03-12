@@ -9,13 +9,11 @@ namespace Facile\OpenIDClient\Issuer\Metadata\Provider;
  */
 interface RemoteProviderInterface
 {
-    public function isAllowedUri(string $uri): bool;
-
     /**
-     * @param string $uri
-     *
      * @return array<string, mixed>
      * @psalm-return IssuerMetadataObject
      */
     public function fetch(string $uri): array;
+
+    public function isAllowedUri(string $uri): bool;
 }

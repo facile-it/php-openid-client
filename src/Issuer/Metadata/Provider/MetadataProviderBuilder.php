@@ -13,37 +13,85 @@ use Psr\SimpleCache\CacheInterface;
 
 class MetadataProviderBuilder
 {
-    /** @var null|DiscoveryProviderInterface */
-    private $discoveryProvider;
-
-    /** @var null|WebFingerProviderInterface */
-    private $webFingerProvider;
-
-    /** @var ClientInterface|null */
-    private $client;
-
-    /** @var RequestFactoryInterface|null */
-    private $requestFactory;
-
-    /** @var UriFactoryInterface|null */
-    private $uriFactory;
-
-    /** @var CacheInterface|null */
+    /**
+     * @var CacheInterface|null
+     */
     private $cache;
 
-    /** @var int|null */
+    /**
+     * @var int|null
+     */
     private $cacheTtl;
 
-    public function setDiscoveryProvider(DiscoveryProviderInterface $discoveryProvider): self
+    /**
+     * @var ClientInterface|null
+     */
+    private $client;
+
+    /**
+     * @var DiscoveryProviderInterface|null
+     */
+    private $discoveryProvider;
+
+    /**
+     * @var RequestFactoryInterface|null
+     */
+    private $requestFactory;
+
+    /**
+     * @var UriFactoryInterface|null
+     */
+    private $uriFactory;
+
+    /**
+     * @var WebFingerProviderInterface|null
+     */
+    private $webFingerProvider;
+
+    public function build(): RemoteProviderInterface
     {
-        $this->discoveryProvider = $discoveryProvider;
+        $provider = new RemoteProvider([
+            $this->buildDiscoveryProvider(),
+            $this->buildWebFingerProvider(),
+        ]);
+
+        if (null !== $this->cache) {
+            $provider = new CachedProviderDecorator($provider, $this->cache, $this->cacheTtl);
+        }
+
+        return $provider;
+    }
+
+    public function buildRequestFactory(): RequestFactoryInterface
+    {
+        return $this->requestFactory ?? Psr17FactoryDiscovery::findRequestFactory();
+    }
+
+    public function buildUriFactory(): UriFactoryInterface
+    {
+        return $this->uriFactory ?? Psr17FactoryDiscovery::findUriFactory();
+    }
+
+    public function buildWebFingerProvider(): WebFingerProviderInterface
+    {
+        return $this->webFingerProvider ?? new WebFingerProvider(
+            $this->buildClient(),
+            $this->buildRequestFactory(),
+            $this->buildUriFactory(),
+            $this->buildDiscoveryProvider()
+        );
+    }
+
+    public function setCache(?CacheInterface $cache): self
+    {
+        $this->cache = $cache;
 
         return $this;
     }
 
-    public function setWebFingerProvider(WebFingerProviderInterface $webFingerProvider): self
+    public function setCacheTtl(?int $cacheTtl): self
     {
-        $this->webFingerProvider = $webFingerProvider;
+        $this->cacheTtl = $cacheTtl;
 
         return $this;
     }
@@ -51,6 +99,13 @@ class MetadataProviderBuilder
     public function setClient(?ClientInterface $client): self
     {
         $this->client = $client;
+
+        return $this;
+    }
+
+    public function setDiscoveryProvider(DiscoveryProviderInterface $discoveryProvider): self
+    {
+        $this->discoveryProvider = $discoveryProvider;
 
         return $this;
     }
@@ -69,16 +124,9 @@ class MetadataProviderBuilder
         return $this;
     }
 
-    public function setCache(?CacheInterface $cache): self
+    public function setWebFingerProvider(WebFingerProviderInterface $webFingerProvider): self
     {
-        $this->cache = $cache;
-
-        return $this;
-    }
-
-    public function setCacheTtl(?int $cacheTtl): self
-    {
-        $this->cacheTtl = $cacheTtl;
+        $this->webFingerProvider = $webFingerProvider;
 
         return $this;
     }
@@ -88,16 +136,6 @@ class MetadataProviderBuilder
         return $this->client ?? Psr18ClientDiscovery::find();
     }
 
-    public function buildRequestFactory(): RequestFactoryInterface
-    {
-        return $this->requestFactory ?? Psr17FactoryDiscovery::findRequestFactory();
-    }
-
-    public function buildUriFactory(): UriFactoryInterface
-    {
-        return $this->uriFactory ?? Psr17FactoryDiscovery::findUriFactory();
-    }
-
     private function buildDiscoveryProvider(): DiscoveryProviderInterface
     {
         return $this->discoveryProvider ?? new DiscoveryProvider(
@@ -105,29 +143,5 @@ class MetadataProviderBuilder
             $this->buildRequestFactory(),
             $this->buildUriFactory()
         );
-    }
-
-    public function buildWebFingerProvider(): WebFingerProviderInterface
-    {
-        return $this->webFingerProvider ?? new WebFingerProvider(
-            $this->buildClient(),
-            $this->buildRequestFactory(),
-            $this->buildUriFactory(),
-            $this->buildDiscoveryProvider()
-        );
-    }
-
-    public function build(): RemoteProviderInterface
-    {
-        $provider = new RemoteProvider([
-            $this->buildDiscoveryProvider(),
-            $this->buildWebFingerProvider(),
-        ]);
-
-        if (null !== $this->cache) {
-            $provider = new CachedProviderDecorator($provider, $this->cache, $this->cacheTtl);
-        }
-
-        return $provider;
     }
 }

@@ -4,23 +4,23 @@ declare(strict_types=1);
 
 namespace Facile\OpenIDClientTest\functions;
 
-use function Facile\OpenIDClient\jose_secret_key;
 use Facile\OpenIDClientTest\TestCase;
+use function Facile\OpenIDClient\jose_secret_key;
 
-class JoseSecretKeyTest extends TestCase
+/**
+ * @internal
+ * @coversNothing
+ */
+final class JoseSecretKeyTest extends TestCase
 {
     /**
      * @dataProvider valuesProvider
-     *
-     * @param string $secret
-     * @param string $alg
-     * @param string $expected
      */
     public function testJoseSecretKey(string $secret, string $alg, string $expected): void
     {
         $jwk = jose_secret_key($secret, $alg);
-        static::assertSame('oct', $jwk->get('kty'));
-        static::assertSame($expected, $jwk->get('k'));
+        self::assertSame('oct', $jwk->get('kty'));
+        self::assertSame($expected, $jwk->get('k'));
     }
 
     public function valuesProvider(): array

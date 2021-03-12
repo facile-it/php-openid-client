@@ -11,14 +11,12 @@ use Facile\OpenIDClientTest\TestCase;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\StreamInterface;
 
-class NoneTest extends TestCase
+/**
+ * @internal
+ * @coversNothing
+ */
+final class NoneTest extends TestCase
 {
-    public function testGetSupportedMethod(): void
-    {
-        $auth = new None();
-        static::assertSame('none', $auth->getSupportedMethod());
-    }
-
     public function testCreateRequest(): void
     {
         $auth = new None();
@@ -40,6 +38,12 @@ class NoneTest extends TestCase
             ['foo' => 'bar']
         );
 
-        static::assertSame($request->reveal(), $result);
+        self::assertSame($request->reveal(), $result);
+    }
+
+    public function testGetSupportedMethod(): void
+    {
+        $auth = new None();
+        self::assertSame('none', $auth->getSupportedMethod());
     }
 }

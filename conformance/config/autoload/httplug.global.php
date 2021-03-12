@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 use Zend\ServiceManager\Factory\InvokableFactory;
 
 return [
@@ -18,9 +20,9 @@ return [
             'default' => [
                 'factory' => 'httplug.client_factory.curl',
                 'config' => [
-                    CURLOPT_AUTOREFERER => true,
-                    CURLOPT_CONNECTTIMEOUT_MS => 1000,
-                    CURLOPT_TIMEOUT_MS => 120000,
+                    \CURLOPT_AUTOREFERER => true,
+                    \CURLOPT_CONNECTTIMEOUT_MS => 1000,
+                    \CURLOPT_TIMEOUT_MS => 120000,
                 ],
                 'plugins' => [
                     'header_defaults' => [

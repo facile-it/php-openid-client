@@ -4,33 +4,39 @@ declare(strict_types=1);
 
 namespace Facile\OpenIDClient\Issuer\Metadata\Provider;
 
-use function array_key_exists;
 use Facile\OpenIDClient\Exception\RuntimeException;
-use function Facile\OpenIDClient\parse_metadata_response;
-use function preg_match;
 use Psr\Http\Client\ClientExceptionInterface;
 use Psr\Http\Client\ClientInterface;
 use Psr\Http\Message\RequestFactoryInterface;
 use Psr\Http\Message\UriFactoryInterface;
+
+use function array_key_exists;
+use function Facile\OpenIDClient\parse_metadata_response;
+use function preg_match;
 use function rtrim;
-use function strpos;
 
 /**
  * @psalm-import-type DiscoveryConfigurationObject from DiscoveryProviderInterface
  */
 final class DiscoveryProvider implements DiscoveryProviderInterface
 {
-    private const OIDC_DISCOVERY = '/.well-known/openid-configuration';
-
     private const OAUTH2_DISCOVERY = '/.well-known/oauth-authorization-server';
 
-    /** @var ClientInterface */
+    private const OIDC_DISCOVERY = '/.well-known/openid-configuration';
+
+    /**
+     * @var ClientInterface
+     */
     private $client;
 
-    /** @var RequestFactoryInterface */
+    /**
+     * @var RequestFactoryInterface
+     */
     private $requestFactory;
 
-    /** @var UriFactoryInterface */
+    /**
+     * @var UriFactoryInterface
+     */
     private $uriFactory;
 
     public function __construct(
@@ -43,17 +49,12 @@ final class DiscoveryProvider implements DiscoveryProviderInterface
         $this->uriFactory = $uriFactory;
     }
 
-    public function isAllowedUri(string $uri): bool
-    {
-        return (int) preg_match('/https?:\/\//', $uri) > 0;
-    }
-
     public function discovery(string $url): array
     {
         $uri = $this->uriFactory->createUri($url);
         $uriPath = $uri->getPath() ?: '/';
 
-        if (false !== strpos($uriPath, '/.well-known/')) {
+        if (false !== mb_strpos($uriPath, '/.well-known/')) {
             return $this->fetchOpenIdConfiguration((string) $uri);
         }
 
@@ -74,9 +75,17 @@ final class DiscoveryProvider implements DiscoveryProviderInterface
         throw new RuntimeException('Unable to fetch provider metadata');
     }
 
+    public function fetch(string $uri): array
+    {
+        return $this->discovery($uri);
+    }
+
+    public function isAllowedUri(string $uri): bool
+    {
+        return (int) preg_match('/https?:\/\//', $uri) > 0;
+    }
+
     /**
-     * @param string $uri
-     *
      * @return array<mixed, string>
      * @psalm-return DiscoveryConfigurationObject
      */
@@ -92,15 +101,10 @@ final class DiscoveryProvider implements DiscoveryProviderInterface
             throw new RuntimeException('Unable to fetch provider metadata', 0, $e);
         }
 
-        if (! array_key_exists('issuer', $data)) {
+        if (!array_key_exists('issuer', $data)) {
             throw new RuntimeException('Invalid metadata content, no "issuer" key found');
         }
 
         return $data;
-    }
-
-    public function fetch(string $uri): array
-    {
-        return $this->discovery($uri);
     }
 }

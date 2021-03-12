@@ -12,7 +12,9 @@ use Psr\Http\Server\RequestHandlerInterface;
 
 final class AuthRequestProviderMiddleware implements MiddlewareInterface
 {
-    /** @var AuthRequestInterface */
+    /**
+     * @var AuthRequestInterface
+     */
     private $authRequest;
 
     public function __construct(AuthRequestInterface $authRequest)

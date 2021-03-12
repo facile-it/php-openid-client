@@ -10,13 +10,10 @@ use Facile\OpenIDClient\Token\UserInfoVerifierBuilder;
 
 final class UserInfoServiceBuilder extends AbstractServiceBuilder
 {
-    /** @var TokenVerifierBuilderInterface|null */
-    private $userInfoVerifierBuilder = null;
-
-    protected function getUserInfoVerifierBuilder(): TokenVerifierBuilderInterface
-    {
-        return $this->userInfoVerifierBuilder = $this->userInfoVerifierBuilder ?? new UserInfoVerifierBuilder();
-    }
+    /**
+     * @var TokenVerifierBuilderInterface|null
+     */
+    private $userInfoVerifierBuilder;
 
     public function build(): UserInfoService
     {
@@ -25,5 +22,10 @@ final class UserInfoServiceBuilder extends AbstractServiceBuilder
             $this->getHttpClient(),
             $this->getRequestFactory()
         );
+    }
+
+    protected function getUserInfoVerifierBuilder(): TokenVerifierBuilderInterface
+    {
+        return $this->userInfoVerifierBuilder = $this->userInfoVerifierBuilder ?? new UserInfoVerifierBuilder();
     }
 }

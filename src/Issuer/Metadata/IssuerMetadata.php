@@ -4,14 +4,13 @@ declare(strict_types=1);
 
 namespace Facile\OpenIDClient\Issuer\Metadata;
 
+use Facile\OpenIDClient\Exception\InvalidArgumentException;
+
 use function array_diff;
-use function array_filter;
-use const ARRAY_FILTER_USE_BOTH;
 use function array_key_exists;
 use function array_keys;
 use function array_merge;
 use function count;
-use Facile\OpenIDClient\Exception\InvalidArgumentException;
 use function implode;
 
 /**
@@ -25,7 +24,9 @@ final class IssuerMetadata implements IssuerMetadataInterface
      */
     private $metadata;
 
-    /** @var string[] */
+    /**
+     * @var string[]
+     */
     private static $requiredKeys = [
         'issuer',
         'authorization_endpoint',
@@ -35,9 +36,6 @@ final class IssuerMetadata implements IssuerMetadataInterface
     /**
      * IssuerMetadata constructor.
      *
-     * @param string $issuer
-     * @param string $authorizationEndpoint
-     * @param string $jwksUri
      * @param array<string, mixed> $claims
      */
     public function __construct(
@@ -67,11 +65,12 @@ final class IssuerMetadata implements IssuerMetadataInterface
     public static function fromArray(array $claims): self
     {
         $missingKeys = array_diff(self::$requiredKeys, array_keys($claims));
+
         if (0 !== count($missingKeys)) {
             throw new InvalidArgumentException('Invalid issuer metadata. Missing keys: ' . implode(', ', $missingKeys));
         }
 
-        return new static(
+        return new self(
             $claims['issuer'],
             $claims['authorization_endpoint'],
             $claims['jwks_uri'],
@@ -79,54 +78,9 @@ final class IssuerMetadata implements IssuerMetadataInterface
         );
     }
 
-    public function getIssuer(): string
+    public function get(string $name)
     {
-        return $this->metadata['issuer'];
-    }
-
-    public function getAuthorizationEndpoint(): string
-    {
-        return $this->metadata['authorization_endpoint'];
-    }
-
-    public function getTokenEndpoint(): ?string
-    {
-        return $this->metadata['token_endpoint'] ?? null;
-    }
-
-    public function getUserinfoEndpoint(): ?string
-    {
-        return $this->metadata['userinfo_endpoint'] ?? null;
-    }
-
-    public function getRegistrationEndpoint(): ?string
-    {
-        return $this->metadata['registration_endpoint'] ?? null;
-    }
-
-    public function getJwksUri(): string
-    {
-        return $this->metadata['jwks_uri'];
-    }
-
-    public function getScopesSupported(): ?array
-    {
-        return $this->metadata['scopes_supported'] ?? null;
-    }
-
-    public function getResponseTypesSupported(): array
-    {
-        return $this->metadata['response_types_supported'];
-    }
-
-    public function getResponseModesSupported(): array
-    {
-        return $this->metadata['response_modes_supported'] ?? ['query', 'fragment'];
-    }
-
-    public function getGrantTypesSupported(): array
-    {
-        return $this->metadata['grant_types_supported'] ?? ['authorization_code', 'implicit'];
+        return $this->metadata[$name] ?? null;
     }
 
     public function getAcrValuesSupported(): ?array
@@ -134,29 +88,29 @@ final class IssuerMetadata implements IssuerMetadataInterface
         return $this->metadata['acr_values_supported'] ?? null;
     }
 
-    public function getSubjectTypesSupported(): array
+    public function getAuthorizationEncryptionAlgValuesSupported(): array
     {
-        return $this->metadata['subject_types_supported'] ?? ['public'];
+        return $this->metadata['authorization_encryption_alg_values_supported'] ?? [];
     }
 
-    public function getDisplayValuesSupported(): ?array
+    public function getAuthorizationEncryptionEncValuesSupported(): array
     {
-        return $this->metadata['display_values_supported'] ?? null;
+        return $this->metadata['authorization_encryption_enc_values_supported'] ?? [];
     }
 
-    public function getClaimTypesSupported(): array
+    public function getAuthorizationEndpoint(): string
     {
-        return $this->metadata['claim_types_supported'] ?? ['normal'];
+        return $this->metadata['authorization_endpoint'];
     }
 
-    public function getClaimsSupported(): ?array
+    public function getAuthorizationSigningAlgValuesSupported(): array
     {
-        return $this->metadata['claims_supported'] ?? null;
+        return $this->metadata['authorization_signing_alg_values_supported'] ?? [];
     }
 
-    public function getServiceDocumentation(): ?string
+    public function getCheckSessionIframe(): ?string
     {
-        return $this->metadata['service_documentation'] ?? null;
+        return $this->metadata['check_session_iframe'] ?? null;
     }
 
     public function getClaimsLocalesSupported(): ?array
@@ -164,39 +118,14 @@ final class IssuerMetadata implements IssuerMetadataInterface
         return $this->metadata['claims_locales_supported'] ?? null;
     }
 
-    public function getUiLocalesSupported(): ?array
+    public function getClaimsSupported(): ?array
     {
-        return $this->metadata['ui_locales_supported'] ?? null;
+        return $this->metadata['claims_supported'] ?? null;
     }
 
-    public function isClaimsParameterSupported(): bool
+    public function getClaimTypesSupported(): array
     {
-        return $this->metadata['claims_parameter_supported'] ?? false;
-    }
-
-    public function isRequestParameterSupported(): bool
-    {
-        return $this->metadata['request_parameter_supported'] ?? false;
-    }
-
-    public function isRequestUriParameterSupported(): bool
-    {
-        return $this->metadata['request_uri_parameter_supported'] ?? false;
-    }
-
-    public function isRequireRequestUriRegistration(): bool
-    {
-        return $this->metadata['require_request_uri_registration'] ?? true;
-    }
-
-    public function getOpPolicyUri(): ?string
-    {
-        return $this->metadata['op_policy_uri'] ?? null;
-    }
-
-    public function getOpTosUri(): ?string
-    {
-        return $this->metadata['op_tos_uri'] ?? null;
+        return $this->metadata['claim_types_supported'] ?? ['normal'];
     }
 
     public function getCodeChallengeMethodsSupported(): ?array
@@ -204,25 +133,19 @@ final class IssuerMetadata implements IssuerMetadataInterface
         return $this->metadata['code_challenge_methods_supported'] ?? null;
     }
 
-    public function getTokenEndpointAuthMethodsSupported(): array
+    public function getDisplayValuesSupported(): ?array
     {
-        return $this->metadata['token_endpoint_auth_methods_supported'] ?? ['client_secret_basic'];
+        return $this->metadata['display_values_supported'] ?? null;
     }
 
-    public function getTokenEndpointAuthSigningAlgValuesSupported(): array
+    public function getEndSessionIframe(): ?string
     {
-        /** @var list<non-empty-string> $default */
-        $default = ['RS256'];
-
-        return $this->metadata['token_endpoint_auth_signing_alg_values_supported'] ?? $default;
+        return $this->metadata['end_session_iframe'] ?? null;
     }
 
-    public function getIdTokenSigningAlgValuesSupported(): array
+    public function getGrantTypesSupported(): array
     {
-        /** @var list<non-empty-string> $default */
-        $default = ['RS256'];
-
-        return $this->metadata['id_token_signing_alg_values_supported'] ?? $default;
+        return $this->metadata['grant_types_supported'] ?? ['authorization_code', 'implicit'];
     }
 
     public function getIdTokenEncryptionAlgValuesSupported(): array
@@ -235,34 +158,22 @@ final class IssuerMetadata implements IssuerMetadataInterface
         return $this->metadata['id_token_encryption_enc_values_supported'] ?? [];
     }
 
-    public function getUserinfoSigningAlgValuesSupported(): array
+    public function getIdTokenSigningAlgValuesSupported(): array
     {
-        return $this->metadata['userinfo_signing_alg_values_supported'] ?? [];
+        /** @var list<non-empty-string> $default */
+        $default = ['RS256'];
+
+        return $this->metadata['id_token_signing_alg_values_supported'] ?? $default;
     }
 
-    public function getUserinfoEncryptionAlgValuesSupported(): array
+    public function getIntrospectionEncryptionAlgValuesSupported(): array
     {
-        return $this->metadata['userinfo_encryption_alg_values_supported'] ?? [];
+        return $this->metadata['introspection_encryption_alg_values_supported'] ?? [];
     }
 
-    public function getUserinfoEncryptionEncValuesSupported(): array
+    public function getIntrospectionEncryptionEncValuesSupported(): array
     {
-        return $this->metadata['userinfo_encryption_enc_values_supported'] ?? [];
-    }
-
-    public function getAuthorizationSigningAlgValuesSupported(): array
-    {
-        return $this->metadata['authorization_signing_alg_values_supported'] ?? [];
-    }
-
-    public function getAuthorizationEncryptionAlgValuesSupported(): array
-    {
-        return $this->metadata['authorization_encryption_alg_values_supported'] ?? [];
-    }
-
-    public function getAuthorizationEncryptionEncValuesSupported(): array
-    {
-        return $this->metadata['authorization_encryption_enc_values_supported'] ?? [];
+        return $this->metadata['introspection_encryption_enc_values_supported'] ?? [];
     }
 
     public function getIntrospectionEndpoint(): ?string
@@ -285,22 +196,34 @@ final class IssuerMetadata implements IssuerMetadataInterface
         return $this->metadata['introspection_signing_alg_values_supported'] ?? [];
     }
 
-    public function getIntrospectionEncryptionAlgValuesSupported(): array
+    public function getIssuer(): string
     {
-        return $this->metadata['introspection_encryption_alg_values_supported'] ?? [];
+        return $this->metadata['issuer'];
     }
 
-    public function getIntrospectionEncryptionEncValuesSupported(): array
+    public function getJwksUri(): string
     {
-        return $this->metadata['introspection_encryption_enc_values_supported'] ?? [];
+        return $this->metadata['jwks_uri'];
     }
 
-    public function getRequestObjectSigningAlgValuesSupported(): array
+    public function getMtlsEndpointAliases(): array
     {
-        /** @var list<non-empty-string> $default */
-        $default = ['none', 'RS256'];
+        return $this->metadata['mtls_endpoint_aliases'] ?? [];
+    }
 
-        return $this->metadata['request_object_signing_alg_values_supported'] ?? $default;
+    public function getOpPolicyUri(): ?string
+    {
+        return $this->metadata['op_policy_uri'] ?? null;
+    }
+
+    public function getOpTosUri(): ?string
+    {
+        return $this->metadata['op_tos_uri'] ?? null;
+    }
+
+    public function getRegistrationEndpoint(): ?string
+    {
+        return $this->metadata['registration_endpoint'] ?? null;
     }
 
     public function getRequestObjectEncryptionAlgValuesSupported(): array
@@ -311,6 +234,24 @@ final class IssuerMetadata implements IssuerMetadataInterface
     public function getRequestObjectEncryptionEncValuesSupported(): array
     {
         return $this->metadata['request_object_encryption_enc_values_supported'] ?? [];
+    }
+
+    public function getRequestObjectSigningAlgValuesSupported(): array
+    {
+        /** @var list<non-empty-string> $default */
+        $default = ['none', 'RS256'];
+
+        return $this->metadata['request_object_signing_alg_values_supported'] ?? $default;
+    }
+
+    public function getResponseModesSupported(): array
+    {
+        return $this->metadata['response_modes_supported'] ?? ['query', 'fragment'];
+    }
+
+    public function getResponseTypesSupported(): array
+    {
+        return $this->metadata['response_types_supported'];
     }
 
     public function getRevocationEndpoint(): ?string
@@ -328,29 +269,67 @@ final class IssuerMetadata implements IssuerMetadataInterface
         return $this->metadata['revocation_endpoint_auth_signing_alg_values_supported'] ?? [];
     }
 
-    public function getCheckSessionIframe(): ?string
+    public function getScopesSupported(): ?array
     {
-        return $this->metadata['check_session_iframe'] ?? null;
+        return $this->metadata['scopes_supported'] ?? null;
     }
 
-    public function getEndSessionIframe(): ?string
+    public function getServiceDocumentation(): ?string
     {
-        return $this->metadata['end_session_iframe'] ?? null;
+        return $this->metadata['service_documentation'] ?? null;
     }
 
-    public function isFrontchannelLogoutSupported(): bool
+    public function getSubjectTypesSupported(): array
     {
-        return $this->metadata['frontchannel_logout_supported'] ?? false;
+        return $this->metadata['subject_types_supported'] ?? ['public'];
     }
 
-    public function isFrontchannelLogoutSessionSupported(): bool
+    public function getTokenEndpoint(): ?string
     {
-        return $this->metadata['frontchannel_logout_session_supported'] ?? false;
+        return $this->metadata['token_endpoint'] ?? null;
     }
 
-    public function isBackchannelLogoutSupported(): bool
+    public function getTokenEndpointAuthMethodsSupported(): array
     {
-        return $this->metadata['backchannel_logout_supported'] ?? false;
+        return $this->metadata['token_endpoint_auth_methods_supported'] ?? ['client_secret_basic'];
+    }
+
+    public function getTokenEndpointAuthSigningAlgValuesSupported(): array
+    {
+        /** @var list<non-empty-string> $default */
+        $default = ['RS256'];
+
+        return $this->metadata['token_endpoint_auth_signing_alg_values_supported'] ?? $default;
+    }
+
+    public function getUiLocalesSupported(): ?array
+    {
+        return $this->metadata['ui_locales_supported'] ?? null;
+    }
+
+    public function getUserinfoEncryptionAlgValuesSupported(): array
+    {
+        return $this->metadata['userinfo_encryption_alg_values_supported'] ?? [];
+    }
+
+    public function getUserinfoEncryptionEncValuesSupported(): array
+    {
+        return $this->metadata['userinfo_encryption_enc_values_supported'] ?? [];
+    }
+
+    public function getUserinfoEndpoint(): ?string
+    {
+        return $this->metadata['userinfo_endpoint'] ?? null;
+    }
+
+    public function getUserinfoSigningAlgValuesSupported(): array
+    {
+        return $this->metadata['userinfo_signing_alg_values_supported'] ?? [];
+    }
+
+    public function has(string $name): bool
+    {
+        return array_key_exists($name, $this->metadata);
     }
 
     public function isBackchannelLogoutSessionSupported(): bool
@@ -358,14 +337,44 @@ final class IssuerMetadata implements IssuerMetadataInterface
         return $this->metadata['backchannel_logout_session_supported'] ?? false;
     }
 
+    public function isBackchannelLogoutSupported(): bool
+    {
+        return $this->metadata['backchannel_logout_supported'] ?? false;
+    }
+
+    public function isClaimsParameterSupported(): bool
+    {
+        return $this->metadata['claims_parameter_supported'] ?? false;
+    }
+
+    public function isFrontchannelLogoutSessionSupported(): bool
+    {
+        return $this->metadata['frontchannel_logout_session_supported'] ?? false;
+    }
+
+    public function isFrontchannelLogoutSupported(): bool
+    {
+        return $this->metadata['frontchannel_logout_supported'] ?? false;
+    }
+
+    public function isRequestParameterSupported(): bool
+    {
+        return $this->metadata['request_parameter_supported'] ?? false;
+    }
+
+    public function isRequestUriParameterSupported(): bool
+    {
+        return $this->metadata['request_uri_parameter_supported'] ?? false;
+    }
+
+    public function isRequireRequestUriRegistration(): bool
+    {
+        return $this->metadata['require_request_uri_registration'] ?? true;
+    }
+
     public function isTlsClientCertificateBoundAccessTokens(): bool
     {
         return $this->metadata['tls_client_certificate_bound_access_tokens'] ?? false;
-    }
-
-    public function getMtlsEndpointAliases(): array
-    {
-        return $this->metadata['mtls_endpoint_aliases'] ?? [];
     }
 
     public function jsonSerialize(): array
@@ -376,15 +385,5 @@ final class IssuerMetadata implements IssuerMetadataInterface
     public function toArray(): array
     {
         return $this->metadata;
-    }
-
-    public function has(string $name): bool
-    {
-        return array_key_exists($name, $this->metadata);
-    }
-
-    public function get(string $name)
-    {
-        return $this->metadata[$name] ?? null;
     }
 }

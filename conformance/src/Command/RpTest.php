@@ -4,35 +4,48 @@ declare(strict_types=1);
 
 namespace Facile\OpenIDClient\ConformanceTest\Command;
 
-use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Input\InputOption;
-use Symfony\Component\Console\Output\OutputInterface;
+use DateTimeImmutable;
 use Facile\OpenIDClient\ConformanceTest\Helper\RPLogsHelper;
 use Facile\OpenIDClient\ConformanceTest\Provider\RpProfileTestsProvider;
 use Facile\OpenIDClient\ConformanceTest\RpTest\RpTestInterface;
 use Facile\OpenIDClient\ConformanceTest\Runner\RpTestResult;
 use Facile\OpenIDClient\ConformanceTest\Runner\RpTestRunner;
 use Facile\OpenIDClient\ConformanceTest\TestInfo;
+use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
+use Symfony\Component\Console\Output\OutputInterface;
+
 use function count;
 use function fnmatch;
 use function sprintf;
 
-class RpTest extends Command
+/**
+ * @internal
+ * @coversNothing
+ */
+final class RpTest extends Command
 {
-    /** @var RpTestRunner */
-    private $testRunner;
-    /** @var RpProfileTestsProvider */
-    private $testsProvider;
-    /** @var RPLogsHelper */
+    /**
+     * @var RPLogsHelper
+     */
     private $logsHelper;
+
+    /**
+     * @var RpTestRunner
+     */
+    private $testRunner;
+
+    /**
+     * @var RpProfileTestsProvider
+     */
+    private $testsProvider;
 
     public function __construct(
         RpTestRunner $testRunner,
         RpProfileTestsProvider $testsProvider,
         RPLogsHelper $logsHelper
-    )
-    {
+    ) {
         $this->testRunner = $testRunner;
         $this->testsProvider = $testsProvider;
         $this->logsHelper = $logsHelper;
@@ -49,8 +62,7 @@ class RpTest extends Command
             ->addOption('show-environment', 'e', InputOption::VALUE_NONE, 'Whether to show environment')
             ->addOption('show-remote-logs', 'l', InputOption::VALUE_NONE, 'Whether to show remote logs')
             ->addOption('keep-logs', 'k', InputOption::VALUE_NONE, 'Whether to keep server logs')
-            ->addOption('ignore-errors', null, InputOption::VALUE_NONE, 'Whether to stops on errors')
-        ;
+            ->addOption('ignore-errors', null, InputOption::VALUE_NONE, 'Whether to stops on errors');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
@@ -77,12 +89,12 @@ class RpTest extends Command
 
             $testInfo = new TestInfo($profile, $responseType);
 
-            if (! $keepLogs) {
+            if (!$keepLogs) {
                 $this->logsHelper->clearLogs($testInfo->getRoot(), $testInfo->getRpId());
             }
 
             if (count($testIds)) {
-                $tests = \array_filter($tests, static function (RpTestInterface $test) use ($testIds) {
+                $tests = array_filter($tests, static function (RpTestInterface $test) use ($testIds) {
                     foreach ($testIds as $testId) {
                         if (fnmatch($testId, $test->getTestId())) {
                             return true;
@@ -98,8 +110,8 @@ class RpTest extends Command
                 $testName = $test->getTestId() . ' @' . $testInfo->getProfile();
                 $counters['executed'][] = $testName;
 
-                $startTime = new \DateTimeImmutable();
-                $output->writeln("<comment>Test started at:</comment> <info>{$startTime->format(\DateTimeImmutable::RFC3339)}</info>", OutputInterface::VERBOSITY_DEBUG);
+                $startTime = new DateTimeImmutable();
+                $output->writeln("<comment>Test started at:</comment> <info>{$startTime->format(DateTimeImmutable::RFC3339)}</info>", OutputInterface::VERBOSITY_DEBUG);
                 $output->writeln('Executing test ' . $testName . '...', OutputInterface::VERBOSITY_DEBUG);
 
                 $count = 0;
@@ -108,10 +120,10 @@ class RpTest extends Command
                     $result = $this->testRunner->run($test, $testInfo);
                 } while (null !== $result->getException() && ++$count < $retries);
 
-                $output->writeln("<comment>Test:</comment> <info>$testName</info>", OutputInterface::VERBOSITY_NORMAL);
+                $output->writeln("<comment>Test:</comment> <info>{$testName}</info>", OutputInterface::VERBOSITY_NORMAL);
 
-                if ($count > 1) {
-                    $output->writeln("<comment>Attempts:</comment> <info>$count</info>", OutputInterface::VERBOSITY_NORMAL);
+                if (1 < $count) {
+                    $output->writeln("<comment>Attempts:</comment> <info>{$count}</info>", OutputInterface::VERBOSITY_NORMAL);
                 }
 
                 if ($showEnvironment) {
@@ -123,7 +135,6 @@ class RpTest extends Command
                     $output->writeln('');
                     $this->printImplementation($result, $output);
                 }
-
 
                 if ($showRemoteLogs) {
                     $output->writeln('');
@@ -141,7 +152,7 @@ class RpTest extends Command
 
                 $this->printSeparator($output, OutputInterface::VERBOSITY_NORMAL);
 
-                if (! $ignoreErrors && $result->getException()) {
+                if (!$ignoreErrors && $result->getException()) {
                     return 1;
                 }
             }
@@ -161,31 +172,11 @@ class RpTest extends Command
             }
         }
 
-
-
         if (count($counters['errors'])) {
             return 1;
         }
 
         return 0;
-    }
-
-    private function printSeparator(OutputInterface $output, int $options = 0): void
-    {
-        $output->writeln(\str_repeat('-', 80), $options);
-    }
-
-    private function printRemoteLog(RpTestResult $result, OutputInterface $output): void
-    {
-        $testInfo = $result->getTestInfo();
-        $body = (string) $this->logsHelper->getLog(
-            $testInfo->getRoot(),
-            $testInfo->getRpId(),
-            $result->getTest()->getTestId()
-        )
-            ->getBody();
-        $output->writeln('<comment>Remote Log:</comment>');
-        $output->writeln("<info>{$body}</info>");
     }
 
     private function printEnvironment(RpTestResult $result, OutputInterface $output): void
@@ -201,5 +192,23 @@ class RpTest extends Command
         $output->writeln('<comment>Implementation:</comment>');
         $output->writeln('');
         $output->writeln('<info>' . $result->getImplementation() . '</info>');
+    }
+
+    private function printRemoteLog(RpTestResult $result, OutputInterface $output): void
+    {
+        $testInfo = $result->getTestInfo();
+        $body = (string) $this->logsHelper->getLog(
+            $testInfo->getRoot(),
+            $testInfo->getRpId(),
+            $result->getTest()->getTestId()
+        )
+            ->getBody();
+        $output->writeln('<comment>Remote Log:</comment>');
+        $output->writeln("<info>{$body}</info>");
+    }
+
+    private function printSeparator(OutputInterface $output, int $options = 0): void
+    {
+        $output->writeln(str_repeat('-', 80), $options);
     }
 }

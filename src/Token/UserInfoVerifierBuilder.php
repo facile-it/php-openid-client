@@ -8,25 +8,15 @@ use Facile\OpenIDClient\Client\ClientInterface;
 
 final class UserInfoVerifierBuilder implements TokenVerifierBuilderInterface
 {
-    /** @var bool */
+    /**
+     * @var bool
+     */
     private $aadIssValidation = false;
 
-    /** @var int */
+    /**
+     * @var int
+     */
     private $clockTolerance = 0;
-
-    public function setAadIssValidation(bool $aadIssValidation): self
-    {
-        $this->aadIssValidation = $aadIssValidation;
-
-        return $this;
-    }
-
-    public function setClockTolerance(int $clockTolerance): self
-    {
-        $this->clockTolerance = $clockTolerance;
-
-        return $this;
-    }
 
     public function build(ClientInterface $client): \Facile\JoseVerifier\TokenVerifierInterface
     {
@@ -40,5 +30,19 @@ final class UserInfoVerifierBuilder implements TokenVerifierBuilderInterface
         $builder->setAadIssValidation($this->aadIssValidation);
 
         return $builder->build();
+    }
+
+    public function setAadIssValidation(bool $aadIssValidation): self
+    {
+        $this->aadIssValidation = $aadIssValidation;
+
+        return $this;
+    }
+
+    public function setClockTolerance(int $clockTolerance): self
+    {
+        $this->clockTolerance = $clockTolerance;
+
+        return $this;
     }
 }

@@ -10,7 +10,11 @@ use Facile\OpenIDClientTest\TestCase;
 use Prophecy\Argument;
 use Psr\SimpleCache\CacheInterface;
 
-class CachedProviderDecoratorTest extends TestCase
+/**
+ * @internal
+ * @coversNothing
+ */
+final class CachedProviderDecoratorTest extends TestCase
 {
     public function testShouldPersistCachedData(): void
     {
@@ -35,7 +39,7 @@ class CachedProviderDecoratorTest extends TestCase
         $cache->set(Argument::type('string'), json_encode($metadata), null)
             ->shouldBeCalled();
 
-        $this->assertSame($metadata, $provider->fetch($uri));
+        self::assertSame($metadata, $provider->fetch($uri));
     }
 
     public function testShouldReuseCachedData(): void
@@ -61,6 +65,6 @@ class CachedProviderDecoratorTest extends TestCase
         $cache->set(Argument::cetera())
             ->shouldNotBeCalled();
 
-        $this->assertSame($metadata, $provider->fetch($uri));
+        self::assertSame($metadata, $provider->fetch($uri));
     }
 }

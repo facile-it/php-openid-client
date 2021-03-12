@@ -9,8 +9,21 @@ use Facile\OpenIDClient\AuthMethod\AuthMethodInterface;
 use Facile\OpenIDClient\Exception\InvalidArgumentException;
 use Facile\OpenIDClientTest\TestCase;
 
-class AuthMethodFactoryTest extends TestCase
+/**
+ * @internal
+ * @coversNothing
+ */
+final class AuthMethodFactoryTest extends TestCase
 {
+    public function testCreateWithUnknownAuthMethod(): void
+    {
+        $this->expectException(InvalidArgumentException::class);
+
+        $factory = new AuthMethodFactory();
+
+        $factory->create('foo');
+    }
+
     public function testFactory(): void
     {
         $authMethod1 = $this->prophesize(AuthMethodInterface::class);
@@ -24,17 +37,8 @@ class AuthMethodFactoryTest extends TestCase
             $authMethod2->reveal(),
         ]);
 
-        static::assertCount(2, $factory->all());
-        static::assertSame($authMethod1->reveal(), $factory->create('foo'));
-        static::assertSame($authMethod2->reveal(), $factory->create('bar'));
-    }
-
-    public function testCreateWithUnknownAuthMethod(): void
-    {
-        $this->expectException(InvalidArgumentException::class);
-
-        $factory = new AuthMethodFactory();
-
-        $factory->create('foo');
+        self::assertCount(2, $factory->all());
+        self::assertSame($authMethod1->reveal(), $factory->create('foo'));
+        self::assertSame($authMethod2->reveal(), $factory->create('bar'));
     }
 }

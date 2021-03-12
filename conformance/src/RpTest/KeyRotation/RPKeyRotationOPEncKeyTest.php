@@ -4,15 +4,16 @@ declare(strict_types=1);
 
 namespace Facile\OpenIDClient\ConformanceTest\RpTest\KeyRotation;
 
+use Facile\OpenIDClient\ConformanceTest\RpTest\AbstractRpTest;
+use Facile\OpenIDClient\ConformanceTest\TestInfo;
+use Facile\OpenIDClient\RequestObject\RequestObjectFactory;
+use Facile\OpenIDClient\Service\AuthorizationService;
+use Facile\OpenIDClient\Session\AuthSession;
 use Jose\Component\Core\JWK;
 use Jose\Component\Core\JWKSet;
 use Jose\Component\KeyManagement\JWKFactory;
 use PHPUnit\Framework\Assert;
-use Facile\OpenIDClient\ConformanceTest\RpTest\AbstractRpTest;
-use Facile\OpenIDClient\ConformanceTest\TestInfo;
-use Facile\OpenIDClient\Session\AuthSession;
-use Facile\OpenIDClient\RequestObject\RequestObjectFactory;
-use Facile\OpenIDClient\Service\AuthorizationService;
+
 use function Facile\OpenIDClient\base64url_encode;
 use function json_decode;
 use function json_encode;
@@ -23,22 +24,19 @@ use function json_encode;
  * Fetch the issuer's keys from the jwks_uri again, and make a new encrypted request using the rotated encryption keys.
  *
  * A successful authentication response to both authentication requests encrypted using rotated encryption keys.
+ *
+ * @internal
+ * @coversNothing
  */
-class RPKeyRotationOPEncKeyTest extends AbstractRpTest
+final class RPKeyRotationOPEncKeyTest extends AbstractRpTest
 {
-
-    public function getTestId(): string
-    {
-        return 'rp-key-rotation-op-enc-key';
-    }
-
     public function execute(TestInfo $testInfo): void
     {
         $jwkSig = JWKFactory::createRSAKey(2048, ['alg' => 'RS256', 'use' => 'sig']);
         $jwkEncAlg = JWKFactory::createRSAKey(2048, ['alg' => 'RSA-OAEP', 'use' => 'enc']);
 
         $jwks = new JWKSet([$jwkSig, $jwkEncAlg]);
-        $publicJwks = new JWKSet(\array_map(static function (JWK $jwk) {
+        $publicJwks = new JWKSet(array_map(static function (JWK $jwk) {
             return $jwk->toPublic();
         }, $jwks->all()));
 
@@ -58,8 +56,8 @@ class RPKeyRotationOPEncKeyTest extends AbstractRpTest
         $authorizationService = new AuthorizationService();
 
         $authSession = AuthSession::fromArray([
-            'state' => base64url_encode(\random_bytes(32)),
-            'nonce' => base64url_encode(\random_bytes(32)),
+            'state' => base64url_encode(random_bytes(32)),
+            'nonce' => base64url_encode(random_bytes(32)),
         ]);
         $uri = $authorizationService->getAuthorizationUri($client, [
             'request' => $requestObjectFactory->create($client),
@@ -91,5 +89,10 @@ class RPKeyRotationOPEncKeyTest extends AbstractRpTest
         $tokenSet = $authorizationService->callback($client, $params, null, $authSession);
 
         Assert::assertNotNull($tokenSet->getIdToken());
+    }
+
+    public function getTestId(): string
+    {
+        return 'rp-key-rotation-op-enc-key';
     }
 }

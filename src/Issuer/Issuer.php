@@ -9,11 +9,15 @@ use Facile\OpenIDClient\Issuer\Metadata\IssuerMetadataInterface;
 
 final class Issuer implements IssuerInterface
 {
-    /** @var IssuerMetadataInterface */
-    private $metadata;
-
-    /** @var JwksProviderInterface */
+    /**
+     * @var JwksProviderInterface
+     */
     private $jwksProvider;
+
+    /**
+     * @var IssuerMetadataInterface
+     */
+    private $metadata;
 
     public function __construct(IssuerMetadataInterface $metadata, JwksProviderInterface $jwksProvider)
     {
@@ -21,13 +25,13 @@ final class Issuer implements IssuerInterface
         $this->jwksProvider = $jwksProvider;
     }
 
-    public function getMetadata(): IssuerMetadataInterface
-    {
-        return $this->metadata;
-    }
-
     public function getJwksProvider(): JwksProviderInterface
     {
         return $this->jwksProvider;
+    }
+
+    public function getMetadata(): IssuerMetadataInterface
+    {
+        return $this->metadata;
     }
 }

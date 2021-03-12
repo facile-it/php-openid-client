@@ -9,7 +9,11 @@ use Facile\OpenIDClient\Issuer\Issuer;
 use Facile\OpenIDClient\Issuer\Metadata\IssuerMetadataInterface;
 use Facile\OpenIDClientTest\TestCase;
 
-class IssuerTest extends TestCase
+/**
+ * @internal
+ * @coversNothing
+ */
+final class IssuerTest extends TestCase
 {
     public function testMinimalConstructor(): void
     {
@@ -21,7 +25,7 @@ class IssuerTest extends TestCase
             $jwksProvider->reveal()
         );
 
-        static::assertSame($metadata->reveal(), $issuer->getMetadata());
-        static::assertSame($jwksProvider->reveal(), $issuer->getJwksProvider());
+        self::assertSame($metadata->reveal(), $issuer->getMetadata());
+        self::assertSame($jwksProvider->reveal(), $issuer->getJwksProvider());
     }
 }

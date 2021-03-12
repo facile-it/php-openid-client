@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Facile\OpenIDClient\Middleware;
 
 use Facile\OpenIDClient\Authorization\AuthRequestInterface;
-use function Facile\OpenIDClient\base64url_encode;
 use Facile\OpenIDClient\Client\ClientInterface;
 use Facile\OpenIDClient\Exception\LogicException;
 use Facile\OpenIDClient\Exception\RuntimeException;
@@ -16,21 +15,31 @@ use Psr\Http\Message\ResponseFactoryInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
+
+use function Facile\OpenIDClient\base64url_encode;
 use function random_bytes;
 
 class AuthRedirectHandler implements RequestHandlerInterface
 {
-    /** @var AuthorizationService */
+    /**
+     * @var AuthorizationService
+     */
     private $authorizationService;
 
-    /** @var ResponseFactoryInterface */
-    private $responseFactory;
-
-    /** @var null|ClientInterface */
+    /**
+     * @var ClientInterface|null
+     */
     private $client;
 
-    /** @var int */
+    /**
+     * @var int
+     */
     private $randomBytes;
+
+    /**
+     * @var ResponseFactoryInterface
+     */
+    private $responseFactory;
 
     public function __construct(
         AuthorizationService $authorizationService,
@@ -48,11 +57,11 @@ class AuthRedirectHandler implements RequestHandlerInterface
     {
         $authRequest = $request->getAttribute(AuthRequestInterface::class);
 
-        if (! $authRequest instanceof AuthRequestInterface) {
+        if (!$authRequest instanceof AuthRequestInterface) {
             throw new RuntimeException('Unable to find a valid attribute for ' . AuthRequestInterface::class);
         }
 
-        /** @var null|AuthSessionInterface $authSession */
+        /** @var AuthSessionInterface|null $authSession */
         $authSession = $request->getAttribute(AuthSessionInterface::class);
 
         if ($authSession instanceof AuthSessionInterface) {
@@ -68,7 +77,7 @@ class AuthRedirectHandler implements RequestHandlerInterface
 
         $client = $this->client ?? $request->getAttribute(ClientInterface::class);
 
-        if (! $client instanceof ClientInterface) {
+        if (!$client instanceof ClientInterface) {
             throw new LogicException('No OpenID client provided');
         }
 

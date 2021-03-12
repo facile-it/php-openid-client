@@ -8,7 +8,7 @@ use Facile\OpenIDClient\ConformanceTest\TestInfo;
 
 interface RpTestInterface
 {
-    public function getTestId(): string;
-
     public function execute(TestInfo $testInfo): void;
+
+    public function getTestId(): string;
 }

@@ -4,12 +4,14 @@ declare(strict_types=1);
 
 namespace Facile\OpenIDClient\ConformanceTest\RpTest\IdToken;
 
-use PHPUnit\Framework\Assert;
-use PHPUnit\Framework\AssertionFailedError;
 use Facile\OpenIDClient\ConformanceTest\RpTest\AbstractRpTest;
 use Facile\OpenIDClient\ConformanceTest\TestInfo;
-use Facile\OpenIDClient\Session\AuthSession;
 use Facile\OpenIDClient\Service\AuthorizationService;
+use Facile\OpenIDClient\Session\AuthSession;
+use PHPUnit\Framework\Assert;
+use PHPUnit\Framework\AssertionFailedError;
+use Throwable;
+
 use function Facile\OpenIDClient\base64url_encode;
 
 /**
@@ -17,15 +19,12 @@ use function Facile\OpenIDClient\base64url_encode;
  * response_type='code id_token token' for Hybrid Flow. Verify the 'at_hash' value in the returned ID Token.
  *
  * Identify the incorrect 'at_hash' value and reject the ID Token after doing Access Token validation.
+ *
+ * @internal
+ * @coversNothing
  */
-class RPIdTokenBadAtHashTest extends AbstractRpTest
+final class RPIdTokenBadAtHashTest extends AbstractRpTest
 {
-
-    public function getTestId(): string
-    {
-        return 'rp-id_token-bad-at_hash';
-    }
-
     public function execute(TestInfo $testInfo): void
     {
         $client = $this->registerClient($testInfo);
@@ -34,7 +33,7 @@ class RPIdTokenBadAtHashTest extends AbstractRpTest
         $authorizationService = new AuthorizationService();
 
         $authSession = AuthSession::fromArray([
-            'nonce' => base64url_encode(\random_bytes(32)),
+            'nonce' => base64url_encode(random_bytes(32)),
         ]);
 
         $uri = $authorizationService->getAuthorizationUri($client, [
@@ -49,10 +48,16 @@ class RPIdTokenBadAtHashTest extends AbstractRpTest
 
         try {
             $authorizationService->callback($client, $params, null, $authSession);
+
             throw new AssertionFailedError('No assertion');
-        } catch (\Throwable $e) {
+        } catch (Throwable $e) {
             Assert::assertSame('Invalid token provided', $e->getMessage());
             Assert::assertRegExp('/at_hash mismatch/', $e->getPrevious()->getMessage());
         }
+    }
+
+    public function getTestId(): string
+    {
+        return 'rp-id_token-bad-at_hash';
     }
 }

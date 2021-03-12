@@ -6,7 +6,10 @@ namespace Facile\OpenIDClient\ConformanceTest\RpTest;
 
 use PHPUnit\Framework\TestCase;
 
-class CommonTest extends TestCase
+/**
+ * @internal
+ * @coversNothing
+ */
+final class CommonTest extends TestCase
 {
-
 }

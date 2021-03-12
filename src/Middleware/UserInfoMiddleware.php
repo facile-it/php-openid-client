@@ -18,11 +18,15 @@ class UserInfoMiddleware implements MiddlewareInterface
 {
     public const USERINFO_ATTRIBUTE = self::class;
 
-    /** @var UserInfoService */
-    private $userInfoService;
-
-    /** @var null|ClientInterface */
+    /**
+     * @var ClientInterface|null
+     */
     private $client;
+
+    /**
+     * @var UserInfoService
+     */
+    private $userInfoService;
 
     public function __construct(
         UserInfoService $userInfoService,
@@ -37,11 +41,11 @@ class UserInfoMiddleware implements MiddlewareInterface
         $tokenSet = $request->getAttribute(TokenSetInterface::class);
         $client = $this->client ?? $request->getAttribute(ClientInterface::class);
 
-        if (! $client instanceof ClientInterface) {
+        if (!$client instanceof ClientInterface) {
             throw new LogicException('No OpenID client provided');
         }
 
-        if (! $tokenSet instanceof TokenSetInterface) {
+        if (!$tokenSet instanceof TokenSetInterface) {
             throw new RuntimeException('Unable to get token response attribute');
         }
 

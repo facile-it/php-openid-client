@@ -4,10 +4,11 @@ declare(strict_types=1);
 
 namespace Facile\OpenIDClient\ConformanceTest\RpTest\IdToken;
 
-use PHPUnit\Framework\Assert;
 use Facile\OpenIDClient\ConformanceTest\RpTest\AbstractRpTest;
 use Facile\OpenIDClient\ConformanceTest\TestInfo;
 use Facile\OpenIDClient\Service\AuthorizationService;
+use PHPUnit\Framework\Assert;
+
 use function Facile\OpenIDClient\base64url_encode;
 
 /**
@@ -15,15 +16,12 @@ use function Facile\OpenIDClient\base64url_encode;
  *
  * Use the single matching key out of the Issuer's published set to verify the ID Tokens signature
  * and accept the ID Token after doing ID Token validation.
+ *
+ * @internal
+ * @coversNothing
  */
-class RpIdTokenKidAbsentSingleJwksTest extends AbstractRpTest
+final class RpIdTokenKidAbsentSingleJwksTest extends AbstractRpTest
 {
-
-    public function getTestId(): string
-    {
-        return 'rp-id_token-kid-absent-single-jwks';
-    }
-
     public function execute(TestInfo $testInfo): void
     {
         $client = $this->registerClient($testInfo);
@@ -32,7 +30,7 @@ class RpIdTokenKidAbsentSingleJwksTest extends AbstractRpTest
         $authorizationService = new AuthorizationService();
         $uri = $authorizationService->getAuthorizationUri($client, [
             'response_type' => $testInfo->getResponseType(),
-            'nonce' => base64url_encode(\random_bytes(32)),
+            'nonce' => base64url_encode(random_bytes(32)),
         ]);
 
         // Simulate a redirect and create the server request
@@ -43,5 +41,10 @@ class RpIdTokenKidAbsentSingleJwksTest extends AbstractRpTest
         $tokenSet = $authorizationService->callback($client, $params);
 
         Assert::assertNotNull($tokenSet->getIdToken());
+    }
+
+    public function getTestId(): string
+    {
+        return 'rp-id_token-kid-absent-single-jwks';
     }
 }

@@ -8,11 +8,15 @@ use Facile\OpenIDClient\Exception\ExceptionInterface;
 use Facile\OpenIDClient\Exception\InvalidArgumentException;
 use Facile\OpenIDClientTest\TestCase;
 
-class InvalidArgumentExceptionTest extends TestCase
+/**
+ * @internal
+ * @coversNothing
+ */
+final class InvalidArgumentExceptionTest extends TestCase
 {
     public function testException(): void
     {
         $exception = new InvalidArgumentException();
-        static::assertInstanceOf(ExceptionInterface::class, $exception);
+        self::assertInstanceOf(ExceptionInterface::class, $exception);
     }
 }

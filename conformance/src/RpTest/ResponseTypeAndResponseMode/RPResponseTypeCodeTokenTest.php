@@ -4,20 +4,20 @@ declare(strict_types=1);
 
 namespace Facile\OpenIDClient\ConformanceTest\RpTest\ResponseTypeAndResponseMode;
 
-use PHPUnit\Framework\Assert;
 use Facile\OpenIDClient\ConformanceTest\RpTest\AbstractRpTest;
 use Facile\OpenIDClient\ConformanceTest\TestInfo;
-use Facile\OpenIDClient\Session\AuthSession;
 use Facile\OpenIDClient\Service\AuthorizationService;
+use Facile\OpenIDClient\Session\AuthSession;
+use PHPUnit\Framework\Assert;
+
 use function Facile\OpenIDClient\base64url_encode;
 
-class RPResponseTypeCodeTokenTest extends AbstractRpTest
+/**
+ * @internal
+ * @coversNothing
+ */
+final class RPResponseTypeCodeTokenTest extends AbstractRpTest
 {
-    public function getTestId(): string
-    {
-        return 'rp-response_type-code+token';
-    }
-
     public function execute(TestInfo $testInfo): void
     {
         $client = $this->registerClient($testInfo);
@@ -28,7 +28,7 @@ class RPResponseTypeCodeTokenTest extends AbstractRpTest
         $authorizationService = new AuthorizationService();
 
         $authSession = AuthSession::fromArray([
-            'nonce' => base64url_encode(\random_bytes(32)),
+            'nonce' => base64url_encode(random_bytes(32)),
         ]);
         $uri = $authorizationService->getAuthorizationUri($client, [
             'response_type' => $testInfo->getResponseType(),
@@ -41,5 +41,10 @@ class RPResponseTypeCodeTokenTest extends AbstractRpTest
         $params = $authorizationService->getCallbackParams($serverRequest, $client);
         Assert::assertArrayHasKey('code', $params);
         Assert::assertArrayHasKey('access_token', $params);
+    }
+
+    public function getTestId(): string
+    {
+        return 'rp-response_type-code+token';
     }
 }

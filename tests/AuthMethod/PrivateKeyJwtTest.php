@@ -10,35 +10,25 @@ use Facile\OpenIDClient\Client\ClientInterface;
 use Facile\OpenIDClient\Client\Metadata\ClientMetadataInterface;
 use Facile\OpenIDClient\Issuer\IssuerInterface;
 use Facile\OpenIDClient\Issuer\Metadata\IssuerMetadataInterface;
-use function http_build_query;
+use Facile\OpenIDClientTest\TestCase;
 use Jose\Component\Core\JWK;
 use Jose\Component\KeyManagement\JWKFactory;
 use Jose\Component\Signature\JWS;
 use Jose\Component\Signature\JWSBuilder;
 use Jose\Component\Signature\Serializer\JWSSerializer;
-use function json_decode;
-use Facile\OpenIDClientTest\TestCase;
 use Prophecy\Argument;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\StreamInterface;
+use function http_build_query;
+use function json_decode;
 use function time;
 
-class PrivateKeyJwtTest extends TestCase
+/**
+ * @internal
+ * @coversNothing
+ */
+final class PrivateKeyJwtTest extends TestCase
 {
-    public function testGetSupportedMethod(): void
-    {
-        $jwsBuilder = $this->prophesize(JWSBuilder::class);
-        $serializer = $this->prophesize(JWSSerializer::class);
-
-        $auth = new PrivateKeyJwt(
-            $jwsBuilder->reveal(),
-            $serializer->reveal(),
-            null,
-            60
-        );
-        static::assertSame('private_key_jwt', $auth->getSupportedMethod());
-    }
-
     public function createRequestProvider(): array
     {
         return [
@@ -49,8 +39,6 @@ class PrivateKeyJwtTest extends TestCase
 
     /**
      * @dataProvider createRequestProvider
-     *
-     * @param bool $jwkAsDependency
      */
     public function testCreateRequest(bool $jwkAsDependency = false): void
     {
@@ -79,7 +67,7 @@ class PrivateKeyJwtTest extends TestCase
         $issuerMetadata = $this->prophesize(IssuerMetadataInterface::class);
         $client->getJwksProvider()->willReturn($jwksProvider->reveal());
 
-        if (! $jwkAsDependency) {
+        if (!$jwkAsDependency) {
             $jwksProvider->getJwks()->willReturn([
                 'keys' => [
                     $jwk->all(),
@@ -100,25 +88,25 @@ class PrivateKeyJwtTest extends TestCase
         $jws = $this->prophesize(JWS::class);
 
         $jwsBuilder->create()->shouldBeCalled()->willReturn($jwsBuilder2->reveal());
-        $jwsBuilder2->withPayload(Argument::that(function (string $payload) {
+        $jwsBuilder2->withPayload(Argument::that(static function (string $payload) {
             $decoded = json_decode($payload, true);
 
-            static::assertIsArray($decoded);
+            self::assertIsArray($decoded);
 
-            static::assertArrayHasKey('iss', $decoded);
-            static::assertArrayHasKey('sub', $decoded);
-            static::assertArrayHasKey('aud', $decoded);
-            static::assertArrayHasKey('iat', $decoded);
-            static::assertArrayHasKey('exp', $decoded);
-            static::assertArrayHasKey('jti', $decoded);
+            self::assertArrayHasKey('iss', $decoded);
+            self::assertArrayHasKey('sub', $decoded);
+            self::assertArrayHasKey('aud', $decoded);
+            self::assertArrayHasKey('iat', $decoded);
+            self::assertArrayHasKey('exp', $decoded);
+            self::assertArrayHasKey('jti', $decoded);
 
-            static::assertSame('bar', $decoded['foo'] ?? null);
-            static::assertSame('foo', $decoded['iss'] ?? null);
-            static::assertSame('foo', $decoded['sub'] ?? null);
-            static::assertSame('issuer', $decoded['aud'] ?? null);
-            static::assertLessThanOrEqual(time(), $decoded['iat']);
-            static::assertLessThanOrEqual(time() + 60, $decoded['exp']);
-            static::assertGreaterThan(time(), $decoded['exp']);
+            self::assertSame('bar', $decoded['foo'] ?? null);
+            self::assertSame('foo', $decoded['iss'] ?? null);
+            self::assertSame('foo', $decoded['sub'] ?? null);
+            self::assertSame('issuer', $decoded['aud'] ?? null);
+            self::assertLessThanOrEqual(time(), $decoded['iat']);
+            self::assertLessThanOrEqual(time() + 60, $decoded['exp']);
+            self::assertGreaterThan(time(), $decoded['exp']);
 
             return true;
         }))
@@ -128,7 +116,7 @@ class PrivateKeyJwtTest extends TestCase
         $jwsBuilder3->addSignature(
             Argument::allOf(
                 Argument::type(JWK::class),
-                Argument::that(function (JWK $key) {
+                Argument::that(static function (JWK $key) {
                     return 'foo' === $key->get('kid');
                 })
             ),
@@ -162,6 +150,20 @@ class PrivateKeyJwtTest extends TestCase
             ['foo' => 'bar']
         );
 
-        static::assertSame($request->reveal(), $result);
+        self::assertSame($request->reveal(), $result);
+    }
+
+    public function testGetSupportedMethod(): void
+    {
+        $jwsBuilder = $this->prophesize(JWSBuilder::class);
+        $serializer = $this->prophesize(JWSSerializer::class);
+
+        $auth = new PrivateKeyJwt(
+            $jwsBuilder->reveal(),
+            $serializer->reveal(),
+            null,
+            60
+        );
+        self::assertSame('private_key_jwt', $auth->getSupportedMethod());
     }
 }

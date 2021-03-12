@@ -20,78 +20,9 @@ use JsonSerializable;
 interface IssuerMetadataInterface extends JsonSerializable
 {
     /**
-     * @param string $name
-     *
      * @return mixed|null
      */
     public function get(string $name);
-
-    /**
-     * @param string $name
-     *
-     * @return bool
-     */
-    public function has(string $name): bool;
-
-    /**
-     * @return string
-     * @psalm-return non-empty-string
-     */
-    public function getIssuer(): string;
-
-    /**
-     * @return string
-     * @psalm-return non-empty-string
-     */
-    public function getAuthorizationEndpoint(): string;
-
-    /**
-     * @return string|null
-     * @psalm-return non-empty-string|null
-     */
-    public function getTokenEndpoint(): ?string;
-
-    /**
-     * @return string|null
-     * @psalm-return non-empty-string|null
-     */
-    public function getUserinfoEndpoint(): ?string;
-
-    /**
-     * @return string|null
-     * @psalm-return non-empty-string|null
-     */
-    public function getRegistrationEndpoint(): ?string;
-
-    /**
-     * @return string
-     * @psalm-return non-empty-string
-     */
-    public function getJwksUri(): string;
-
-    /**
-     * @return string[]|null
-     * @psalm-return list<non-empty-string>|null
-     */
-    public function getScopesSupported(): ?array;
-
-    /**
-     * @return string[]
-     * @psalm-return list<non-empty-string>
-     */
-    public function getResponseTypesSupported(): array;
-
-    /**
-     * @return string[]
-     * @psalm-return list<OpenIdResponseMode>
-     */
-    public function getResponseModesSupported(): array;
-
-    /**
-     * @return string[]
-     * @psalm-return list<OpenIdGrantType>
-     */
-    public function getGrantTypesSupported(): array;
 
     /**
      * @return string[]|null
@@ -101,33 +32,31 @@ interface IssuerMetadataInterface extends JsonSerializable
 
     /**
      * @return string[]
-     * @psalm-return list<OpenIdSubjectType>
+     * @psalm-return list<non-empty-string>
      */
-    public function getSubjectTypesSupported(): array;
-
-    /**
-     * @return string[]|null
-     * @psalm-return list<non-empty-string>|null
-     */
-    public function getDisplayValuesSupported(): ?array;
+    public function getAuthorizationEncryptionAlgValuesSupported(): array;
 
     /**
      * @return string[]
-     * @psalm-return list<OpenIdClaimType>
+     * @psalm-return list<non-empty-string>
      */
-    public function getClaimTypesSupported(): array;
+    public function getAuthorizationEncryptionEncValuesSupported(): array;
 
     /**
-     * @return string[]|null
-     * @psalm-return list<non-empty-string>|null
+     * @psalm-return non-empty-string
      */
-    public function getClaimsSupported(): ?array;
+    public function getAuthorizationEndpoint(): string;
 
     /**
-     * @return string|null
+     * @return string[]
+     * @psalm-return list<non-empty-string>
+     */
+    public function getAuthorizationSigningAlgValuesSupported(): array;
+
+    /**
      * @psalm-return non-empty-string|null
      */
-    public function getServiceDocumentation(): ?string;
+    public function getCheckSessionIframe(): ?string;
 
     /**
      * @return string[]|null
@@ -139,39 +68,13 @@ interface IssuerMetadataInterface extends JsonSerializable
      * @return string[]|null
      * @psalm-return list<non-empty-string>|null
      */
-    public function getUiLocalesSupported(): ?array;
+    public function getClaimsSupported(): ?array;
 
     /**
-     * @return bool
+     * @return string[]
+     * @psalm-return list<OpenIdClaimType>
      */
-    public function isClaimsParameterSupported(): bool;
-
-    /**
-     * @return bool
-     */
-    public function isRequestParameterSupported(): bool;
-
-    /**
-     * @return bool
-     */
-    public function isRequestUriParameterSupported(): bool;
-
-    /**
-     * @return bool
-     */
-    public function isRequireRequestUriRegistration(): bool;
-
-    /**
-     * @return string|null
-     * @psalm-return non-empty-string|null
-     */
-    public function getOpPolicyUri(): ?string;
-
-    /**
-     * @return string|null
-     * @psalm-return non-empty-string|null
-     */
-    public function getOpTosUri(): ?string;
+    public function getClaimTypesSupported(): array;
 
     /**
      * @return string[]
@@ -180,22 +83,21 @@ interface IssuerMetadataInterface extends JsonSerializable
     public function getCodeChallengeMethodsSupported(): ?array;
 
     /**
-     * @return string[]
-     * @psalm-return list<non-empty-string>
+     * @return string[]|null
+     * @psalm-return list<non-empty-string>|null
      */
-    public function getTokenEndpointAuthMethodsSupported(): array;
+    public function getDisplayValuesSupported(): ?array;
+
+    /**
+     * @psalm-return non-empty-string|null
+     */
+    public function getEndSessionIframe(): ?string;
 
     /**
      * @return string[]
-     * @psalm-return list<non-empty-string>
+     * @psalm-return list<OpenIdGrantType>
      */
-    public function getTokenEndpointAuthSigningAlgValuesSupported(): array;
-
-    /**
-     * @return string[]
-     * @psalm-return list<non-empty-string>
-     */
-    public function getIdTokenSigningAlgValuesSupported(): array;
+    public function getGrantTypesSupported(): array;
 
     /**
      * @return string[]
@@ -213,40 +115,21 @@ interface IssuerMetadataInterface extends JsonSerializable
      * @return string[]
      * @psalm-return list<non-empty-string>
      */
-    public function getUserinfoSigningAlgValuesSupported(): array;
+    public function getIdTokenSigningAlgValuesSupported(): array;
 
     /**
      * @return string[]
      * @psalm-return list<non-empty-string>
      */
-    public function getUserinfoEncryptionAlgValuesSupported(): array;
+    public function getIntrospectionEncryptionAlgValuesSupported(): array;
 
     /**
      * @return string[]
      * @psalm-return list<non-empty-string>
      */
-    public function getUserinfoEncryptionEncValuesSupported(): array;
+    public function getIntrospectionEncryptionEncValuesSupported(): array;
 
     /**
-     * @return string[]
-     * @psalm-return list<non-empty-string>
-     */
-    public function getAuthorizationSigningAlgValuesSupported(): array;
-
-    /**
-     * @return string[]
-     * @psalm-return list<non-empty-string>
-     */
-    public function getAuthorizationEncryptionAlgValuesSupported(): array;
-
-    /**
-     * @return string[]
-     * @psalm-return list<non-empty-string>
-     */
-    public function getAuthorizationEncryptionEncValuesSupported(): array;
-
-    /**
-     * @return string|null
      * @psalm-return non-empty-string|null
      */
     public function getIntrospectionEndpoint(): ?string;
@@ -270,22 +153,34 @@ interface IssuerMetadataInterface extends JsonSerializable
     public function getIntrospectionSigningAlgValuesSupported(): array;
 
     /**
-     * @return string[]
-     * @psalm-return list<non-empty-string>
+     * @psalm-return non-empty-string
      */
-    public function getIntrospectionEncryptionAlgValuesSupported(): array;
+    public function getIssuer(): string;
 
     /**
-     * @return string[]
-     * @psalm-return list<non-empty-string>
+     * @psalm-return non-empty-string
      */
-    public function getIntrospectionEncryptionEncValuesSupported(): array;
+    public function getJwksUri(): string;
 
     /**
-     * @return string[]
-     * @psalm-return list<non-empty-string>
+     * @return array<string, string>
      */
-    public function getRequestObjectSigningAlgValuesSupported(): array;
+    public function getMtlsEndpointAliases(): array;
+
+    /**
+     * @psalm-return non-empty-string|null
+     */
+    public function getOpPolicyUri(): ?string;
+
+    /**
+     * @psalm-return non-empty-string|null
+     */
+    public function getOpTosUri(): ?string;
+
+    /**
+     * @psalm-return non-empty-string|null
+     */
+    public function getRegistrationEndpoint(): ?string;
 
     /**
      * @return string[]
@@ -300,7 +195,24 @@ interface IssuerMetadataInterface extends JsonSerializable
     public function getRequestObjectEncryptionEncValuesSupported(): array;
 
     /**
-     * @return string|null
+     * @return string[]
+     * @psalm-return list<non-empty-string>
+     */
+    public function getRequestObjectSigningAlgValuesSupported(): array;
+
+    /**
+     * @return string[]
+     * @psalm-return list<OpenIdResponseMode>
+     */
+    public function getResponseModesSupported(): array;
+
+    /**
+     * @return string[]
+     * @psalm-return list<non-empty-string>
+     */
+    public function getResponseTypesSupported(): array;
+
+    /**
      * @psalm-return non-empty-string|null
      */
     public function getRevocationEndpoint(): ?string;
@@ -318,46 +230,87 @@ interface IssuerMetadataInterface extends JsonSerializable
     public function getRevocationEndpointAuthSigningAlgValuesSupported(): array;
 
     /**
-     * @return string|null
+     * @return string[]|null
+     * @psalm-return list<non-empty-string>|null
+     */
+    public function getScopesSupported(): ?array;
+
+    /**
      * @psalm-return non-empty-string|null
      */
-    public function getCheckSessionIframe(): ?string;
+    public function getServiceDocumentation(): ?string;
 
     /**
-     * @return string|null
+     * @return string[]
+     * @psalm-return list<OpenIdSubjectType>
+     */
+    public function getSubjectTypesSupported(): array;
+
+    /**
      * @psalm-return non-empty-string|null
      */
-    public function getEndSessionIframe(): ?string;
+    public function getTokenEndpoint(): ?string;
 
     /**
-     * @return bool
+     * @return string[]
+     * @psalm-return list<non-empty-string>
      */
-    public function isFrontchannelLogoutSupported(): bool;
+    public function getTokenEndpointAuthMethodsSupported(): array;
 
     /**
-     * @return bool
+     * @return string[]
+     * @psalm-return list<non-empty-string>
      */
-    public function isFrontchannelLogoutSessionSupported(): bool;
+    public function getTokenEndpointAuthSigningAlgValuesSupported(): array;
 
     /**
-     * @return bool
+     * @return string[]|null
+     * @psalm-return list<non-empty-string>|null
      */
-    public function isBackchannelLogoutSupported(): bool;
+    public function getUiLocalesSupported(): ?array;
 
     /**
-     * @return bool
+     * @return string[]
+     * @psalm-return list<non-empty-string>
      */
+    public function getUserinfoEncryptionAlgValuesSupported(): array;
+
+    /**
+     * @return string[]
+     * @psalm-return list<non-empty-string>
+     */
+    public function getUserinfoEncryptionEncValuesSupported(): array;
+
+    /**
+     * @psalm-return non-empty-string|null
+     */
+    public function getUserinfoEndpoint(): ?string;
+
+    /**
+     * @return string[]
+     * @psalm-return list<non-empty-string>
+     */
+    public function getUserinfoSigningAlgValuesSupported(): array;
+
+    public function has(string $name): bool;
+
     public function isBackchannelLogoutSessionSupported(): bool;
 
-    /**
-     * @return bool
-     */
-    public function isTlsClientCertificateBoundAccessTokens(): bool;
+    public function isBackchannelLogoutSupported(): bool;
 
-    /**
-     * @return array<string, string>
-     */
-    public function getMtlsEndpointAliases(): array;
+    public function isClaimsParameterSupported(): bool;
+
+    public function isFrontchannelLogoutSessionSupported(): bool;
+
+    public function isFrontchannelLogoutSupported(): bool;
+
+    public function isRequestParameterSupported(): bool;
+
+    public function isRequestUriParameterSupported(): bool;
+
+    public function isRequireRequestUriRegistration(): bool;
+
+    public function isTlsClientCertificateBoundAccessTokens(): bool;
 
     /**
      * @return array<string, mixed>

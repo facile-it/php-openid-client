@@ -4,85 +4,28 @@ declare(strict_types=1);
 
 namespace Facile\OpenIDClientTest\Claims;
 
-use function Facile\OpenIDClient\base64url_encode;
 use Facile\OpenIDClient\Claims\DistributedParser;
 use Facile\OpenIDClient\Client\ClientInterface;
 use Facile\OpenIDClient\Issuer\IssuerBuilderInterface;
 use Facile\OpenIDClient\Issuer\IssuerInterface;
-use function implode;
+use Facile\OpenIDClientTest\TestCase;
 use Jose\Component\Core\AlgorithmManager;
 use Jose\Component\Signature\JWSVerifier;
-use function json_encode;
-use Facile\OpenIDClientTest\TestCase;
 use Psr\Http\Client\ClientInterface as HttpClient;
 use Psr\Http\Message\RequestFactoryInterface;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\StreamInterface;
+use function Facile\OpenIDClient\base64url_encode;
+use function implode;
+use function json_encode;
 
-class DistributedClaimsTest extends TestCase
+/**
+ * @internal
+ * @coversNothing
+ */
+final class DistributedClaimsTest extends TestCase
 {
-    public function testUnpackAggregatedClaimsWithNoClaimSources(): void
-    {
-        $algorithmManager = $this->prophesize(AlgorithmManager::class);
-        $JWSVerifier = $this->prophesize(JWSVerifier::class);
-        $issuerBuilder = $this->prophesize(IssuerBuilderInterface::class);
-        $httpClient = $this->prophesize(HttpClient::class);
-        $requestFactory = $this->prophesize(RequestFactoryInterface::class);
-        $client = $this->prophesize(ClientInterface::class);
-
-        $service = new DistributedParser(
-            $issuerBuilder->reveal(),
-            $httpClient->reveal(),
-            $requestFactory->reveal(),
-            $algorithmManager->reveal(),
-            $JWSVerifier->reveal()
-        );
-
-        $claims = [
-            'sub' => 'foo',
-            '_claim_names' => [
-                'age' => 'src1',
-            ],
-        ];
-
-        $distributed = $service->fetch($client->reveal(), $claims);
-
-        static::assertSame($claims, $distributed);
-    }
-
-    public function testUnpackAggregatedClaimsWithNoClaimNames(): void
-    {
-        $algorithmManager = $this->prophesize(AlgorithmManager::class);
-        $JWSVerifier = $this->prophesize(JWSVerifier::class);
-        $issuerBuilder = $this->prophesize(IssuerBuilderInterface::class);
-        $httpClient = $this->prophesize(HttpClient::class);
-        $requestFactory = $this->prophesize(RequestFactoryInterface::class);
-        $client = $this->prophesize(ClientInterface::class);
-
-        $service = new DistributedParser(
-            $issuerBuilder->reveal(),
-            $httpClient->reveal(),
-            $requestFactory->reveal(),
-            $algorithmManager->reveal(),
-            $JWSVerifier->reveal()
-        );
-
-        $claims = [
-            'sub' => 'foo',
-            '_claim_sources' => [
-                'src1' => [
-                    'endpoint' => 'https://endpoint.url/claims',
-                    'access_token' => 'access-token',
-                ],
-            ],
-        ];
-
-        $distributed = $service->fetch($client->reveal(), $claims);
-
-        static::assertSame($claims, $distributed);
-    }
-
     public function testUnpackAggregatedClaims(): void
     {
         $jwt = implode('.', [
@@ -142,9 +85,70 @@ class DistributedClaimsTest extends TestCase
 
         $unpacked = $service->fetch($client->reveal(), $claims);
 
-        static::assertSame(30, $unpacked['age'] ?? null);
-        static::assertArrayNotHasKey('_claim_names', $unpacked);
-        static::assertArrayNotHasKey('_claim_sources', $unpacked);
+        self::assertSame(30, $unpacked['age'] ?? null);
+        self::assertArrayNotHasKey('_claim_names', $unpacked);
+        self::assertArrayNotHasKey('_claim_sources', $unpacked);
+    }
+
+    public function testUnpackAggregatedClaimsWithNoClaimNames(): void
+    {
+        $algorithmManager = $this->prophesize(AlgorithmManager::class);
+        $JWSVerifier = $this->prophesize(JWSVerifier::class);
+        $issuerBuilder = $this->prophesize(IssuerBuilderInterface::class);
+        $httpClient = $this->prophesize(HttpClient::class);
+        $requestFactory = $this->prophesize(RequestFactoryInterface::class);
+        $client = $this->prophesize(ClientInterface::class);
+
+        $service = new DistributedParser(
+            $issuerBuilder->reveal(),
+            $httpClient->reveal(),
+            $requestFactory->reveal(),
+            $algorithmManager->reveal(),
+            $JWSVerifier->reveal()
+        );
+
+        $claims = [
+            'sub' => 'foo',
+            '_claim_sources' => [
+                'src1' => [
+                    'endpoint' => 'https://endpoint.url/claims',
+                    'access_token' => 'access-token',
+                ],
+            ],
+        ];
+
+        $distributed = $service->fetch($client->reveal(), $claims);
+
+        self::assertSame($claims, $distributed);
+    }
+
+    public function testUnpackAggregatedClaimsWithNoClaimSources(): void
+    {
+        $algorithmManager = $this->prophesize(AlgorithmManager::class);
+        $JWSVerifier = $this->prophesize(JWSVerifier::class);
+        $issuerBuilder = $this->prophesize(IssuerBuilderInterface::class);
+        $httpClient = $this->prophesize(HttpClient::class);
+        $requestFactory = $this->prophesize(RequestFactoryInterface::class);
+        $client = $this->prophesize(ClientInterface::class);
+
+        $service = new DistributedParser(
+            $issuerBuilder->reveal(),
+            $httpClient->reveal(),
+            $requestFactory->reveal(),
+            $algorithmManager->reveal(),
+            $JWSVerifier->reveal()
+        );
+
+        $claims = [
+            'sub' => 'foo',
+            '_claim_names' => [
+                'age' => 'src1',
+            ],
+        ];
+
+        $distributed = $service->fetch($client->reveal(), $claims);
+
+        self::assertSame($claims, $distributed);
     }
 
     public function testUnpackAggregatedClaimsWithResourceError(): void
@@ -207,6 +211,6 @@ class DistributedClaimsTest extends TestCase
 
         $unpacked = $service->fetch($client->reveal(), $claims);
 
-        static::assertSame($claims, $unpacked);
+        self::assertSame($claims, $unpacked);
     }
 }

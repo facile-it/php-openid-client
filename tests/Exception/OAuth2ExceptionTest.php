@@ -8,14 +8,43 @@ use Facile\OpenIDClient\Exception\ExceptionInterface;
 use Facile\OpenIDClient\Exception\InvalidArgumentException;
 use Facile\OpenIDClient\Exception\OAuth2Exception;
 use Facile\OpenIDClient\Exception\RemoteException;
-use function json_decode;
-use function json_encode;
 use Facile\OpenIDClientTest\TestCase;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\StreamInterface;
+use function json_decode;
+use function json_encode;
 
-class OAuth2ExceptionTest extends TestCase
+/**
+ * @internal
+ * @coversNothing
+ */
+final class OAuth2ExceptionTest extends TestCase
 {
+    public function testFromInvalidParameters(): void
+    {
+        $this->expectException(InvalidArgumentException::class);
+
+        OAuth2Exception::fromParameters([
+            'error_description' => 'Error message',
+            'error_uri' => 'uri',
+        ]);
+    }
+
+    public function testFromParameters(): void
+    {
+        $exception = OAuth2Exception::fromParameters([
+            'error' => 'error_code',
+            'error_description' => 'Error message',
+            'error_uri' => 'uri',
+        ]);
+
+        self::assertInstanceOf(ExceptionInterface::class, $exception);
+        self::assertSame('Error message (error_code)', $exception->getMessage());
+        self::assertSame('error_code', $exception->getError());
+        self::assertSame('Error message', $exception->getDescription());
+        self::assertSame('uri', $exception->getErrorUri());
+    }
+
     public function testFromResponse(): void
     {
         $response = $this->prophesize(ResponseInterface::class);
@@ -29,11 +58,11 @@ class OAuth2ExceptionTest extends TestCase
 
         $exception = OAuth2Exception::fromResponse($response->reveal());
 
-        static::assertInstanceOf(ExceptionInterface::class, $exception);
-        static::assertSame('error_code', $exception->getMessage());
-        static::assertSame('error_code', $exception->getError());
-        static::assertNull($exception->getDescription());
-        static::assertNull($exception->getErrorUri());
+        self::assertInstanceOf(ExceptionInterface::class, $exception);
+        self::assertSame('error_code', $exception->getMessage());
+        self::assertSame('error_code', $exception->getError());
+        self::assertNull($exception->getDescription());
+        self::assertNull($exception->getErrorUri());
     }
 
     public function testFromResponseComplete(): void
@@ -49,11 +78,11 @@ class OAuth2ExceptionTest extends TestCase
 
         $exception = OAuth2Exception::fromResponse($response->reveal());
 
-        static::assertInstanceOf(ExceptionInterface::class, $exception);
-        static::assertSame('Error message (error_code)', $exception->getMessage());
-        static::assertSame('error_code', $exception->getError());
-        static::assertSame('Error message', $exception->getDescription());
-        static::assertSame('uri', $exception->getErrorUri());
+        self::assertInstanceOf(ExceptionInterface::class, $exception);
+        self::assertSame('Error message (error_code)', $exception->getMessage());
+        self::assertSame('error_code', $exception->getError());
+        self::assertSame('Error message', $exception->getDescription());
+        self::assertSame('uri', $exception->getErrorUri());
     }
 
     public function testFromResponseNoOAuthError(): void
@@ -72,31 +101,6 @@ class OAuth2ExceptionTest extends TestCase
         OAuth2Exception::fromResponse($response->reveal());
     }
 
-    public function testFromParameters(): void
-    {
-        $exception = OAuth2Exception::fromParameters([
-            'error' => 'error_code',
-            'error_description' => 'Error message',
-            'error_uri' => 'uri',
-        ]);
-
-        static::assertInstanceOf(ExceptionInterface::class, $exception);
-        static::assertSame('Error message (error_code)', $exception->getMessage());
-        static::assertSame('error_code', $exception->getError());
-        static::assertSame('Error message', $exception->getDescription());
-        static::assertSame('uri', $exception->getErrorUri());
-    }
-
-    public function testFromInvalidParameters(): void
-    {
-        $this->expectException(InvalidArgumentException::class);
-
-        OAuth2Exception::fromParameters([
-            'error_description' => 'Error message',
-            'error_uri' => 'uri',
-        ]);
-    }
-
     public function testJsonSerializer(): void
     {
         $params = [
@@ -106,7 +110,7 @@ class OAuth2ExceptionTest extends TestCase
         ];
         $exception = OAuth2Exception::fromParameters($params);
 
-        static::assertInstanceOf(ExceptionInterface::class, $exception);
-        static::assertSame($params, json_decode(json_encode($exception), true));
+        self::assertInstanceOf(ExceptionInterface::class, $exception);
+        self::assertSame($params, json_decode(json_encode($exception), true));
     }
 }

@@ -4,25 +4,23 @@ declare(strict_types=1);
 
 namespace Facile\OpenIDClient\ConformanceTest\RpTest\ClientAuthentication;
 
-use PHPUnit\Framework\Assert;
 use Facile\OpenIDClient\ConformanceTest\RpTest\AbstractRpTest;
 use Facile\OpenIDClient\ConformanceTest\TestInfo;
 use Facile\OpenIDClient\Service\AuthorizationService;
+use PHPUnit\Framework\Assert;
+
 use function Facile\OpenIDClient\base64url_encode;
 
 /**
  * Use the 'client_secret_jwt' method to authenticate at the Authorization Server when using the token endpoint.
  *
  * A Token Response, containing an ID token.
+ *
+ * @internal
+ * @coversNothing
  */
-class RpTokenEndpointClientSecretJwtTest extends AbstractRpTest
+final class RpTokenEndpointClientSecretJwtTest extends AbstractRpTest
 {
-
-    public function getTestId(): string
-    {
-        return 'rp-token_endpoint-client_secret_jwt';
-    }
-
     public function execute(TestInfo $testInfo): void
     {
         $client = $this->registerClient($testInfo, [
@@ -33,7 +31,7 @@ class RpTokenEndpointClientSecretJwtTest extends AbstractRpTest
 
         $uri = $authorizationService->getAuthorizationUri($client, [
             'response_type' => $testInfo->getResponseType(),
-            'nonce' => base64url_encode(\random_bytes(32)),
+            'nonce' => base64url_encode(random_bytes(32)),
         ]);
 
         // Simulate a redirect and create the server request
@@ -44,5 +42,10 @@ class RpTokenEndpointClientSecretJwtTest extends AbstractRpTest
         $tokenSet = $authorizationService->callback($client, $params);
 
         Assert::assertNotNull($tokenSet->getIdToken());
+    }
+
+    public function getTestId(): string
+    {
+        return 'rp-token_endpoint-client_secret_jwt';
     }
 }

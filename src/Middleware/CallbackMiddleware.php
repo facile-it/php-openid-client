@@ -16,17 +16,25 @@ use Psr\Http\Server\RequestHandlerInterface;
 
 class CallbackMiddleware implements MiddlewareInterface
 {
-    /** @var AuthorizationService */
+    /**
+     * @var AuthorizationService
+     */
     private $authorizationService;
 
-    /** @var string|null */
-    private $redirectUri;
-
-    /** @var null|ClientInterface */
+    /**
+     * @var ClientInterface|null
+     */
     private $client;
 
-    /** @var null|int */
+    /**
+     * @var int|null
+     */
     private $maxAge;
+
+    /**
+     * @var string|null
+     */
+    private $redirectUri;
 
     public function __construct(
         AuthorizationService $authorizationService,
@@ -45,11 +53,11 @@ class CallbackMiddleware implements MiddlewareInterface
         $client = $this->client ?? $request->getAttribute(ClientInterface::class);
         $authSession = $request->getAttribute(AuthSessionInterface::class);
 
-        if (! $client instanceof ClientInterface) {
+        if (!$client instanceof ClientInterface) {
             throw new LogicException('No OpenID client provided');
         }
 
-        if (null !== $authSession && ! $authSession instanceof AuthSessionInterface) {
+        if (null !== $authSession && !$authSession instanceof AuthSessionInterface) {
             throw new LogicException('Invalid auth session provided in attribute ' . AuthSessionInterface::class);
         }
 

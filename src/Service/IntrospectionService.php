@@ -6,23 +6,28 @@ namespace Facile\OpenIDClient\Service;
 
 use Facile\OpenIDClient\Client\ClientInterface as OpenIDClient;
 use Facile\OpenIDClient\Exception\RuntimeException;
-use function Facile\OpenIDClient\get_endpoint_uri;
-use function Facile\OpenIDClient\parse_metadata_response;
 use Psr\Http\Client\ClientExceptionInterface;
 use Psr\Http\Client\ClientInterface;
 use Psr\Http\Message\RequestFactoryInterface;
 
+use function Facile\OpenIDClient\get_endpoint_uri;
+use function Facile\OpenIDClient\parse_metadata_response;
+
 /**
- * RFC 7662 Token Introspection
+ * RFC 7662 Token Introspection.
  *
- * @link https://tools.ietf.org/html/rfc7662 RFC 7662
+ * @see https://tools.ietf.org/html/rfc7662 RFC 7662
  */
 final class IntrospectionService
 {
-    /** @var ClientInterface */
+    /**
+     * @var ClientInterface
+     */
     private $client;
 
-    /** @var RequestFactoryInterface */
+    /**
+     * @var RequestFactoryInterface
+     */
     private $requestFactory;
 
     public function __construct(
@@ -34,8 +39,6 @@ final class IntrospectionService
     }
 
     /**
-     * @param OpenIDClient $client
-     * @param string $token
      * @param array<string, mixed> $params
      *
      * @return array<string, mixed>

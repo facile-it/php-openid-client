@@ -10,35 +10,15 @@ use Facile\OpenIDClient\Issuer\Metadata\Provider\MetadataProviderBuilder;
 
 final class IssuerBuilder implements IssuerBuilderInterface
 {
-    /** @var MetadataProviderBuilder|null */
-    private $metadataProviderBuilder;
-
-    /** @var JwksProviderBuilder|null */
+    /**
+     * @var JwksProviderBuilder|null
+     */
     private $jwksProviderBuilder;
 
-    public function setMetadataProviderBuilder(?MetadataProviderBuilder $metadataProviderBuilder): self
-    {
-        $this->metadataProviderBuilder = $metadataProviderBuilder;
-
-        return $this;
-    }
-
-    public function setJwksProviderBuilder(?JwksProviderBuilder $jwksProviderBuilder): self
-    {
-        $this->jwksProviderBuilder = $jwksProviderBuilder;
-
-        return $this;
-    }
-
-    private function buildMetadataProviderBuilder(): MetadataProviderBuilder
-    {
-        return $this->metadataProviderBuilder ?? new MetadataProviderBuilder();
-    }
-
-    private function buildJwksProviderBuilder(): JwksProviderBuilder
-    {
-        return $this->jwksProviderBuilder ?? new JwksProviderBuilder();
-    }
+    /**
+     * @var MetadataProviderBuilder|null
+     */
+    private $metadataProviderBuilder;
 
     public function build(string $resource): IssuerInterface
     {
@@ -53,5 +33,29 @@ final class IssuerBuilder implements IssuerBuilderInterface
             $metadata,
             $jwksProvider
         );
+    }
+
+    public function setJwksProviderBuilder(?JwksProviderBuilder $jwksProviderBuilder): self
+    {
+        $this->jwksProviderBuilder = $jwksProviderBuilder;
+
+        return $this;
+    }
+
+    public function setMetadataProviderBuilder(?MetadataProviderBuilder $metadataProviderBuilder): self
+    {
+        $this->metadataProviderBuilder = $metadataProviderBuilder;
+
+        return $this;
+    }
+
+    private function buildJwksProviderBuilder(): JwksProviderBuilder
+    {
+        return $this->jwksProviderBuilder ?? new JwksProviderBuilder();
+    }
+
+    private function buildMetadataProviderBuilder(): MetadataProviderBuilder
+    {
+        return $this->metadataProviderBuilder ?? new MetadataProviderBuilder();
     }
 }

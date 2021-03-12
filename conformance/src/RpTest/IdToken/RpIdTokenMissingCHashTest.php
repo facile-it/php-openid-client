@@ -4,12 +4,14 @@ declare(strict_types=1);
 
 namespace Facile\OpenIDClient\ConformanceTest\RpTest\IdToken;
 
-use PHPUnit\Framework\Assert;
-use PHPUnit\Framework\AssertionFailedError;
 use Facile\OpenIDClient\ConformanceTest\RpTest\AbstractRpTest;
 use Facile\OpenIDClient\ConformanceTest\TestInfo;
-use Facile\OpenIDClient\Session\AuthSession;
 use Facile\OpenIDClient\Service\AuthorizationService;
+use Facile\OpenIDClient\Session\AuthSession;
+use PHPUnit\Framework\Assert;
+use PHPUnit\Framework\AssertionFailedError;
+use Throwable;
+
 use function Facile\OpenIDClient\base64url_encode;
 
 /**
@@ -17,15 +19,12 @@ use function Facile\OpenIDClient\base64url_encode;
  * Verify the c_hash presence in the returned ID token.
  *
  * Identify missing 'c_hash' value and reject the ID Token.
+ *
+ * @internal
+ * @coversNothing
  */
-class RpIdTokenMissingCHashTest extends AbstractRpTest
+final class RpIdTokenMissingCHashTest extends AbstractRpTest
 {
-
-    public function getTestId(): string
-    {
-        return 'rp-id_token-missing-c_hash';
-    }
-
     public function execute(TestInfo $testInfo): void
     {
         $client = $this->registerClient($testInfo);
@@ -34,7 +33,7 @@ class RpIdTokenMissingCHashTest extends AbstractRpTest
         $authorizationService = new AuthorizationService();
 
         $authSession = AuthSession::fromArray([
-            'nonce' => base64url_encode(\random_bytes(32)),
+            'nonce' => base64url_encode(random_bytes(32)),
         ]);
 
         $uri = $authorizationService->getAuthorizationUri($client, [
@@ -49,10 +48,16 @@ class RpIdTokenMissingCHashTest extends AbstractRpTest
 
         try {
             $authorizationService->callback($client, $params, null, $authSession);
+
             throw new AssertionFailedError('No assertion');
-        } catch (\Throwable $e) {
+        } catch (Throwable $e) {
             Assert::assertSame('Invalid token provided', $e->getMessage());
             Assert::assertRegExp('/The following claims are mandatory: c_hash/', $e->getPrevious()->getMessage());
         }
+    }
+
+    public function getTestId(): string
+    {
+        return 'rp-id_token-missing-c_hash';
     }
 }

@@ -9,30 +9,12 @@ use Facile\OpenIDClient\Issuer\Metadata\Provider\RemoteProvider;
 use Facile\OpenIDClient\Issuer\Metadata\Provider\RemoteProviderInterface;
 use Facile\OpenIDClientTest\TestCase;
 
-class RemoteProviderTest extends TestCase
+/**
+ * @internal
+ * @coversNothing
+ */
+final class RemoteProviderTest extends TestCase
 {
-    public function testShouldReturnDataFromFirstProvider(): void
-    {
-        $uri = 'https://example.com';
-        $provider1 = $this->prophesize(RemoteProviderInterface::class);
-        $provider2 = $this->prophesize(RemoteProviderInterface::class);
-
-        $provider1->isAllowedUri($uri)->willReturn(true);
-        $provider2->isAllowedUri($uri)->willReturn(true);
-
-        $provider1->fetch($uri)->shouldBeCalled()->willReturn([
-            'foo1' => 'bar1',
-        ]);
-        $provider2->fetch($uri)->shouldNotBeCalled();
-
-        $provider = new RemoteProvider([
-            $provider1->reveal(),
-            $provider2->reveal(),
-        ]);
-
-        $this->assertSame(['foo1' => 'bar1'], $provider->fetch($uri));
-    }
-
     public function testShouldFallbackOnNextProvider(): void
     {
         $uri = 'https://example.com';
@@ -52,7 +34,29 @@ class RemoteProviderTest extends TestCase
             $provider2->reveal(),
         ]);
 
-        $this->assertSame(['foo1' => 'bar1'], $provider->fetch($uri));
+        self::assertSame(['foo1' => 'bar1'], $provider->fetch($uri));
+    }
+
+    public function testShouldReturnDataFromFirstProvider(): void
+    {
+        $uri = 'https://example.com';
+        $provider1 = $this->prophesize(RemoteProviderInterface::class);
+        $provider2 = $this->prophesize(RemoteProviderInterface::class);
+
+        $provider1->isAllowedUri($uri)->willReturn(true);
+        $provider2->isAllowedUri($uri)->willReturn(true);
+
+        $provider1->fetch($uri)->shouldBeCalled()->willReturn([
+            'foo1' => 'bar1',
+        ]);
+        $provider2->fetch($uri)->shouldNotBeCalled();
+
+        $provider = new RemoteProvider([
+            $provider1->reveal(),
+            $provider2->reveal(),
+        ]);
+
+        self::assertSame(['foo1' => 'bar1'], $provider->fetch($uri));
     }
 
     public function testShouldSkipIncompatibleProvider(): void
@@ -74,6 +78,6 @@ class RemoteProviderTest extends TestCase
             $provider2->reveal(),
         ]);
 
-        $this->assertSame(['foo1' => 'bar1'], $provider->fetch($uri));
+        self::assertSame(['foo1' => 'bar1'], $provider->fetch($uri));
     }
 }

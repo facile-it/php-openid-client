@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Facile\OpenIDClient;
 
-use function hash;
 use Jose\Component\Core\JWK;
-use function substr;
+
+use function hash;
 
 function derived_key(string $secret, int $length): JWK
 {

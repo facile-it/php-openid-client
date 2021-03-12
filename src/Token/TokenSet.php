@@ -4,15 +4,16 @@ declare(strict_types=1);
 
 namespace Facile\OpenIDClient\Token;
 
-use function array_key_exists;
 use JsonSerializable;
+
+use function array_key_exists;
 
 /**
  * @psalm-import-type TokenSetType from TokenSetInterface
  * @psalm-import-type TokenSetClaimsType from TokenSetInterface
  * @psalm-import-type TokenSetMixedType from TokenSetInterface
  */
-final class TokenSet implements TokenSetInterface, JsonSerializable
+final class TokenSet implements JsonSerializable, TokenSetInterface
 {
     /**
      * @var array<string, mixed>
@@ -36,21 +37,30 @@ final class TokenSet implements TokenSetInterface, JsonSerializable
         $this->claims = $claims;
     }
 
+    public function claims(): array
+    {
+        return $this->claims;
+    }
+
     /**
      * @param array<string, mixed> $data
      * @psalm-param TokenSetMixedType $data
-     *
-     * @return TokenSetInterface
      */
     public static function fromParams(array $data): TokenSetInterface
     {
         $claims = [];
+
         if (array_key_exists('claims', $data)) {
             $claims = $data['claims'];
             unset($data['claims']);
         }
 
-        return new static($data, $claims);
+        return new self($data, $claims);
+    }
+
+    public function getAccessToken(): ?string
+    {
+        return $this->attributes['access_token'] ?? null;
     }
 
     public function getAttributes(): array
@@ -63,19 +73,17 @@ final class TokenSet implements TokenSetInterface, JsonSerializable
         return $this->attributes['code'] ?? null;
     }
 
-    public function getState(): ?string
+    public function getCodeVerifier(): ?string
     {
-        return $this->attributes['state'] ?? null;
+        return $this->attributes['code_verifier'] ?? null;
     }
 
-    public function getTokenType(): ?string
+    public function getExpiresIn(): ?int
     {
-        return $this->attributes['token_type'] ?? null;
-    }
+        /** @var int|string|null $expiresIn */
+        $expiresIn = $this->attributes['expires_in'] ?? null;
 
-    public function getAccessToken(): ?string
-    {
-        return $this->attributes['access_token'] ?? null;
+        return null !== $expiresIn ? (int) $expiresIn : null;
     }
 
     public function getIdToken(): ?string
@@ -88,33 +96,14 @@ final class TokenSet implements TokenSetInterface, JsonSerializable
         return $this->attributes['refresh_token'] ?? null;
     }
 
-    public function getExpiresIn(): ?int
+    public function getState(): ?string
     {
-        /** @var int|string|null $expiresIn */
-        $expiresIn = $this->attributes['expires_in'] ?? null;
-
-        return null !== $expiresIn ? (int) $expiresIn : null;
+        return $this->attributes['state'] ?? null;
     }
 
-    public function getCodeVerifier(): ?string
+    public function getTokenType(): ?string
     {
-        return $this->attributes['code_verifier'] ?? null;
-    }
-
-    public function withIdToken(string $idToken): TokenSetInterface
-    {
-        $clone = clone $this;
-        $clone->attributes['id_token'] = $idToken;
-
-        return $clone;
-    }
-
-    public function withClaims(array $claims): TokenSetInterface
-    {
-        $clone = clone $this;
-        $clone->claims = $claims;
-
-        return $clone;
+        return $this->attributes['token_type'] ?? null;
     }
 
     /**
@@ -126,8 +115,19 @@ final class TokenSet implements TokenSetInterface, JsonSerializable
         return $this->attributes;
     }
 
-    public function claims(): array
+    public function withClaims(array $claims): TokenSetInterface
     {
-        return $this->claims;
+        $clone = clone $this;
+        $clone->claims = $claims;
+
+        return $clone;
+    }
+
+    public function withIdToken(string $idToken): TokenSetInterface
+    {
+        $clone = clone $this;
+        $clone->attributes['id_token'] = $idToken;
+
+        return $clone;
     }
 }

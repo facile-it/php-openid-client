@@ -4,42 +4,49 @@ declare(strict_types=1);
 
 namespace Facile\OpenIDClient\Service;
 
+use Facile\OpenIDClient\Exception\InvalidArgumentException;
+use Facile\OpenIDClient\Exception\RuntimeException;
+use Facile\OpenIDClient\Issuer\IssuerInterface;
+use Psr\Http\Client\ClientExceptionInterface;
+use Psr\Http\Client\ClientInterface;
+use Psr\Http\Message\RequestFactoryInterface;
+
 use function array_diff_key;
 use function array_flip;
 use function array_intersect_key;
 use function array_key_exists;
 use function array_merge;
 use function Facile\OpenIDClient\check_server_response;
-use Facile\OpenIDClient\Exception\InvalidArgumentException;
-use Facile\OpenIDClient\Exception\RuntimeException;
-use Facile\OpenIDClient\Issuer\IssuerInterface;
 use function Facile\OpenIDClient\parse_metadata_response;
 use function json_encode;
-use Psr\Http\Client\ClientExceptionInterface;
-use Psr\Http\Client\ClientInterface;
-use Psr\Http\Message\RequestFactoryInterface;
 
 /**
- * Dynamic Client Registration Protocol
+ * Dynamic Client Registration Protocol.
  *
- * @link https://tools.ietf.org/html/rfc7591
- * @link https://openid.net/specs/openid-connect-registration-1_0.html
+ * @see https://tools.ietf.org/html/rfc7591
+ * @see https://openid.net/specs/openid-connect-registration-1_0.html
  */
 final class RegistrationService
 {
-    /** @var ClientInterface */
+    /**
+     * @var ClientInterface
+     */
     private $client;
 
-    /** @var RequestFactoryInterface */
-    private $requestFactory;
-
-    /** @var string[] */
+    /**
+     * @var string[]
+     */
     private static $registrationClaims = [
         'registration_access_token',
         'registration_client_uri',
         'client_secret_expires_at',
         'client_id_issued_at',
     ];
+
+    /**
+     * @var RequestFactoryInterface
+     */
+    private $requestFactory;
 
     public function __construct(
         ClientInterface $client,
@@ -49,10 +56,46 @@ final class RegistrationService
         $this->requestFactory = $requestFactory;
     }
 
+    public function delete(string $clientUri, string $accessToken): void
+    {
+        $request = $this->requestFactory->createRequest('DELETE', $clientUri)
+            ->withHeader('authorization', 'Bearer ' . $accessToken);
+
+        try {
+            $response = $this->client->sendRequest($request);
+        } catch (ClientExceptionInterface $e) {
+            throw new RuntimeException('Unable to delete OpenID client', 0, $e);
+        }
+
+        check_server_response($response, 204);
+    }
+
     /**
-     * @param IssuerInterface $issuer
+     * @return array<string, mixed>
+     */
+    public function read(string $clientUri, string $accessToken): array
+    {
+        $request = $this->requestFactory->createRequest('GET', $clientUri)
+            ->withHeader('accept', 'application/json')
+            ->withHeader('authorization', 'Bearer ' . $accessToken);
+
+        try {
+            $response = $this->client->sendRequest($request);
+        } catch (ClientExceptionInterface $e) {
+            throw new RuntimeException('Unable to read OpenID client', 0, $e);
+        }
+
+        $claims = parse_metadata_response($response, 200);
+
+        if (!array_key_exists('client_id', $claims)) {
+            throw new RuntimeException('Registration response did not return a client_id field');
+        }
+
+        return $claims;
+    }
+
+    /**
      * @param array<string, mixed> $metadata
-     * @param string|null $initialToken
      *
      * @return array<string, mixed>
      */
@@ -91,7 +134,7 @@ final class RegistrationService
 
         $data = parse_metadata_response($response, 201);
 
-        if (! array_key_exists('client_id', $data)) {
+        if (!array_key_exists('client_id', $data)) {
             throw new RuntimeException('Registration response did not return a client_id field');
         }
 
@@ -99,35 +142,6 @@ final class RegistrationService
     }
 
     /**
-     * @param string $clientUri
-     * @param string $accessToken
-     *
-     * @return array<string, mixed>
-     */
-    public function read(string $clientUri, string $accessToken): array
-    {
-        $request = $this->requestFactory->createRequest('GET', $clientUri)
-            ->withHeader('accept', 'application/json')
-            ->withHeader('authorization', 'Bearer ' . $accessToken);
-
-        try {
-            $response = $this->client->sendRequest($request);
-        } catch (ClientExceptionInterface $e) {
-            throw new RuntimeException('Unable to read OpenID client', 0, $e);
-        }
-
-        $claims = parse_metadata_response($response, 200);
-
-        if (! array_key_exists('client_id', $claims)) {
-            throw new RuntimeException('Registration response did not return a client_id field');
-        }
-
-        return $claims;
-    }
-
-    /**
-     * @param string $clientUri
-     * @param string $accessToken
      * @param array<string, mixed> $metadata
      *
      * @return array<string, mixed>
@@ -163,27 +177,11 @@ final class RegistrationService
 
         $data = parse_metadata_response($response, 200);
 
-        if (! array_key_exists('client_id', $data)) {
+        if (!array_key_exists('client_id', $data)) {
             throw new RuntimeException('Registration response did not return a client_id field');
         }
 
         /** @var array<string, mixed> $merged */
-        $merged = array_merge($clientRegistrationMetadata, $data);
-
-        return $merged;
-    }
-
-    public function delete(string $clientUri, string $accessToken): void
-    {
-        $request = $this->requestFactory->createRequest('DELETE', $clientUri)
-            ->withHeader('authorization', 'Bearer ' . $accessToken);
-
-        try {
-            $response = $this->client->sendRequest($request);
-        } catch (ClientExceptionInterface $e) {
-            throw new RuntimeException('Unable to delete OpenID client', 0, $e);
-        }
-
-        check_server_response($response, 204);
+        return array_merge($clientRegistrationMetadata, $data);
     }
 }

@@ -1,15 +1,17 @@
 <?php
 
+declare(strict_types=1);
+
 chdir(__DIR__);
 
 require_once __DIR__ . '/../../vendor/autoload.php';
 
+use Facile\OpenIDClient\ConformanceTest\Command\RpTest;
 use Psr\Container\ContainerInterface;
 use Symfony\Component\Console\Application;
-use Facile\OpenIDClient\ConformanceTest\Command\RpTest;
 
 /** @var ContainerInterface $container */
-$container = require __DIR__ .'/../config/container.php';
+$container = require __DIR__ . '/../config/container.php';
 
 $application = new Application();
 
@@ -19,5 +21,6 @@ try {
     exit($application->run());
 } catch (Throwable $e) {
     echo $e;
+
     exit(1);
 }

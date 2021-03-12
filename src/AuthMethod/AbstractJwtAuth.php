@@ -4,21 +4,14 @@ declare(strict_types=1);
 
 namespace Facile\OpenIDClient\AuthMethod;
 
-use function array_merge;
 use Facile\OpenIDClient\Client\ClientInterface as OpenIDClient;
-use function http_build_query;
 use Psr\Http\Message\RequestInterface;
+
+use function array_merge;
+use function http_build_query;
 
 abstract class AbstractJwtAuth implements AuthMethodInterface
 {
-    /**
-     * @param OpenIDClient $client
-     * @param array<string, mixed> $claims
-     *
-     * @return string
-     */
-    abstract protected function createAuthJwt(OpenIDClient $client, array $claims = []): string;
-
     public function createRequest(
         RequestInterface $request,
         OpenIDClient $client,
@@ -36,4 +29,9 @@ abstract class AbstractJwtAuth implements AuthMethodInterface
 
         return $request;
     }
+
+    /**
+     * @param array<string, mixed> $claims
+     */
+    abstract protected function createAuthJwt(OpenIDClient $client, array $claims = []): string;
 }

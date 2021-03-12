@@ -9,7 +9,7 @@ use Facile\OpenIDClient\Issuer\Metadata\IssuerMetadataInterface;
 
 interface IssuerInterface
 {
-    public function getMetadata(): IssuerMetadataInterface;
-
     public function getJwksProvider(): JwksProviderInterface;
+
+    public function getMetadata(): IssuerMetadataInterface;
 }

@@ -6,8 +6,6 @@ namespace Facile\OpenIDClientTest\Issuer\Metadata\Provider;
 
 use Facile\OpenIDClient\Issuer\Metadata\Provider\DiscoveryProviderInterface;
 use Facile\OpenIDClient\Issuer\Metadata\Provider\WebFingerProvider;
-use function http_build_query;
-use function json_encode;
 use Facile\OpenIDClientTest\TestCase;
 use Psr\Http\Client\ClientInterface;
 use Psr\Http\Message\RequestFactoryInterface;
@@ -16,8 +14,14 @@ use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\StreamInterface;
 use Psr\Http\Message\UriFactoryInterface;
 use Psr\Http\Message\UriInterface;
+use function http_build_query;
+use function json_encode;
 
-class WebFingerProviderTest extends TestCase
+/**
+ * @internal
+ * @coversNothing
+ */
+final class WebFingerProviderTest extends TestCase
 {
     public function testFetch(): void
     {
@@ -84,6 +88,6 @@ class WebFingerProviderTest extends TestCase
             'issuer' => 'https://openid-uri',
         ]);
 
-        static::assertSame(['issuer' => 'https://openid-uri'], $provider->fetch($resource));
+        self::assertSame(['issuer' => 'https://openid-uri'], $provider->fetch($resource));
     }
 }

@@ -4,26 +4,25 @@ declare(strict_types=1);
 
 namespace Facile\OpenIDClient\ConformanceTest\RpTest\IdToken;
 
-use PHPUnit\Framework\Assert;
-use PHPUnit\Framework\AssertionFailedError;
 use Facile\OpenIDClient\ConformanceTest\RpTest\AbstractRpTest;
 use Facile\OpenIDClient\ConformanceTest\TestInfo;
 use Facile\OpenIDClient\Service\AuthorizationService;
+use PHPUnit\Framework\Assert;
+use PHPUnit\Framework\AssertionFailedError;
+use Throwable;
+
 use function Facile\OpenIDClient\base64url_encode;
 
 /**
  * Request an ID token and verify its 'iss' value.
  *
  * Identify the incorrect 'iss' value and reject the ID Token after doing ID Token validation.
+ *
+ * @internal
+ * @coversNothing
  */
-class RpIdTokenIssuerMismatchTest extends AbstractRpTest
+final class RpIdTokenIssuerMismatchTest extends AbstractRpTest
 {
-
-    public function getTestId(): string
-    {
-        return 'rp-id_token-issuer-mismatch';
-    }
-
     public function execute(TestInfo $testInfo): void
     {
         $client = $this->registerClient($testInfo);
@@ -32,7 +31,7 @@ class RpIdTokenIssuerMismatchTest extends AbstractRpTest
         $authorizationService = new AuthorizationService();
         $uri = $authorizationService->getAuthorizationUri($client, [
             'response_type' => $testInfo->getResponseType(),
-            'nonce' => base64url_encode(\random_bytes(32)),
+            'nonce' => base64url_encode(random_bytes(32)),
         ]);
 
         // Simulate a redirect and create the server request
@@ -42,10 +41,16 @@ class RpIdTokenIssuerMismatchTest extends AbstractRpTest
 
         try {
             $authorizationService->callback($client, $params);
+
             throw new AssertionFailedError('No assertion');
-        } catch (\Throwable $e) {
+        } catch (Throwable $e) {
             Assert::assertSame('Invalid token provided', $e->getMessage());
             Assert::assertRegExp('/Unknown issuer/', $e->getPrevious()->getMessage());
         }
+    }
+
+    public function getTestId(): string
+    {
+        return 'rp-id_token-issuer-mismatch';
     }
 }

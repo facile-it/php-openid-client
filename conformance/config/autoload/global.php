@@ -1,12 +1,14 @@
 <?php
 
+declare(strict_types=1);
+
 use Laminas\Di\Container;
 use Laminas\ServiceManager\Factory\InvokableFactory;
 
 return [
     'dependencies' => [
         'abstract_factories' => [
-            Container\ServiceManager\AutowireFactory::class
+            Container\ServiceManager\AutowireFactory::class,
         ],
         'aliases' => [
             \Psr\Http\Message\ServerRequestInterface::class => \Laminas\Diactoros\ServerRequestFactory::class,
@@ -24,7 +26,6 @@ return [
         ],
         'auto' => [
             'types' => [
-
             ],
         ],
     ],

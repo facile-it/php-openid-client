@@ -22,41 +22,12 @@ use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\StreamInterface;
 
-class AuthorizationServiceTest extends TestCase
+/**
+ * @internal
+ * @coversNothing
+ */
+final class AuthorizationServiceTest extends TestCase
 {
-    public function testGetAuthorizationUri(): void
-    {
-        $tokenSetFactory = $this->prophesize(TokenSetFactoryInterface::class);
-        $client = $this->prophesize(ClientInterface::class);
-        $requestFactory = $this->prophesize(RequestFactoryInterface::class);
-        $idTokenVerifierBuilder = $this->prophesize(IdTokenVerifierBuilderInterface::class);
-        $tokenVerifierBuilder = $this->prophesize(TokenVerifierBuilderInterface::class);
-
-        $service = new AuthorizationService(
-            $tokenSetFactory->reveal(),
-            $client->reveal(),
-            $requestFactory->reveal(),
-            $idTokenVerifierBuilder->reveal(),
-            $tokenVerifierBuilder->reveal()
-        );
-
-        $openIdClient = $this->prophesize(OpenIDClient::class);
-        $clientMetadata = $this->prophesize(ClientMetadataInterface::class);
-        $issuer = $this->prophesize(IssuerInterface::class);
-        $issuerMetadata = $this->prophesize(IssuerMetadataInterface::class);
-
-        $openIdClient->getIssuer()->willReturn($issuer->reveal());
-        $openIdClient->getMetadata()->willReturn($clientMetadata->reveal());
-        $openIdClient->getHttpClient()->willReturn(null);
-        $clientMetadata->getClientId()->willReturn('clientId');
-        $clientMetadata->getResponseTypes()->willReturn(['code']);
-        $clientMetadata->getRedirectUris()->willReturn(['redirect_uri_1']);
-        $issuer->getMetadata()->willReturn($issuerMetadata);
-        $issuerMetadata->getAuthorizationEndpoint()->willReturn('https://foo-endpoint');
-
-        static::assertSame('https://foo-endpoint?client_id=clientId&scope=openid&response_type=code&redirect_uri=redirect_uri_1', $service->getAuthorizationUri($openIdClient->reveal()));
-    }
-
     public function testFetchTokenFromCode(): void
     {
         $tokenSetFactory = $this->prophesize(TokenSetFactoryInterface::class);
@@ -121,6 +92,39 @@ class AuthorizationServiceTest extends TestCase
         $tokenSet = $this->prophesize(TokenSetInterface::class);
         $tokenSetFactory->fromArray(['foo' => 'bar'])->willReturn($tokenSet->reveal());
 
-        static::assertSame($tokenSet->reveal(), $service->grant($openIdClient->reveal(), $claims));
+        self::assertSame($tokenSet->reveal(), $service->grant($openIdClient->reveal(), $claims));
+    }
+
+    public function testGetAuthorizationUri(): void
+    {
+        $tokenSetFactory = $this->prophesize(TokenSetFactoryInterface::class);
+        $client = $this->prophesize(ClientInterface::class);
+        $requestFactory = $this->prophesize(RequestFactoryInterface::class);
+        $idTokenVerifierBuilder = $this->prophesize(IdTokenVerifierBuilderInterface::class);
+        $tokenVerifierBuilder = $this->prophesize(TokenVerifierBuilderInterface::class);
+
+        $service = new AuthorizationService(
+            $tokenSetFactory->reveal(),
+            $client->reveal(),
+            $requestFactory->reveal(),
+            $idTokenVerifierBuilder->reveal(),
+            $tokenVerifierBuilder->reveal()
+        );
+
+        $openIdClient = $this->prophesize(OpenIDClient::class);
+        $clientMetadata = $this->prophesize(ClientMetadataInterface::class);
+        $issuer = $this->prophesize(IssuerInterface::class);
+        $issuerMetadata = $this->prophesize(IssuerMetadataInterface::class);
+
+        $openIdClient->getIssuer()->willReturn($issuer->reveal());
+        $openIdClient->getMetadata()->willReturn($clientMetadata->reveal());
+        $openIdClient->getHttpClient()->willReturn(null);
+        $clientMetadata->getClientId()->willReturn('clientId');
+        $clientMetadata->getResponseTypes()->willReturn(['code']);
+        $clientMetadata->getRedirectUris()->willReturn(['redirect_uri_1']);
+        $issuer->getMetadata()->willReturn($issuerMetadata);
+        $issuerMetadata->getAuthorizationEndpoint()->willReturn('https://foo-endpoint');
+
+        self::assertSame('https://foo-endpoint?client_id=clientId&scope=openid&response_type=code&redirect_uri=redirect_uri_1', $service->getAuthorizationUri($openIdClient->reveal()));
     }
 }

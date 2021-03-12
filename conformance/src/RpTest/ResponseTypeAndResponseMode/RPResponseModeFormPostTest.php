@@ -4,27 +4,25 @@ declare(strict_types=1);
 
 namespace Facile\OpenIDClient\ConformanceTest\RpTest\ResponseTypeAndResponseMode;
 
-use PHPUnit\Framework\Assert;
 use Facile\OpenIDClient\ConformanceTest\RpTest\AbstractRpTest;
 use Facile\OpenIDClient\ConformanceTest\TestInfo;
-use Facile\OpenIDClient\Session\AuthSession;
 use Facile\OpenIDClient\Service\AuthorizationService;
+use Facile\OpenIDClient\Session\AuthSession;
 use Laminas\Diactoros\ServerRequestFactory;
+use PHPUnit\Framework\Assert;
+
 use function Facile\OpenIDClient\base64url_encode;
 
 /**
  * Make an authentication request with the response_type set to 'id_token token' and the response mode set to form_post.
  *
  * HTML form post response processed, resulting in query encoded parameters.
+ *
+ * @internal
+ * @coversNothing
  */
-class RPResponseModeFormPostTest extends AbstractRpTest
+final class RPResponseModeFormPostTest extends AbstractRpTest
 {
-
-    public function getTestId(): string
-    {
-        return 'rp-response_mode-form_post';
-    }
-
     public function execute(TestInfo $testInfo): void
     {
         $client = $this->registerClient($testInfo);
@@ -33,7 +31,7 @@ class RPResponseModeFormPostTest extends AbstractRpTest
         $authorizationService = new AuthorizationService();
 
         $authSession = AuthSession::fromArray([
-            'nonce' => base64url_encode(\random_bytes(32)),
+            'nonce' => base64url_encode(random_bytes(32)),
         ]);
 
         $uri = $authorizationService->getAuthorizationUri($client, [
@@ -46,8 +44,8 @@ class RPResponseModeFormPostTest extends AbstractRpTest
         $response = $this->httpGet($uri);
         $body = (string) $response->getBody();
 
-        \preg_match_all('/<input type="hidden" name="(\w+)" value="([^"]+)"\/>/', $body, $matches);
-        $requestBody = \http_build_query(\array_combine($matches[1], $matches[2]));
+        preg_match_all('/<input type="hidden" name="(\w+)" value="([^"]+)"\/>/', $body, $matches);
+        $requestBody = http_build_query(array_combine($matches[1], $matches[2]));
 
         $serverRequest = $serverRequestFactory->createServerRequest('POST', 'http://redirect.dev', [
             'content-type' => 'application/x-www-form-urlencoded',
@@ -58,5 +56,10 @@ class RPResponseModeFormPostTest extends AbstractRpTest
         $tokenSet = $authorizationService->callback($client, $params, null, $authSession);
 
         Assert::assertNotNull($tokenSet->getIdToken());
+    }
+
+    public function getTestId(): string
+    {
+        return 'rp-response_mode-form_post';
     }
 }

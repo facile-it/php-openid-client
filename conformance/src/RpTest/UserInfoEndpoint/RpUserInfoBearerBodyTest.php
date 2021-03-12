@@ -4,27 +4,25 @@ declare(strict_types=1);
 
 namespace Facile\OpenIDClient\ConformanceTest\RpTest\UserInfoEndpoint;
 
-use PHPUnit\Framework\Assert;
 use Facile\OpenIDClient\ConformanceTest\RpTest\AbstractRpTest;
 use Facile\OpenIDClient\ConformanceTest\TestInfo;
-use Facile\OpenIDClient\Session\AuthSession;
 use Facile\OpenIDClient\Service\AuthorizationService;
 use Facile\OpenIDClient\Service\UserInfoService;
+use Facile\OpenIDClient\Session\AuthSession;
+use PHPUnit\Framework\Assert;
+
 use function Facile\OpenIDClient\base64url_encode;
 
 /**
  * Pass the access token as a form-encoded body parameter while doing the UserInfo Request.
  *
  * A UserInfo Response.
+ *
+ * @internal
+ * @coversNothing
  */
-class RpUserInfoBearerBodyTest extends AbstractRpTest
+final class RpUserInfoBearerBodyTest extends AbstractRpTest
 {
-
-    public function getTestId(): string
-    {
-        return 'rp-userinfo-bearer-body';
-    }
-
     public function execute(TestInfo $testInfo): void
     {
         $client = $this->registerClient($testInfo);
@@ -33,7 +31,7 @@ class RpUserInfoBearerBodyTest extends AbstractRpTest
         $userInfoService = new UserInfoService();
 
         $authSession = AuthSession::fromArray([
-            'nonce' => base64url_encode(\random_bytes(32)),
+            'nonce' => base64url_encode(random_bytes(32)),
         ]);
         $uri = $authorizationService->getAuthorizationUri($client, [
             'response_type' => $testInfo->getResponseType(),
@@ -49,5 +47,10 @@ class RpUserInfoBearerBodyTest extends AbstractRpTest
         $userInfo = $userInfoService->getUserInfo($client, $tokenSet, true);
 
         Assert::assertArrayHasKey('sub', $userInfo);
+    }
+
+    public function getTestId(): string
+    {
+        return 'rp-userinfo-bearer-body';
     }
 }

@@ -21,29 +21,33 @@ use Psr\Http\Client\ClientInterface as HttpClient;
 
 final class Client implements ClientInterface
 {
-    /** @var IssuerInterface */
-    private $issuer;
-
-    /** @var ClientMetadataInterface */
-    private $metadata;
-
-    /** @var JwksProviderInterface */
-    private $jwksProvider;
-
-    /** @var AuthMethodFactoryInterface */
+    /**
+     * @var AuthMethodFactoryInterface
+     */
     private $authMethodFactory;
 
-    /** @var null|HttpClient */
+    /**
+     * @var HttpClient|null
+     */
     private $httpClient;
 
     /**
+     * @var IssuerInterface
+     */
+    private $issuer;
+
+    /**
+     * @var JwksProviderInterface
+     */
+    private $jwksProvider;
+
+    /**
+     * @var ClientMetadataInterface
+     */
+    private $metadata;
+
+    /**
      * Client constructor.
-     *
-     * @param IssuerInterface $issuer
-     * @param ClientMetadataInterface $metadata
-     * @param null|JwksProviderInterface $jwksProvider
-     * @param null|AuthMethodFactoryInterface $authMethodFactory
-     * @param null|HttpClient $httpClient
      */
     public function __construct(
         IssuerInterface $issuer,
@@ -67,27 +71,6 @@ final class Client implements ClientInterface
         $this->httpClient = $httpClient;
     }
 
-    /**
-     * @return IssuerInterface
-     */
-    public function getIssuer(): IssuerInterface
-    {
-        return $this->issuer;
-    }
-
-    public function getMetadata(): ClientMetadataInterface
-    {
-        return $this->metadata;
-    }
-
-    public function getJwksProvider(): JwksProviderInterface
-    {
-        return $this->jwksProvider;
-    }
-
-    /**
-     * @return AuthMethodFactoryInterface
-     */
     public function getAuthMethodFactory(): AuthMethodFactoryInterface
     {
         return $this->authMethodFactory;
@@ -96,5 +79,20 @@ final class Client implements ClientInterface
     public function getHttpClient(): ?HttpClient
     {
         return $this->httpClient;
+    }
+
+    public function getIssuer(): IssuerInterface
+    {
+        return $this->issuer;
+    }
+
+    public function getJwksProvider(): JwksProviderInterface
+    {
+        return $this->jwksProvider;
+    }
+
+    public function getMetadata(): ClientMetadataInterface
+    {
+        return $this->metadata;
     }
 }

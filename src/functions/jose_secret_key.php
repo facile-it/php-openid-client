@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Facile\OpenIDClient;
 
 use Jose\Component\Core\JWK;
+
 use function preg_match;
 
 function jose_secret_key(string $secret, ?string $alg = null): JWK
@@ -17,10 +18,8 @@ function jose_secret_key(string $secret, ?string $alg = null): JWK
         return derived_key($secret, (int) ($matches[2] ?? $matches[1]));
     }
 
-    $key = new JWK([
+    return new JWK([
         'k' => base64url_encode($secret),
         'kty' => 'oct',
     ]);
-
-    return $key;
 }

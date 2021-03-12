@@ -4,21 +4,22 @@ declare(strict_types=1);
 
 namespace Facile\OpenIDClient\ConformanceTest\Runner;
 
-use PHPUnit\Framework\Assert;
-use PHPUnit\Framework\IncompleteTestError;
-use Throwable;
 use Facile\OpenIDClient\ConformanceTest\Provider\ImplementationProvider;
 use Facile\OpenIDClient\ConformanceTest\RpTest\RpTestInterface;
 use Facile\OpenIDClient\ConformanceTest\TestInfo;
+use PHPUnit\Framework\Assert;
+use PHPUnit\Framework\IncompleteTestError;
+use Throwable;
 
 class RpTestRunner
 {
-    /** @var ImplementationProvider */
+    /**
+     * @var ImplementationProvider
+     */
     private $implementationProvider;
 
     /**
      * RpTestRunner constructor.
-     * @param ImplementationProvider $implementationProvider
      */
     public function __construct(ImplementationProvider $implementationProvider)
     {

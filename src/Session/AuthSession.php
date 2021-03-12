@@ -8,26 +8,35 @@ use function array_filter;
 
 final class AuthSession implements AuthSessionInterface
 {
-    /** @var null|string */
-    private $state;
-
-    /** @var null|string */
-    private $nonce;
-
-    /** @var null|string */
+    /**
+     * @var string|null
+     */
     private $codeVerifier;
 
-    /** @var array<string, mixed> */
+    /**
+     * @var array<string, mixed>
+     */
     private $customs = [];
 
-    public function getState(): ?string
-    {
-        return $this->state;
-    }
+    /**
+     * @var string|null
+     */
+    private $nonce;
 
-    public function getNonce(): ?string
+    /**
+     * @var string|null
+     */
+    private $state;
+
+    public static function fromArray(array $array): AuthSessionInterface
     {
-        return $this->nonce;
+        $session = new self();
+        $session->setState($array['state'] ?? null);
+        $session->setNonce($array['nonce'] ?? null);
+        $session->setCodeVerifier($array['code_verifier'] ?? null);
+        $session->setCustoms($array['customs'] ?? []);
+
+        return $session;
     }
 
     public function getCodeVerifier(): ?string
@@ -43,14 +52,24 @@ final class AuthSession implements AuthSessionInterface
         return $this->customs;
     }
 
-    public function setState(?string $state): void
+    public function getNonce(): ?string
     {
-        $this->state = $state;
+        return $this->nonce;
     }
 
-    public function setNonce(?string $nonce): void
+    public function getState(): ?string
     {
-        $this->nonce = $nonce;
+        return $this->state;
+    }
+
+    public function jsonSerialize(): array
+    {
+        return array_filter([
+            'state' => $this->getState(),
+            'nonce' => $this->getNonce(),
+            'code_verifier' => $this->getCodeVerifier(),
+            'customs' => $this->getCustoms(),
+        ]);
     }
 
     public function setCodeVerifier(?string $codeVerifier): void
@@ -66,24 +85,13 @@ final class AuthSession implements AuthSessionInterface
         $this->customs = $customs;
     }
 
-    public static function fromArray(array $array): AuthSessionInterface
+    public function setNonce(?string $nonce): void
     {
-        $session = new static();
-        $session->setState($array['state'] ?? null);
-        $session->setNonce($array['nonce'] ?? null);
-        $session->setCodeVerifier($array['code_verifier'] ?? null);
-        $session->setCustoms($array['customs'] ?? []);
-
-        return $session;
+        $this->nonce = $nonce;
     }
 
-    public function jsonSerialize(): array
+    public function setState(?string $state): void
     {
-        return array_filter([
-            'state' => $this->getState(),
-            'nonce' => $this->getNonce(),
-            'code_verifier' => $this->getCodeVerifier(),
-            'customs' => $this->getCustoms(),
-        ]);
+        $this->state = $state;
     }
 }

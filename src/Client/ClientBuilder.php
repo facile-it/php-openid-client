@@ -23,24 +23,67 @@ use Psr\Http\Client\ClientInterface as HttpClient;
 
 class ClientBuilder
 {
-    /** @var ClientMetadataInterface|null */
-    private $clientMetadata;
-
-    /** @var IssuerInterface|null */
-    private $issuer;
-
-    /** @var JwksProviderInterface|null */
-    private $jwksProvider;
-
-    /** @var AuthMethodFactoryInterface|null */
+    /**
+     * @var AuthMethodFactoryInterface|null
+     */
     private $authMethodFactory;
 
-    /** @var HttpClient|null */
+    /**
+     * @var ClientMetadataInterface|null
+     */
+    private $clientMetadata;
+
+    /**
+     * @var HttpClient|null
+     */
     private $httpClient;
+
+    /**
+     * @var IssuerInterface|null
+     */
+    private $issuer;
+
+    /**
+     * @var JwksProviderInterface|null
+     */
+    private $jwksProvider;
+
+    public function build(): ClientInterface
+    {
+        if (null === $this->issuer) {
+            throw new InvalidArgumentException('Issuer must be provided');
+        }
+
+        if (null === $this->clientMetadata) {
+            throw new InvalidArgumentException('Client metadata must be provided');
+        }
+
+        return new Client(
+            $this->issuer,
+            $this->clientMetadata,
+            $this->buildJwksProvider(),
+            $this->buildAuthMethodFactory(),
+            $this->buildHttpClient()
+        );
+    }
+
+    public function setAuthMethodFactory(?AuthMethodFactoryInterface $authMethodFactory): self
+    {
+        $this->authMethodFactory = $authMethodFactory;
+
+        return $this;
+    }
 
     public function setClientMetadata(?ClientMetadataInterface $clientMetadata): self
     {
         $this->clientMetadata = $clientMetadata;
+
+        return $this;
+    }
+
+    public function setHttpClient(?HttpClient $httpClient): self
+    {
+        $this->httpClient = $httpClient;
 
         return $this;
     }
@@ -57,39 +100,6 @@ class ClientBuilder
         $this->jwksProvider = $jwksProvider;
 
         return $this;
-    }
-
-    public function setAuthMethodFactory(?AuthMethodFactoryInterface $authMethodFactory): self
-    {
-        $this->authMethodFactory = $authMethodFactory;
-
-        return $this;
-    }
-
-    public function setHttpClient(?HttpClient $httpClient): self
-    {
-        $this->httpClient = $httpClient;
-
-        return $this;
-    }
-
-    private function buildJwksProvider(): JwksProviderInterface
-    {
-        if (null !== $this->jwksProvider) {
-            return $this->jwksProvider;
-        }
-
-        if (null === $this->clientMetadata) {
-            return new MemoryJwksProvider(['keys' => []]);
-        }
-
-        $jwks = $this->clientMetadata->getJwks();
-
-        if (null !== $jwks) {
-            new MemoryJwksProvider($jwks);
-        }
-
-        return new MemoryJwksProvider(['keys' => []]);
     }
 
     private function buildAuthMethodFactory(): AuthMethodFactoryInterface
@@ -110,22 +120,22 @@ class ClientBuilder
         return $this->httpClient ?? Psr18ClientDiscovery::find();
     }
 
-    public function build(): ClientInterface
+    private function buildJwksProvider(): JwksProviderInterface
     {
-        if (null === $this->issuer) {
-            throw new InvalidArgumentException('Issuer must be provided');
+        if (null !== $this->jwksProvider) {
+            return $this->jwksProvider;
         }
 
         if (null === $this->clientMetadata) {
-            throw new InvalidArgumentException('Client metadata must be provided');
+            return new MemoryJwksProvider(['keys' => []]);
         }
 
-        return new Client(
-            $this->issuer,
-            $this->clientMetadata,
-            $this->buildJwksProvider(),
-            $this->buildAuthMethodFactory(),
-            $this->buildHttpClient()
-        );
+        $jwks = $this->clientMetadata->getJwks();
+
+        if (null !== $jwks) {
+            new MemoryJwksProvider($jwks);
+        }
+
+        return new MemoryJwksProvider(['keys' => []]);
     }
 }

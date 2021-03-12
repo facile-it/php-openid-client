@@ -4,15 +4,16 @@ declare(strict_types=1);
 
 namespace Facile\OpenIDClient\ConformanceTest\RpTest\UserInfoEndpoint;
 
+use Facile\OpenIDClient\ConformanceTest\RpTest\AbstractRpTest;
+use Facile\OpenIDClient\ConformanceTest\TestInfo;
+use Facile\OpenIDClient\Service\AuthorizationService;
+use Facile\OpenIDClient\Service\UserInfoService;
+use Facile\OpenIDClient\Session\AuthSession;
 use Jose\Component\Core\JWK;
 use Jose\Component\Core\JWKSet;
 use Jose\Component\KeyManagement\JWKFactory;
 use PHPUnit\Framework\Assert;
-use Facile\OpenIDClient\ConformanceTest\RpTest\AbstractRpTest;
-use Facile\OpenIDClient\ConformanceTest\TestInfo;
-use Facile\OpenIDClient\Session\AuthSession;
-use Facile\OpenIDClient\Service\AuthorizationService;
-use Facile\OpenIDClient\Service\UserInfoService;
+
 use function Facile\OpenIDClient\base64url_encode;
 use function json_decode;
 use function json_encode;
@@ -21,21 +22,19 @@ use function json_encode;
  * Request signed UserInfo.
  *
  * A UserInfo Response.
+ *
+ * @internal
+ * @coversNothing
  */
-class RPUserInfoSigEncTest extends AbstractRpTest
+final class RPUserInfoSigEncTest extends AbstractRpTest
 {
-    public function getTestId(): string
-    {
-        return 'rp-userinfo-sig+enc';
-    }
-
     public function execute(TestInfo $testInfo): void
     {
         $jwkSig = JWKFactory::createRSAKey(2048, ['alg' => 'RS256', 'use' => 'sig']);
         $jwkEncAlg = JWKFactory::createRSAKey(2048, ['alg' => 'RSA1_5', 'use' => 'enc']);
 
         $jwks = new JWKSet([$jwkSig, $jwkEncAlg]);
-        $publicJwks = new JWKSet(\array_map(static function (JWK $jwk) {
+        $publicJwks = new JWKSet(array_map(static function (JWK $jwk) {
             return $jwk->toPublic();
         }, $jwks->all()));
 
@@ -54,7 +53,7 @@ class RPUserInfoSigEncTest extends AbstractRpTest
         $userInfoService = new UserInfoService();
 
         $authSession = AuthSession::fromArray([
-            'nonce' => base64url_encode(\random_bytes(32)),
+            'nonce' => base64url_encode(random_bytes(32)),
         ]);
         $uri = $authorizationService->getAuthorizationUri($client, [
             'response_type' => $testInfo->getResponseType(),
@@ -70,5 +69,10 @@ class RPUserInfoSigEncTest extends AbstractRpTest
         $userInfo = $userInfoService->getUserInfo($client, $tokenSet);
 
         Assert::assertArrayHasKey('sub', $userInfo);
+    }
+
+    public function getTestId(): string
+    {
+        return 'rp-userinfo-sig+enc';
     }
 }

@@ -11,14 +11,12 @@ use Facile\OpenIDClientTest\TestCase;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\StreamInterface;
 
-class SelfSignedTLSClientAuthTest extends TestCase
+/**
+ * @internal
+ * @coversNothing
+ */
+final class SelfSignedTLSClientAuthTest extends TestCase
 {
-    public function testGetSupportedMethod(): void
-    {
-        $auth = new SelfSignedTLSClientAuth();
-        static::assertSame('self_signed_tls_client_auth', $auth->getSupportedMethod());
-    }
-
     public function testCreateRequest(): void
     {
         $auth = new SelfSignedTLSClientAuth();
@@ -42,6 +40,12 @@ class SelfSignedTLSClientAuthTest extends TestCase
             ['foo' => 'bar']
         );
 
-        static::assertSame($request->reveal(), $result);
+        self::assertSame($request->reveal(), $result);
+    }
+
+    public function testGetSupportedMethod(): void
+    {
+        $auth = new SelfSignedTLSClientAuth();
+        self::assertSame('self_signed_tls_client_auth', $auth->getSupportedMethod());
     }
 }

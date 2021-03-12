@@ -4,11 +4,12 @@ declare(strict_types=1);
 
 namespace Facile\OpenIDClient\ConformanceTest\RpTest\KeyRotation;
 
-use PHPUnit\Framework\Assert;
 use Facile\OpenIDClient\ConformanceTest\RpTest\AbstractRpTest;
 use Facile\OpenIDClient\ConformanceTest\TestInfo;
-use Facile\OpenIDClient\Session\AuthSession;
 use Facile\OpenIDClient\Service\AuthorizationService;
+use Facile\OpenIDClient\Session\AuthSession;
+use PHPUnit\Framework\Assert;
+
 use function Facile\OpenIDClient\base64url_encode;
 
 /**
@@ -17,15 +18,12 @@ use function Facile\OpenIDClient\base64url_encode;
  *
  * Successfully verify the ID Token signature, fetching the rotated signing keys if the 'kid' claim in the
  * JOSE header is unknown.
+ *
+ * @internal
+ * @coversNothing
  */
-class RPKeyRotationOPSignKeyTest extends AbstractRpTest
+final class RPKeyRotationOPSignKeyTest extends AbstractRpTest
 {
-
-    public function getTestId(): string
-    {
-        return 'rp-key-rotation-op-sign-key';
-    }
-
     public function execute(TestInfo $testInfo): void
     {
         $client = $this->registerClient($testInfo);
@@ -34,8 +32,8 @@ class RPKeyRotationOPSignKeyTest extends AbstractRpTest
         $authorizationService = new AuthorizationService();
 
         $authSession = AuthSession::fromArray([
-            'state' => base64url_encode(\random_bytes(32)),
-            'nonce' => base64url_encode(\random_bytes(32)),
+            'state' => base64url_encode(random_bytes(32)),
+            'nonce' => base64url_encode(random_bytes(32)),
         ]);
         $uri = $authorizationService->getAuthorizationUri($client, [
             'state' => $authSession->getState(),
@@ -63,5 +61,10 @@ class RPKeyRotationOPSignKeyTest extends AbstractRpTest
         $tokenSet = $authorizationService->callback($client, $params, null, $authSession);
 
         Assert::assertNotNull($tokenSet->getIdToken());
+    }
+
+    public function getTestId(): string
+    {
+        return 'rp-key-rotation-op-sign-key';
     }
 }

@@ -14,14 +14,10 @@ interface AuthMethodInterface
         'tls_client_auth',
     ];
 
-    public function getSupportedMethod(): string;
-
     /**
-     * @param RequestInterface $request
-     * @param OpenIDClient $client
      * @param array<string, mixed> $claims
-     *
-     * @return RequestInterface
      */
     public function createRequest(RequestInterface $request, OpenIDClient $client, array $claims): RequestInterface;
+
+    public function getSupportedMethod(): string;
 }

@@ -12,14 +12,12 @@ use Facile\OpenIDClientTest\TestCase;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\StreamInterface;
 
-class ClientSecretPostTest extends TestCase
+/**
+ * @internal
+ * @coversNothing
+ */
+final class ClientSecretPostTest extends TestCase
 {
-    public function testGetSupportedMethod(): void
-    {
-        $auth = new ClientSecretPost();
-        static::assertSame('client_secret_post', $auth->getSupportedMethod());
-    }
-
     public function testCreateRequest(): void
     {
         $auth = new ClientSecretPost();
@@ -44,7 +42,7 @@ class ClientSecretPostTest extends TestCase
             ['foo' => 'bar']
         );
 
-        static::assertSame($request->reveal(), $result);
+        self::assertSame($request->reveal(), $result);
     }
 
     public function testCreateRequestWithNoClientSecret(): void
@@ -65,5 +63,11 @@ class ClientSecretPostTest extends TestCase
             $client->reveal(),
             []
         );
+    }
+
+    public function testGetSupportedMethod(): void
+    {
+        $auth = new ClientSecretPost();
+        self::assertSame('client_secret_post', $auth->getSupportedMethod());
     }
 }

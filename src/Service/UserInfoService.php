@@ -10,12 +10,13 @@ use Facile\OpenIDClient\Exception\OAuth2Exception;
 use Facile\OpenIDClient\Exception\RuntimeException;
 use Facile\OpenIDClient\Token\TokenSetInterface;
 use Facile\OpenIDClient\Token\TokenVerifierBuilderInterface;
-use function http_build_query;
-use function is_array;
-use function json_decode;
 use Psr\Http\Client\ClientExceptionInterface;
 use Psr\Http\Client\ClientInterface;
 use Psr\Http\Message\RequestFactoryInterface;
+
+use function http_build_query;
+use function is_array;
+use function json_decode;
 use function sprintf;
 
 /**
@@ -23,13 +24,19 @@ use function sprintf;
  */
 final class UserInfoService
 {
-    /** @var ClientInterface */
+    /**
+     * @var ClientInterface
+     */
     private $client;
 
-    /** @var RequestFactoryInterface */
+    /**
+     * @var RequestFactoryInterface
+     */
     private $requestFactory;
 
-    /** @var TokenVerifierBuilderInterface */
+    /**
+     * @var TokenVerifierBuilderInterface
+     */
     private $userInfoVerifierBuilder;
 
     public function __construct(
@@ -43,10 +50,6 @@ final class UserInfoService
     }
 
     /**
-     * @param OpenIDClient $client
-     * @param TokenSetInterface $tokenSet
-     * @param bool $useBody
-     *
      * @return array<string, mixed>
      */
     public function getUserInfo(OpenIDClient $client, TokenSetInterface $tokenSet, bool $useBody = false): array
@@ -108,7 +111,7 @@ final class UserInfoService
             $payload = json_decode((string) $response->getBody(), true);
         }
 
-        if (! is_array($payload)) {
+        if (!is_array($payload)) {
             throw new RuntimeException('Unable to parse userinfo claims');
         }
 

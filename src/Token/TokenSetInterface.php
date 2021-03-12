@@ -12,36 +12,34 @@ namespace Facile\OpenIDClient\Token;
 interface TokenSetInterface
 {
     /**
-     * Get all attributes
+     * @return array<string, mixed>
+     * @psalm-return TokenSetClaimsType
+     */
+    public function claims(): array;
+
+    public function getAccessToken(): ?string;
+
+    /**
+     * Get all attributes.
      *
      * @return array<string, mixed>
      * @psalm-return TokenSetType
      */
     public function getAttributes(): array;
 
-    public function getTokenType(): ?string;
+    public function getCode(): ?string;
 
-    public function getAccessToken(): ?string;
+    public function getCodeVerifier(): ?string;
+
+    public function getExpiresIn(): ?int;
 
     public function getIdToken(): ?string;
 
     public function getRefreshToken(): ?string;
 
-    public function getExpiresIn(): ?int;
-
-    public function getCodeVerifier(): ?string;
-
-    public function getCode(): ?string;
-
     public function getState(): ?string;
 
-    /**
-     * @return array<string, mixed>
-     * @psalm-return TokenSetClaimsType
-     */
-    public function claims(): array;
-
-    public function withIdToken(string $idToken): self;
+    public function getTokenType(): ?string;
 
     /**
      * @param array<string, mixed> $claims
@@ -51,4 +49,6 @@ interface TokenSetInterface
      * @psalm-param TokenSetClaimsType $claims
      */
     public function withClaims(array $claims): self;
+
+    public function withIdToken(string $idToken): self;
 }

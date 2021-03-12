@@ -8,11 +8,15 @@ use Facile\OpenIDClient\Exception\ExceptionInterface;
 use Facile\OpenIDClient\Exception\LogicException;
 use Facile\OpenIDClientTest\TestCase;
 
-class LogicExceptionTest extends TestCase
+/**
+ * @internal
+ * @coversNothing
+ */
+final class LogicExceptionTest extends TestCase
 {
     public function testException(): void
     {
         $exception = new LogicException();
-        static::assertInstanceOf(ExceptionInterface::class, $exception);
+        self::assertInstanceOf(ExceptionInterface::class, $exception);
     }
 }

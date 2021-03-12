@@ -5,31 +5,18 @@ declare(strict_types=1);
 namespace Facile\OpenIDClientTest\functions;
 
 use Facile\OpenIDClient\Exception\RuntimeException;
-use function Facile\OpenIDClient\parse_callback_params;
 use Facile\OpenIDClientTest\TestCase;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Message\StreamInterface;
 use Psr\Http\Message\UriInterface;
+use function Facile\OpenIDClient\parse_callback_params;
 
-class ParseCallbackParamsTest extends TestCase
+/**
+ * @internal
+ * @coversNothing
+ */
+final class ParseCallbackParamsTest extends TestCase
 {
-    public function testWithPost(): void
-    {
-        $urlEncoded = 'foo=bar&foo2=bar2';
-        $expected = ['foo' => 'bar', 'foo2' => 'bar2'];
-
-        $serverRequest = $this->prophesize(ServerRequestInterface::class);
-        $stream = $this->prophesize(StreamInterface::class);
-
-        $serverRequest->getMethod()->willReturn('POST');
-        $serverRequest->getBody()->willReturn($stream->reveal());
-        $stream->__toString()->willReturn($urlEncoded);
-
-        $params = parse_callback_params($serverRequest->reveal());
-
-        static::assertSame($expected, $params);
-    }
-
     public function testWithGetFragment(): void
     {
         $urlEncoded = 'foo=bar&foo2=bar2';
@@ -44,7 +31,7 @@ class ParseCallbackParamsTest extends TestCase
 
         $params = parse_callback_params($serverRequest->reveal());
 
-        static::assertSame($expected, $params);
+        self::assertSame($expected, $params);
     }
 
     public function testWithGetQuery(): void
@@ -62,7 +49,7 @@ class ParseCallbackParamsTest extends TestCase
 
         $params = parse_callback_params($serverRequest->reveal());
 
-        static::assertSame($expected, $params);
+        self::assertSame($expected, $params);
     }
 
     public function testWithInvalidMethod(): void
@@ -74,5 +61,22 @@ class ParseCallbackParamsTest extends TestCase
 
         $serverRequest->getMethod()->willReturn('PUT');
         parse_callback_params($serverRequest->reveal());
+    }
+
+    public function testWithPost(): void
+    {
+        $urlEncoded = 'foo=bar&foo2=bar2';
+        $expected = ['foo' => 'bar', 'foo2' => 'bar2'];
+
+        $serverRequest = $this->prophesize(ServerRequestInterface::class);
+        $stream = $this->prophesize(StreamInterface::class);
+
+        $serverRequest->getMethod()->willReturn('POST');
+        $serverRequest->getBody()->willReturn($stream->reveal());
+        $stream->__toString()->willReturn($urlEncoded);
+
+        $params = parse_callback_params($serverRequest->reveal());
+
+        self::assertSame($expected, $params);
     }
 }

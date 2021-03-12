@@ -4,10 +4,11 @@ declare(strict_types=1);
 
 namespace Facile\OpenIDClient\ConformanceTest\RpTest\IdToken;
 
-use PHPUnit\Framework\Assert;
 use Facile\OpenIDClient\ConformanceTest\RpTest\AbstractRpTest;
 use Facile\OpenIDClient\ConformanceTest\TestInfo;
 use Facile\OpenIDClient\Service\AuthorizationService;
+use PHPUnit\Framework\Assert;
+
 use function Facile\OpenIDClient\base64url_encode;
 
 /**
@@ -17,15 +18,12 @@ use function Facile\OpenIDClient\base64url_encode;
  * JWK Set document (referenced by 'jwks_uri'). The RP can do one of two things; reject the ID Token since it can not
  * by using the kid determined which key to use to verify the signature. Or it can just test all possible keys and hit
  * upon one that works, which it will in this case.
+ *
+ * @internal
+ * @coversNothing
  */
-class RpIdTokenKidAbsentMultipleJwksTest extends AbstractRpTest
+final class RpIdTokenKidAbsentMultipleJwksTest extends AbstractRpTest
 {
-
-    public function getTestId(): string
-    {
-        return 'rp-id_token-kid-absent-multiple-jwks';
-    }
-
     public function execute(TestInfo $testInfo): void
     {
         $client = $this->registerClient($testInfo);
@@ -34,7 +32,7 @@ class RpIdTokenKidAbsentMultipleJwksTest extends AbstractRpTest
         $authorizationService = new AuthorizationService();
         $uri = $authorizationService->getAuthorizationUri($client, [
             'response_type' => $testInfo->getResponseType(),
-            'nonce' => base64url_encode(\random_bytes(32)),
+            'nonce' => base64url_encode(random_bytes(32)),
         ]);
 
         // Simulate a redirect and create the server request
@@ -44,5 +42,10 @@ class RpIdTokenKidAbsentMultipleJwksTest extends AbstractRpTest
         $tokenSet = $authorizationService->callback($client, $params);
 
         Assert::assertNotNull($tokenSet->getIdToken());
+    }
+
+    public function getTestId(): string
+    {
+        return 'rp-id_token-kid-absent-multiple-jwks';
     }
 }

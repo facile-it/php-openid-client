@@ -14,68 +14,60 @@ use JsonSerializable;
 interface ClientMetadataInterface extends JsonSerializable
 {
     /**
-     * @param string $name
-     *
      * @return mixed|null
      */
     public function get(string $name);
 
-    /**
-     * @param string $name
-     *
-     * @return bool
-     */
-    public function has(string $name): bool;
+    public function getAuthorizationEncryptedResponseAlg(): ?string;
+
+    public function getAuthorizationEncryptedResponseEnc(): ?string;
+
+    public function getAuthorizationSignedResponseAlg(): ?string;
 
     public function getClientId(): string;
 
     public function getClientSecret(): ?string;
+
+    public function getIdTokenEncryptedResponseAlg(): ?string;
+
+    public function getIdTokenEncryptedResponseEnc(): ?string;
+
+    public function getIdTokenSignedResponseAlg(): string;
+
+    public function getIntrospectionEndpointAuthMethod(): string;
+
+    /**
+     * @psalm-return JWKSetObject|null
+     */
+    public function getJwks(): ?array;
 
     /**
      * @return string[]
      */
     public function getRedirectUris(): array;
 
+    public function getRequestObjectEncryptionAlg(): ?string;
+
+    public function getRequestObjectEncryptionEnc(): ?string;
+
+    public function getRequestObjectSigningAlg(): ?string;
+
     /**
      * @return string[]
      */
     public function getResponseTypes(): array;
 
+    public function getRevocationEndpointAuthMethod(): string;
+
     public function getTokenEndpointAuthMethod(): string;
-
-    public function getAuthorizationSignedResponseAlg(): ?string;
-
-    public function getAuthorizationEncryptedResponseAlg(): ?string;
-
-    public function getAuthorizationEncryptedResponseEnc(): ?string;
-
-    public function getIdTokenSignedResponseAlg(): string;
-
-    public function getIdTokenEncryptedResponseAlg(): ?string;
-
-    public function getIdTokenEncryptedResponseEnc(): ?string;
-
-    public function getUserinfoSignedResponseAlg(): ?string;
 
     public function getUserinfoEncryptedResponseAlg(): ?string;
 
     public function getUserinfoEncryptedResponseEnc(): ?string;
 
-    public function getRequestObjectSigningAlg(): ?string;
+    public function getUserinfoSignedResponseAlg(): ?string;
 
-    public function getRequestObjectEncryptionAlg(): ?string;
-
-    public function getRequestObjectEncryptionEnc(): ?string;
-
-    public function getIntrospectionEndpointAuthMethod(): string;
-
-    public function getRevocationEndpointAuthMethod(): string;
-
-    /**
-     * @return array|null
-     * @psalm-return JWKSetObject|null
-     */
-    public function getJwks(): ?array;
+    public function has(string $name): bool;
 
     /**
      * @return array<string, mixed>

@@ -10,6 +10,7 @@ use Facile\OpenIDClient\Client\ClientInterface;
 use Facile\OpenIDClient\Issuer\IssuerBuilderInterface;
 use Facile\OpenIDClient\Issuer\IssuerInterface;
 use Facile\OpenIDClient\Issuer\Metadata\IssuerMetadataInterface;
+use Facile\OpenIDClientTest\TestCase;
 use Jose\Component\Core\AlgorithmManager;
 use Jose\Component\Core\JWK;
 use Jose\Component\KeyManagement\JWKFactory;
@@ -19,67 +20,15 @@ use Jose\Component\Signature\JWSBuilder;
 use Jose\Component\Signature\JWSVerifier;
 use Jose\Component\Signature\Serializer\CompactSerializer;
 use Jose\Component\Signature\Serializer\JWSSerializer;
-use function json_encode;
-use Facile\OpenIDClientTest\TestCase;
 use Prophecy\Argument;
+use function json_encode;
 
-class AggregatedClaimsTest extends TestCase
+/**
+ * @internal
+ * @coversNothing
+ */
+final class AggregatedClaimsTest extends TestCase
 {
-    public function testUnpackAggregatedClaimsWithNoClaimSources(): void
-    {
-        $algorithmManager = $this->prophesize(AlgorithmManager::class);
-        $JWSVerifier = $this->prophesize(JWSVerifier::class);
-        $JWSSerializer = $this->prophesize(JWSSerializer::class);
-        $client = $this->prophesize(ClientInterface::class);
-        $issuerBuilder = $this->prophesize(IssuerBuilderInterface::class);
-
-        $service = new AggregateParser(
-            $issuerBuilder->reveal(),
-            $algorithmManager->reveal(),
-            $JWSVerifier->reveal(),
-            $JWSSerializer->reveal()
-        );
-
-        $claims = [
-            'sub' => 'foo',
-            '_claim_names' => [
-                'eye_color' => 'src1',
-                'shoe_size' => 'src1',
-            ],
-        ];
-
-        $unpacked = $service->unpack($client->reveal(), $claims);
-
-        static::assertSame($claims, $unpacked);
-    }
-
-    public function testUnpackAggregatedClaimsWithNoClaimNames(): void
-    {
-        $algorithmManager = $this->prophesize(AlgorithmManager::class);
-        $JWSVerifier = $this->prophesize(JWSVerifier::class);
-        $issuerBuilder = $this->prophesize(IssuerBuilderInterface::class);
-        $client = $this->prophesize(ClientInterface::class);
-
-        $service = new AggregateParser(
-            $issuerBuilder->reveal(),
-            $algorithmManager->reveal(),
-            $JWSVerifier->reveal()
-        );
-
-        $claims = [
-            'sub' => 'foo',
-            '_claim_sources' => [
-                'src1' => [
-                    'JWT' => 'foo',
-                ],
-            ],
-        ];
-
-        $unpacked = $service->unpack($client->reveal(), $claims);
-
-        static::assertSame($claims, $unpacked);
-    }
-
     public function testUnpackAggregatedClaims(): void
     {
         $jwt = 'eyJhbGciOiJub25lIn0.eyJleWVfY29sb3IiOiAiYmx1ZSIsICJzaG9lX3NpemUiOiA4fQ.';
@@ -113,10 +62,65 @@ class AggregatedClaimsTest extends TestCase
 
         $unpacked = $service->unpack($client->reveal(), $claims);
 
-        static::assertSame('blue', $unpacked['eye_color'] ?? null);
-        static::assertSame(8, $unpacked['shoe_size'] ?? null);
-        static::assertArrayNotHasKey('_claim_names', $unpacked);
-        static::assertArrayNotHasKey('_claim_sources', $unpacked);
+        self::assertSame('blue', $unpacked['eye_color'] ?? null);
+        self::assertSame(8, $unpacked['shoe_size'] ?? null);
+        self::assertArrayNotHasKey('_claim_names', $unpacked);
+        self::assertArrayNotHasKey('_claim_sources', $unpacked);
+    }
+
+    public function testUnpackAggregatedClaimsWithNoClaimNames(): void
+    {
+        $algorithmManager = $this->prophesize(AlgorithmManager::class);
+        $JWSVerifier = $this->prophesize(JWSVerifier::class);
+        $issuerBuilder = $this->prophesize(IssuerBuilderInterface::class);
+        $client = $this->prophesize(ClientInterface::class);
+
+        $service = new AggregateParser(
+            $issuerBuilder->reveal(),
+            $algorithmManager->reveal(),
+            $JWSVerifier->reveal()
+        );
+
+        $claims = [
+            'sub' => 'foo',
+            '_claim_sources' => [
+                'src1' => [
+                    'JWT' => 'foo',
+                ],
+            ],
+        ];
+
+        $unpacked = $service->unpack($client->reveal(), $claims);
+
+        self::assertSame($claims, $unpacked);
+    }
+
+    public function testUnpackAggregatedClaimsWithNoClaimSources(): void
+    {
+        $algorithmManager = $this->prophesize(AlgorithmManager::class);
+        $JWSVerifier = $this->prophesize(JWSVerifier::class);
+        $JWSSerializer = $this->prophesize(JWSSerializer::class);
+        $client = $this->prophesize(ClientInterface::class);
+        $issuerBuilder = $this->prophesize(IssuerBuilderInterface::class);
+
+        $service = new AggregateParser(
+            $issuerBuilder->reveal(),
+            $algorithmManager->reveal(),
+            $JWSVerifier->reveal(),
+            $JWSSerializer->reveal()
+        );
+
+        $claims = [
+            'sub' => 'foo',
+            '_claim_names' => [
+                'eye_color' => 'src1',
+                'shoe_size' => 'src1',
+            ],
+        ];
+
+        $unpacked = $service->unpack($client->reveal(), $claims);
+
+        self::assertSame($claims, $unpacked);
     }
 
     public function testUnpackAggregatedClaimsWithSignedJWT(): void
@@ -146,7 +150,7 @@ class AggregatedClaimsTest extends TestCase
         $algorithm = new RS256();
         $algorithmManager->get('RS256')->willReturn($algorithm);
 
-        $JWSVerifier->verifyWithKey(Argument::type(JWS::class), Argument::that(function (JWK $key) use ($jwkPublic) {
+        $JWSVerifier->verifyWithKey(Argument::type(JWS::class), Argument::that(static function (JWK $key) use ($jwkPublic) {
             return $jwkPublic->all() === $key->all();
         }), 0)
             ->willReturn(true);
@@ -181,8 +185,8 @@ class AggregatedClaimsTest extends TestCase
 
         $unpacked = $service->unpack($client->reveal(), $claims);
 
-        static::assertSame('blue', $unpacked['eye_color'] ?? null);
-        static::assertArrayNotHasKey('_claim_names', $unpacked);
-        static::assertArrayNotHasKey('_claim_sources', $unpacked);
+        self::assertSame('blue', $unpacked['eye_color'] ?? null);
+        self::assertArrayNotHasKey('_claim_names', $unpacked);
+        self::assertArrayNotHasKey('_claim_sources', $unpacked);
     }
 }

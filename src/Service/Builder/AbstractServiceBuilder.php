@@ -11,10 +11,14 @@ use Psr\Http\Message\RequestFactoryInterface;
 
 abstract class AbstractServiceBuilder
 {
-    /** @var null|ClientInterface */
+    /**
+     * @var ClientInterface|null
+     */
     private $httpClient;
 
-    /** @var null|RequestFactoryInterface */
+    /**
+     * @var RequestFactoryInterface|null
+     */
     private $requestFactory;
 
     public function setHttpClient(ClientInterface $httpClient): self

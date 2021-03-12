@@ -12,13 +12,13 @@ use Psr\Http\Client\ClientInterface as HttpClient;
 
 interface ClientInterface
 {
-    public function getIssuer(): IssuerInterface;
-
-    public function getMetadata(): ClientMetadataInterface;
-
-    public function getJwksProvider(): JwksProviderInterface;
-
     public function getAuthMethodFactory(): AuthMethodFactoryInterface;
 
     public function getHttpClient(): ?HttpClient;
+
+    public function getIssuer(): IssuerInterface;
+
+    public function getJwksProvider(): JwksProviderInterface;
+
+    public function getMetadata(): ClientMetadataInterface;
 }

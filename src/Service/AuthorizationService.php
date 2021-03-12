@@ -4,54 +4,65 @@ declare(strict_types=1);
 
 namespace Facile\OpenIDClient\Service;
 
-use function array_filter;
-use function array_key_exists;
-use function array_merge;
 use Facile\OpenIDClient\Client\ClientInterface as OpenIDClient;
 use Facile\OpenIDClient\Exception\InvalidArgumentException;
 use Facile\OpenIDClient\Exception\OAuth2Exception;
 use Facile\OpenIDClient\Exception\RuntimeException;
-use function Facile\OpenIDClient\get_endpoint_uri;
-use function Facile\OpenIDClient\parse_callback_params;
-use function Facile\OpenIDClient\parse_metadata_response;
 use Facile\OpenIDClient\Session\AuthSessionInterface;
 use Facile\OpenIDClient\Token\IdTokenVerifierBuilderInterface;
 use Facile\OpenIDClient\Token\TokenSetFactoryInterface;
 use Facile\OpenIDClient\Token\TokenSetInterface;
 use Facile\OpenIDClient\Token\TokenVerifierBuilderInterface;
-use function http_build_query;
-use function is_array;
-use function is_string;
-use function json_encode;
 use JsonSerializable;
 use Psr\Http\Client\ClientExceptionInterface;
 use Psr\Http\Client\ClientInterface;
 use Psr\Http\Message\RequestFactoryInterface;
 use Psr\Http\Message\ServerRequestInterface;
 
+use function array_filter;
+use function array_key_exists;
+use function array_merge;
+use function Facile\OpenIDClient\get_endpoint_uri;
+use function Facile\OpenIDClient\parse_callback_params;
+use function Facile\OpenIDClient\parse_metadata_response;
+use function http_build_query;
+use function is_array;
+use function is_string;
+use function json_encode;
+
 /**
- * OAuth 2.0
+ * OAuth 2.0.
  *
- * @link https://tools.ietf.org/html/rfc6749 RFC 6749
+ * @see https://tools.ietf.org/html/rfc6749 RFC 6749
  *
  * @psalm-import-type TokenSetMixedType from TokenSetInterface
  */
 final class AuthorizationService
 {
-    /** @var TokenSetFactoryInterface */
-    private $tokenSetFactory;
-
-    /** @var ClientInterface */
+    /**
+     * @var ClientInterface
+     */
     private $client;
 
-    /** @var RequestFactoryInterface */
-    private $requestFactory;
-
-    /** @var IdTokenVerifierBuilderInterface */
+    /**
+     * @var IdTokenVerifierBuilderInterface
+     */
     private $idTokenVerifierBuilder;
 
-    /** @var TokenVerifierBuilderInterface */
+    /**
+     * @var RequestFactoryInterface
+     */
+    private $requestFactory;
+
+    /**
+     * @var TokenVerifierBuilderInterface
+     */
     private $responseVerifierBuilder;
+
+    /**
+     * @var TokenSetFactoryInterface
+     */
+    private $tokenSetFactory;
 
     public function __construct(
         TokenSetFactoryInterface $tokenSetFactory,
@@ -68,75 +79,7 @@ final class AuthorizationService
     }
 
     /**
-     * @param OpenIDClient $client
      * @param array<string, mixed> $params
-     *
-     * @return string
-     *
-     * @template P as (array{scope?: string, response_type?: string, redirect_uri?: string, claims?: array<string, string>|JsonSerializable}&array<string, mixed>)|array<empty, empty>
-     * @psalm-param P $params
-     */
-    public function getAuthorizationUri(OpenIDClient $client, array $params = []): string
-    {
-        $clientMetadata = $client->getMetadata();
-        $issuerMetadata = $client->getIssuer()->getMetadata();
-        $endpointUri = $issuerMetadata->getAuthorizationEndpoint();
-
-        $params = array_merge([
-            'client_id' => $clientMetadata->getClientId(),
-            'scope' => 'openid',
-            'response_type' => $clientMetadata->getResponseTypes()[0] ?? 'code',
-            'redirect_uri' => $clientMetadata->getRedirectUris()[0] ?? null,
-        ], $params);
-
-        $params = array_filter($params, static function ($value): bool {
-            return null !== $value;
-        });
-
-        /**
-         * @var string $key
-         * @var mixed $value
-         */
-        foreach ($params as $key => $value) {
-            if (null === $value) {
-                unset($params[$key]);
-            } elseif ('claims' === $key && (is_array($value) || $value instanceof JsonSerializable)) {
-                $params['claims'] = json_encode($value);
-            } elseif (! is_string($value)) {
-                $params[$key] = (string) $value;
-            }
-        }
-
-        if (! array_key_exists('nonce', $params) && 'code' !== ($params['response_type'] ?? '')) {
-            throw new InvalidArgumentException('nonce MUST be provided for implicit and hybrid flows');
-        }
-
-        return $endpointUri . '?' . http_build_query($params);
-    }
-
-    /**
-     * @param ServerRequestInterface $serverRequest
-     * @param OpenIDClient $client
-     *
-     * @throws OAuth2Exception
-     *
-     * @return array<string, mixed>
-     *
-     * @psalm-return TokenSetMixedType
-     */
-    public function getCallbackParams(ServerRequestInterface $serverRequest, OpenIDClient $client): array
-    {
-        return $this->processResponseParams($client, parse_callback_params($serverRequest));
-    }
-
-    /**
-     * @param OpenIDClient $client
-     * @param array<string, mixed> $params
-     * @param string|null $redirectUri
-     * @param AuthSessionInterface|null $authSession
-     * @param int|null $maxAge
-     *
-     * @return TokenSetInterface
      *
      * @psalm-param TokenSetMixedType $params
      */
@@ -171,15 +114,7 @@ final class AuthorizationService
     }
 
     /**
-     * @param OpenIDClient $client
-     * @param TokenSetInterface $tokenSet
-     * @param string|null $redirectUri
-     * @param AuthSessionInterface|null $authSession
-     * @param int|null $maxAge
-     *
      * @throws OAuth2Exception
-     *
-     * @return TokenSetInterface
      */
     public function fetchToken(
         OpenIDClient $client,
@@ -229,44 +164,65 @@ final class AuthorizationService
     }
 
     /**
-     * @param OpenIDClient $client
-     * @param string $refreshToken
      * @param array<string, mixed> $params
      *
-     * @return TokenSetInterface
+     * @template P as (array{scope?: string, response_type?: string, redirect_uri?: string, claims?: array<string, string>|JsonSerializable}&array<string, mixed>)|array<empty, empty>
+     * @psalm-param P $params
      */
-    public function refresh(OpenIDClient $client, string $refreshToken, array $params = []): TokenSetInterface
+    public function getAuthorizationUri(OpenIDClient $client, array $params = []): string
     {
-        $tokenSet = $this->grant($client, array_merge($params, [
-            'grant_type' => 'refresh_token',
-            'refresh_token' => $refreshToken,
-        ]));
+        $clientMetadata = $client->getMetadata();
+        $issuerMetadata = $client->getIssuer()->getMetadata();
+        $endpointUri = $issuerMetadata->getAuthorizationEndpoint();
 
-        $idToken = $tokenSet->getIdToken();
+        $params = array_merge([
+            'client_id' => $clientMetadata->getClientId(),
+            'scope' => 'openid',
+            'response_type' => $clientMetadata->getResponseTypes()[0] ?? 'code',
+            'redirect_uri' => $clientMetadata->getRedirectUris()[0] ?? null,
+        ], $params);
 
-        if (null === $idToken) {
-            return $tokenSet;
+        $params = array_filter($params, static function ($value): bool {
+            return null !== $value;
+        });
+
+        /**
+         * @var string $key
+         * @var mixed $value
+         */
+        foreach ($params as $key => $value) {
+            if (null === $value) {
+                unset($params[$key]);
+            } elseif ('claims' === $key && (is_array($value) || $value instanceof JsonSerializable)) {
+                $params['claims'] = json_encode($value);
+            } elseif (!is_string($value)) {
+                $params[$key] = (string) $value;
+            }
         }
 
-        $idToken = $tokenSet->getIdToken();
-
-        if (null !== $idToken) {
-            $claims = $this->idTokenVerifierBuilder->build($client)
-                ->withAccessToken($tokenSet->getAccessToken())
-                ->verify($idToken);
-            $tokenSet = $tokenSet->withClaims($claims);
+        if (!array_key_exists('nonce', $params) && 'code' !== ($params['response_type'] ?? '')) {
+            throw new InvalidArgumentException('nonce MUST be provided for implicit and hybrid flows');
         }
 
-        return $tokenSet;
+        return $endpointUri . '?' . http_build_query($params);
     }
 
     /**
-     * @param OpenIDClient $client
+     * @throws OAuth2Exception
+     *
+     * @return array<string, mixed>
+     *
+     * @psalm-return TokenSetMixedType
+     */
+    public function getCallbackParams(ServerRequestInterface $serverRequest, OpenIDClient $client): array
+    {
+        return $this->processResponseParams($client, parse_callback_params($serverRequest));
+    }
+
+    /**
      * @param array<string, mixed> $params
      *
      * @throws OAuth2Exception
-     *
-     * @return TokenSetInterface
      */
     public function grant(OpenIDClient $client, array $params = []): TokenSetInterface
     {
@@ -297,15 +253,30 @@ final class AuthorizationService
 
     /**
      * @param array<string, mixed> $params
-     * @return bool
-     *
-     * @template P as array<string, mixed>
-     * @psalm-param P $params
-     * @psalm-assert-if-true array{response: string} $params
      */
-    private function isResponseObject(array $params): bool
+    public function refresh(OpenIDClient $client, string $refreshToken, array $params = []): TokenSetInterface
     {
-        return array_key_exists('response', $params);
+        $tokenSet = $this->grant($client, array_merge($params, [
+            'grant_type' => 'refresh_token',
+            'refresh_token' => $refreshToken,
+        ]));
+
+        $idToken = $tokenSet->getIdToken();
+
+        if (null === $idToken) {
+            return $tokenSet;
+        }
+
+        $idToken = $tokenSet->getIdToken();
+
+        if (null !== $idToken) {
+            $claims = $this->idTokenVerifierBuilder->build($client)
+                ->withAccessToken($tokenSet->getAccessToken())
+                ->verify($idToken);
+            $tokenSet = $tokenSet->withClaims($claims);
+        }
+
+        return $tokenSet;
     }
 
     /**
@@ -324,7 +295,18 @@ final class AuthorizationService
     }
 
     /**
-     * @param OpenIDClient $client
+     * @param array<string, mixed> $params
+     *
+     * @template P as array<string, mixed>
+     * @psalm-param P $params
+     * @psalm-assert-if-true array{response: string} $params
+     */
+    private function isResponseObject(array $params): bool
+    {
+        return array_key_exists('response', $params);
+    }
+
+    /**
      * @param array<string, mixed> $params
      *
      * @throws OAuth2Exception
@@ -341,7 +323,7 @@ final class AuthorizationService
         $this->assertOAuth2Error($params);
 
         if ($this->isResponseObject($params)) {
-            /** @var TokenSetMixedType|ResObject $params */
+            /** @var ResObject|TokenSetMixedType $params */
             $params = $this->responseVerifierBuilder->build($client)
                 ->verify($params['response']);
 

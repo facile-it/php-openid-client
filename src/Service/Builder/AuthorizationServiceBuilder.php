@@ -14,20 +14,30 @@ use Facile\OpenIDClient\Token\TokenVerifierBuilderInterface;
 
 final class AuthorizationServiceBuilder extends AbstractServiceBuilder
 {
-    /** @var null|TokenSetFactoryInterface */
-    private $tokenSetFactory;
-
-    /** @var null|IdTokenVerifierBuilderInterface */
+    /**
+     * @var IdTokenVerifierBuilderInterface|null
+     */
     private $idTokenVerifierBuilder;
 
-    /** @var null|TokenVerifierBuilderInterface */
+    /**
+     * @var TokenVerifierBuilderInterface|null
+     */
     private $responseVerifierBuilder;
 
-    public function setTokenSetFactory(TokenSetFactoryInterface $tokenSetFactory): self
-    {
-        $this->tokenSetFactory = $tokenSetFactory;
+    /**
+     * @var TokenSetFactoryInterface|null
+     */
+    private $tokenSetFactory;
 
-        return $this;
+    public function build(): AuthorizationService
+    {
+        return new AuthorizationService(
+            $this->getTokenSetFactory(),
+            $this->getHttpClient(),
+            $this->getRequestFactory(),
+            $this->getIdTokenVerifierBuilder(),
+            $this->getResponseVerifierBuilder()
+        );
     }
 
     public function setIdTokenVerifierBuilder(IdTokenVerifierBuilderInterface $idTokenVerifierBuilder): self
@@ -44,9 +54,11 @@ final class AuthorizationServiceBuilder extends AbstractServiceBuilder
         return $this;
     }
 
-    protected function getTokenSetFactory(): TokenSetFactoryInterface
+    public function setTokenSetFactory(TokenSetFactoryInterface $tokenSetFactory): self
     {
-        return $this->tokenSetFactory = $this->tokenSetFactory ?? new TokenSetFactory();
+        $this->tokenSetFactory = $tokenSetFactory;
+
+        return $this;
     }
 
     protected function getIdTokenVerifierBuilder(): IdTokenVerifierBuilderInterface
@@ -59,14 +71,8 @@ final class AuthorizationServiceBuilder extends AbstractServiceBuilder
         return $this->responseVerifierBuilder = $this->responseVerifierBuilder ?? new ResponseVerifierBuilder();
     }
 
-    public function build(): AuthorizationService
+    protected function getTokenSetFactory(): TokenSetFactoryInterface
     {
-        return new AuthorizationService(
-            $this->getTokenSetFactory(),
-            $this->getHttpClient(),
-            $this->getRequestFactory(),
-            $this->getIdTokenVerifierBuilder(),
-            $this->getResponseVerifierBuilder()
-        );
+        return $this->tokenSetFactory = $this->tokenSetFactory ?? new TokenSetFactory();
     }
 }

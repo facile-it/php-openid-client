@@ -11,28 +11,6 @@ use JsonSerializable;
  */
 interface AuthSessionInterface extends JsonSerializable
 {
-    public function getState(): ?string;
-
-    public function getNonce(): ?string;
-
-    public function getCodeVerifier(): ?string;
-
-    /**
-     * @return array<string, mixed>
-     */
-    public function getCustoms(): array;
-
-    public function setState(?string $state): void;
-
-    public function setNonce(?string $nonce): void;
-
-    public function setCodeVerifier(?string $codeVerifier): void;
-
-    /**
-     * @param array<string, mixed> $customs
-     */
-    public function setCustoms(array $customs): void;
-
     /**
      * @param array<string, mixed> $array
      *
@@ -42,9 +20,31 @@ interface AuthSessionInterface extends JsonSerializable
      */
     public static function fromArray(array $array): self;
 
+    public function getCodeVerifier(): ?string;
+
+    /**
+     * @return array<string, mixed>
+     */
+    public function getCustoms(): array;
+
+    public function getNonce(): ?string;
+
+    public function getState(): ?string;
+
     /**
      * @return array<string, mixed>
      * @psalm-return AuthSessionType
      */
     public function jsonSerialize(): array;
+
+    public function setCodeVerifier(?string $codeVerifier): void;
+
+    /**
+     * @param array<string, mixed> $customs
+     */
+    public function setCustoms(array $customs): void;
+
+    public function setNonce(?string $nonce): void;
+
+    public function setState(?string $state): void;
 }

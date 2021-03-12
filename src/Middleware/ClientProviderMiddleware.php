@@ -12,7 +12,9 @@ use Psr\Http\Server\RequestHandlerInterface;
 
 class ClientProviderMiddleware implements MiddlewareInterface
 {
-    /** @var ClientInterface */
+    /**
+     * @var ClientInterface
+     */
     private $client;
 
     public function __construct(ClientInterface $client)

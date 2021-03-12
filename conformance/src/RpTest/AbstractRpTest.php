@@ -5,33 +5,40 @@ declare(strict_types=1);
 namespace Facile\OpenIDClient\ConformanceTest\RpTest;
 
 use Facile\JoseVerifier\JWK\MemoryJwksProvider;
-use Http\Discovery\Psr17FactoryDiscovery;
-use Http\Discovery\Psr18ClientDiscovery;
-use Psr\Http\Client\ClientInterface as HttpClient;
-use Psr\Http\Message\RequestFactoryInterface;
-use Psr\Http\Message\ResponseInterface;
 use Facile\OpenIDClient\Client\ClientBuilder;
-use Facile\OpenIDClient\Issuer\IssuerBuilder;
-use Facile\OpenIDClient\Service\RegistrationService;
-use function array_merge;
-use Http\Client\Common\HttpMethodsClientInterface;
-use Jose\Component\Core\JWKSet;
-use Psr\Container\ContainerInterface;
-use Psr\Http\Message\ServerRequestInterface;
 use Facile\OpenIDClient\Client\ClientInterface;
+use Facile\OpenIDClient\Client\Metadata\ClientMetadata;
 use Facile\OpenIDClient\ConformanceTest\TestInfo;
 use Facile\OpenIDClient\Exception\OAuth2Exception;
 use Facile\OpenIDClient\Exception\RemoteException;
-use Facile\OpenIDClient\Client\Metadata\ClientMetadata;
+use Facile\OpenIDClient\Issuer\IssuerBuilder;
+use Facile\OpenIDClient\Service\RegistrationService;
+use Http\Discovery\Psr17FactoryDiscovery;
+use Http\Discovery\Psr18ClientDiscovery;
+use Jose\Component\Core\JWKSet;
 use Laminas\Diactoros\ServerRequestFactory;
+use Psr\Container\ContainerInterface;
+use Psr\Http\Client\ClientInterface as HttpClient;
+use Psr\Http\Message\RequestFactoryInterface;
+use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface;
+
+use function array_merge;
 use function json_decode;
 use function json_encode;
 
+use const PHP_EOL;
+
+/**
+ * @internal
+ */
 abstract class AbstractRpTest implements RpTestInterface
 {
     protected const REDIRECT_URI = 'https://rp.test/callback';
 
-    /** @var ContainerInterface */
+    /**
+     * @var ContainerInterface
+     */
     private $container;
 
     public function __construct(ContainerInterface $container)
@@ -39,15 +46,12 @@ abstract class AbstractRpTest implements RpTestInterface
         $this->container = $container;
     }
 
-    /**
-     * @return ContainerInterface
-     */
     public function getContainer(): ContainerInterface
     {
         return $this->container;
     }
 
-    public function registerClient(TestInfo $testInfo, array $metadata = [], JWKSet $jwks = null): ClientInterface
+    public function registerClient(TestInfo $testInfo, array $metadata = [], ?JWKSet $jwks = null): ClientInterface
     {
         $issuer = (new IssuerBuilder())
             ->build($testInfo->getRpUri() . '/' . $this->getTestId() . '/.well-known/openid-configuration');
@@ -73,9 +77,11 @@ abstract class AbstractRpTest implements RpTestInterface
             $clientMetadata = ClientMetadata::fromArray($registrationService->register($issuer, $metadata));
         } catch (OAuth2Exception $e) {
             echo sprintf('%s (%s)', $e->getMessage(), $e->getDescription()) . PHP_EOL;
+
             throw $e;
         } catch (RemoteException $e) {
             echo $e->getResponse()->getBody() . PHP_EOL;
+
             throw $e;
         }
 

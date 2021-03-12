@@ -10,8 +10,6 @@ namespace Facile\OpenIDClient\Issuer\Metadata\Provider;
 interface DiscoveryProviderInterface extends RemoteProviderInterface
 {
     /**
-     * @param string $url
-     *
      * @return array<string, mixed>
      * @psalm-return DiscoveryConfigurationObject
      */

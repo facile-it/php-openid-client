@@ -4,26 +4,25 @@ declare(strict_types=1);
 
 namespace Facile\OpenIDClient\ConformanceTest\RpTest\IdToken;
 
-use PHPUnit\Framework\Assert;
-use PHPUnit\Framework\AssertionFailedError;
 use Facile\OpenIDClient\ConformanceTest\RpTest\AbstractRpTest;
 use Facile\OpenIDClient\ConformanceTest\TestInfo;
 use Facile\OpenIDClient\Service\AuthorizationService;
+use PHPUnit\Framework\Assert;
+use PHPUnit\Framework\AssertionFailedError;
+use Throwable;
+
 use function Facile\OpenIDClient\base64url_encode;
 
 /**
  * Request an ID token and verify its signature using the keys provided by the Issuer.
  *
  * Identify the invalid signature and reject the ID Token after doing ID Token validation.
+ *
+ * @internal
+ * @coversNothing
  */
-class RpIdTokenBadSigES256Test extends AbstractRpTest
+final class RpIdTokenBadSigES256Test extends AbstractRpTest
 {
-
-    public function getTestId(): string
-    {
-        return 'rp-id_token-bad-sig-es256';
-    }
-
     public function execute(TestInfo $testInfo): void
     {
         $client = $this->registerClient($testInfo, ['id_token_signed_response_alg' => 'ES256']);
@@ -34,7 +33,7 @@ class RpIdTokenBadSigES256Test extends AbstractRpTest
         $authorizationService = new AuthorizationService();
         $uri = $authorizationService->getAuthorizationUri($client, [
             'response_type' => $testInfo->getResponseType(),
-            'nonce' => base64url_encode(\random_bytes(32)),
+            'nonce' => base64url_encode(random_bytes(32)),
         ]);
 
         // Simulate a redirect and create the server request
@@ -43,10 +42,16 @@ class RpIdTokenBadSigES256Test extends AbstractRpTest
 
         try {
             $authorizationService->callback($client, $params);
+
             throw new AssertionFailedError('No assertions');
-        } catch (\Throwable $e) {
+        } catch (Throwable $e) {
             Assert::assertSame('Invalid token provided', $e->getMessage());
             Assert::assertRegExp('/Invalid signature/', $e->getPrevious()->getMessage());
         }
+    }
+
+    public function getTestId(): string
+    {
+        return 'rp-id_token-bad-sig-es256';
     }
 }
