@@ -50,7 +50,10 @@ final class IntrospectionService
         $tokenRequest = $this->requestFactory->createRequest('POST', $endpointUri)
             ->withHeader('content-type', 'application/x-www-form-urlencoded');
 
-        $params['token'] = $token;
+        $params += [
+            'token' => $token,
+            'aud' => $client->getIssuer()->getMetadata()->getIntrospectionEndpoint(),
+        ];
         $tokenRequest = $authMethod->createRequest($tokenRequest, $client, $params);
 
         $httpClient = $client->getHttpClient() ?? $this->client;
