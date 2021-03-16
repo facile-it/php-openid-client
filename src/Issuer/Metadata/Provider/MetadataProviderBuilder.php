@@ -41,6 +41,13 @@ class MetadataProviderBuilder
         return $this;
     }
 
+    public function setHttpClient(?ClientInterface $client): self
+    {
+        $this->client = $client;
+
+        return $this;
+    }
+
     public function setWebFingerProvider(WebFingerProviderInterface $webFingerProvider): self
     {
         $this->webFingerProvider = $webFingerProvider;
@@ -48,6 +55,9 @@ class MetadataProviderBuilder
         return $this;
     }
 
+    /**
+     * @deprecated Use MetadataProviderBuilder::setHttpClient() instead.
+     */
     public function setClient(?ClientInterface $client): self
     {
         $this->client = $client;
