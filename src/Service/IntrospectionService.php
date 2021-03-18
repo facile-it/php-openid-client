@@ -61,7 +61,7 @@ final class IntrospectionService
         try {
             $response = $httpClient->sendRequest($tokenRequest);
         } catch (ClientExceptionInterface $e) {
-            throw new RuntimeException('Unable to get revocation response', 0, $e);
+            throw new RuntimeException('Unable to get introspection response', 0, $e);
         }
 
         return parse_metadata_response($response, 200);
