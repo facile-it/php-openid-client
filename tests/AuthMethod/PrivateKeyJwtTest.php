@@ -10,6 +10,7 @@ use Facile\OpenIDClient\Client\ClientInterface;
 use Facile\OpenIDClient\Client\Metadata\ClientMetadataInterface;
 use Facile\OpenIDClient\Issuer\IssuerInterface;
 use Facile\OpenIDClient\Issuer\Metadata\IssuerMetadataInterface;
+use Facile\OpenIDClientTest\TestCase;
 use function http_build_query;
 use Jose\Component\Core\JWK;
 use Jose\Component\KeyManagement\JWKFactory;
@@ -17,7 +18,6 @@ use Jose\Component\Signature\JWS;
 use Jose\Component\Signature\JWSBuilder;
 use Jose\Component\Signature\Serializer\JWSSerializer;
 use function json_decode;
-use Facile\OpenIDClientTest\TestCase;
 use Prophecy\Argument;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\StreamInterface;
@@ -49,8 +49,6 @@ class PrivateKeyJwtTest extends TestCase
 
     /**
      * @dataProvider createRequestProvider
-     *
-     * @param bool $jwkAsDependency
      */
     public function testCreateRequest(bool $jwkAsDependency = false): void
     {

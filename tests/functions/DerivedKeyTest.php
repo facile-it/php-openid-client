@@ -11,10 +11,6 @@ class DerivedKeyTest extends TestCase
 {
     /**
      * @dataProvider valuesProvider
-     *
-     * @param string $secret
-     * @param int $length
-     * @param string $expected
      */
     public function testDerivedKey(string $secret, int $length, string $expected): void
     {

@@ -38,12 +38,6 @@ final class Client implements ClientInterface
 
     /**
      * Client constructor.
-     *
-     * @param IssuerInterface $issuer
-     * @param ClientMetadataInterface $metadata
-     * @param null|JwksProviderInterface $jwksProvider
-     * @param null|AuthMethodFactoryInterface $authMethodFactory
-     * @param null|HttpClient $httpClient
      */
     public function __construct(
         IssuerInterface $issuer,
@@ -67,9 +61,6 @@ final class Client implements ClientInterface
         $this->httpClient = $httpClient;
     }
 
-    /**
-     * @return IssuerInterface
-     */
     public function getIssuer(): IssuerInterface
     {
         return $this->issuer;
@@ -85,9 +76,6 @@ final class Client implements ClientInterface
         return $this->jwksProvider;
     }
 
-    /**
-     * @return AuthMethodFactoryInterface
-     */
     public function getAuthMethodFactory(): AuthMethodFactoryInterface
     {
         return $this->authMethodFactory;

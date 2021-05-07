@@ -6,9 +6,9 @@ namespace Facile\OpenIDClientTest\Client\Metadata;
 
 use Facile\OpenIDClient\Client\Metadata\ClientMetadata;
 use Facile\OpenIDClient\Exception\InvalidArgumentException;
+use Facile\OpenIDClientTest\TestCase;
 use function json_decode;
 use function json_encode;
-use Facile\OpenIDClientTest\TestCase;
 
 class ClientMetadataTest extends TestCase
 {

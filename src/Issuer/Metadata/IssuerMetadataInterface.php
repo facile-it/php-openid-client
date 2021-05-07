@@ -20,51 +20,38 @@ use JsonSerializable;
 interface IssuerMetadataInterface extends JsonSerializable
 {
     /**
-     * @param string $name
-     *
      * @return mixed|null
      */
     public function get(string $name);
 
-    /**
-     * @param string $name
-     *
-     * @return bool
-     */
     public function has(string $name): bool;
 
     /**
-     * @return string
      * @psalm-return non-empty-string
      */
     public function getIssuer(): string;
 
     /**
-     * @return string
      * @psalm-return non-empty-string
      */
     public function getAuthorizationEndpoint(): string;
 
     /**
-     * @return string|null
      * @psalm-return non-empty-string|null
      */
     public function getTokenEndpoint(): ?string;
 
     /**
-     * @return string|null
      * @psalm-return non-empty-string|null
      */
     public function getUserinfoEndpoint(): ?string;
 
     /**
-     * @return string|null
      * @psalm-return non-empty-string|null
      */
     public function getRegistrationEndpoint(): ?string;
 
     /**
-     * @return string
      * @psalm-return non-empty-string
      */
     public function getJwksUri(): string;
@@ -124,7 +111,6 @@ interface IssuerMetadataInterface extends JsonSerializable
     public function getClaimsSupported(): ?array;
 
     /**
-     * @return string|null
      * @psalm-return non-empty-string|null
      */
     public function getServiceDocumentation(): ?string;
@@ -141,34 +127,20 @@ interface IssuerMetadataInterface extends JsonSerializable
      */
     public function getUiLocalesSupported(): ?array;
 
-    /**
-     * @return bool
-     */
     public function isClaimsParameterSupported(): bool;
 
-    /**
-     * @return bool
-     */
     public function isRequestParameterSupported(): bool;
 
-    /**
-     * @return bool
-     */
     public function isRequestUriParameterSupported(): bool;
 
-    /**
-     * @return bool
-     */
     public function isRequireRequestUriRegistration(): bool;
 
     /**
-     * @return string|null
      * @psalm-return non-empty-string|null
      */
     public function getOpPolicyUri(): ?string;
 
     /**
-     * @return string|null
      * @psalm-return non-empty-string|null
      */
     public function getOpTosUri(): ?string;
@@ -246,7 +218,6 @@ interface IssuerMetadataInterface extends JsonSerializable
     public function getAuthorizationEncryptionEncValuesSupported(): array;
 
     /**
-     * @return string|null
      * @psalm-return non-empty-string|null
      */
     public function getIntrospectionEndpoint(): ?string;
@@ -300,7 +271,6 @@ interface IssuerMetadataInterface extends JsonSerializable
     public function getRequestObjectEncryptionEncValuesSupported(): array;
 
     /**
-     * @return string|null
      * @psalm-return non-empty-string|null
      */
     public function getRevocationEndpoint(): ?string;
@@ -318,40 +288,23 @@ interface IssuerMetadataInterface extends JsonSerializable
     public function getRevocationEndpointAuthSigningAlgValuesSupported(): array;
 
     /**
-     * @return string|null
      * @psalm-return non-empty-string|null
      */
     public function getCheckSessionIframe(): ?string;
 
     /**
-     * @return string|null
      * @psalm-return non-empty-string|null
      */
     public function getEndSessionIframe(): ?string;
 
-    /**
-     * @return bool
-     */
     public function isFrontchannelLogoutSupported(): bool;
 
-    /**
-     * @return bool
-     */
     public function isFrontchannelLogoutSessionSupported(): bool;
 
-    /**
-     * @return bool
-     */
     public function isBackchannelLogoutSupported(): bool;
 
-    /**
-     * @return bool
-     */
     public function isBackchannelLogoutSessionSupported(): bool;
 
-    /**
-     * @return bool
-     */
     public function isTlsClientCertificateBoundAccessTokens(): bool;
 
     /**

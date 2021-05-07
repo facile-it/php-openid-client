@@ -4,26 +4,31 @@ declare(strict_types=1);
 
 namespace Facile\OpenIDClient\ConformanceTest\Command;
 
-use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Input\InputOption;
-use Symfony\Component\Console\Output\OutputInterface;
+use function array_filter;
+use function count;
+use DateTimeImmutable;
 use Facile\OpenIDClient\ConformanceTest\Helper\RPLogsHelper;
 use Facile\OpenIDClient\ConformanceTest\Provider\RpProfileTestsProvider;
 use Facile\OpenIDClient\ConformanceTest\RpTest\RpTestInterface;
 use Facile\OpenIDClient\ConformanceTest\Runner\RpTestResult;
 use Facile\OpenIDClient\ConformanceTest\Runner\RpTestRunner;
 use Facile\OpenIDClient\ConformanceTest\TestInfo;
-use function count;
 use function fnmatch;
 use function sprintf;
+use function str_repeat;
+use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
+use Symfony\Component\Console\Output\OutputInterface;
 
 class RpTest extends Command
 {
     /** @var RpTestRunner */
     private $testRunner;
+
     /** @var RpProfileTestsProvider */
     private $testsProvider;
+
     /** @var RPLogsHelper */
     private $logsHelper;
 
@@ -31,8 +36,7 @@ class RpTest extends Command
         RpTestRunner $testRunner,
         RpProfileTestsProvider $testsProvider,
         RPLogsHelper $logsHelper
-    )
-    {
+    ) {
         $this->testRunner = $testRunner;
         $this->testsProvider = $testsProvider;
         $this->logsHelper = $logsHelper;
@@ -82,7 +86,7 @@ class RpTest extends Command
             }
 
             if (count($testIds)) {
-                $tests = \array_filter($tests, static function (RpTestInterface $test) use ($testIds) {
+                $tests = array_filter($tests, static function (RpTestInterface $test) use ($testIds) {
                     foreach ($testIds as $testId) {
                         if (fnmatch($testId, $test->getTestId())) {
                             return true;
@@ -98,8 +102,8 @@ class RpTest extends Command
                 $testName = $test->getTestId() . ' @' . $testInfo->getProfile();
                 $counters['executed'][] = $testName;
 
-                $startTime = new \DateTimeImmutable();
-                $output->writeln("<comment>Test started at:</comment> <info>{$startTime->format(\DateTimeImmutable::RFC3339)}</info>", OutputInterface::VERBOSITY_DEBUG);
+                $startTime = new DateTimeImmutable();
+                $output->writeln("<comment>Test started at:</comment> <info>{$startTime->format(DateTimeImmutable::RFC3339)}</info>", OutputInterface::VERBOSITY_DEBUG);
                 $output->writeln('Executing test ' . $testName . '...', OutputInterface::VERBOSITY_DEBUG);
 
                 $count = 0;
@@ -123,7 +127,6 @@ class RpTest extends Command
                     $output->writeln('');
                     $this->printImplementation($result, $output);
                 }
-
 
                 if ($showRemoteLogs) {
                     $output->writeln('');
@@ -161,8 +164,6 @@ class RpTest extends Command
             }
         }
 
-
-
         if (count($counters['errors'])) {
             return 1;
         }
@@ -172,7 +173,7 @@ class RpTest extends Command
 
     private function printSeparator(OutputInterface $output, int $options = 0): void
     {
-        $output->writeln(\str_repeat('-', 80), $options);
+        $output->writeln(str_repeat('-', 80), $options);
     }
 
     private function printRemoteLog(RpTestResult $result, OutputInterface $output): void

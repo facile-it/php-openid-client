@@ -35,9 +35,6 @@ class DiscoveryProviderTest extends TestCase
         $this->uriFactory = $this->prophesize(UriFactoryInterface::class);
     }
 
-    /**
-     * @param string $uri
-     */
     private function prepareForDiscovery(string $uri, string $baseUri = ''): void
     {
         $client = $this->client;

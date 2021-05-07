@@ -39,8 +39,6 @@ final class TokenSet implements TokenSetInterface, JsonSerializable
     /**
      * @param array<string, mixed> $data
      * @psalm-param TokenSetMixedType $data
-     *
-     * @return TokenSetInterface
      */
     public static function fromParams(array $data): TokenSetInterface
     {

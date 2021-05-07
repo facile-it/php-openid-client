@@ -5,8 +5,6 @@ declare(strict_types=1);
 namespace Facile\OpenIDClient\Issuer\Metadata;
 
 use function array_diff;
-use function array_filter;
-use const ARRAY_FILTER_USE_BOTH;
 use function array_key_exists;
 use function array_keys;
 use function array_merge;
@@ -35,9 +33,6 @@ final class IssuerMetadata implements IssuerMetadataInterface
     /**
      * IssuerMetadata constructor.
      *
-     * @param string $issuer
-     * @param string $authorizationEndpoint
-     * @param string $jwksUri
      * @param array<string, mixed> $claims
      */
     public function __construct(

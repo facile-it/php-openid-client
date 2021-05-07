@@ -75,8 +75,6 @@ final class DiscoveryProvider implements DiscoveryProviderInterface
     }
 
     /**
-     * @param string $uri
-     *
      * @return array<mixed, string>
      * @psalm-return IssuerMetadataObject
      */

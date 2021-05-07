@@ -4,10 +4,11 @@ declare(strict_types=1);
 
 namespace Facile\OpenIDClient\ConformanceTest\RpTest\Discovery;
 
-use PHPUnit\Framework\Assert;
 use Facile\OpenIDClient\ConformanceTest\RpTest\AbstractRpTest;
 use Facile\OpenIDClient\ConformanceTest\TestInfo;
 use Facile\OpenIDClient\Issuer\IssuerBuilder;
+use PHPUnit\Framework\Assert;
+use function sprintf;
 
 /**
  * Retrieve and use the OpenID Provider Configuration Information.
@@ -16,7 +17,6 @@ use Facile\OpenIDClient\Issuer\IssuerBuilder;
  */
 class RPDiscoveryOpenIdConfiguration extends AbstractRpTest
 {
-
     public function getTestId(): string
     {
         return 'rp-discovery-openid-configuration';

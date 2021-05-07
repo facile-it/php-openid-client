@@ -4,13 +4,15 @@ declare(strict_types=1);
 
 namespace Facile\OpenIDClient\ConformanceTest\RpTest\IdToken;
 
-use PHPUnit\Framework\Assert;
-use PHPUnit\Framework\AssertionFailedError;
+use function Facile\OpenIDClient\base64url_encode;
 use Facile\OpenIDClient\ConformanceTest\RpTest\AbstractRpTest;
 use Facile\OpenIDClient\ConformanceTest\TestInfo;
-use Facile\OpenIDClient\Session\AuthSession;
 use Facile\OpenIDClient\Service\AuthorizationService;
-use function Facile\OpenIDClient\base64url_encode;
+use Facile\OpenIDClient\Session\AuthSession;
+use PHPUnit\Framework\Assert;
+use PHPUnit\Framework\AssertionFailedError;
+use function random_bytes;
+use Throwable;
 
 /**
  * Retrieve Authorization Code and ID Token from the Authorization Endpoint, using Hybrid Flow.
@@ -20,7 +22,6 @@ use function Facile\OpenIDClient\base64url_encode;
  */
 class RpIdTokenMissingCHashTest extends AbstractRpTest
 {
-
     public function getTestId(): string
     {
         return 'rp-id_token-missing-c_hash';
@@ -34,7 +35,7 @@ class RpIdTokenMissingCHashTest extends AbstractRpTest
         $authorizationService = new AuthorizationService();
 
         $authSession = AuthSession::fromArray([
-            'nonce' => base64url_encode(\random_bytes(32)),
+            'nonce' => base64url_encode(random_bytes(32)),
         ]);
 
         $uri = $authorizationService->getAuthorizationUri($client, [
@@ -50,7 +51,7 @@ class RpIdTokenMissingCHashTest extends AbstractRpTest
         try {
             $authorizationService->callback($client, $params, null, $authSession);
             throw new AssertionFailedError('No assertion');
-        } catch (\Throwable $e) {
+        } catch (Throwable $e) {
             Assert::assertSame('Invalid token provided', $e->getMessage());
             Assert::assertRegExp('/The following claims are mandatory: c_hash/', $e->getPrevious()->getMessage());
         }

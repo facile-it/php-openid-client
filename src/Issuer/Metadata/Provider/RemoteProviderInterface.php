@@ -12,8 +12,6 @@ interface RemoteProviderInterface
     public function isAllowedUri(string $uri): bool;
 
     /**
-     * @param string $uri
-     *
      * @return array<string, mixed>
      * @psalm-return IssuerMetadataObject
      */

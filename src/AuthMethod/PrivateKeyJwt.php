@@ -34,11 +34,6 @@ final class PrivateKeyJwt extends AbstractJwtAuth
 
     /**
      * PrivateKeyJwt constructor.
-     *
-     * @param null|JWSBuilder $jwsBuilder
-     * @param null|JWSSerializer $serializer
-     * @param null|JWK $jwk
-     * @param int $tokenTTL
      */
     public function __construct(
         ?JWSBuilder $jwsBuilder = null,
@@ -58,10 +53,7 @@ final class PrivateKeyJwt extends AbstractJwtAuth
     }
 
     /**
-     * @param OpenIDClient $client
      * @param array<string, mixed> $claims
-     *
-     * @return string
      */
     protected function createAuthJwt(OpenIDClient $client, array $claims = []): string
     {

@@ -8,9 +8,9 @@ use Facile\OpenIDClient\Exception\ExceptionInterface;
 use Facile\OpenIDClient\Exception\InvalidArgumentException;
 use Facile\OpenIDClient\Exception\OAuth2Exception;
 use Facile\OpenIDClient\Exception\RemoteException;
+use Facile\OpenIDClientTest\TestCase;
 use function json_decode;
 use function json_encode;
-use Facile\OpenIDClientTest\TestCase;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\StreamInterface;
 

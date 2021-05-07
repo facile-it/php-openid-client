@@ -12,8 +12,6 @@ interface MetadataFactoryInterface
     /**
      * @param array<string, mixed> $metadata
      *
-     * @return ClientMetadataInterface
-     *
      * @psalm-param ClientMetadataObject $metadata
      */
     public function fromArray(array $metadata): ClientMetadataInterface;

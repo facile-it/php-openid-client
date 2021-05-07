@@ -7,6 +7,7 @@ namespace Facile\OpenIDClient\Claims;
 use function array_filter;
 use Facile\OpenIDClient\Client\ClientInterface;
 use function is_array;
+use function is_string;
 use Throwable;
 
 /**

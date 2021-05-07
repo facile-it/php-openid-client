@@ -31,8 +31,6 @@ final class AuthRequest implements AuthRequestInterface
     ];
 
     /**
-     * @param string $clientId
-     * @param string $redirectUri
      * @param array<string, mixed> $params
      */
     public function __construct(
@@ -77,8 +75,6 @@ final class AuthRequest implements AuthRequestInterface
 
     /**
      * OpenID Connect requests MUST contain the openid scope value.
-     *
-     * @return string
      */
     public function getScope(): string
     {
@@ -89,8 +85,6 @@ final class AuthRequest implements AuthRequestInterface
      * OAuth 2.0 Response Type value that determines the authorization processing flow to be used,
      * including what parameters are returned from the endpoints used. When using the Authorization Code Flow,
      * this value is code.
-     *
-     * @return string
      */
     public function getResponseType(): string
     {
@@ -99,8 +93,6 @@ final class AuthRequest implements AuthRequestInterface
 
     /**
      * OAuth 2.0 Client Identifier valid at the Authorization Server.
-     *
-     * @return string
      */
     public function getClientId(): string
     {
@@ -109,8 +101,6 @@ final class AuthRequest implements AuthRequestInterface
 
     /**
      * Redirection URI to which the response will be sent.
-     *
-     * @return string
      */
     public function getRedirectUri(): string
     {
@@ -119,8 +109,6 @@ final class AuthRequest implements AuthRequestInterface
 
     /**
      * Opaque value used to maintain state between the request and the callback.
-     *
-     * @return null|string
      */
     public function getState(): ?string
     {
@@ -130,8 +118,6 @@ final class AuthRequest implements AuthRequestInterface
     /**
      * Informs the Authorization Server of the mechanism to be used for returning parameters from
      * the Authorization Endpoint.
-     *
-     * @return string|null
      */
     public function getResponseMode(): ?string
     {
@@ -140,8 +126,6 @@ final class AuthRequest implements AuthRequestInterface
 
     /**
      * String value used to associate a Client session with an ID Token, and to mitigate replay attacks.
-     *
-     * @return null|string
      */
     public function getNonce(): ?string
     {
@@ -157,8 +141,6 @@ final class AuthRequest implements AuthRequestInterface
      * - popup
      * - touch
      * - wrap
-     *
-     * @return string|null
      */
     public function getDisplay(): ?string
     {
@@ -174,8 +156,6 @@ final class AuthRequest implements AuthRequestInterface
      * - login
      * - consent
      * - select_account
-     *
-     * @return null|string
      */
     public function getPrompt(): ?string
     {
@@ -185,8 +165,6 @@ final class AuthRequest implements AuthRequestInterface
     /**
      * Maximum Authentication Age. Specifies the allowable elapsed time in seconds since the last time the End-User
      * was actively authenticated by the OP.
-     *
-     * @return int|null
      */
     public function getMaxAge(): ?int
     {
@@ -196,8 +174,6 @@ final class AuthRequest implements AuthRequestInterface
     /**
      * End-User's preferred languages and scripts for the user interface, represented as a space-separated list
      * of BCP47 [RFC5646] language tag values, ordered by preference.
-     *
-     * @return null|string
      */
     public function getUiLocales(): ?string
     {
@@ -207,8 +183,6 @@ final class AuthRequest implements AuthRequestInterface
     /**
      * ID Token previously issued by the Authorization Server being passed as a hint about the End-User's current or
      * past authenticated session with the Client.
-     *
-     * @return string|null
      */
     public function getIdTokenHint(): ?string
     {
@@ -217,8 +191,6 @@ final class AuthRequest implements AuthRequestInterface
 
     /**
      * Hint to the Authorization Server about the login identifier the End-User might use to log in (if necessary).
-     *
-     * @return string|null
      */
     public function getLoginHint(): ?string
     {
@@ -227,8 +199,6 @@ final class AuthRequest implements AuthRequestInterface
 
     /**
      * Requested Authentication Context Class Reference values.
-     *
-     * @return null|string
      */
     public function getAcrValues(): ?string
     {
@@ -254,8 +224,6 @@ final class AuthRequest implements AuthRequestInterface
      * Add other params and return a new instance.
      *
      * @param array<string, mixed> $params
-     *
-     * @return AuthRequestInterface
      */
     public function withParams(array $params): AuthRequestInterface
     {

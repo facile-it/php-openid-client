@@ -360,3 +360,13 @@ $issuerBuilder = (new IssuerBuilder())
 
 $issuer = $issuerBuilder->build('https://example.com/.well-known/openid-configuration');
 ```
+
+## Using Psalm
+
+If you need to use Psalm you can include the plugin in your `psalm.xml`.
+
+```
+<plugins>
+    <pluginClass class="Facile\JoseVerifier\Psalm\Plugin" />
+</plugins>
+```

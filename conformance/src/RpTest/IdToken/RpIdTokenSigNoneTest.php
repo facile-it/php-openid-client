@@ -4,11 +4,12 @@ declare(strict_types=1);
 
 namespace Facile\OpenIDClient\ConformanceTest\RpTest\IdToken;
 
-use PHPUnit\Framework\Assert;
+use function Facile\OpenIDClient\base64url_encode;
 use Facile\OpenIDClient\ConformanceTest\RpTest\AbstractRpTest;
 use Facile\OpenIDClient\ConformanceTest\TestInfo;
 use Facile\OpenIDClient\Service\AuthorizationService;
-use function Facile\OpenIDClient\base64url_encode;
+use PHPUnit\Framework\Assert;
+use function random_bytes;
 
 /**
  * Use Code Flow and retrieve an unsigned ID Token.
@@ -18,7 +19,6 @@ use function Facile\OpenIDClient\base64url_encode;
  */
 class RpIdTokenSigNoneTest extends AbstractRpTest
 {
-
     public function getTestId(): string
     {
         return 'rp-id_token-sig-none';
@@ -34,7 +34,7 @@ class RpIdTokenSigNoneTest extends AbstractRpTest
         $authorizationService = new AuthorizationService();
         $uri = $authorizationService->getAuthorizationUri($client, [
             'response_type' => $testInfo->getResponseType(),
-            'nonce' => base64url_encode(\random_bytes(32)),
+            'nonce' => base64url_encode(random_bytes(32)),
         ]);
 
         // Simulate a redirect and create the server request

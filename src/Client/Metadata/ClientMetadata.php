@@ -5,8 +5,6 @@ declare(strict_types=1);
 namespace Facile\OpenIDClient\Client\Metadata;
 
 use function array_diff;
-use function array_filter;
-use const ARRAY_FILTER_USE_BOTH;
 use function array_key_exists;
 use function array_keys;
 use function array_merge;
@@ -36,7 +34,6 @@ final class ClientMetadata implements ClientMetadataInterface
     /**
      * IssuerMetadata constructor.
      *
-     * @param string $clientId
      * @param array<string, mixed> $claims
      * @psalm-param ClientMetadataObject|array<empty, empty> $claims
      */
@@ -182,19 +179,12 @@ final class ClientMetadata implements ClientMetadataInterface
         return $this->metadata;
     }
 
-    /**
-     * @param string $name
-     *
-     * @return bool
-     */
     public function has(string $name): bool
     {
         return array_key_exists($name, $this->metadata);
     }
 
     /**
-     * @param string $name
-     *
      * @return mixed|null
      */
     public function get(string $name)

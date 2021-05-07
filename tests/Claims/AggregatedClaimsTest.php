@@ -10,6 +10,7 @@ use Facile\OpenIDClient\Client\ClientInterface;
 use Facile\OpenIDClient\Issuer\IssuerBuilderInterface;
 use Facile\OpenIDClient\Issuer\IssuerInterface;
 use Facile\OpenIDClient\Issuer\Metadata\IssuerMetadataInterface;
+use Facile\OpenIDClientTest\TestCase;
 use Jose\Component\Core\AlgorithmManager;
 use Jose\Component\Core\JWK;
 use Jose\Component\KeyManagement\JWKFactory;
@@ -20,7 +21,6 @@ use Jose\Component\Signature\JWSVerifier;
 use Jose\Component\Signature\Serializer\CompactSerializer;
 use Jose\Component\Signature\Serializer\JWSSerializer;
 use function json_encode;
-use Facile\OpenIDClientTest\TestCase;
 use Prophecy\Argument;
 
 class AggregatedClaimsTest extends TestCase

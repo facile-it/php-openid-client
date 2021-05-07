@@ -4,12 +4,14 @@ declare(strict_types=1);
 
 namespace Facile\OpenIDClient\ConformanceTest\RpTest\IdToken;
 
-use PHPUnit\Framework\Assert;
-use PHPUnit\Framework\AssertionFailedError;
+use function Facile\OpenIDClient\base64url_encode;
 use Facile\OpenIDClient\ConformanceTest\RpTest\AbstractRpTest;
 use Facile\OpenIDClient\ConformanceTest\TestInfo;
 use Facile\OpenIDClient\Service\AuthorizationService;
-use function Facile\OpenIDClient\base64url_encode;
+use PHPUnit\Framework\Assert;
+use PHPUnit\Framework\AssertionFailedError;
+use function random_bytes;
+use Throwable;
 
 /**
  * Request an ID token and verify its signature using the keys provided by the Issuer.
@@ -18,7 +20,6 @@ use function Facile\OpenIDClient\base64url_encode;
  */
 class RpIdTokenBadSigRS256Test extends AbstractRpTest
 {
-
     public function getTestId(): string
     {
         return 'rp-id_token-bad-sig-rs256';
@@ -32,7 +33,7 @@ class RpIdTokenBadSigRS256Test extends AbstractRpTest
         $authorizationService = new AuthorizationService();
         $uri = $authorizationService->getAuthorizationUri($client, [
             'response_type' => $testInfo->getResponseType(),
-            'nonce' => base64url_encode(\random_bytes(32)),
+            'nonce' => base64url_encode(random_bytes(32)),
         ]);
 
         // Simulate a redirect and create the server request
@@ -43,7 +44,7 @@ class RpIdTokenBadSigRS256Test extends AbstractRpTest
         try {
             $authorizationService->callback($client, $params);
             throw new AssertionFailedError('No assertion');
-        } catch (\Throwable $e) {
+        } catch (Throwable $e) {
             Assert::assertSame('Invalid token provided', $e->getMessage());
             Assert::assertRegExp('/Invalid signature/', $e->getPrevious()->getMessage());
         }

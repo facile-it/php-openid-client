@@ -4,11 +4,12 @@ declare(strict_types=1);
 
 namespace Facile\OpenIDClient\ConformanceTest\RpTest\IdToken;
 
-use PHPUnit\Framework\Assert;
+use function Facile\OpenIDClient\base64url_encode;
 use Facile\OpenIDClient\ConformanceTest\RpTest\AbstractRpTest;
 use Facile\OpenIDClient\ConformanceTest\TestInfo;
 use Facile\OpenIDClient\Service\AuthorizationService;
-use function Facile\OpenIDClient\base64url_encode;
+use PHPUnit\Framework\Assert;
+use function random_bytes;
 
 /**
  * Request an ID token and verify its signature using a single matching key provided by the Issuer.
@@ -18,7 +19,6 @@ use function Facile\OpenIDClient\base64url_encode;
  */
 class RpIdTokenKidAbsentSingleJwksTest extends AbstractRpTest
 {
-
     public function getTestId(): string
     {
         return 'rp-id_token-kid-absent-single-jwks';
@@ -32,7 +32,7 @@ class RpIdTokenKidAbsentSingleJwksTest extends AbstractRpTest
         $authorizationService = new AuthorizationService();
         $uri = $authorizationService->getAuthorizationUri($client, [
             'response_type' => $testInfo->getResponseType(),
-            'nonce' => base64url_encode(\random_bytes(32)),
+            'nonce' => base64url_encode(random_bytes(32)),
         ]);
 
         // Simulate a redirect and create the server request

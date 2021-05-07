@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace Facile\OpenIDClientTest\Authorization;
 
 use Facile\OpenIDClient\Authorization\AuthRequest;
+use Facile\OpenIDClientTest\TestCase;
 use function json_decode;
 use function json_encode;
-use Facile\OpenIDClientTest\TestCase;
 
 class AuthRequestTest extends TestCase
 {

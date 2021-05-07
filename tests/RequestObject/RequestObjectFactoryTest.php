@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Facile\OpenIDClientTest\RequestObject;
 
+use function explode;
 use Facile\JoseVerifier\JWK\JwksProviderInterface;
 use function Facile\OpenIDClient\base64url_decode;
 use function Facile\OpenIDClient\base64url_encode;
@@ -12,6 +13,7 @@ use Facile\OpenIDClient\Client\Metadata\ClientMetadataInterface;
 use Facile\OpenIDClient\Issuer\IssuerInterface;
 use Facile\OpenIDClient\Issuer\Metadata\IssuerMetadataInterface;
 use Facile\OpenIDClient\RequestObject\RequestObjectFactory;
+use Facile\OpenIDClientTest\TestCase;
 use Jose\Component\Core\AlgorithmManager;
 use Jose\Component\Core\JWK;
 use Jose\Component\Encryption\Algorithm\KeyEncryption\RSAOAEP;
@@ -22,7 +24,7 @@ use Jose\Component\Signature\Algorithm\RS256;
 use Jose\Component\Signature\JWS;
 use Jose\Component\Signature\JWSBuilder;
 use Jose\Component\Signature\Serializer\JWSSerializer;
-use Facile\OpenIDClientTest\TestCase;
+use function json_decode;
 use Prophecy\Argument;
 use Prophecy\Prophecy\ObjectProphecy;
 
@@ -108,9 +110,9 @@ class RequestObjectFactoryTest extends TestCase
 
         $token = $this->factory->create($this->client->reveal(), ['foo' => 'bar']);
 
-        [$header, $payload] = \explode('.', $token);
-        $header = \json_decode(base64url_decode($header), true);
-        $payload = \json_decode(base64url_decode($payload), true);
+        [$header, $payload] = explode('.', $token);
+        $header = json_decode(base64url_decode($header), true);
+        $payload = json_decode(base64url_decode($payload), true);
 
         self::assertSame('none', $header['alg'] ?? null);
         self::assertSame('client-id', $payload['iss'] ?? null);

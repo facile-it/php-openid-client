@@ -9,6 +9,7 @@ use Facile\OpenIDClient\Client\ClientInterface as OpenIDClient;
 use Facile\OpenIDClient\Exception\InvalidArgumentException;
 use function http_build_query;
 use Psr\Http\Message\RequestInterface;
+use function urlencode;
 
 final class ClientSecretBasic implements AuthMethodInterface
 {

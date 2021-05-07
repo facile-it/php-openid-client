@@ -4,10 +4,13 @@ declare(strict_types=1);
 
 namespace Facile\OpenIDClient\ConformanceTest\RpTest\Discovery;
 
-use PHPUnit\Framework\Assert;
 use Facile\OpenIDClient\ConformanceTest\RpTest\AbstractRpTest;
 use Facile\OpenIDClient\ConformanceTest\TestInfo;
 use Facile\OpenIDClient\Issuer\IssuerBuilder;
+use function parse_url;
+use PHPUnit\Framework\Assert;
+use function rtrim;
+use function sprintf;
 
 /**
  * Use WebFinger (RFC7033) and OpenID Provider Issuer Discovery to determine the location of the OpenID Provider.
@@ -18,7 +21,6 @@ use Facile\OpenIDClient\Issuer\IssuerBuilder;
  */
 class RPDiscoveryWebFingerAcct extends AbstractRpTest
 {
-
     public function getTestId(): string
     {
         return 'rp-discovery-webfinger-acct';
@@ -26,7 +28,7 @@ class RPDiscoveryWebFingerAcct extends AbstractRpTest
 
     public function execute(TestInfo $testInfo): void
     {
-        $parsed = \parse_url($testInfo->getRoot());
+        $parsed = parse_url($testInfo->getRoot());
         $issuerHostAndPort = rtrim($parsed['host'] . ':' . ($parsed['port'] ?? ''), ':');
 
         $input = sprintf('acct:%s.%s@%s', $testInfo->getRpId(), $this->getTestId(), $issuerHostAndPort);

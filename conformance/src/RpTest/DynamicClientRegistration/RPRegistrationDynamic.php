@@ -4,11 +4,12 @@ declare(strict_types=1);
 
 namespace Facile\OpenIDClient\ConformanceTest\RpTest\DynamicClientRegistration;
 
-use PHPUnit\Framework\Assert;
 use Facile\OpenIDClient\ConformanceTest\RpTest\AbstractRpTest;
 use Facile\OpenIDClient\ConformanceTest\TestInfo;
 use Facile\OpenIDClient\Issuer\IssuerBuilder;
 use Facile\OpenIDClient\Service\RegistrationService;
+use PHPUnit\Framework\Assert;
+use function sprintf;
 
 /**
  * Use the client registration endpoint in order to dynamically register the Relying Party.
@@ -17,7 +18,6 @@ use Facile\OpenIDClient\Service\RegistrationService;
  */
 class RPRegistrationDynamic extends AbstractRpTest
 {
-
     public function getTestId(): string
     {
         return 'rp-registration-dynamic';

@@ -22,9 +22,6 @@ class RemoteException extends RuntimeException
         $this->response = $response;
     }
 
-    /**
-     * @return ResponseInterface
-     */
     public function getResponse(): ResponseInterface
     {
         return $this->response;

@@ -4,12 +4,21 @@ declare(strict_types=1);
 
 namespace Facile\OpenIDClient\ConformanceTest;
 
-use Http\Client\Common\HttpMethodsClientInterface;
+use function fclose;
+use function file_exists;
+use function fopen;
+use function fwrite;
 use Http\Discovery\Psr17FactoryDiscovery;
 use Http\Discovery\Psr18ClientDiscovery;
+use function is_dir;
+use function ltrim;
+use function mkdir;
+use function preg_match;
 use Psr\Http\Client\ClientInterface;
 use Psr\Http\Message\RequestFactoryInterface;
 use Psr\Http\Message\ResponseInterface;
+use RuntimeException;
+use function sprintf;
 
 class RpTestUtil
 {
@@ -26,8 +35,7 @@ class RpTestUtil
         ?ClientInterface $client = null,
         ?RequestFactoryInterface $requestFactory = null,
         string $logDir = __DIR__ . '/../log'
-    )
-    {
+    ) {
         $this->client = $client ?? Psr18ClientDiscovery::find();
         $this->requestFactory = $requestFactory ?? Psr17FactoryDiscovery::findRequestFactory();
         $this->logDir = $logDir;
@@ -35,8 +43,8 @@ class RpTestUtil
 
     private function mkdir(string $dirname): void
     {
-        if (! \file_exists($dirname) && ! mkdir($concurrentDirectory = $dirname, 0777, true) && ! is_dir($concurrentDirectory)) {
-            throw new \RuntimeException(sprintf('Directory "%s" was not created', $concurrentDirectory));
+        if (! file_exists($dirname) && ! mkdir($concurrentDirectory = $dirname, 0777, true) && ! is_dir($concurrentDirectory)) {
+            throw new RuntimeException(sprintf('Directory "%s" was not created', $concurrentDirectory));
         }
     }
 
@@ -51,7 +59,7 @@ class RpTestUtil
     {
         $response = $this->get($root . '/log/' . $rpId);
 
-        if (! \preg_match('/Clear all test logs/', (string) $response->getBody())) {
+        if (! preg_match('/Clear all test logs/', (string) $response->getBody())) {
             return;
         }
 
@@ -62,7 +70,7 @@ class RpTestUtil
     {
         $response = $this->get($testInfo->getRpLogsUri());
 
-        if (! \preg_match('/Download tar file/', (string) $response->getBody())) {
+        if (! preg_match('/Download tar file/', (string) $response->getBody())) {
             return;
         }
 
@@ -70,11 +78,11 @@ class RpTestUtil
         $this->mkdir($logDir);
 
         $response = $this->get($testInfo->getRoot() . '/mktar/' . $testInfo->getRpUri());
-        $handle = \fopen($logDir . '/log-' . $responseType . '.tar', 'wb+');
+        $handle = fopen($logDir . '/log-' . $responseType . '.tar', 'wb+');
 
         while (! $response->getBody()->eof()) {
-            \fwrite($handle, $response->getBody()->getContents());
+            fwrite($handle, $response->getBody()->getContents());
         }
-        \fclose($handle);
+        fclose($handle);
     }
 }

@@ -14,17 +14,10 @@ use JsonSerializable;
 interface ClientMetadataInterface extends JsonSerializable
 {
     /**
-     * @param string $name
-     *
      * @return mixed|null
      */
     public function get(string $name);
 
-    /**
-     * @param string $name
-     *
-     * @return bool
-     */
     public function has(string $name): bool;
 
     public function getClientId(): string;
@@ -72,7 +65,6 @@ interface ClientMetadataInterface extends JsonSerializable
     public function getRevocationEndpointAuthMethod(): string;
 
     /**
-     * @return array|null
      * @psalm-return JWKSetObject|null
      */
     public function getJwks(): ?array;

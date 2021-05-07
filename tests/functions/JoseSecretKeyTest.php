@@ -11,10 +11,6 @@ class JoseSecretKeyTest extends TestCase
 {
     /**
      * @dataProvider valuesProvider
-     *
-     * @param string $secret
-     * @param string $alg
-     * @param string $expected
      */
     public function testJoseSecretKey(string $secret, string $alg, string $expected): void
     {

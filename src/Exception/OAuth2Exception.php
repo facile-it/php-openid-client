@@ -24,12 +24,7 @@ class OAuth2Exception extends RuntimeException implements JsonSerializable
     private $errorUri;
 
     /**
-     * @param ResponseInterface $response
-     * @param Throwable|null $previous
-     *
      * @throws RemoteException
-     *
-     * @return self
      */
     public static function fromResponse(ResponseInterface $response, Throwable $previous = null): self
     {
@@ -45,9 +40,6 @@ class OAuth2Exception extends RuntimeException implements JsonSerializable
 
     /**
      * @param array<string, mixed> $params
-     * @param Throwable|null $previous
-     *
-     * @return self
      *
      * @psalm-param array{error?: string, error_description?: string, error_uri?: string} $params
      */
@@ -84,25 +76,16 @@ class OAuth2Exception extends RuntimeException implements JsonSerializable
         $this->errorUri = $errorUri;
     }
 
-    /**
-     * @return string
-     */
     public function getError(): string
     {
         return $this->error;
     }
 
-    /**
-     * @return string|null
-     */
     public function getDescription(): ?string
     {
         return $this->description;
     }
 
-    /**
-     * @return string|null
-     */
     public function getErrorUri(): ?string
     {
         return $this->errorUri;
