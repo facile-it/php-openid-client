@@ -4,13 +4,14 @@ declare(strict_types=1);
 
 namespace Facile\OpenIDClient\ConformanceTest\RpTest\UserInfoEndpoint;
 
-use PHPUnit\Framework\Assert;
+use function Facile\OpenIDClient\base64url_encode;
 use Facile\OpenIDClient\ConformanceTest\RpTest\AbstractRpTest;
 use Facile\OpenIDClient\ConformanceTest\TestInfo;
-use Facile\OpenIDClient\Session\AuthSession;
 use Facile\OpenIDClient\Service\AuthorizationService;
 use Facile\OpenIDClient\Service\UserInfoService;
-use function Facile\OpenIDClient\base64url_encode;
+use Facile\OpenIDClient\Session\AuthSession;
+use PHPUnit\Framework\Assert;
+use function random_bytes;
 
 /**
  * Pass the access token as a form-encoded body parameter while doing the UserInfo Request.
@@ -19,7 +20,6 @@ use function Facile\OpenIDClient\base64url_encode;
  */
 class RpUserInfoBearerBodyTest extends AbstractRpTest
 {
-
     public function getTestId(): string
     {
         return 'rp-userinfo-bearer-body';
@@ -33,7 +33,7 @@ class RpUserInfoBearerBodyTest extends AbstractRpTest
         $userInfoService = new UserInfoService();
 
         $authSession = AuthSession::fromArray([
-            'nonce' => base64url_encode(\random_bytes(32)),
+            'nonce' => base64url_encode(random_bytes(32)),
         ]);
         $uri = $authorizationService->getAuthorizationUri($client, [
             'response_type' => $testInfo->getResponseType(),

@@ -7,10 +7,6 @@ namespace Facile\OpenIDClient;
 use Facile\OpenIDClient\Exception\OAuth2Exception;
 use Psr\Http\Message\ResponseInterface;
 
-/**
- * @param ResponseInterface $response
- * @param int|null $expectedCode
- */
 function check_server_response(ResponseInterface $response, ?int $expectedCode = null): void
 {
     if (null === $expectedCode && $response->getStatusCode() >= 400) {

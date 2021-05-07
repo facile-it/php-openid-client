@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace Facile\OpenIDClientTest\Issuer\Metadata;
 
 use Facile\OpenIDClient\Issuer\Metadata\IssuerMetadata;
+use Facile\OpenIDClientTest\TestCase;
 use function json_decode;
 use function json_encode;
-use Facile\OpenIDClientTest\TestCase;
 
 class IssuerMetadataTest extends TestCase
 {
@@ -77,8 +77,6 @@ class IssuerMetadataTest extends TestCase
     /**
      * @dataProvider getClaimGetterProvider
      *
-     * @param string $claim
-     * @param string $methodName
      * @param mixed $value
      */
     public function testGetters(string $claim, string $methodName, $value): void

@@ -6,7 +6,6 @@ namespace Facile\OpenIDClient\ConformanceTest\Provider;
 
 use function array_map;
 use function array_pop;
-use function array_push;
 use function array_shift;
 use function array_slice;
 use function array_unshift;
@@ -17,6 +16,7 @@ use function is_callable;
 use function preg_match;
 use function preg_replace;
 use ReflectionFunction;
+use function sprintf;
 use function str_repeat;
 use function strlen;
 
@@ -27,7 +27,6 @@ class ImplementationProvider
 
     /**
      * ImplementationProvider constructor.
-     * @param int $indent
      */
     public function __construct(int $indent = 4)
     {

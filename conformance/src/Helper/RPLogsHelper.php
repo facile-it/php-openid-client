@@ -6,6 +6,7 @@ namespace Facile\OpenIDClient\ConformanceTest\Helper;
 
 use Http\Discovery\Psr17FactoryDiscovery;
 use Http\Discovery\Psr18ClientDiscovery;
+use function preg_match;
 use Psr\Http\Client\ClientInterface;
 use Psr\Http\Message\RequestFactoryInterface;
 use Psr\Http\Message\ResponseInterface;
@@ -29,7 +30,7 @@ class RPLogsHelper
         $request = $this->requestFactory->createRequest('GET', $root . '/log/' . $rpId);
         $response = $this->client->sendRequest($request);
 
-        if (! \preg_match('/Clear all test logs/', (string) $response->getBody())) {
+        if (! preg_match('/Clear all test logs/', (string) $response->getBody())) {
             return;
         }
 
@@ -50,7 +51,7 @@ class RPLogsHelper
         $request = $this->requestFactory->createRequest('GET', $root . '/log/' . $rpId);
         $response = $this->client->sendRequest($request);
 
-        if (! \preg_match('/Download tar file/', (string) $response->getBody())) {
+        if (! preg_match('/Download tar file/', (string) $response->getBody())) {
             return null;
         }
 

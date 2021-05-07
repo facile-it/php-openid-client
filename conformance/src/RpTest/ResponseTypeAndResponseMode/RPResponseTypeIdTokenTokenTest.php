@@ -4,12 +4,13 @@ declare(strict_types=1);
 
 namespace Facile\OpenIDClient\ConformanceTest\RpTest\ResponseTypeAndResponseMode;
 
-use PHPUnit\Framework\Assert;
+use function Facile\OpenIDClient\base64url_encode;
 use Facile\OpenIDClient\ConformanceTest\RpTest\AbstractRpTest;
 use Facile\OpenIDClient\ConformanceTest\TestInfo;
-use Facile\OpenIDClient\Session\AuthSession;
 use Facile\OpenIDClient\Service\AuthorizationService;
-use function Facile\OpenIDClient\base64url_encode;
+use Facile\OpenIDClient\Session\AuthSession;
+use PHPUnit\Framework\Assert;
+use function random_bytes;
 
 class RPResponseTypeIdTokenTokenTest extends AbstractRpTest
 {
@@ -28,7 +29,7 @@ class RPResponseTypeIdTokenTokenTest extends AbstractRpTest
         $authorizationService = new AuthorizationService();
 
         $authSession = AuthSession::fromArray([
-            'nonce' => base64url_encode(\random_bytes(32)),
+            'nonce' => base64url_encode(random_bytes(32)),
         ]);
         $uri = $authorizationService->getAuthorizationUri($client, [
             'response_type' => $testInfo->getResponseType(),

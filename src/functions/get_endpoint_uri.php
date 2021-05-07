@@ -6,14 +6,11 @@ namespace Facile\OpenIDClient;
 
 use Facile\OpenIDClient\Client\ClientInterface as OpenIDClient;
 use Facile\OpenIDClient\Exception\RuntimeException;
+use function is_string;
+use function strpos;
 
 /**
  * Handle endpoint URI based on auth method
- *
- * @param OpenIDClient $client
- * @param string $endpointMetadata
- *
- * @return string
  */
 function get_endpoint_uri(OpenIDClient $client, string $endpointMetadata): string
 {

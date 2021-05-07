@@ -10,9 +10,6 @@ use function json_decode;
 use Psr\Http\Message\ResponseInterface;
 
 /**
- * @param ResponseInterface $response
- * @param int|null $expectedCode
- *
  * @return array<string, mixed>
  *
  * @template P as array{error?: string, error_description?: string, error_uri?: string, response?: string}&array<string, mixed>

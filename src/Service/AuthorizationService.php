@@ -68,10 +68,7 @@ final class AuthorizationService
     }
 
     /**
-     * @param OpenIDClient $client
      * @param array<string, mixed> $params
-     *
-     * @return string
      *
      * @template P as (array{scope?: string, response_type?: string, redirect_uri?: string, claims?: array<string, string>|JsonSerializable}&array<string, mixed>)|array<empty, empty>
      * @psalm-param P $params
@@ -115,9 +112,6 @@ final class AuthorizationService
     }
 
     /**
-     * @param ServerRequestInterface $serverRequest
-     * @param OpenIDClient $client
-     *
      * @throws OAuth2Exception
      *
      * @return array<string, mixed>
@@ -130,13 +124,7 @@ final class AuthorizationService
     }
 
     /**
-     * @param OpenIDClient $client
      * @param array<string, mixed> $params
-     * @param string|null $redirectUri
-     * @param AuthSessionInterface|null $authSession
-     * @param int|null $maxAge
-     *
-     * @return TokenSetInterface
      *
      * @psalm-param TokenSetMixedType $params
      */
@@ -171,15 +159,7 @@ final class AuthorizationService
     }
 
     /**
-     * @param OpenIDClient $client
-     * @param TokenSetInterface $tokenSet
-     * @param string|null $redirectUri
-     * @param AuthSessionInterface|null $authSession
-     * @param int|null $maxAge
-     *
      * @throws OAuth2Exception
-     *
-     * @return TokenSetInterface
      */
     public function fetchToken(
         OpenIDClient $client,
@@ -229,11 +209,7 @@ final class AuthorizationService
     }
 
     /**
-     * @param OpenIDClient $client
-     * @param string $refreshToken
      * @param array<string, mixed> $params
-     *
-     * @return TokenSetInterface
      */
     public function refresh(OpenIDClient $client, string $refreshToken, array $params = []): TokenSetInterface
     {
@@ -261,12 +237,9 @@ final class AuthorizationService
     }
 
     /**
-     * @param OpenIDClient $client
      * @param array<string, mixed> $params
      *
      * @throws OAuth2Exception
-     *
-     * @return TokenSetInterface
      */
     public function grant(OpenIDClient $client, array $params = []): TokenSetInterface
     {
@@ -297,7 +270,6 @@ final class AuthorizationService
 
     /**
      * @param array<string, mixed> $params
-     * @return bool
      *
      * @template P as array<string, mixed>
      * @psalm-param P $params
@@ -324,7 +296,6 @@ final class AuthorizationService
     }
 
     /**
-     * @param OpenIDClient $client
      * @param array<string, mixed> $params
      *
      * @throws OAuth2Exception

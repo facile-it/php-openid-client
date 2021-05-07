@@ -4,15 +4,15 @@ declare(strict_types=1);
 
 namespace Facile\OpenIDClient\ConformanceTest\RpTest\NonceRequestParameter;
 
-use PHPUnit\Framework\Assert;
-use PHPUnit\Framework\AssertionFailedError;
+use function Facile\OpenIDClient\base64url_encode;
 use Facile\OpenIDClient\ConformanceTest\RpTest\AbstractRpTest;
 use Facile\OpenIDClient\ConformanceTest\TestInfo;
 use Facile\OpenIDClient\Exception\InvalidArgumentException;
-use Facile\OpenIDClient\Session\AuthSession;
 use Facile\OpenIDClient\Service\AuthorizationService;
-use Facile\OpenIDClient\Service\UserInfoService;
-use function Facile\OpenIDClient\base64url_encode;
+use Facile\OpenIDClient\Session\AuthSession;
+use PHPUnit\Framework\Assert;
+use PHPUnit\Framework\AssertionFailedError;
+use function random_bytes;
 
 /**
  * Always send a 'nonce' value as a request parameter while using implicit or hybrid flow.
@@ -23,7 +23,6 @@ use function Facile\OpenIDClient\base64url_encode;
  */
 class RpNonceUnlessCodeFlowTest extends AbstractRpTest
 {
-
     public function getTestId(): string
     {
         return 'rp-nonce-unless-code-flow';
@@ -45,7 +44,7 @@ class RpNonceUnlessCodeFlowTest extends AbstractRpTest
             Assert::assertRegExp('/nonce MUST be provided for implicit and hybrid flows/', $e->getMessage());
         }
 
-        $nonce = base64url_encode(\random_bytes(32));
+        $nonce = base64url_encode(random_bytes(32));
         $authSession = AuthSession::fromArray(['nonce' => $nonce]);
 
         $uri = $authorizationService->getAuthorizationUri($client, [

@@ -4,12 +4,13 @@ declare(strict_types=1);
 
 namespace Facile\OpenIDClient\ConformanceTest\RpTest\KeyRotation;
 
-use PHPUnit\Framework\Assert;
+use function Facile\OpenIDClient\base64url_encode;
 use Facile\OpenIDClient\ConformanceTest\RpTest\AbstractRpTest;
 use Facile\OpenIDClient\ConformanceTest\TestInfo;
-use Facile\OpenIDClient\Session\AuthSession;
 use Facile\OpenIDClient\Service\AuthorizationService;
-use function Facile\OpenIDClient\base64url_encode;
+use Facile\OpenIDClient\Session\AuthSession;
+use PHPUnit\Framework\Assert;
+use function random_bytes;
 
 /**
  * Request an ID Token and verify its signature.
@@ -20,7 +21,6 @@ use function Facile\OpenIDClient\base64url_encode;
  */
 class RPKeyRotationOPSignKeyNativeTest extends AbstractRpTest
 {
-
     public function getTestId(): string
     {
         return 'rp-key-rotation-op-sign-key-native';
@@ -33,8 +33,8 @@ class RPKeyRotationOPSignKeyNativeTest extends AbstractRpTest
         // Get authorization redirect uri
         $authorizationService = new AuthorizationService();
         $authSession = AuthSession::fromArray([
-            'state' => base64url_encode(\random_bytes(32)),
-            'nonce' => base64url_encode(\random_bytes(32)),
+            'state' => base64url_encode(random_bytes(32)),
+            'nonce' => base64url_encode(random_bytes(32)),
         ]);
         $uri = $authorizationService->getAuthorizationUri($client, [
             'state' => $authSession->getState(),

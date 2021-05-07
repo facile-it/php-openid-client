@@ -50,9 +50,7 @@ final class RegistrationService
     }
 
     /**
-     * @param IssuerInterface $issuer
      * @param array<string, mixed> $metadata
-     * @param string|null $initialToken
      *
      * @return array<string, mixed>
      */
@@ -99,9 +97,6 @@ final class RegistrationService
     }
 
     /**
-     * @param string $clientUri
-     * @param string $accessToken
-     *
      * @return array<string, mixed>
      */
     public function read(string $clientUri, string $accessToken): array
@@ -126,8 +121,6 @@ final class RegistrationService
     }
 
     /**
-     * @param string $clientUri
-     * @param string $accessToken
      * @param array<string, mixed> $metadata
      *
      * @return array<string, mixed>

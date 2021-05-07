@@ -64,10 +64,7 @@ class RequestObjectFactory
     }
 
     /**
-     * @param ClientInterface $client
      * @param array<string, mixed> $params
-     *
-     * @return string
      */
     public function create(ClientInterface $client, array $params = []): string
     {
@@ -78,10 +75,7 @@ class RequestObjectFactory
     }
 
     /**
-     * @param ClientInterface $client
      * @param array<string, mixed> $params
-     *
-     * @return string
      */
     private function createPayload(ClientInterface $client, array $params = []): string
     {

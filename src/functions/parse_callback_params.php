@@ -11,8 +11,6 @@ use Psr\Http\Message\ServerRequestInterface;
 use function strtoupper;
 
 /**
- * @param ServerRequestInterface $serverRequest
- *
  * @return array<string, mixed>
  *
  * @template P as array{error?: string, error_description?: string, error_uri?: string, response?: string}&array<string, mixed>

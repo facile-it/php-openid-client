@@ -4,14 +4,31 @@ declare(strict_types=1);
 
 namespace Facile\OpenIDClient\ConformanceTest;
 
-use PHPUnit\Framework\Test;
-use PHPUnit\Framework\TestSuite;
-use PHPUnit\Framework\TestListenerDefaultImplementation;
-use PHPUnit\Framework\TestListener as TestListenerInterface;
-use Psr\Container\ContainerInterface;
-use ReflectionFunction;
+use function array_map;
+use function array_pop;
+use function array_push;
+use function array_shift;
+use function array_slice;
+use function array_unshift;
+use Closure;
 use Facile\OpenIDClient\ConformanceTest\RpTest\ResponseTypeAndResponseMode\RPResponseTypeCodeTest;
 use Facile\OpenIDClient\ConformanceTest\RpTest\RpTestInterface;
+use function file;
+use function implode;
+use function is_callable;
+use PHPUnit\Framework\Test;
+use PHPUnit\Framework\TestListener as TestListenerInterface;
+use PHPUnit\Framework\TestListenerDefaultImplementation;
+use PHPUnit\Framework\TestSuite;
+use function preg_match;
+use function preg_replace;
+use Psr\Container\ContainerInterface;
+use ReflectionFunction;
+use function sprintf;
+use function str_repeat;
+use function strlen;
+use function strpos;
+use function substr;
 
 class TestListener implements TestListenerInterface
 {
@@ -53,16 +70,16 @@ class TestListener implements TestListenerInterface
      */
     public function startTestSuite(TestSuite $suite): void
     {
-        if (0 !== \strpos($suite->getName(), 'rp-')) {
+        if (0 !== strpos($suite->getName(), 'rp-')) {
             return;
         }
 
-        $profile = \substr($suite->getName(), 3);
+        $profile = substr($suite->getName(), 3);
 
         $testMap = [
             'code-basic' => [
-                'rp-response_type-code' => new RPResponseTypeCodeTest($this->container)
-            ]
+                'rp-response_type-code' => new RPResponseTypeCodeTest($this->container),
+            ],
         ];
 
         $this->rpTestUtil->clearLogs($this->getRoot(), $this->getRpId());
@@ -90,7 +107,6 @@ class TestListener implements TestListenerInterface
         if (! $test instanceof RpTestInterface) {
             return;
         }
-
     }
 
     /**
@@ -107,43 +123,44 @@ class TestListener implements TestListenerInterface
         $implementation = $this->getClosureDump([$test, 'execute']);
     }
 
-    protected function getClosureDump(callable $closure, int $indent = 4) {
-        if (\is_callable($closure)) {
-            $closure = \Closure::fromCallable($closure);
+    protected function getClosureDump(callable $closure, int $indent = 4)
+    {
+        if (is_callable($closure)) {
+            $closure = Closure::fromCallable($closure);
         }
 
         $r = new ReflectionFunction($closure);
-        $lines = \file($r->getFileName());
-        $lines = \array_slice($lines, $r->getStartLine(), $r->getEndLine() - $r->getStartLine());
-        if (\preg_match('/^ *{ *$/', $lines[0] ?? '')) {
+        $lines = file($r->getFileName());
+        $lines = array_slice($lines, $r->getStartLine(), $r->getEndLine() - $r->getStartLine());
+        if (preg_match('/^ *{ *$/', $lines[0] ?? '')) {
             unset($lines[0]);
         }
 
-        $firstLine = \array_shift($lines) ?: '';
+        $firstLine = array_shift($lines) ?: '';
 
-        if (! \preg_match('/^ *{ *$/', $firstLine)) {
-            \array_unshift($lines, $firstLine);
+        if (! preg_match('/^ *{ *$/', $firstLine)) {
+            array_unshift($lines, $firstLine);
         }
 
-        $lastLine = \array_pop($lines) ?: '';
-        if (! \preg_match('/^ *} *$/', $lastLine)) {
-            \array_push($lines, $lastLine);
+        $lastLine = array_pop($lines) ?: '';
+        if (! preg_match('/^ *} *$/', $lastLine)) {
+            array_push($lines, $lastLine);
         }
 
         // remove spaces based on first line
-        if (\preg_match('/^( +)/', $lines[0] ?? '', $matches)) {
-            $toTrim = \strlen($matches[1]);
-            $lines = \array_map(static function (string $line) use ($toTrim) {
-                return \preg_replace(sprintf('/^ {0,%d}/', $toTrim), '', $line);
+        if (preg_match('/^( +)/', $lines[0] ?? '', $matches)) {
+            $toTrim = strlen($matches[1]);
+            $lines = array_map(static function (string $line) use ($toTrim) {
+                return preg_replace(sprintf('/^ {0,%d}/', $toTrim), '', $line);
             }, $lines);
         }
 
         if ($indent) {
-            $lines = \array_map(static function (string $line) use ($indent) {
-                return \str_repeat(' ', $indent) . $line;
+            $lines = array_map(static function (string $line) use ($indent) {
+                return str_repeat(' ', $indent) . $line;
             }, $lines);
         }
 
-        return \implode('', $lines);
+        return implode('', $lines);
     }
 }

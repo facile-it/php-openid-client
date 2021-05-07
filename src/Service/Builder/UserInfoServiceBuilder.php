@@ -11,7 +11,7 @@ use Facile\OpenIDClient\Token\UserInfoVerifierBuilder;
 final class UserInfoServiceBuilder extends AbstractServiceBuilder
 {
     /** @var TokenVerifierBuilderInterface|null */
-    private $userInfoVerifierBuilder = null;
+    private $userInfoVerifierBuilder;
 
     protected function getUserInfoVerifierBuilder(): TokenVerifierBuilderInterface
     {

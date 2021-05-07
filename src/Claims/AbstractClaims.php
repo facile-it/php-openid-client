@@ -54,9 +54,6 @@ abstract class AbstractClaims
     }
 
     /**
-     * @param OpenIDClient $client
-     * @param string $jwt
-     *
      * @return array<string, mixed>
      */
     protected function claimJWT(OpenIDClient $client, string $jwt): array

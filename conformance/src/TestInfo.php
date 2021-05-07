@@ -4,57 +4,59 @@ declare(strict_types=1);
 
 namespace Facile\OpenIDClient\ConformanceTest;
 
+use function rtrim;
+use function str_replace;
+
 class TestInfo
 {
     public const PROFILE_BASIC_CODE = 'code-basic';
+
     public const PROFILE_IMPLICIT_IDTOKEN = 'id_token-implicit';
+
     public const PROFILE_IMPLICIT_IDTOKEN_TOKEN = 'id_token+token-hybrid';
+
     public const PROFILE_HYBRID_CODE_IDTOKEN = 'code+id_token-hybrid';
+
     public const PROFILE_HYBRID_CODE_IDTOKEN_TOKEN = 'code+id_token+token-hybrid';
+
     public const PROFILE_HYBRID_CODE_TOKEN = 'code+token-hybrid';
+
     public const PROFILE_CONFIGURATION = 'configuration';
+
     public const PROFILE_DYNAMIC = 'dynamic';
 
-    /** @var string  */
+    /** @var string */
     private $profile;
+
     /** @var string */
     private $responseType;
+
     /** @var string */
     private $rpId;
+
     /** @var string */
     private $root;
 
     /**
      * TestInfo constructor.
-     * @param string $profile
-     * @param string $responseType
-     * @param string $baseRpId
-     * @param string $root
      */
     public function __construct(
         string $profile,
         string $responseType = 'code',
         string $baseRpId = 'tmv_php-openid-client',
         string $root = 'https://rp.certification.openid.net:8080/'
-    )
-    {
+    ) {
         $this->profile = $profile;
         $this->responseType = $responseType;
         $this->rpId = $baseRpId;
         $this->root = rtrim($root, '/');
     }
 
-    /**
-     * @return string
-     */
     public function getProfile(): string
     {
         return $this->profile;
     }
 
-    /**
-     * @return string
-     */
     public function getResponseType(): string
     {
         return $this->responseType;
@@ -62,7 +64,7 @@ class TestInfo
 
     public function getRpId(): string
     {
-        return $this->rpId . '.' . \str_replace(' ', '_', $this->getResponseType());
+        return $this->rpId . '.' . str_replace(' ', '_', $this->getResponseType());
     }
 
     public function getRoot(): string

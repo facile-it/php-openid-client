@@ -4,11 +4,13 @@ declare(strict_types=1);
 
 namespace Facile\OpenIDClient\ConformanceTest\Provider;
 
+use function array_keys;
+use function array_map;
+use Facile\OpenIDClient\ConformanceTest\RpTest;
+use Facile\OpenIDClient\ConformanceTest\RpTest\RpTestInterface;
+use Facile\OpenIDClient\ConformanceTest\TestInfo;
 use InvalidArgumentException;
 use Psr\Container\ContainerInterface;
-use Facile\OpenIDClient\ConformanceTest\RpTest\RpTestInterface;
-use Facile\OpenIDClient\ConformanceTest\RpTest;
-use Facile\OpenIDClient\ConformanceTest\TestInfo;
 
 class RpProfileTestsProvider
 {
@@ -392,7 +394,6 @@ class RpProfileTestsProvider
 
     /**
      * ProfileTestsProvider constructor.
-     * @param ContainerInterface $container
      */
     public function __construct(ContainerInterface $container)
     {
@@ -401,7 +402,7 @@ class RpProfileTestsProvider
 
     public function getAvailableProfiles(): array
     {
-        return \array_keys(static::$testMap);
+        return array_keys(static::$testMap);
     }
 
     public function getResponseTypeForProfile(string $profile): string
@@ -416,11 +417,10 @@ class RpProfileTestsProvider
     }
 
     /**
-     * @param string $profile
      * @return RpTestInterface[]
      */
     public function getTests(string $profile): array
     {
-        return \array_map([$this->container, 'get'], static::$testMap[$profile] ?? []);
+        return array_map([$this->container, 'get'], static::$testMap[$profile] ?? []);
     }
 }

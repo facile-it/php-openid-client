@@ -8,5 +8,4 @@ use PHPUnit\Framework\TestCase;
 
 class CommonTest extends TestCase
 {
-
 }

@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Facile\OpenIDClient\ConformanceTest\RpTest\ResponseTypeAndResponseMode;
 
-use PHPUnit\Framework\Assert;
 use Facile\OpenIDClient\ConformanceTest\RpTest\AbstractRpTest;
 use Facile\OpenIDClient\ConformanceTest\TestInfo;
 use Facile\OpenIDClient\Service\AuthorizationService;
+use PHPUnit\Framework\Assert;
 
 class RPResponseTypeCodeTest extends AbstractRpTest
 {

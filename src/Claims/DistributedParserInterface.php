@@ -12,7 +12,6 @@ use Facile\OpenIDClient\Client\ClientInterface;
 interface DistributedParserInterface
 {
     /**
-     * @param ClientInterface $client
      * @param array<string, mixed> $claims
      * @param string[] $accessTokens
      *

@@ -4,13 +4,17 @@ declare(strict_types=1);
 
 namespace Facile\OpenIDClient\ConformanceTest\RpTest\ResponseTypeAndResponseMode;
 
-use PHPUnit\Framework\Assert;
+use function array_combine;
+use function Facile\OpenIDClient\base64url_encode;
 use Facile\OpenIDClient\ConformanceTest\RpTest\AbstractRpTest;
 use Facile\OpenIDClient\ConformanceTest\TestInfo;
-use Facile\OpenIDClient\Session\AuthSession;
 use Facile\OpenIDClient\Service\AuthorizationService;
+use Facile\OpenIDClient\Session\AuthSession;
+use function http_build_query;
 use Laminas\Diactoros\ServerRequestFactory;
-use function Facile\OpenIDClient\base64url_encode;
+use PHPUnit\Framework\Assert;
+use function preg_match_all;
+use function random_bytes;
 
 /**
  * Make an authentication request with the response_type set to 'id_token token' and the response mode set to form_post.
@@ -19,7 +23,6 @@ use function Facile\OpenIDClient\base64url_encode;
  */
 class RPResponseModeFormPostTest extends AbstractRpTest
 {
-
     public function getTestId(): string
     {
         return 'rp-response_mode-form_post';
@@ -33,7 +36,7 @@ class RPResponseModeFormPostTest extends AbstractRpTest
         $authorizationService = new AuthorizationService();
 
         $authSession = AuthSession::fromArray([
-            'nonce' => base64url_encode(\random_bytes(32)),
+            'nonce' => base64url_encode(random_bytes(32)),
         ]);
 
         $uri = $authorizationService->getAuthorizationUri($client, [
@@ -46,8 +49,8 @@ class RPResponseModeFormPostTest extends AbstractRpTest
         $response = $this->httpGet($uri);
         $body = (string) $response->getBody();
 
-        \preg_match_all('/<input type="hidden" name="(\w+)" value="([^"]+)"\/>/', $body, $matches);
-        $requestBody = \http_build_query(\array_combine($matches[1], $matches[2]));
+        preg_match_all('/<input type="hidden" name="(\w+)" value="([^"]+)"\/>/', $body, $matches);
+        $requestBody = http_build_query(array_combine($matches[1], $matches[2]));
 
         $serverRequest = $serverRequestFactory->createServerRequest('POST', 'http://redirect.dev', [
             'content-type' => 'application/x-www-form-urlencoded',

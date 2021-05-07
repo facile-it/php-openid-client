@@ -12,7 +12,6 @@ use Facile\OpenIDClient\Client\ClientInterface;
 interface AggregatedParserInterface
 {
     /**
-     * @param ClientInterface $client
      * @param array<string, mixed> $claims
      *
      * @return array<string, mixed>

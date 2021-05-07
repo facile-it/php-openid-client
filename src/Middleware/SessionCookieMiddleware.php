@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Facile\OpenIDClient\Middleware;
 
+use function bin2hex;
 use function class_exists;
 use Dflydev\FigCookies\Cookies;
 use Dflydev\FigCookies\FigResponseCookies;
@@ -21,6 +22,7 @@ use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\MiddlewareInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 use Psr\SimpleCache\CacheInterface;
+use function random_bytes;
 
 /**
  * @psalm-import-type AuthSessionType from AuthSessionInterface

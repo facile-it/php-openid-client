@@ -56,7 +56,7 @@ class MetadataProviderBuilder
     }
 
     /**
-     * @deprecated Use MetadataProviderBuilder::setHttpClient() instead.
+     * @deprecated use MetadataProviderBuilder::setHttpClient() instead
      */
     public function setClient(?ClientInterface $client): self
     {

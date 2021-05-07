@@ -4,18 +4,20 @@ declare(strict_types=1);
 
 namespace Facile\OpenIDClient\ConformanceTest\RpTest\KeyRotation;
 
+use function array_map;
+use function Facile\OpenIDClient\base64url_encode;
+use Facile\OpenIDClient\ConformanceTest\RpTest\AbstractRpTest;
+use Facile\OpenIDClient\ConformanceTest\TestInfo;
+use Facile\OpenIDClient\RequestObject\RequestObjectFactory;
+use Facile\OpenIDClient\Service\AuthorizationService;
+use Facile\OpenIDClient\Session\AuthSession;
 use Jose\Component\Core\JWK;
 use Jose\Component\Core\JWKSet;
 use Jose\Component\KeyManagement\JWKFactory;
-use PHPUnit\Framework\Assert;
-use Facile\OpenIDClient\ConformanceTest\RpTest\AbstractRpTest;
-use Facile\OpenIDClient\ConformanceTest\TestInfo;
-use Facile\OpenIDClient\Session\AuthSession;
-use Facile\OpenIDClient\RequestObject\RequestObjectFactory;
-use Facile\OpenIDClient\Service\AuthorizationService;
-use function Facile\OpenIDClient\base64url_encode;
 use function json_decode;
 use function json_encode;
+use PHPUnit\Framework\Assert;
+use function random_bytes;
 
 /**
  * Fetch the issuer's keys from the 'jwks_uri' and make an encrypted authentication request using the issuer's
@@ -26,7 +28,6 @@ use function json_encode;
  */
 class RPKeyRotationOPEncKeyTest extends AbstractRpTest
 {
-
     public function getTestId(): string
     {
         return 'rp-key-rotation-op-enc-key';
@@ -38,7 +39,7 @@ class RPKeyRotationOPEncKeyTest extends AbstractRpTest
         $jwkEncAlg = JWKFactory::createRSAKey(2048, ['alg' => 'RSA-OAEP', 'use' => 'enc']);
 
         $jwks = new JWKSet([$jwkSig, $jwkEncAlg]);
-        $publicJwks = new JWKSet(\array_map(static function (JWK $jwk) {
+        $publicJwks = new JWKSet(array_map(static function (JWK $jwk) {
             return $jwk->toPublic();
         }, $jwks->all()));
 
@@ -58,8 +59,8 @@ class RPKeyRotationOPEncKeyTest extends AbstractRpTest
         $authorizationService = new AuthorizationService();
 
         $authSession = AuthSession::fromArray([
-            'state' => base64url_encode(\random_bytes(32)),
-            'nonce' => base64url_encode(\random_bytes(32)),
+            'state' => base64url_encode(random_bytes(32)),
+            'nonce' => base64url_encode(random_bytes(32)),
         ]);
         $uri = $authorizationService->getAuthorizationUri($client, [
             'request' => $requestObjectFactory->create($client),

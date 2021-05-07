@@ -12,10 +12,7 @@ use Psr\Http\Message\RequestInterface;
 abstract class AbstractJwtAuth implements AuthMethodInterface
 {
     /**
-     * @param OpenIDClient $client
      * @param array<string, mixed> $claims
-     *
-     * @return string
      */
     abstract protected function createAuthJwt(OpenIDClient $client, array $claims = []): string;
 

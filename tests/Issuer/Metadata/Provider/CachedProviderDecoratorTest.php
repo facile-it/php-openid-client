@@ -7,6 +7,7 @@ namespace Facile\OpenIDClientTest\Issuer\Metadata\Provider;
 use Facile\OpenIDClient\Issuer\Metadata\Provider\CachedProviderDecorator;
 use Facile\OpenIDClient\Issuer\Metadata\Provider\RemoteProviderInterface;
 use Facile\OpenIDClientTest\TestCase;
+use function json_encode;
 use Prophecy\Argument;
 use Psr\SimpleCache\CacheInterface;
 

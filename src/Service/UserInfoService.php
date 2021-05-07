@@ -43,10 +43,6 @@ final class UserInfoService
     }
 
     /**
-     * @param OpenIDClient $client
-     * @param TokenSetInterface $tokenSet
-     * @param bool $useBody
-     *
      * @return array<string, mixed>
      */
     public function getUserInfo(OpenIDClient $client, TokenSetInterface $tokenSet, bool $useBody = false): array

@@ -4,23 +4,37 @@ declare(strict_types=1);
 
 namespace Facile\OpenIDClient\ConformanceTest;
 
+use function array_merge;
+use function dirname;
+use Facile\OpenIDClient\Client\ClientBuilder;
+use Facile\OpenIDClient\Client\ClientInterface;
+use Facile\OpenIDClient\Client\Metadata\ClientMetadata;
+use Facile\OpenIDClient\Issuer\IssuerBuilder;
+use Facile\OpenIDClient\Service\RegistrationService;
+use function file;
+use function file_exists;
+use function file_put_contents;
 use Http\Discovery\Psr17FactoryDiscovery;
 use Http\Discovery\Psr18ClientDiscovery;
+use function implode;
+use function is_dir;
+use Laminas\Diactoros\RequestFactory;
+use Laminas\Diactoros\ServerRequestFactory;
+use Laminas\Diactoros\Uri;
+use function ltrim;
+use function mkdir;
+use function parse_str;
+use const PHP_EOL;
 use PHPUnit\Framework\TestCase;
 use Psr\Container\ContainerInterface;
 use Psr\Http\Client\ClientInterface as HttpClient;
 use Psr\Http\Message\RequestFactoryInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use ReflectionFunction;
-use Facile\OpenIDClient\Client\ClientBuilder;
-use Facile\OpenIDClient\Client\ClientInterface;
-use Facile\OpenIDClient\Client\Metadata\ClientMetadata;
-use Facile\OpenIDClient\Issuer\IssuerBuilder;
-use Laminas\Diactoros\RequestFactory;
-use Laminas\Diactoros\ServerRequestFactory;
-use Laminas\Diactoros\Uri;
 use RuntimeException;
-use Facile\OpenIDClient\Service\RegistrationService;
+use function sprintf;
+use Throwable;
+use function var_export;
 
 abstract class AbstractRpTestCase extends TestCase
 {
@@ -89,7 +103,7 @@ abstract class AbstractRpTestCase extends TestCase
     protected function parseQueryParams(string $uri): array
     {
         $uri = new Uri($uri);
-        \parse_str($uri->getQuery(), $query);
+        parse_str($uri->getQuery(), $query);
 
         return $query;
     }
@@ -102,7 +116,7 @@ abstract class AbstractRpTestCase extends TestCase
 
         try {
             $callback($profile, $testName);
-        } catch (\Throwable $e) {
+        } catch (Throwable $e) {
             throw $e;
         } finally {
             $this->getAndSaveTestLog($profile, $testName);
@@ -116,7 +130,7 @@ abstract class AbstractRpTestCase extends TestCase
         $issuerBuilder = new IssuerBuilder();
         $issuer = $issuerBuilder->build($this->getTestUri($testName) . '/.well-known/openid-configuration');
 
-        $clientMetadata = ClientMetadata::fromArray($registrationService->register($issuer, \array_merge([
+        $clientMetadata = ClientMetadata::fromArray($registrationService->register($issuer, array_merge([
             'redirect_uris' => [$this->getRedirectUri()],
             'contacts' => [
                 'tvargiu@gmail.com',
@@ -133,28 +147,29 @@ abstract class AbstractRpTestCase extends TestCase
         $str = 'function (';
         $r = new ReflectionFunction($closure);
         $params = [];
-        foreach($r->getParameters() as $p) {
+        foreach ($r->getParameters() as $p) {
             $s = '';
-            if($p->isArray()) {
+            if ($p->isArray()) {
                 $s .= 'array ';
-            } else if($p->getClass()) {
+            } elseif ($p->getClass()) {
                 $s .= $p->getClass()->name . ' ';
             }
-            if($p->isPassedByReference()){
+            if ($p->isPassedByReference()) {
                 $s .= '&';
             }
             $s .= '$' . $p->name;
-            if($p->isOptional()) {
-                $s .= ' = ' . var_export($p->getDefaultValue(), TRUE);
+            if ($p->isOptional()) {
+                $s .= ' = ' . var_export($p->getDefaultValue(), true);
             }
-            $params []= $s;
+            $params[] = $s;
         }
         $str .= implode(', ', $params);
         $str .= '){' . PHP_EOL;
         $lines = file($r->getFileName());
-        for ($l = $r->getStartLine(); $l < $r->getEndLine(); $l++) {
+        for ($l = $r->getStartLine(); $l < $r->getEndLine(); ++$l) {
             $str .= $lines[$l];
         }
+
         return $str;
     }
 
@@ -167,19 +182,19 @@ abstract class AbstractRpTestCase extends TestCase
         $response = $httpClient->sendRequest($request);
 
         if (200 !== $response->getStatusCode()) {
-            throw new \RuntimeException('Invalid log response status code');
+            throw new RuntimeException('Invalid log response status code');
         }
 
         $log = (string) $response->getBody();
 
         $logFilePath = __DIR__ . '/../log/' . ltrim($profile, '@') . '/' . $testName . '.txt';
-        $dirname = \dirname($logFilePath);
+        $dirname = dirname($logFilePath);
 
-        if (! \file_exists($dirname) && ! mkdir($concurrentDirectory = $dirname, 0777, true) && ! is_dir($concurrentDirectory)) {
-            throw new \RuntimeException(sprintf('Directory "%s" was not created', $concurrentDirectory));
+        if (! file_exists($dirname) && ! mkdir($concurrentDirectory = $dirname, 0777, true) && ! is_dir($concurrentDirectory)) {
+            throw new RuntimeException(sprintf('Directory "%s" was not created', $concurrentDirectory));
         }
 
-        \file_put_contents($logFilePath, $log);
+        file_put_contents($logFilePath, $log);
 
         return $log;
     }
@@ -206,9 +221,6 @@ abstract class AbstractRpTestCase extends TestCase
         return $value;
     }
 
-    /**
-     * @return ContainerInterface
-     */
     public function getContainer(): ContainerInterface
     {
         return static::$container;

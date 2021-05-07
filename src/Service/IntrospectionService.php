@@ -34,8 +34,6 @@ final class IntrospectionService
     }
 
     /**
-     * @param OpenIDClient $client
-     * @param string $token
      * @param array<string, mixed> $params
      *
      * @return array<string, mixed>

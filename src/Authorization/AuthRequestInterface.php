@@ -10,8 +10,6 @@ interface AuthRequestInterface extends JsonSerializable
 {
     /**
      * Space delimited scopes. OpenID Connect requests MUST contain the openid scope value.
-     *
-     * @return string
      */
     public function getScope(): string;
 
@@ -19,44 +17,32 @@ interface AuthRequestInterface extends JsonSerializable
      * OAuth 2.0 Response Type value that determines the authorization processing flow to be used,
      * including what parameters are returned from the endpoints used. When using the Authorization Code Flow,
      * this value is code.
-     *
-     * @return string
      */
     public function getResponseType(): string;
 
     /**
      * OAuth 2.0 Client Identifier valid at the Authorization Server.
-     *
-     * @return string
      */
     public function getClientId(): string;
 
     /**
      * Redirection URI to which the response will be sent.
-     *
-     * @return string
      */
     public function getRedirectUri(): string;
 
     /**
      * Opaque value used to maintain state between the request and the callback.
-     *
-     * @return null|string
      */
     public function getState(): ?string;
 
     /**
      * Informs the Authorization Server of the mechanism to be used for returning parameters from
      * the Authorization Endpoint.
-     *
-     * @return string|null
      */
     public function getResponseMode(): ?string;
 
     /**
      * String value used to associate a Client session with an ID Token, and to mitigate replay attacks.
-     *
-     * @return null|string
      */
     public function getNonce(): ?string;
 
@@ -69,8 +55,6 @@ interface AuthRequestInterface extends JsonSerializable
      * - popup
      * - touch
      * - wrap
-     *
-     * @return string|null
      */
     public function getDisplay(): ?string;
 
@@ -83,39 +67,29 @@ interface AuthRequestInterface extends JsonSerializable
      * - login
      * - consent
      * - select_account
-     *
-     * @return null|string
      */
     public function getPrompt(): ?string;
 
     /**
      * Maximum Authentication Age. Specifies the allowable elapsed time in seconds since the last time the End-User
      * was actively authenticated by the OP.
-     *
-     * @return int|null
      */
     public function getMaxAge(): ?int;
 
     /**
      * End-User's preferred languages and scripts for the user interface, represented as a space-separated list
      * of BCP47 [RFC5646] language tag values, ordered by preference.
-     *
-     * @return null|string
      */
     public function getUiLocales(): ?string;
 
     /**
      * ID Token previously issued by the Authorization Server being passed as a hint about the End-User's current or
      * past authenticated session with the Client.
-     *
-     * @return string|null
      */
     public function getIdTokenHint(): ?string;
 
     /**
      * Hint to the Authorization Server about the login identifier the End-User might use to log in (if necessary).
-     *
-     * @return string|null
      */
     public function getLoginHint(): ?string;
 
@@ -123,8 +97,6 @@ interface AuthRequestInterface extends JsonSerializable
      * Requested Authentication Context Class Reference values.
      * Space-separated string that specifies the acr values that the Authorization Server is being requested
      * to use for processing this Authentication Request.
-     *
-     * @return null|string
      */
     public function getAcrValues(): ?string;
 

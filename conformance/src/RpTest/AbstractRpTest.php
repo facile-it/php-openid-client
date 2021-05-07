@@ -4,28 +4,29 @@ declare(strict_types=1);
 
 namespace Facile\OpenIDClient\ConformanceTest\RpTest;
 
-use Facile\JoseVerifier\JWK\MemoryJwksProvider;
-use Http\Discovery\Psr17FactoryDiscovery;
-use Http\Discovery\Psr18ClientDiscovery;
-use Psr\Http\Client\ClientInterface as HttpClient;
-use Psr\Http\Message\RequestFactoryInterface;
-use Psr\Http\Message\ResponseInterface;
-use Facile\OpenIDClient\Client\ClientBuilder;
-use Facile\OpenIDClient\Issuer\IssuerBuilder;
-use Facile\OpenIDClient\Service\RegistrationService;
 use function array_merge;
-use Http\Client\Common\HttpMethodsClientInterface;
-use Jose\Component\Core\JWKSet;
-use Psr\Container\ContainerInterface;
-use Psr\Http\Message\ServerRequestInterface;
+use Facile\JoseVerifier\JWK\MemoryJwksProvider;
+use Facile\OpenIDClient\Client\ClientBuilder;
 use Facile\OpenIDClient\Client\ClientInterface;
+use Facile\OpenIDClient\Client\Metadata\ClientMetadata;
 use Facile\OpenIDClient\ConformanceTest\TestInfo;
 use Facile\OpenIDClient\Exception\OAuth2Exception;
 use Facile\OpenIDClient\Exception\RemoteException;
-use Facile\OpenIDClient\Client\Metadata\ClientMetadata;
-use Laminas\Diactoros\ServerRequestFactory;
+use Facile\OpenIDClient\Issuer\IssuerBuilder;
+use Facile\OpenIDClient\Service\RegistrationService;
+use Http\Discovery\Psr17FactoryDiscovery;
+use Http\Discovery\Psr18ClientDiscovery;
+use Jose\Component\Core\JWKSet;
 use function json_decode;
 use function json_encode;
+use Laminas\Diactoros\ServerRequestFactory;
+use const PHP_EOL;
+use Psr\Container\ContainerInterface;
+use Psr\Http\Client\ClientInterface as HttpClient;
+use Psr\Http\Message\RequestFactoryInterface;
+use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface;
+use function sprintf;
 
 abstract class AbstractRpTest implements RpTestInterface
 {
@@ -39,9 +40,6 @@ abstract class AbstractRpTest implements RpTestInterface
         $this->container = $container;
     }
 
-    /**
-     * @return ContainerInterface
-     */
     public function getContainer(): ContainerInterface
     {
         return $this->container;

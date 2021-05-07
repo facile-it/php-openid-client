@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Facile\OpenIDClient\AuthMethod;
 
-use function array_merge;
 use function class_exists;
 use function Facile\OpenIDClient\base64url_encode;
 use Facile\OpenIDClient\Client\ClientInterface as OpenIDClient;
@@ -30,9 +29,6 @@ final class ClientSecretJwt extends AbstractJwtAuth
 
     /**
      * ClientSecretJwt constructor.
-     *
-     * @param null|JWSBuilder $jwsBuilder
-     * @param null|JWSSerializer $jwsSerializer
      */
     public function __construct(
         ?JWSBuilder $jwsBuilder = null,
