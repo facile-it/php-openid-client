@@ -137,9 +137,7 @@ final class RegistrationService
         string $accessToken,
         array $metadata
     ): array {
-        /** @var array<string, mixed> $clientRegistrationMetadata */
         $clientRegistrationMetadata = array_intersect_key($metadata, array_flip(self::$registrationClaims));
-        /** @var array<string, mixed> $metadata */
         $metadata = array_diff_key($metadata, $clientRegistrationMetadata);
 
         $encodedMetadata = json_encode($metadata);

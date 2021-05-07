@@ -119,7 +119,6 @@ final class UserInfoService
         }
 
         // check expected sub
-        /** @var string|null $expectedSub */
         $expectedSub = $tokenSet->claims()['sub'] ?? null;
 
         if (null === $expectedSub) {

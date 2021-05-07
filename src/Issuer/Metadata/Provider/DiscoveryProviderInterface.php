@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Facile\OpenIDClient\Issuer\Metadata\Provider;
 
 /**
- * @psalm-type DiscoveryConfigurationObject = array<string, mixed>
+ * @psalm-import-type IssuerMetadataObject from \Facile\JoseVerifier\Psalm\PsalmTypes
  */
 interface DiscoveryProviderInterface extends RemoteProviderInterface
 {
@@ -13,7 +13,7 @@ interface DiscoveryProviderInterface extends RemoteProviderInterface
      * @param string $url
      *
      * @return array<string, mixed>
-     * @psalm-return DiscoveryConfigurationObject
+     * @psalm-return IssuerMetadataObject
      */
     public function discovery(string $url): array;
 }

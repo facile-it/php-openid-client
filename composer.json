@@ -25,7 +25,7 @@
     "require": {
         "php": "^7.2 || ^8.0",
         "ext-json": "*",
-        "facile-it/php-jose-verifier": "^0.3.0-beta3",
+        "facile-it/php-jose-verifier": "^0.3.0",
         "php-http/discovery": "^1.6",
         "psr/http-client": "^1.0",
         "psr/http-client-implementation": "^1.0",
@@ -78,7 +78,7 @@
         "phpspec/prophecy-phpunit": "^1.1 || ^2.0",
         "phpunit/phpunit": "^8.5.14 || ^9.3",
         "symfony/console": "^4.3 || ^5.0",
-        "vimeo/psalm": "^4.3",
+        "vimeo/psalm": "^4.7.2",
         "web-token/jwt-encryption-algorithm-aescbc": "^2.0",
         "web-token/jwt-encryption-algorithm-aesgcm": "^2.0",
         "web-token/jwt-encryption-algorithm-aesgcmkw": "^2.0",
