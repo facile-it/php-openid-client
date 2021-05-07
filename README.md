@@ -5,9 +5,8 @@ Full OpenID client implementation.
 [![Latest Stable Version](https://poser.pugx.org/facile-it/php-openid-client/v/stable)](https://packagist.org/packages/facile-it/php-openid-client)
 [![Total Downloads](https://poser.pugx.org/facile-it/php-openid-client/downloads)](https://packagist.org/packages/facile-it/php-openid-client)
 [![License](https://poser.pugx.org/facile-it/php-openid-client/license)](https://packagist.org/packages/facile-it/php-openid-client)
-[![Code Coverage](https://scrutinizer-ci.com/g/facile-it/php-openid-client/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/facile-it/php-openid-client/?branch=master)
-[![Build Status](https://scrutinizer-ci.com/g/facile-it/php-openid-client/badges/build.png?b=master)](https://scrutinizer-ci.com/g/facile-it/php-openid-client/build-status/master)
-[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/facile-it/php-openid-client/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/facile-it/php-openid-client/?branch=master)
+[![codecov](https://codecov.io/gh/facile-it/php-openid-client/branch/master/graph/badge.svg?token=T59S02D2KM)](https://codecov.io/gh/facile-it/php-openid-client)
+[![Build Status](https://github.com/facile-it/php-openid-client/workflows/Continuous%20Integration/badge.svg?branch=master)](https://github.com/facile-it/php-openid-client/actions)
 
 
 Most of the library code is based on the awesome [`node-openid-client`](https://github.com/panva/node-openid-client).

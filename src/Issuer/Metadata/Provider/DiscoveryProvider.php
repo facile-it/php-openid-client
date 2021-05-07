@@ -16,7 +16,7 @@ use function rtrim;
 use function strpos;
 
 /**
- * @psalm-import-type DiscoveryConfigurationObject from DiscoveryProviderInterface
+ * @psalm-import-type IssuerMetadataObject from \Facile\JoseVerifier\Psalm\PsalmTypes
  */
 final class DiscoveryProvider implements DiscoveryProviderInterface
 {
@@ -78,7 +78,7 @@ final class DiscoveryProvider implements DiscoveryProviderInterface
      * @param string $uri
      *
      * @return array<mixed, string>
-     * @psalm-return DiscoveryConfigurationObject
+     * @psalm-return IssuerMetadataObject
      */
     private function fetchOpenIdConfiguration(string $uri): array
     {
@@ -86,7 +86,7 @@ final class DiscoveryProvider implements DiscoveryProviderInterface
             ->withHeader('accept', 'application/json');
 
         try {
-            /** @var DiscoveryConfigurationObject $data */
+            /** @var IssuerMetadataObject $data */
             $data = parse_metadata_response($this->client->sendRequest($request));
         } catch (ClientExceptionInterface $e) {
             throw new RuntimeException('Unable to fetch provider metadata', 0, $e);

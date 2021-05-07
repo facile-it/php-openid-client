@@ -11,6 +11,9 @@ use Psr\SimpleCache\CacheInterface;
 use function sha1;
 use function substr;
 
+/**
+ * @psalm-import-type IssuerMetadataObject from \Facile\JoseVerifier\Psalm\PsalmTypes
+ */
 final class CachedProviderDecorator implements RemoteProviderInterface
 {
     /** @var RemoteProviderInterface */
@@ -51,7 +54,7 @@ final class CachedProviderDecorator implements RemoteProviderInterface
 
         /** @var string $cached */
         $cached = $this->cache->get($cacheId) ?? '';
-        /** @var null|string|array<mixed> $data */
+        /** @var null|string|IssuerMetadataObject $data */
         $data = json_decode($cached, true);
 
         if (is_array($data)) {

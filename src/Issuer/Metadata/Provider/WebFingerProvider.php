@@ -23,6 +23,9 @@ use Psr\Http\Message\UriFactoryInterface;
 use function strpos;
 use function substr;
 
+/**
+ * @psalm-import-type IssuerMetadataObject from \Facile\JoseVerifier\Psalm\PsalmTypes
+ */
 final class WebFingerProvider implements RemoteProviderInterface, WebFingerProviderInterface
 {
     private const OIDC_DISCOVERY = '/.well-known/openid-configuration';
@@ -125,6 +128,7 @@ final class WebFingerProvider implements RemoteProviderInterface, WebFingerProvi
             throw new RuntimeException('Discovered issuer mismatch');
         }
 
+        /** @var IssuerMetadataObject $metadata */
         return $metadata;
     }
 
@@ -152,7 +156,6 @@ final class WebFingerProvider implements RemoteProviderInterface, WebFingerProvi
             }
 
             $parts = explode('@', $input);
-            /** @var string $host */
             $host = array_pop($parts);
 
             return ! (bool) preg_match('/[:\/?]+/', $host);
