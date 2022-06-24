@@ -70,7 +70,7 @@ class SessionCookieMiddleware implements MiddlewareInterface
 
         $response = $handler->handle($request->withAttribute(self::SESSION_ATTRIBUTE, $authSession));
 
-        $sessionId = $sessionId ?? bin2hex(random_bytes(32));
+        $sessionId ??= bin2hex(random_bytes(32));
 
         /** @var string $sessionValue */
         $sessionValue = json_encode($authSession);

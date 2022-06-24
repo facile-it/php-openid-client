@@ -35,6 +35,7 @@ use Psr\Http\Message\ServerRequestInterface;
  * @link https://tools.ietf.org/html/rfc6749 RFC 6749
  *
  * @psalm-import-type TokenSetMixedType from TokenSetInterface
+ * @psalm-import-type TokenSetClaimsType from TokenSetInterface
  */
 final class AuthorizationService
 {
@@ -86,9 +87,7 @@ final class AuthorizationService
             'redirect_uri' => $clientMetadata->getRedirectUris()[0] ?? null,
         ], $params);
 
-        $params = array_filter($params, static function ($value): bool {
-            return null !== $value;
-        });
+        $params = array_filter($params, static fn ($value): bool => null !== $value);
 
         /**
          * @var string $key
@@ -140,6 +139,7 @@ final class AuthorizationService
         $idToken = $tokenSet->getIdToken();
 
         if (null !== $idToken) {
+            /** @psalm-var TokenSetClaimsType $claims */
             $claims = $this->idTokenVerifierBuilder->build($client)
                 ->withNonce(null !== $authSession ? $authSession->getNonce() : null)
                 ->withState(null !== $authSession ? $authSession->getState() : null)
@@ -197,6 +197,7 @@ final class AuthorizationService
         $idToken = $tokenSet->getIdToken();
 
         if (null !== $idToken) {
+            /** @psalm-var TokenSetClaimsType $claims */
             $claims = $this->idTokenVerifierBuilder->build($client)
                 ->withNonce(null !== $authSession ? $authSession->getNonce() : null)
                 ->withState(null !== $authSession ? $authSession->getState() : null)
@@ -227,6 +228,7 @@ final class AuthorizationService
         $idToken = $tokenSet->getIdToken();
 
         if (null !== $idToken) {
+            /** @psalm-var TokenSetClaimsType $claims */
             $claims = $this->idTokenVerifierBuilder->build($client)
                 ->withAccessToken($tokenSet->getAccessToken())
                 ->verify($idToken);

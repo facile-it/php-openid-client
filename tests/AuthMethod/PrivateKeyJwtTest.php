@@ -126,9 +126,7 @@ class PrivateKeyJwtTest extends TestCase
         $jwsBuilder3->addSignature(
             Argument::allOf(
                 Argument::type(JWK::class),
-                Argument::that(function (JWK $key) {
-                    return 'foo' === $key->get('kid');
-                })
+                Argument::that(fn (JWK $key) => 'foo' === $key->get('kid'))
             ),
             Argument::allOf(
                 Argument::type('array'),

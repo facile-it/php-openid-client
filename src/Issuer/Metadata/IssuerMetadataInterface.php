@@ -20,7 +20,7 @@ use JsonSerializable;
 interface IssuerMetadataInterface extends JsonSerializable
 {
     /**
-     * @return mixed|null
+     * @return mixed
      */
     public function get(string $name);
 

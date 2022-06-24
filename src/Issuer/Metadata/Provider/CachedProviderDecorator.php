@@ -43,9 +43,7 @@ final class CachedProviderDecorator implements RemoteProviderInterface
         $this->provider = $provider;
         $this->cache = $cache;
         $this->cacheTtl = $cacheTtl;
-        $this->cacheIdGenerator = $cacheIdGenerator ?? static function (string $uri): string {
-            return substr(sha1($uri), 0, 65);
-        };
+        $this->cacheIdGenerator = $cacheIdGenerator ?? static fn (string $uri): string => substr(sha1($uri), 0, 65);
     }
 
     public function fetch(string $uri): array

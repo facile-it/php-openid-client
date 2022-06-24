@@ -25,8 +25,10 @@ function get_endpoint_uri(OpenIDClient $client, string $endpointMetadata): strin
             ->getMtlsEndpointAliases()['token_endpoint'] ?? null;
     }
 
-    /** @var string|null $endpoint */
-    $endpoint = $endpoint ?? $client->getIssuer()->getMetadata()->get($endpointMetadata);
+    if (! $endpoint) {
+        /** @var null|string $endpoint */
+        $endpoint = $client->getIssuer()->getMetadata()->get($endpointMetadata);
+    }
 
     if (! is_string($endpoint)) {
         throw new RuntimeException('Unable to retrieve the token endpoint');

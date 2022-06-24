@@ -29,9 +29,7 @@ final class AggregateParser extends AbstractClaims implements AggregatedParserIn
         }
 
         /** @var array<string, array{JWT: string}> $aggregatedSources */
-        $aggregatedSources = array_filter($claimSources, static function ($value): bool {
-            return is_string($value['JWT'] ?? null);
-        });
+        $aggregatedSources = array_filter($claimSources, static fn ($value): bool => is_string($value['JWT'] ?? null));
 
         $claimPayloads = [];
         foreach ($aggregatedSources as $sourceName => $source) {

@@ -8,7 +8,7 @@ use Jose\Component\Core\AlgorithmManager;
 use Jose\Component\Encryption\Algorithm\ContentEncryption;
 use Jose\Component\Encryption\Algorithm\KeyEncryption;
 use Jose\Component\Signature\Algorithm;
-use Jose\Easy\AlgorithmProvider;
+use Throwable;
 
 class AlgorithmManagerBuilder
 {
@@ -29,7 +29,18 @@ class AlgorithmManagerBuilder
 
     public function build(): AlgorithmManager
     {
-        return new AlgorithmManager((new AlgorithmProvider($this->algorithmClasses))->getAvailableAlgorithms());
+        $algorithms = [];
+        foreach ($this->algorithmClasses as $algorithmClass) {
+            if (class_exists($algorithmClass)) {
+                try {
+                    $algorithms[] = new $algorithmClass();
+                } catch (Throwable $throwable) {
+                    //does nothing
+                }
+            }
+        }
+
+        return new AlgorithmManager($algorithms);
     }
 
     /**

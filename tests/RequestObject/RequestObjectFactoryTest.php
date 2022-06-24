@@ -136,12 +136,8 @@ class RequestObjectFactoryTest extends TestCase
         $this->jwsBuilder->withPayload(Argument::type('string'))->willReturn($this->jwsBuilder->reveal());
         $this->jwsBuilder->addSignature(Argument::allOf(
             Argument::type(JWK::class),
-            Argument::that(function (JWK $jwk) {
-                return $jwk->get('k') === base64url_encode('client-secret');
-            }),
-            Argument::that(function (JWK $jwk) {
-                return $jwk->get('kty') === 'oct';
-            })
+            Argument::that(fn (JWK $jwk) => $jwk->get('k') === base64url_encode('client-secret')),
+            Argument::that(fn (JWK $jwk) => $jwk->get('kty') === 'oct')
         ), [
             'alg' => 'HS256',
             'typ' => 'JWT',
@@ -179,9 +175,7 @@ class RequestObjectFactoryTest extends TestCase
 
         $this->jwsBuilder->create()->willReturn($this->jwsBuilder->reveal());
         $this->jwsBuilder->withPayload(Argument::type('string'))->willReturn($this->jwsBuilder->reveal());
-        $this->jwsBuilder->addSignature(Argument::that(function (JWK $key) {
-            return 'some-key-id' === $key->get('kid');
-        }), [
+        $this->jwsBuilder->addSignature(Argument::that(fn (JWK $key) => 'some-key-id' === $key->get('kid')), [
             'alg' => 'RS256',
             'typ' => 'JWT',
             'kid' => 'some-key-id',
@@ -214,12 +208,8 @@ class RequestObjectFactoryTest extends TestCase
         ])->willReturn($this->jweBuilder->reveal());
         $this->jweBuilder->addRecipient(Argument::allOf(
             Argument::type(JWK::class),
-            Argument::that(function (JWK $jwk) {
-                return $jwk->get('k') === base64url_encode('client-secret');
-            }),
-            Argument::that(function (JWK $jwk) {
-                return $jwk->get('kty') === 'oct';
-            })
+            Argument::that(fn (JWK $jwk) => $jwk->get('k') === base64url_encode('client-secret')),
+            Argument::that(fn (JWK $jwk) => $jwk->get('kty') === 'oct')
         ))
             ->willReturn($this->jweBuilder->reveal());
         $this->jweBuilder->build()->willReturn($jwe->reveal());
@@ -259,9 +249,7 @@ class RequestObjectFactoryTest extends TestCase
             'cty' => 'JWT',
             'kid' => 'some-key-id',
         ])->willReturn($this->jweBuilder->reveal());
-        $this->jweBuilder->addRecipient(Argument::that(function (JWK $key) {
-            return 'some-key-id' === $key->get('kid');
-        }))
+        $this->jweBuilder->addRecipient(Argument::that(fn (JWK $key) => 'some-key-id' === $key->get('kid')))
             ->willReturn($this->jweBuilder->reveal());
         $this->jweBuilder->build()->willReturn($jwe->reveal());
 

@@ -55,9 +55,7 @@ final class DistributedParser extends AbstractClaims implements DistributedParse
         }
 
         /** @var array<string, array{endpoint: string}> $distributedSources */
-        $distributedSources = array_filter($claimSources, static function ($value): bool {
-            return null !== ($value['endpoint'] ?? null);
-        });
+        $distributedSources = array_filter($claimSources, static fn ($value): bool => null !== ($value['endpoint'] ?? null));
 
         /** @var array<string, ResponseInterface> $responses */
         $responses = [];

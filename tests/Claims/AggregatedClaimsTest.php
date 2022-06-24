@@ -146,9 +146,7 @@ class AggregatedClaimsTest extends TestCase
         $algorithm = new RS256();
         $algorithmManager->get('RS256')->willReturn($algorithm);
 
-        $JWSVerifier->verifyWithKey(Argument::type(JWS::class), Argument::that(function (JWK $key) use ($jwkPublic) {
-            return $jwkPublic->all() === $key->all();
-        }), 0)
+        $JWSVerifier->verifyWithKey(Argument::type(JWS::class), Argument::that(fn (JWK $key) => $jwkPublic->all() === $key->all()), 0)
             ->willReturn(true);
 
         $client->getIssuer()->willReturn($issuer->reveal());

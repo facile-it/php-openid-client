@@ -150,15 +150,11 @@ class TestListener implements TestListenerInterface
         // remove spaces based on first line
         if (preg_match('/^( +)/', $lines[0] ?? '', $matches)) {
             $toTrim = strlen($matches[1]);
-            $lines = array_map(static function (string $line) use ($toTrim) {
-                return preg_replace(sprintf('/^ {0,%d}/', $toTrim), '', $line);
-            }, $lines);
+            $lines = array_map(static fn (string $line) => preg_replace(sprintf('/^ {0,%d}/', $toTrim), '', $line), $lines);
         }
 
         if ($indent) {
-            $lines = array_map(static function (string $line) use ($indent) {
-                return str_repeat(' ', $indent) . $line;
-            }, $lines);
+            $lines = array_map(static fn (string $line) => str_repeat(' ', $indent) . $line, $lines);
         }
 
         return implode('', $lines);
