@@ -76,6 +76,7 @@ final class DiscoveryProvider implements DiscoveryProviderInterface
 
     /**
      * @return array<mixed, string>
+     *
      * @psalm-return IssuerMetadataObject
      */
     private function fetchOpenIdConfiguration(string $uri): array

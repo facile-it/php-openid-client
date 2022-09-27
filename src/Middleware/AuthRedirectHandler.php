@@ -31,6 +31,7 @@ class AuthRedirectHandler implements RequestHandlerInterface
 
     /**
      * @var int
+     *
      * @psalm-var positive-int
      */
     private $randomBytes;

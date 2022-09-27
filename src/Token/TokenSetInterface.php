@@ -15,6 +15,7 @@ interface TokenSetInterface
      * Get all attributes
      *
      * @return array<string, mixed>
+     *
      * @psalm-return TokenSetType
      */
     public function getAttributes(): array;
@@ -37,6 +38,7 @@ interface TokenSetInterface
 
     /**
      * @return array<string, mixed>
+     *
      * @psalm-return TokenSetClaimsType
      */
     public function claims(): array;

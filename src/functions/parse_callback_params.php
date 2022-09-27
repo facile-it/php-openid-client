@@ -14,6 +14,7 @@ use function strtoupper;
  * @return array<string, mixed>
  *
  * @template P as array{error?: string, error_description?: string, error_uri?: string, response?: string}&array<string, mixed>
+ *
  * @psalm-return P
  */
 function parse_callback_params(ServerRequestInterface $serverRequest): array

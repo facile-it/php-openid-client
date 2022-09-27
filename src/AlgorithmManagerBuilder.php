@@ -14,12 +14,14 @@ class AlgorithmManagerBuilder
 {
     /**
      * @var string[]
+     *
      * @psalm-var list<class-string<\Jose\Component\Core\Algorithm>>
      */
     private $algorithmClasses;
 
     /**
      * @param string[]|null $algorithmClasses
+     *
      * @psalm-param null|list<class-string<\Jose\Component\Core\Algorithm>> $algorithmClasses
      */
     public function __construct(?array $algorithmClasses = null)
@@ -45,6 +47,7 @@ class AlgorithmManagerBuilder
 
     /**
      * @return string[]
+     *
      * @psalm-return list<class-string<\Jose\Component\Core\Algorithm>>
      */
     private function getAlgorithms(): array

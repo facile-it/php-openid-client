@@ -93,6 +93,7 @@ class OAuth2Exception extends RuntimeException implements JsonSerializable
 
     /**
      * @return array<string, mixed>
+     *
      * @psalm-return array{error: string, error_description?: string, error_uri?: string}
      */
     public function jsonSerialize(): array

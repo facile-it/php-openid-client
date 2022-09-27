@@ -16,12 +16,14 @@ final class TokenSet implements TokenSetInterface, JsonSerializable
 {
     /**
      * @var array<string, mixed>
+     *
      * @psalm-var TokenSetType
      */
     private $attributes = [];
 
     /**
      * @var array<string, mixed>
+     *
      * @psalm-var TokenSetClaimsType
      */
     private $claims = [];
@@ -38,6 +40,7 @@ final class TokenSet implements TokenSetInterface, JsonSerializable
 
     /**
      * @param array<string, mixed> $data
+     *
      * @psalm-param TokenSetMixedType $data
      */
     public static function fromParams(array $data): TokenSetInterface
@@ -117,6 +120,7 @@ final class TokenSet implements TokenSetInterface, JsonSerializable
 
     /**
      * @return array<string, mixed>
+     *
      * @psalm-return TokenSetType
      */
     public function jsonSerialize(): array

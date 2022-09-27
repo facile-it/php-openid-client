@@ -14,7 +14,6 @@ use Facile\OpenIDClient\Issuer\IssuerInterface;
 use Facile\OpenIDClient\Issuer\Metadata\IssuerMetadataInterface;
 use Facile\OpenIDClient\Service\AuthorizationService;
 use Facile\OpenIDClient\Token\IdTokenVerifierBuilderInterface;
-use Facile\OpenIDClient\Token\TokenSetFactory;
 use Facile\OpenIDClient\Token\TokenSetFactoryInterface;
 use Facile\OpenIDClient\Token\TokenSetInterface;
 use Facile\OpenIDClient\Token\TokenVerifierBuilderInterface;
@@ -156,16 +155,17 @@ class AuthorizationServiceTest extends TestCase
             $clientMetadata
         );
 
+        $tokenSet = $this->prophesize(TokenSetInterface::class);
+        $tokenSetFactory->fromArray([])->shouldBeCalled()->willReturn($tokenSet->reveal());
+
         // Build poc request
         $body = 'claims[iss]=foobar&claims[sub]=adminuser1'; // forge arbitrary claims
         $headers = ['test' => 'test'];
         $serverRequest = new \GuzzleHttp\Psr7\ServerRequest('POST', 'http://127.0.0.1:8082', $headers, $body);
 
         $callbackParams = $service->getCallbackParams($serverRequest, $client);
-        $tokenSet = $service->callback($client, $callbackParams); // tokenSet contains forged claims
+        $tokenSetResult = $service->callback($client, $callbackParams); // tokenSet contains forged claims
 
-        $claims = $tokenSet->claims();
-
-        $this->assertSame([], $claims);
+        $this->assertSame($tokenSetResult, $tokenSet->reveal());
     }
 }

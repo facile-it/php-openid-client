@@ -27,6 +27,7 @@ final class CachedProviderDecorator implements RemoteProviderInterface
 
     /**
      * @var callable
+     *
      * @psalm-var callable(string): string
      */
     private $cacheIdGenerator;

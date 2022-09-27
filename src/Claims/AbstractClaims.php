@@ -111,6 +111,7 @@ abstract class AbstractClaims
      * @return array<string, mixed>
      *
      * @psalm-param TokenSetClaimsType $claims
+     *
      * @psalm-return TokenSetClaimsType
      */
     protected function assignClaims(array $claims, array $sourceNames, array $sources): array
@@ -140,6 +141,7 @@ abstract class AbstractClaims
      * @return array<string, mixed>
      *
      * @psalm-param TokenSetClaimsType $claims
+     *
      * @psalm-return TokenSetClaimsType
      */
     protected function cleanClaims(array $claims): array

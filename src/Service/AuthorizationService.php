@@ -72,6 +72,7 @@ final class AuthorizationService
      * @param array<string, mixed> $params
      *
      * @template P as (array{scope?: string, response_type?: string, redirect_uri?: string, claims?: array<string, string>|JsonSerializable}&array<string, mixed>)|array<empty, empty>
+     *
      * @psalm-param P $params
      */
     public function getAuthorizationUri(OpenIDClient $client, array $params = []): string
@@ -278,7 +279,9 @@ final class AuthorizationService
      * @param array<string, mixed> $params
      *
      * @template P as array<string, mixed>
+     *
      * @psalm-param P $params
+     *
      * @psalm-assert-if-true array{response: string} $params
      */
     private function isResponseObject(array $params): bool
@@ -291,7 +294,9 @@ final class AuthorizationService
      *
      * @template P as array<string, mixed>
      * @template OE as array{error: string, error_description?: string, error_uri?: string}
+     *
      * @psalm-param OE|P $params
+     *
      * @psalm-assert P $params
      */
     private function assertOAuth2Error(array $params): void
@@ -310,7 +315,9 @@ final class AuthorizationService
      *
      * @template R as array<string, mixed>
      * @template ResObject as array{response: string}
+     *
      * @psalm-param R $params
+     *
      * @psalm-return (R is ResObject ? TokenSetMixedType : R)
      */
     private function processResponseParams(OpenIDClient $client, array $params): array
