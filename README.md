@@ -103,7 +103,12 @@ $idToken = $tokenSet->getIdToken(); // Unencrypted id_token
 $accessToken = $tokenSet->getAccessToken(); // Access token
 $refreshToken = $tokenSet->getRefreshToken(); // Refresh token
 
-$claims = $tokenSet->claims(); // IdToken claims (if id_token is available)
+// check if we have an authenticated user
+if ($idToken) {
+    $claims = $tokenSet->claims(); // IdToken claims
+} else {
+    throw new \RuntimeException('Unauthorized')
+}
 
 
 // Refresh token
