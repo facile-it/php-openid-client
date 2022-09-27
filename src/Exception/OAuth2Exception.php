@@ -7,6 +7,7 @@ namespace Facile\OpenIDClient\Exception;
 use function array_key_exists;
 use function is_array;
 use function json_decode;
+use JsonException;
 use JsonSerializable;
 use Psr\Http\Message\ResponseInterface;
 use function sprintf;
@@ -28,8 +29,12 @@ class OAuth2Exception extends RuntimeException implements JsonSerializable
      */
     public static function fromResponse(ResponseInterface $response, Throwable $previous = null): self
     {
-        /** @psalm-var false|array{error: string, error_description?: string, error_uri?: string}  $data */
-        $data = json_decode((string) $response->getBody(), true);
+        try {
+            /** @psalm-var false|array{error: string, error_description?: string, error_uri?: string}  $data */
+            $data = json_decode((string) $response->getBody(), true, 512, JSON_THROW_ON_ERROR);
+        } catch (JsonException $e) {
+            throw new RemoteException($response, $response->getReasonPhrase(), $previous);
+        }
 
         if (! is_array($data) || ! isset($data['error'])) {
             throw new RemoteException($response, $response->getReasonPhrase(), $previous);

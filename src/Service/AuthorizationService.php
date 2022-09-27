@@ -98,7 +98,7 @@ final class AuthorizationService
             if (null === $value) {
                 unset($params[$key]);
             } elseif ('claims' === $key && (is_array($value) || $value instanceof JsonSerializable)) {
-                $params['claims'] = json_encode($value);
+                $params['claims'] = json_encode($value, JSON_THROW_ON_ERROR);
             } elseif (! is_string($value)) {
                 $params[$key] = (string) $value;
             }

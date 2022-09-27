@@ -71,7 +71,6 @@ final class PrivateKeyJwt extends AbstractJwtAuth
         $time = time();
         $jti = base64url_encode(random_bytes(32));
 
-        /** @var string $payload */
         $payload = json_encode(array_merge(
             $claims,
             [
@@ -82,7 +81,7 @@ final class PrivateKeyJwt extends AbstractJwtAuth
                 'exp' => $time + $this->tokenTTL,
                 'jti' => $jti,
             ]
-        ));
+        ), JSON_THROW_ON_ERROR);
 
         $jws = $this->jwsBuilder->create()
             ->withPayload($payload)

@@ -60,7 +60,7 @@ class SessionCookieMiddleware implements MiddlewareInterface
         /** @var string|null $sessionValue */
         $sessionValue = null !== $sessionId ? $this->cache->get($sessionId) : null;
         /** @var false|AuthSessionType $data */
-        $data = null !== $sessionValue ? json_decode($sessionValue, true) : [];
+        $data = null !== $sessionValue ? json_decode($sessionValue, true, 512, JSON_THROW_ON_ERROR) : [];
 
         if (! is_array($data)) {
             $data = [];
@@ -72,8 +72,7 @@ class SessionCookieMiddleware implements MiddlewareInterface
 
         $sessionId ??= bin2hex(random_bytes(32));
 
-        /** @var string $sessionValue */
-        $sessionValue = json_encode($authSession);
+        $sessionValue = json_encode($authSession, JSON_THROW_ON_ERROR);
 
         if (false === $this->cache->set($sessionId, $sessionValue, $this->ttl)) {
             throw new RuntimeException('Unable to save session');
