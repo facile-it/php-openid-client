@@ -7,6 +7,7 @@ namespace Facile\OpenIDClient;
 use Facile\OpenIDClient\Exception\InvalidArgumentException;
 use function is_array;
 use function json_decode;
+use JsonException;
 use Psr\Http\Message\ResponseInterface;
 
 /**
@@ -20,8 +21,12 @@ function parse_metadata_response(ResponseInterface $response, ?int $expectedCode
 {
     check_server_response($response, $expectedCode);
 
-    /** @var bool|P $data */
-    $data = json_decode((string) $response->getBody(), true);
+    try {
+        /** @var bool|P $data */
+        $data = json_decode((string) $response->getBody(), true, 512, JSON_THROW_ON_ERROR);
+    } catch (JsonException $e) {
+        throw new InvalidArgumentException('Invalid metadata content', 0, $e);
+    }
 
     if (! is_array($data)) {
         throw new InvalidArgumentException('Invalid metadata content');

@@ -73,9 +73,7 @@ final class ClientSecretJwt extends AbstractJwtAuth
         $time = time();
         $jti = base64url_encode(random_bytes(32));
 
-        /** @var string $payload */
-        $payload = json_encode(
-            $claims +
+        $payload = json_encode($claims +
             [
                 'iss' => $clientId,
                 'sub' => $clientId,
@@ -83,8 +81,7 @@ final class ClientSecretJwt extends AbstractJwtAuth
                 'iat' => $time,
                 'exp' => $time + 60,
                 'jti' => $jti,
-            ]
-        );
+            ], JSON_THROW_ON_ERROR);
 
         $jws = $this->getJwsBuilder()->create()
             ->withPayload($payload)
