@@ -134,7 +134,11 @@ final class AuthorizationService
         ?AuthSessionInterface $authSession = null,
         ?int $maxAge = null
     ): TokenSetInterface {
-        $tokenSet = $this->tokenSetFactory->fromArray($params);
+        $allowedParams = ['code', 'state', 'token_type', 'access_token', 'id_token', 'refresh_token', 'expires_in', 'code_verifier'];
+        $tokenSet = $this->tokenSetFactory->fromArray(array_intersect_key(
+            $params,
+            array_fill_keys($allowedParams, true)
+        ));
 
         $idToken = $tokenSet->getIdToken();
 
