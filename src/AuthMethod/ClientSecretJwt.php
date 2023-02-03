@@ -66,8 +66,6 @@ final class ClientSecretJwt extends AbstractJwtAuth
         }
 
         $clientId = $client->getMetadata()->getClientId();
-        $issuer = $client->getIssuer();
-        $issuerMetadata = $issuer->getMetadata();
 
         $jwk = jose_secret_key($clientSecret);
 

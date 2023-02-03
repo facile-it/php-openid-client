@@ -58,9 +58,6 @@ final class PrivateKeyJwt extends AbstractJwtAuth
      */
     protected function createAuthJwt(OpenIDClient $client, array $claims = []): string
     {
-        $issuer = $client->getIssuer();
-        $issuerMetadata = $issuer->getMetadata();
-
         $clientId = $client->getMetadata()->getClientId();
 
         $jwk = $this->jwk ?? JWKSet::createFromKeyData($client->getJwksProvider()->getJwks())->selectKey('sig');
