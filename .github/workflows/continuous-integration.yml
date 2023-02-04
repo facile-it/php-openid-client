@@ -62,13 +62,15 @@ jobs:
           - "7.4"
           - "8.0"
           - "8.1"
-          - "8.2"
         deps:
           - "--prefer-lowest"
           - ""
         coverage:
           - "false"
         include:
+          - php-version: "8.2"
+            deps: "--prefer-lowest"
+            coverage: "false"
           - php-version: "8.2"
             deps: ""
             coverage: "true"
