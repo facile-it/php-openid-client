@@ -67,7 +67,13 @@ jobs:
           - ""
         coverage:
           - "false"
+        codestyle:
+          - "false"
         include:
+          - php-version: "8.1"
+            deps: ""
+            coverage: "false"
+            codestyle: "true"
           - php-version: "8.2"
             deps: "--prefer-lowest"
             coverage: "false"
@@ -101,7 +107,7 @@ jobs:
 
       - name: "Run PHPCS check"
         run: "composer cs-check"
-        if: "${{ matrix.coverage == 'true' }}"
+        if: "${{ matrix.codestyle == 'true' }}"
 
       - name: "Run PHPUnit"
         run: "vendor/bin/phpunit -c phpunit.xml.dist"
