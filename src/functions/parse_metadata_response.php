@@ -11,9 +11,8 @@ use JsonException;
 use Psr\Http\Message\ResponseInterface;
 
 /**
+ * @internal
  * @return array<string, mixed>
- *
- * @template P as array{error?: string, error_description?: string, error_uri?: string, response?: string}&array<string, mixed>
  *
  * @psalm-return array<string, mixed>
  */
@@ -22,7 +21,7 @@ function parse_metadata_response(ResponseInterface $response, ?int $expectedCode
     check_server_response($response, $expectedCode);
 
     try {
-        /** @var bool|P $data */
+        /** @var null|(array{}&array{error?: string, error_description?: string, error_uri?: string, response?: string}) $data */
         $data = json_decode((string) $response->getBody(), true, 512, JSON_THROW_ON_ERROR);
     } catch (JsonException $e) {
         throw new InvalidArgumentException('Invalid metadata content', 0, $e);

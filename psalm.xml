@@ -5,6 +5,9 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xmlns="https://getpsalm.org/schema/config"
     xsi:schemaLocation="https://getpsalm.org/schema/config vendor/vimeo/psalm/config.xsd"
+    findUnusedBaselineEntry="false"
+    findUnusedCode="false"
+    errorBaseline="psalm-baseline.xml"
 >
     <projectFiles>
         <directory name="src" />
@@ -13,7 +16,11 @@
         </ignoreFiles>
     </projectFiles>
 
-    <plugins>
-        <pluginClass class="Facile\JoseVerifier\Psalm\Plugin" />
-    </plugins>
+    <stubs>
+        <file name="stubs/Jose/Component/Core/JWK.php.stub"/>
+        <file name="stubs/Jose/Component/Core/JWKSet.php.stub"/>
+        <file name="stubs/Jose/Component/Encryption/JWE.php.stub"/>
+        <file name="stubs/Jose/Component/Signature/JWSBuilder.php.stub"/>
+        <file name="stubs/Jose/Component/Signature/Signature.php.stub"/>
+    </stubs>
 </psalm>

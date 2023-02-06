@@ -13,6 +13,14 @@ use Psr\Http\Message\ResponseInterface;
 use function sprintf;
 use Throwable;
 
+/**
+ * @psalm-type OAuth2ErrorType = array{}&array{
+ *     error: string,
+ *     error_description?: string,
+ *     error_uri?: string,
+ *     state?: string,
+ * }
+ */
 class OAuth2Exception extends RuntimeException implements JsonSerializable
 {
     /** @var string */
@@ -25,12 +33,21 @@ class OAuth2Exception extends RuntimeException implements JsonSerializable
     private $errorUri;
 
     /**
+     * @psalm-param array<string, mixed> $data
+     * @psalm-assert-if-true OAuth2ErrorType $data
+     */
+    public static function isOAuth2Error(array $data): bool
+    {
+        return array_key_exists('error', $data);
+    }
+
+    /**
      * @throws RemoteException
      */
     public static function fromResponse(ResponseInterface $response, Throwable $previous = null): self
     {
         try {
-            /** @psalm-var false|array{error: string, error_description?: string, error_uri?: string}  $data */
+            /** @psalm-var false|array{error?: string, error_description?: string, error_uri?: string}  $data */
             $data = json_decode((string) $response->getBody(), true, 512, JSON_THROW_ON_ERROR);
         } catch (JsonException $e) {
             throw new RemoteException($response, $response->getReasonPhrase(), $previous);
@@ -46,11 +63,11 @@ class OAuth2Exception extends RuntimeException implements JsonSerializable
     /**
      * @param array<string, mixed> $params
      *
-     * @psalm-param array{error?: string, error_description?: string, error_uri?: string} $params
+     * @psalm-param OAuth2ErrorType $params
      */
     public static function fromParameters(array $params, Throwable $previous = null): self
     {
-        if (! array_key_exists('error', $params)) {
+        if (! static::isOAuth2Error($params)) {
             throw new InvalidArgumentException('Invalid OAuth2 exception', 0, $previous);
         }
 

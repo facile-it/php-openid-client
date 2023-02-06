@@ -83,9 +83,15 @@ final class PrivateKeyJwt extends AbstractJwtAuth
             ]
         ), JSON_THROW_ON_ERROR);
 
+        $jwkAlg = $jwk->get('alg');
+
+        if (! is_string($jwkAlg)) {
+            throw new RuntimeException('Invalid JWK `alg` value');
+        }
+
         $jws = $this->jwsBuilder->create()
             ->withPayload($payload)
-            ->addSignature($jwk, ['alg' => $jwk->get('alg'), 'jti' => $jti])
+            ->addSignature($jwk, ['alg' => $jwkAlg, 'jti' => $jti])
             ->build();
 
         return $this->jwsSerializer->serialize($jws, 0);

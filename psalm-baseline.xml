@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<files psalm-version="5.6.0@e784128902dfe01d489c4123d69918a9f3c1eac5">
+  <file src="src/Issuer/Metadata/Provider/CachedProviderDecorator.php">
+    <MoreSpecificReturnType>
+      <code>array</code>
+    </MoreSpecificReturnType>
+  </file>
+  <file src="src/Issuer/Metadata/Provider/DiscoveryProvider.php">
+    <MoreSpecificReturnType>
+      <code>array</code>
+    </MoreSpecificReturnType>
+  </file>
+  <file src="src/Token/IdTokenVerifierBuilder.php">
+    <InvalidArgument>
+      <code>$client-&gt;getIssuer()-&gt;getMetadata()-&gt;toArray()</code>
+    </InvalidArgument>
+  </file>
+  <file src="src/Token/ResponseVerifierBuilder.php">
+    <InvalidArgument>
+      <code>$client-&gt;getIssuer()-&gt;getMetadata()-&gt;toArray()</code>
+    </InvalidArgument>
+  </file>
+  <file src="src/Token/UserInfoVerifierBuilder.php">
+    <InvalidArgument>
+      <code>$client-&gt;getIssuer()-&gt;getMetadata()-&gt;toArray()</code>
+    </InvalidArgument>
+  </file>
+</files>

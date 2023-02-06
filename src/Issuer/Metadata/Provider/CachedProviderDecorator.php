@@ -56,7 +56,7 @@ final class CachedProviderDecorator implements RemoteProviderInterface
         $cached = $this->cache->get($cacheId) ?? '';
 
         try {
-            /** @var null|string|IssuerMetadataObject $data */
+            /** @psalm-var null|string|IssuerMetadataObject $data */
             $data = json_decode($cached, true, 512, JSON_THROW_ON_ERROR);
         } catch (JsonException $e) {
             $data = null;

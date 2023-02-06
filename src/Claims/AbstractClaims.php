@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Facile\OpenIDClient\Claims;
 
+use Facile\OpenIDClient\Token\TokenSetInterface;
 use function array_diff_key;
 use function array_flip;
 use function array_key_exists;
@@ -26,7 +27,10 @@ use JsonException;
 use function sprintf;
 
 /**
- * @psalm-import-type TokenSetClaimsType from \Facile\OpenIDClient\Token\TokenSetInterface
+ * @psalm-import-type TokenSetClaimsType from TokenSetInterface
+ * @psalm-import-type ClaimSourceType from TokenSetInterface
+ * @psalm-import-type ClaimSourceAggregateType from TokenSetInterface
+ * @psalm-import-type ClaimSourceDistributedType from TokenSetInterface
  */
 abstract class AbstractClaims
 {
@@ -52,6 +56,26 @@ abstract class AbstractClaims
         $this->algorithmManager = $algorithmManager ?? (new AlgorithmManagerBuilder())->build();
         $this->JWSVerifier = $JWSVerifier ?? new JWSVerifier($this->algorithmManager);
         $this->serializer = $serializer ?? new CompactSerializer();
+    }
+
+    /**
+     * @psalm-param array<string, mixed> $data
+     * @psalm-return bool
+     * @psalm-assert-if-true ClaimSourceAggregateType $data
+     */
+    protected function isAggregateSource(array $data): bool
+    {
+        return array_key_exists('JWT', $data);
+    }
+
+    /**
+     * @psalm-param array<string, mixed> $data
+     * @psalm-return bool
+     * @psalm-assert-if-true ClaimSourceDistributedType $data
+     */
+    protected function isDistributedSource(array $data): bool
+    {
+        return array_key_exists('endpoint', $data);
     }
 
     /**

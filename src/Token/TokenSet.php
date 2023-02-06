@@ -9,6 +9,7 @@ use JsonSerializable;
 
 /**
  * @psalm-import-type TokenSetType from TokenSetInterface
+ * @psalm-import-type TokenSetAttributesType from TokenSetInterface
  * @psalm-import-type TokenSetClaimsType from TokenSetInterface
  * @psalm-import-type TokenSetMixedType from TokenSetInterface
  */
@@ -17,7 +18,7 @@ final class TokenSet implements TokenSetInterface, JsonSerializable
     /**
      * @var array<string, mixed>
      *
-     * @psalm-var TokenSetType
+     * @psalm-var TokenSetAttributesType
      */
     private $attributes = [];
 
@@ -29,7 +30,7 @@ final class TokenSet implements TokenSetInterface, JsonSerializable
     private $claims = [];
 
     /**
-     * @psalm-param TokenSetType $attributes
+     * @psalm-param TokenSetAttributesType $attributes
      * @psalm-param TokenSetClaimsType $claims
      */
     private function __construct(array $attributes, array $claims)
@@ -50,6 +51,8 @@ final class TokenSet implements TokenSetInterface, JsonSerializable
             $claims = $data['claims'];
             unset($data['claims']);
         }
+
+        /** @psalm-var TokenSetAttributesType $data */
 
         return new static($data, $claims);
     }

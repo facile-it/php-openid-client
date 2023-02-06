@@ -4,18 +4,17 @@ declare(strict_types=1);
 
 namespace Facile\OpenIDClient;
 
+use Facile\OpenIDClient\Exception\OAuth2Exception;
 use Facile\OpenIDClient\Exception\RuntimeException;
+use Facile\OpenIDClient\Service\AuthorizationService;
 use function in_array;
 use function parse_str;
 use Psr\Http\Message\ServerRequestInterface;
 use function strtoupper;
 
 /**
+ * @internal
  * @return array<string, mixed>
- *
- * @template P as array{error?: string, error_description?: string, error_uri?: string, response?: string}&array<string, mixed>
- *
- * @psalm-return P
  */
 function parse_callback_params(ServerRequestInterface $serverRequest): array
 {
@@ -33,6 +32,6 @@ function parse_callback_params(ServerRequestInterface $serverRequest): array
         parse_str($serverRequest->getUri()->getQuery(), $params);
     }
 
-    /** @var P $params */
+    /** @var array<string, mixed> $params */
     return $params;
 }

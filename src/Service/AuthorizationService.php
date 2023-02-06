@@ -34,8 +34,23 @@ use Psr\Http\Message\ServerRequestInterface;
  *
  * @link https://tools.ietf.org/html/rfc6749 RFC 6749
  *
- * @psalm-import-type TokenSetMixedType from TokenSetInterface
+ * @psalm-import-type TokenSetAttributesType from TokenSetInterface
  * @psalm-import-type TokenSetClaimsType from TokenSetInterface
+ * @psalm-import-type OAuth2ErrorType from OAuth2Exception
+ * @psalm-type AuthorizationResponseObjectType = array{}&array{
+ *     response: string,
+ * }
+ * @psalm-type AuthorizationResponseType = array{}&array{
+ *     code?: string,
+ *     access_token?: string,
+ *     token_type?: string,
+ *     expires_in?: int,
+ *     scope?: string,
+ *     state?: string,
+ *     code_verifier?: string,
+ *     redirect_uri?: string
+ * }
+ * @psalm-type CallbackParamsType = array<string, mixed>
  */
 final class AuthorizationService
 {
@@ -71,9 +86,7 @@ final class AuthorizationService
     /**
      * @param array<string, mixed> $params
      *
-     * @template P as (array{scope?: string, response_type?: string, redirect_uri?: string, claims?: array<string, string>|JsonSerializable}&array<string, mixed>)|array<empty, empty>
-     *
-     * @psalm-param P $params
+     * @psalm-param array<string, mixed> $params
      */
     public function getAuthorizationUri(OpenIDClient $client, array $params = []): string
     {
@@ -116,7 +129,7 @@ final class AuthorizationService
      *
      * @return array<string, mixed>
      *
-     * @psalm-return TokenSetMixedType
+     * @psalm-return TokenSetAttributesType
      */
     public function getCallbackParams(ServerRequestInterface $serverRequest, OpenIDClient $client): array
     {
@@ -126,7 +139,7 @@ final class AuthorizationService
     /**
      * @param array<string, mixed> $params
      *
-     * @psalm-param TokenSetMixedType $params
+     * @psalm-param TokenSetAttributesType $params
      */
     public function callback(
         OpenIDClient $client,
@@ -136,10 +149,12 @@ final class AuthorizationService
         ?int $maxAge = null
     ): TokenSetInterface {
         $allowedParams = ['code', 'state', 'token_type', 'access_token', 'id_token', 'refresh_token', 'expires_in', 'code_verifier'];
-        $tokenSet = $this->tokenSetFactory->fromArray(array_intersect_key(
+        /** @psalm-var AuthorizationResponseType $safeParams */
+        $safeParams = array_intersect_key(
             $params,
             array_fill_keys($allowedParams, true)
-        ));
+        );
+        $tokenSet = $this->tokenSetFactory->fromArray($safeParams);
 
         $idToken = $tokenSet->getIdToken();
 
@@ -268,7 +283,6 @@ final class AuthorizationService
             throw new RuntimeException('Unable to get token response', 0, $e);
         }
 
-        /** @var TokenSetMixedType|array{error?: string}|array{response?: string} $data */
         $data = parse_metadata_response($response);
         $params = $this->processResponseParams($client, $data);
 
@@ -278,60 +292,38 @@ final class AuthorizationService
     /**
      * @param array<string, mixed> $params
      *
-     * @template P as array<string, mixed>
+     * @psalm-param array<string, mixed> $params
      *
-     * @psalm-param P $params
-     *
-     * @psalm-assert-if-true array{response: string} $params
+     * @psalm-assert-if-true AuthorizationResponseObjectType $params
      */
-    private function isResponseObject(array $params): bool
+    private function isAuthorizationResponseObject(array $params): bool
     {
         return array_key_exists('response', $params);
     }
 
     /**
-     * @throws OAuth2Exception
-     *
-     * @template P as array<string, mixed>
-     * @template OE as array{error: string, error_description?: string, error_uri?: string}
-     *
-     * @psalm-param OE|P $params
-     *
-     * @psalm-assert P $params
-     */
-    private function assertOAuth2Error(array $params): void
-    {
-        if (array_key_exists('error', $params)) {
-            throw OAuth2Exception::fromParameters($params);
-        }
-    }
-
-    /**
      * @param array<string, mixed> $params
-     *
-     * @throws OAuth2Exception
      *
      * @return array<string, mixed>
      *
-     * @template R as array<string, mixed>
-     * @template ResObject as array{response: string}
+     * @psalm-param array<string, mixed> $params
      *
-     * @psalm-param R $params
+     * @psalm-return TokenSetAttributesType
      *
-     * @psalm-return (R is ResObject ? TokenSetMixedType : R)
+     * @throws OAuth2Exception
      */
     private function processResponseParams(OpenIDClient $client, array $params): array
     {
-        $this->assertOAuth2Error($params);
-
-        if ($this->isResponseObject($params)) {
-            /** @var TokenSetMixedType|ResObject $params */
+        if ($this->isAuthorizationResponseObject($params)) {
             $params = $this->responseVerifierBuilder->build($client)
                 ->verify($params['response']);
-
-            $this->assertOAuth2Error($params);
         }
 
+        if (OAuth2Exception::isOAuth2Error($params)) {
+            throw OAuth2Exception::fromParameters($params);
+        }
+
+        /** @psalm-var TokenSetAttributesType $params */
         return $params;
     }
 }
