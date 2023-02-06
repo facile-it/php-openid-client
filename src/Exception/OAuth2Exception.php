@@ -34,6 +34,7 @@ class OAuth2Exception extends RuntimeException implements JsonSerializable
 
     /**
      * @psalm-param array<string, mixed> $data
+     *
      * @psalm-assert-if-true OAuth2ErrorType $data
      */
     public static function isOAuth2Error(array $data): bool

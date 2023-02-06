@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Facile\OpenIDClient\Claims;
 
-use Facile\OpenIDClient\Token\TokenSetInterface;
 use function array_diff_key;
 use function array_flip;
 use function array_key_exists;
@@ -17,6 +16,7 @@ use Facile\OpenIDClient\Exception\InvalidArgumentException;
 use Facile\OpenIDClient\Exception\RuntimeException;
 use Facile\OpenIDClient\Issuer\IssuerBuilder;
 use Facile\OpenIDClient\Issuer\IssuerBuilderInterface;
+use Facile\OpenIDClient\Token\TokenSetInterface;
 use Jose\Component\Core\AlgorithmManager;
 use Jose\Component\Core\JWKSet;
 use Jose\Component\Signature\JWSVerifier;
@@ -60,7 +60,9 @@ abstract class AbstractClaims
 
     /**
      * @psalm-param array<string, mixed> $data
+     *
      * @psalm-return bool
+     *
      * @psalm-assert-if-true ClaimSourceAggregateType $data
      */
     protected function isAggregateSource(array $data): bool
@@ -70,7 +72,9 @@ abstract class AbstractClaims
 
     /**
      * @psalm-param array<string, mixed> $data
+     *
      * @psalm-return bool
+     *
      * @psalm-assert-if-true ClaimSourceDistributedType $data
      */
     protected function isDistributedSource(array $data): bool

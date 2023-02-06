@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Facile\OpenIDClientTest\Claims;
 
-use Facile\OpenIDClient\Exception\RuntimeException;
 use function Facile\OpenIDClient\base64url_encode;
 use Facile\OpenIDClient\Claims\DistributedParser;
 use Facile\OpenIDClient\Client\ClientInterface;
+use Facile\OpenIDClient\Exception\RuntimeException;
 use Facile\OpenIDClient\Issuer\IssuerBuilderInterface;
 use Facile\OpenIDClient\Issuer\IssuerInterface;
 use Facile\OpenIDClientTest\TestCase;

@@ -12,6 +12,7 @@ use Psr\Http\Message\ResponseInterface;
 
 /**
  * @internal
+ *
  * @return array<string, mixed>
  *
  * @psalm-return array<string, mixed>

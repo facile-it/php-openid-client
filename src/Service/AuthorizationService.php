@@ -37,6 +37,7 @@ use Psr\Http\Message\ServerRequestInterface;
  * @psalm-import-type TokenSetAttributesType from TokenSetInterface
  * @psalm-import-type TokenSetClaimsType from TokenSetInterface
  * @psalm-import-type OAuth2ErrorType from OAuth2Exception
+ *
  * @psalm-type AuthorizationResponseObjectType = array{}&array{
  *     response: string,
  * }
@@ -304,13 +305,13 @@ final class AuthorizationService
     /**
      * @param array<string, mixed> $params
      *
+     * @throws OAuth2Exception
+     *
      * @return array<string, mixed>
      *
      * @psalm-param array<string, mixed> $params
      *
      * @psalm-return TokenSetAttributesType
-     *
-     * @throws OAuth2Exception
      */
     private function processResponseParams(OpenIDClient $client, array $params): array
     {
