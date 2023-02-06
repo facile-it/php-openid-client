@@ -11,6 +11,8 @@ use function strpos;
 
 /**
  * Handle endpoint URI based on auth method
+ *
+ * @internal
  */
 function get_endpoint_uri(OpenIDClient $client, string $endpointMetadata): string
 {

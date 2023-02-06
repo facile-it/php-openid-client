@@ -7,9 +7,9 @@ namespace Facile\OpenIDClientTest\AuthMethod;
 use Facile\JoseVerifier\JWK\JwksProviderInterface;
 use Facile\OpenIDClient\AuthMethod\PrivateKeyJwt;
 use Facile\OpenIDClient\Client\ClientInterface;
-use Facile\OpenIDClient\Client\Metadata\ClientMetadataInterface;
+use Facile\OpenIDClient\Client\Metadata\ClientMetadata;
 use Facile\OpenIDClient\Issuer\IssuerInterface;
-use Facile\OpenIDClient\Issuer\Metadata\IssuerMetadataInterface;
+use Facile\OpenIDClient\Issuer\Metadata\IssuerMetadata;
 use Facile\OpenIDClientTest\TestCase;
 use function http_build_query;
 use Jose\Component\Core\JWK;
@@ -72,10 +72,20 @@ class PrivateKeyJwtTest extends TestCase
         $stream = $this->prophesize(StreamInterface::class);
         $request = $this->prophesize(RequestInterface::class);
         $client = $this->prophesize(ClientInterface::class);
-        $metadata = $this->prophesize(ClientMetadataInterface::class);
         $issuer = $this->prophesize(IssuerInterface::class);
-        $issuerMetadata = $this->prophesize(IssuerMetadataInterface::class);
         $client->getJwksProvider()->willReturn($jwksProvider->reveal());
+
+        $issuerMetadata = IssuerMetadata::fromArray([
+            'issuer' => 'https://issuer.com',
+            'authorization_endpoint' => 'https://issuer.com/auth',
+            'token_endpoint' => 'https://issuer.com/token',
+            'jwks_uri' => 'https://issuer.com/jwks',
+        ]);
+
+        $clientMetadata = ClientMetadata::fromArray([
+            'client_id' => 'foo',
+            'client_secret' => 'bar',
+        ]);
 
         if (! $jwkAsDependency) {
             $jwksProvider->getJwks()->willReturn([
@@ -85,12 +95,9 @@ class PrivateKeyJwtTest extends TestCase
             ]);
         }
 
-        $client->getMetadata()->willReturn($metadata->reveal());
+        $client->getMetadata()->willReturn($clientMetadata);
         $client->getIssuer()->willReturn($issuer->reveal());
-        $metadata->getClientId()->willReturn('foo');
-        $metadata->getClientSecret()->willReturn('bar');
-        $issuer->getMetadata()->willReturn($issuerMetadata->reveal());
-        $issuerMetadata->getIssuer()->willReturn('issuer');
+        $issuer->getMetadata()->willReturn($issuerMetadata);
 
         $jwsBuilder2 = $this->prophesize(JWSBuilder::class);
         $jwsBuilder3 = $this->prophesize(JWSBuilder::class);
@@ -113,7 +120,7 @@ class PrivateKeyJwtTest extends TestCase
             static::assertSame('bar', $decoded['foo'] ?? null);
             static::assertSame('foo', $decoded['iss'] ?? null);
             static::assertSame('foo', $decoded['sub'] ?? null);
-            static::assertSame('issuer', $decoded['aud'] ?? null);
+            static::assertSame('https://issuer.com/token', $decoded['aud'] ?? null);
             static::assertLessThanOrEqual(time(), $decoded['iat']);
             static::assertLessThanOrEqual(time() + 60, $decoded['exp']);
             static::assertGreaterThan(time(), $decoded['exp']);
