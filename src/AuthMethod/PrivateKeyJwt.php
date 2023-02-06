@@ -14,6 +14,7 @@ use Jose\Component\Core\JWKSet;
 use Jose\Component\Signature\JWSBuilder;
 use Jose\Component\Signature\Serializer\CompactSerializer;
 use Jose\Component\Signature\Serializer\JWSSerializer;
+use function Facile\OpenIDClient\get_endpoint_uri;
 use function json_encode;
 use function random_bytes;
 use function time;
@@ -57,9 +58,6 @@ final class PrivateKeyJwt extends AbstractJwtAuth
      */
     protected function createAuthJwt(OpenIDClient $client, array $claims = []): string
     {
-        $issuer = $client->getIssuer();
-        $issuerMetadata = $issuer->getMetadata();
-
         $clientId = $client->getMetadata()->getClientId();
 
         $jwk = $this->jwk ?? JWKSet::createFromKeyData($client->getJwksProvider()->getJwks())->selectKey('sig');
@@ -76,7 +74,7 @@ final class PrivateKeyJwt extends AbstractJwtAuth
             [
                 'iss' => $clientId,
                 'sub' => $clientId,
-                'aud' => $issuerMetadata->getIssuer(),
+                'aud' => get_endpoint_uri($client, 'token_endpoint'),
                 'iat' => $time,
                 'exp' => $time + $this->tokenTTL,
                 'jti' => $jti,
