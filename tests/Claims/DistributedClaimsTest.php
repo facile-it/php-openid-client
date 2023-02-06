@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Facile\OpenIDClientTest\Claims;
 
+use Facile\OpenIDClient\Exception\RuntimeException;
 use function Facile\OpenIDClient\base64url_encode;
 use Facile\OpenIDClient\Claims\DistributedParser;
 use Facile\OpenIDClient\Client\ClientInterface;
@@ -149,6 +150,9 @@ class DistributedClaimsTest extends TestCase
 
     public function testUnpackAggregatedClaimsWithResourceError(): void
     {
+        $this->expectException(RuntimeException::class);
+        $this->expectExceptionMessage('Unable to fetch distributed claim for "src1"');
+
         $jwt = implode('.', [
             base64url_encode((string) json_encode(['alg' => 'none'])),
             base64url_encode((string) json_encode(['age' => 30])),

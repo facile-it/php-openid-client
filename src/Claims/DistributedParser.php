@@ -71,7 +71,7 @@ final class DistributedParser extends AbstractClaims implements DistributedParse
             try {
                 $responses[$sourceName] = $this->client->sendRequest($request);
             } catch (Throwable $e) {
-                throw new RuntimeException("Unable to fetch distributed claim for {$sourceName}", 0, $e);
+                throw new RuntimeException("Unable to fetch distributed claim for \"{$sourceName}\"", 0, $e);
             }
         }
 
@@ -82,7 +82,7 @@ final class DistributedParser extends AbstractClaims implements DistributedParse
                 $claimPayloads[$sourceName] = $this->claimJWT($client, (string) $response->getBody());
                 unset($claims['_claim_sources'][$sourceName]);
             } catch (Throwable $e) {
-                throw new RuntimeException("Unable to fetch distributed claim for {$sourceName}", 0, $e);
+                throw new RuntimeException("Unable to fetch distributed claim for \"{$sourceName}\"", 0, $e);
             }
         }
 
