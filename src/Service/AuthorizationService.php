@@ -123,7 +123,7 @@ final class AuthorizationService
         }
 
         // Support Authorization Endpoint uris with query params
-        $splitUrl = explode('?', $endpointUri);
+        $splitUrl = explode('?', $endpointUri, 2);
         if (isset($splitUrl[1])) {
             parse_str($splitUrl[1], $existingParameters);
             $params = array_merge($existingParameters, $params);
