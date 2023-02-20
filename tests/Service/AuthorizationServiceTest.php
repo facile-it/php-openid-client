@@ -54,9 +54,12 @@ class AuthorizationServiceTest extends TestCase
         $clientMetadata->getResponseTypes()->willReturn(['code']);
         $clientMetadata->getRedirectUris()->willReturn(['redirect_uri_1']);
         $issuer->getMetadata()->willReturn($issuerMetadata);
-        $issuerMetadata->getAuthorizationEndpoint()->willReturn('https://foo-endpoint');
+        $issuerMetadata->getAuthorizationEndpoint()->willReturn('https://foo-endpoint?param=value');
 
-        static::assertSame('https://foo-endpoint?client_id=clientId&scope=openid&response_type=code&redirect_uri=redirect_uri_1', $service->getAuthorizationUri($openIdClient->reveal()));
+        static::assertSame(
+            'https://foo-endpoint?param=value&client_id=clientId&scope=openid&response_type=code&redirect_uri=redirect_uri_1',
+            $service->getAuthorizationUri($openIdClient->reveal())
+        );
     }
 
     public function testFetchTokenFromCode(): void
