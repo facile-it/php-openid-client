@@ -122,7 +122,14 @@ final class AuthorizationService
             throw new InvalidArgumentException('nonce MUST be provided for implicit and hybrid flows');
         }
 
-        return $endpointUri . '?' . http_build_query($params);
+        // Support Authorization Endpoint uris with query params
+        $splitUrl = explode('?', $endpointUri, 2);
+        if (isset($splitUrl[1])) {
+            parse_str($splitUrl[1], $existingParameters);
+            $params = array_merge($existingParameters, $params);
+        }
+
+        return $splitUrl[0] . '?' . http_build_query($params);
     }
 
     /**
