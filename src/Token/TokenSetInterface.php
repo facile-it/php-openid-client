@@ -28,7 +28,6 @@ namespace Facile\OpenIDClient\Token;
  *     picture?: string,
  *     website?: string,
  *     email?: string,
- *     email?: string,
  *     email_verified?: bool,
  *     gender?: string,
  *     birthdate?: string,
