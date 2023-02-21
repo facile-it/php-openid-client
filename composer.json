@@ -14,7 +14,8 @@
         "sort-packages": true,
         "allow-plugins": {
             "facile-it/facile-coding-standard": true,
-            "laminas/laminas-component-installer": true
+            "laminas/laminas-component-installer": true,
+            "php-http/discovery": true
         }
     },
     "keywords": [
