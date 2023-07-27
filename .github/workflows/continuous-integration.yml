@@ -1,21 +1,19 @@
 name: "Continuous Integration"
 
 on:
+  workflow_dispatch:
   pull_request:
-    branches:
-      - "*.x"
-      - "master"
   push:
     branches:
-      - "*.x"
-      - "master"
+      - '[0-9]+.[0-9]+.x'
+      - 'master'
   schedule:
-    - cron: "42 9 * * 1"
+    - cron: "45 9 * * 1"
 
 jobs:
   psalm:
     name: "Static Analysis"
-    runs-on: "ubuntu-20.04"
+    runs-on: ubuntu-latest
 
     strategy:
       matrix:
@@ -24,9 +22,7 @@ jobs:
 
     steps:
       - name: "Checkout"
-        uses: "actions/checkout@v2"
-        with:
-          fetch-depth: 2
+        uses: "actions/checkout@v3"
 
       - name: "Install PHP"
         uses: "shivammathur/setup-php@v2"
@@ -34,7 +30,7 @@ jobs:
           php-version: "${{ matrix.php-version }}"
 
       - name: "Cache dependencies installed with composer"
-        uses: "actions/cache@v2"
+        uses: "actions/cache@v3"
         with:
           path: "~/.composer/cache"
           key: "php-${{ matrix.php-version }}-composer-${{ hashFiles('composer.lock') }}"
@@ -47,14 +43,14 @@ jobs:
         run: "vendor/bin/psalm --long-progress --output-format=github --report=psalm.sarif --php-version=${{ matrix.php-version }}"
 
       - name: "Upload SARIF file"
-        uses: github/codeql-action/upload-sarif@v1
+        uses: github/codeql-action/upload-sarif@v2
         continue-on-error: true
         with:
           sarif_file: psalm.sarif
 
   phpunit:
     name: "PHPUnit"
-    runs-on: "ubuntu-20.04"
+    runs-on: ubuntu-latest
 
     strategy:
       matrix:
@@ -83,9 +79,7 @@ jobs:
 
     steps:
       - name: "Checkout"
-        uses: "actions/checkout@v2"
-        with:
-          fetch-depth: 2
+        uses: "actions/checkout@v3"
 
       - name: "Install PHP"
         uses: "shivammathur/setup-php@v2"
@@ -93,10 +87,10 @@ jobs:
           php-version: "${{ matrix.php-version }}"
           coverage: "pcov"
           ini-values: "zend.assertions=1"
-          extensions: "bcmath gmp"
+          extensions: "bcmath, gmp"
 
       - name: "Cache dependencies installed with composer"
-        uses: "actions/cache@v2"
+        uses: "actions/cache@v3"
         with:
           path: "~/.composer/cache"
           key: "php-${{ matrix.php-version }}-composer-${{ hashFiles('composer.lock') }}"
@@ -118,7 +112,7 @@ jobs:
         if: "${{ matrix.coverage == 'true' }}"
 
       - name: Upload code coverage
-        uses: codecov/codecov-action@v1
+        uses: codecov/codecov-action@v3
         with:
-          file: coverage-report.xml
+          files: coverage-report.xml
         if: "${{ matrix.coverage == 'true' }}"
