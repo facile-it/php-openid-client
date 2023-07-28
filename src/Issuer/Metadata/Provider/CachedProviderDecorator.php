@@ -48,6 +48,13 @@ final class CachedProviderDecorator implements RemoteProviderInterface
         $this->cacheIdGenerator = $cacheIdGenerator ?? static fn (string $uri): string => substr(sha1($uri), 0, 65);
     }
 
+    /**
+     * @return array<string, mixed>
+     *
+     * @psalm-return IssuerMetadataObject
+     *
+     * @psalm-suppress MixedReturnTypeCoercion
+     */
     public function fetch(string $uri): array
     {
         $cacheId = ($this->cacheIdGenerator)($uri);

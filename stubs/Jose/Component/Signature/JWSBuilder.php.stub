@@ -39,8 +39,8 @@ class JWSBuilder
     /**
      * Adds the information needed to compute the signature. This method will return a new JWSBuilder object.
      *
-     * @param array{}&array{alg?: string} $protectedHeader
-     * @param array{}&array{alg?: string} $header
+     * @psalm-param array{alg?: string, ...} $protectedHeader
+     * @psalm-param array{alg?: string, ...} $header
      */
     public function addSignature(JWK $signatureKey, array $protectedHeader, array $header = []): self
     {

@@ -158,13 +158,14 @@ abstract class AbstractClaims
                 throw new RuntimeException(sprintf('Unable to find claim "%s" in source "%s"', $claim, $inSource));
             }
 
-            /** @var scalar $value */
+            /** @psalm-var scalar $value */
             $value = $sources[$inSource][$claim];
             $claims[$claim] = $value;
-            /** @var TokenSetClaimsType $claims */
+            /** @psalm-var TokenSetClaimsType $claims */
             $claims['_claim_names'] = array_diff_key($claims['_claim_names'] ?? [], array_flip([$claim]));
         }
 
+        /** @psalm-var TokenSetClaimsType $claims */
         return $claims;
     }
 

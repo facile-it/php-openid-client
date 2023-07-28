@@ -43,6 +43,7 @@ namespace Facile\OpenIDClient\Token;
  * @psalm-type TokenSetAttributesType = array{}&array{
  *     code?: string,
  *     access_token?: string,
+ *     id_token?: string,
  *     token_type?: string,
  *     refresh_token?: string,
  *     expires_in?: int,
