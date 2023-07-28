@@ -48,6 +48,13 @@ final class DiscoveryProvider implements DiscoveryProviderInterface
         return (int) preg_match('/https?:\/\//', $uri) > 0;
     }
 
+    /**
+     * @return array<string, mixed>
+     *
+     * @psalm-return IssuerMetadataObject
+     *
+     * @psalm-suppress MixedReturnTypeCoercion
+     */
     public function discovery(string $url): array
     {
         $uri = $this->uriFactory->createUri($url);
@@ -85,7 +92,7 @@ final class DiscoveryProvider implements DiscoveryProviderInterface
             ->withHeader('accept', 'application/json');
 
         try {
-            /** @var IssuerMetadataObject $data */
+            /** @psalm-var IssuerMetadataObject $data */
             $data = parse_metadata_response($this->client->sendRequest($request));
         } catch (ClientExceptionInterface $e) {
             throw new RuntimeException('Unable to fetch provider metadata', 0, $e);
