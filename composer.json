@@ -28,7 +28,7 @@
         "identity"
     ],
     "require": {
-        "php": "^7.4 || ^8.0",
+        "php": "^8.1",
         "ext-json": "*",
         "facile-it/php-jose-verifier": "^0.3 || ^0.4.3",
         "php-http/discovery": "^1.6",
