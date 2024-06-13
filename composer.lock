@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "36e1e92a41519fa25f08f10f70b751b0",
+    "content-hash": "153ccd7b1d7a19093bcf7a78e8d02cda",
     "packages": [
         {
             "name": "brick/math",
@@ -63,63 +63,46 @@
         },
         {
             "name": "facile-it/php-jose-verifier",
-            "version": "0.4.3",
+            "version": "dev-master",
             "source": {
                 "type": "git",
                 "url": "https://github.com/facile-it/php-jose-verifier.git",
-                "reference": "87b63f735c77ead878d4c8447399d4844541580a"
+                "reference": "e5f7e713523b71621ecdceb689acc97d8aae551c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/facile-it/php-jose-verifier/zipball/87b63f735c77ead878d4c8447399d4844541580a",
-                "reference": "87b63f735c77ead878d4c8447399d4844541580a",
+                "url": "https://api.github.com/repos/facile-it/php-jose-verifier/zipball/e5f7e713523b71621ecdceb689acc97d8aae551c",
+                "reference": "e5f7e713523b71621ecdceb689acc97d8aae551c",
                 "shasum": ""
             },
             "require": {
                 "ext-json": "*",
-                "php": "^7.2 || ^8.0",
-                "php-http/discovery": "^1.7",
+                "nyholm/psr7": "^1.8",
+                "php": "^8.1",
                 "psr/http-client": "^1.0",
-                "psr/http-message": "^1.0 || 2.0",
+                "psr/http-message": "^1.0 || ^2.0",
                 "psr/simple-cache": "^1.0 || ^2.0 || ^3.0",
                 "spomky-labs/base64url": "^2.0.1",
+                "symfony/http-client": "^6.0 || ^7.0",
                 "symfony/polyfill-mbstring": "^1.15",
-                "web-token/jwt-checker": "^2.2.0 || ^3.0",
-                "web-token/jwt-core": "^2.2.0 || ^3.0",
-                "web-token/jwt-key-mgmt": "^2.2.0 || ^3.0",
-                "web-token/jwt-signature": "^2.2.0 || ^3.0",
-                "web-token/jwt-signature-algorithm-rsa": "^2.2.0 || ^3.0"
+                "web-token/jwt-library": "^3.4"
             },
             "require-dev": {
-                "facile-it/facile-coding-standard": "^0.5",
-                "friendsofphp/php-cs-fixer": "^3.0",
-                "laminas/laminas-diactoros": "^2.2 || ^3.0.0",
-                "php-http/curl-client": "^2.1",
-                "phpspec/prophecy-phpunit": "^1.1 || ^2.0",
-                "phpunit/phpunit": "^8.5.14 || ^9.3",
-                "vimeo/psalm": "^4.30.0 || ^5.13.1",
-                "web-token/jwt-encryption": "^2.2.0 || ^3.0",
-                "web-token/jwt-encryption-algorithm-aescbc": "^2.2.0 || ^3.0",
-                "web-token/jwt-encryption-algorithm-aesgcm": "^2.2.0 || ^3.0",
-                "web-token/jwt-encryption-algorithm-aesgcmkw": "^2.2.0 || ^3.0",
-                "web-token/jwt-encryption-algorithm-aeskw": "^2.2.0 || ^3.0",
-                "web-token/jwt-encryption-algorithm-dir": "^2.2.0 || ^3.0",
-                "web-token/jwt-encryption-algorithm-ecdh-es": "^2.2.0 || ^3.0",
-                "web-token/jwt-encryption-algorithm-experimental": "^2.2.0 || ^3.0",
-                "web-token/jwt-encryption-algorithm-pbes2": "^2.2.0 || ^3.0",
-                "web-token/jwt-encryption-algorithm-rsa": "^2.2.0 || ^3.0",
-                "web-token/jwt-nested-token": "^2.2.0 || ^3.0",
-                "web-token/jwt-signature-algorithm-ecdsa": "^2.2.0 || ^3.0",
-                "web-token/jwt-signature-algorithm-experimental": "^2.2.0 || ^3.0",
-                "web-token/jwt-signature-algorithm-hmac": "^2.2.0 || ^3.0",
-                "web-token/jwt-signature-algorithm-none": "^2.2.0 || ^3.0",
-                "web-token/jwt-util-ecc": "^2.2.0 || ^3.0"
+                "facile-it/facile-coding-standard": "^1.2.0",
+                "friendsofphp/php-cs-fixer": "^3.14.3",
+                "phpspec/prophecy-phpunit": "^2.0.1",
+                "phpstan/phpstan": "^1.10",
+                "phpunit/phpunit": "^10.5.20 || ^11.1.0",
+                "spomky-labs/aes-key-wrap": "^7.0",
+                "vimeo/psalm": "^5.23.1",
+                "web-token/jwt-library": "^3.4.3"
             },
+            "default-branch": true,
             "type": "library",
             "autoload": {
                 "files": [
-                    "src/functions/derived_key.php",
-                    "src/functions/jose_secret_key.php"
+                    "src/Internal/functions/derived_key.php",
+                    "src/Internal/functions/jose_secret_key.php"
                 ],
                 "psr-4": {
                     "Facile\\JoseVerifier\\": "src/"
@@ -152,9 +135,87 @@
             ],
             "support": {
                 "issues": "https://github.com/facile-it/php-jose-verifier/issues",
-                "source": "https://github.com/facile-it/php-jose-verifier/tree/0.4.3"
+                "source": "https://github.com/facile-it/php-jose-verifier/tree/0.5.0-beta1"
             },
-            "time": "2023-07-28T09:54:13+00:00"
+            "time": "2024-04-27T12:54:08+00:00"
+        },
+        {
+            "name": "nyholm/psr7",
+            "version": "1.8.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/Nyholm/psr7.git",
+                "reference": "aa5fc277a4f5508013d571341ade0c3886d4d00e"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/Nyholm/psr7/zipball/aa5fc277a4f5508013d571341ade0c3886d4d00e",
+                "reference": "aa5fc277a4f5508013d571341ade0c3886d4d00e",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=7.2",
+                "psr/http-factory": "^1.0",
+                "psr/http-message": "^1.1 || ^2.0"
+            },
+            "provide": {
+                "php-http/message-factory-implementation": "1.0",
+                "psr/http-factory-implementation": "1.0",
+                "psr/http-message-implementation": "1.0"
+            },
+            "require-dev": {
+                "http-interop/http-factory-tests": "^0.9",
+                "php-http/message-factory": "^1.0",
+                "php-http/psr7-integration-tests": "^1.0",
+                "phpunit/phpunit": "^7.5 || ^8.5 || ^9.4",
+                "symfony/error-handler": "^4.4"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.8-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Nyholm\\Psr7\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Tobias Nyholm",
+                    "email": "tobias.nyholm@gmail.com"
+                },
+                {
+                    "name": "Martijn van der Ven",
+                    "email": "martijn@vanderven.se"
+                }
+            ],
+            "description": "A fast PHP7 implementation of PSR-7",
+            "homepage": "https://tnyholm.se",
+            "keywords": [
+                "psr-17",
+                "psr-7"
+            ],
+            "support": {
+                "issues": "https://github.com/Nyholm/psr7/issues",
+                "source": "https://github.com/Nyholm/psr7/tree/1.8.1"
+            },
+            "funding": [
+                {
+                    "url": "https://github.com/Zegnat",
+                    "type": "github"
+                },
+                {
+                    "url": "https://github.com/nyholm",
+                    "type": "github"
+                }
+            ],
+            "time": "2023-11-13T09:31:12+00:00"
         },
         {
             "name": "paragonie/constant_time_encoding",
@@ -2034,210 +2095,6 @@
             "time": "2023-03-21T21:06:29+00:00"
         },
         {
-            "name": "web-token/jwt-checker",
-            "version": "3.4.3",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/web-token/jwt-checker.git",
-                "reference": "973ab960dd1761b00fce24a7cf2ec2a328499a58"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/web-token/jwt-checker/zipball/973ab960dd1761b00fce24a7cf2ec2a328499a58",
-                "reference": "973ab960dd1761b00fce24a7cf2ec2a328499a58",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=8.1",
-                "psr/clock": "^1.0",
-                "web-token/jwt-library": "^3.3"
-            },
-            "type": "library",
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Florent Morselli",
-                    "homepage": "https://github.com/Spomky"
-                },
-                {
-                    "name": "All contributors",
-                    "homepage": "https://github.com/web-token/jwt-framework/contributors"
-                }
-            ],
-            "description": "[DEPRECATED] Please use web-token/jwt-library instead.",
-            "homepage": "https://github.com/web-token",
-            "keywords": [
-                "JOSE",
-                "JWE",
-                "JWK",
-                "JWKSet",
-                "JWS",
-                "Jot",
-                "RFC7515",
-                "RFC7516",
-                "RFC7517",
-                "RFC7518",
-                "RFC7519",
-                "RFC7520",
-                "bundle",
-                "jwa",
-                "jwt",
-                "symfony"
-            ],
-            "support": {
-                "source": "https://github.com/web-token/jwt-checker/tree/3.4.3"
-            },
-            "funding": [
-                {
-                    "url": "https://www.patreon.com/FlorentMorselli",
-                    "type": "patreon"
-                }
-            ],
-            "abandoned": "web-token/jwt-library",
-            "time": "2024-02-22T07:19:34+00:00"
-        },
-        {
-            "name": "web-token/jwt-core",
-            "version": "3.4.3",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/web-token/jwt-core.git",
-                "reference": "b32c2625037e3ec853e7118068470d3708d51c12"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/web-token/jwt-core/zipball/b32c2625037e3ec853e7118068470d3708d51c12",
-                "reference": "b32c2625037e3ec853e7118068470d3708d51c12",
-                "shasum": ""
-            },
-            "require": {
-                "brick/math": "^0.9|^0.10|^0.11|^0.12",
-                "ext-json": "*",
-                "ext-mbstring": "*",
-                "paragonie/constant_time_encoding": "^2.6",
-                "php": ">=8.1",
-                "spomky-labs/pki-framework": "^1.2.1",
-                "web-token/jwt-library": "^3.3"
-            },
-            "type": "library",
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Florent Morselli",
-                    "homepage": "https://github.com/Spomky"
-                },
-                {
-                    "name": "All contributors",
-                    "homepage": "https://github.com/web-token/jwt-framework/contributors"
-                }
-            ],
-            "description": "[DEPRECATED] Please use web-token/jwt-library instead.",
-            "homepage": "https://github.com/web-token",
-            "keywords": [
-                "JOSE",
-                "JWE",
-                "JWK",
-                "JWKSet",
-                "JWS",
-                "Jot",
-                "RFC7515",
-                "RFC7516",
-                "RFC7517",
-                "RFC7518",
-                "RFC7519",
-                "RFC7520",
-                "bundle",
-                "jwa",
-                "jwt",
-                "symfony"
-            ],
-            "support": {
-                "source": "https://github.com/web-token/jwt-core/tree/3.4.3"
-            },
-            "funding": [
-                {
-                    "url": "https://www.patreon.com/FlorentMorselli",
-                    "type": "patreon"
-                }
-            ],
-            "abandoned": "web-token/jwt-library",
-            "time": "2024-04-03T07:57:45+00:00"
-        },
-        {
-            "name": "web-token/jwt-key-mgmt",
-            "version": "3.4.3",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/web-token/jwt-key-mgmt.git",
-                "reference": "4d2a5a1a86477dd50b89aff76962816ddbd64590"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/web-token/jwt-key-mgmt/zipball/4d2a5a1a86477dd50b89aff76962816ddbd64590",
-                "reference": "4d2a5a1a86477dd50b89aff76962816ddbd64590",
-                "shasum": ""
-            },
-            "require": {
-                "ext-openssl": "*",
-                "php": ">=8.1",
-                "psr/http-client": "^1.0",
-                "psr/http-factory": "^1.0",
-                "web-token/jwt-library": "^3.3"
-            },
-            "type": "library",
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Florent Morselli",
-                    "homepage": "https://github.com/Spomky"
-                },
-                {
-                    "name": "All contributors",
-                    "homepage": "https://github.com/web-token/jwt-framework/contributors"
-                }
-            ],
-            "description": "[DEPRECATED] Please use web-token/jwt-library instead.",
-            "homepage": "https://github.com/web-token",
-            "keywords": [
-                "JOSE",
-                "JWE",
-                "JWK",
-                "JWKSet",
-                "JWS",
-                "Jot",
-                "RFC7515",
-                "RFC7516",
-                "RFC7517",
-                "RFC7518",
-                "RFC7519",
-                "RFC7520",
-                "bundle",
-                "jwa",
-                "jwt",
-                "symfony"
-            ],
-            "support": {
-                "source": "https://github.com/web-token/jwt-key-mgmt/tree/3.4.3"
-            },
-            "funding": [
-                {
-                    "url": "https://www.patreon.com/FlorentMorselli",
-                    "type": "patreon"
-                }
-            ],
-            "abandoned": "web-token/jwt-library",
-            "time": "2024-02-22T07:19:34+00:00"
-        },
-        {
             "name": "web-token/jwt-library",
             "version": "3.4.3",
             "source": {
@@ -2334,138 +2191,6 @@
                 }
             ],
             "time": "2024-04-17T17:41:33+00:00"
-        },
-        {
-            "name": "web-token/jwt-signature",
-            "version": "3.4.3",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/web-token/jwt-signature.git",
-                "reference": "eccfd59e658d4118414cf6d14229aa52eec387e7"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/web-token/jwt-signature/zipball/eccfd59e658d4118414cf6d14229aa52eec387e7",
-                "reference": "eccfd59e658d4118414cf6d14229aa52eec387e7",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=8.1",
-                "web-token/jwt-library": "^3.3"
-            },
-            "type": "library",
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Florent Morselli",
-                    "homepage": "https://github.com/Spomky"
-                },
-                {
-                    "name": "All contributors",
-                    "homepage": "https://github.com/web-token/jwt-framework/contributors"
-                }
-            ],
-            "description": "[DEPRECATED] Please use web-token/jwt-library instead.",
-            "homepage": "https://github.com/web-token",
-            "keywords": [
-                "JOSE",
-                "JWE",
-                "JWK",
-                "JWKSet",
-                "JWS",
-                "Jot",
-                "RFC7515",
-                "RFC7516",
-                "RFC7517",
-                "RFC7518",
-                "RFC7519",
-                "RFC7520",
-                "bundle",
-                "jwa",
-                "jwt",
-                "symfony"
-            ],
-            "support": {
-                "source": "https://github.com/web-token/jwt-signature/tree/3.4.3"
-            },
-            "funding": [
-                {
-                    "url": "https://www.patreon.com/FlorentMorselli",
-                    "type": "patreon"
-                }
-            ],
-            "abandoned": "web-token/jwt-library",
-            "time": "2024-02-22T07:19:34+00:00"
-        },
-        {
-            "name": "web-token/jwt-signature-algorithm-rsa",
-            "version": "3.4.3",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/web-token/jwt-signature-algorithm-rsa.git",
-                "reference": "4408e41671294f0390731e2f84065a03a8089ace"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/web-token/jwt-signature-algorithm-rsa/zipball/4408e41671294f0390731e2f84065a03a8089ace",
-                "reference": "4408e41671294f0390731e2f84065a03a8089ace",
-                "shasum": ""
-            },
-            "require": {
-                "brick/math": "^0.9|^0.10|^0.11|^0.12",
-                "ext-openssl": "*",
-                "php": ">=8.1",
-                "web-token/jwt-library": "^3.3"
-            },
-            "type": "library",
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Florent Morselli",
-                    "homepage": "https://github.com/Spomky"
-                },
-                {
-                    "name": "All contributors",
-                    "homepage": "https://github.com/web-token/jwt-framework/contributors"
-                }
-            ],
-            "description": "[DEPRECATED] Please use web-token/jwt-library instead.",
-            "homepage": "https://github.com/web-token",
-            "keywords": [
-                "JOSE",
-                "JWE",
-                "JWK",
-                "JWKSet",
-                "JWS",
-                "Jot",
-                "RFC7515",
-                "RFC7516",
-                "RFC7517",
-                "RFC7518",
-                "RFC7519",
-                "RFC7520",
-                "bundle",
-                "jwa",
-                "jwt",
-                "symfony"
-            ],
-            "support": {
-                "source": "https://github.com/web-token/jwt-signature-algorithm-rsa/tree/3.4.3"
-            },
-            "funding": [
-                {
-                    "url": "https://www.patreon.com/FlorentMorselli",
-                    "type": "patreon"
-                }
-            ],
-            "abandoned": "web-token/jwt-library",
-            "time": "2024-02-22T07:19:34+00:00"
         }
     ],
     "packages-dev": [
@@ -7973,7 +7698,9 @@
     ],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": [],
+    "stability-flags": {
+        "facile-it/php-jose-verifier": 20
+    },
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {

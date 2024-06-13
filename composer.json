@@ -30,7 +30,7 @@
     "require": {
         "php": "^8.1",
         "ext-json": "*",
-        "facile-it/php-jose-verifier": "^0.3 || ^0.4.3",
+        "facile-it/php-jose-verifier": "dev-master",
         "php-http/discovery": "^1.6",
         "psr/http-client": "^1.0",
         "psr/http-client-implementation": "^1.0",
