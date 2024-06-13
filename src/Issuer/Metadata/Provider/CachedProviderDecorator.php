@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Facile\OpenIDClient\Issuer\Metadata\Provider;
 
+use Facile\JoseVerifier\TokenVerifierInterface;
 use function is_array;
 use function json_decode;
 use function json_encode;
@@ -13,7 +14,7 @@ use function sha1;
 use function substr;
 
 /**
- * @psalm-import-type IssuerMetadataObject from \Facile\JoseVerifier\Psalm\PsalmTypes
+ * @psalm-import-type IssuerMetadataType from TokenVerifierInterface
  */
 final class CachedProviderDecorator implements RemoteProviderInterface
 {
@@ -51,7 +52,7 @@ final class CachedProviderDecorator implements RemoteProviderInterface
     /**
      * @return array<string, mixed>
      *
-     * @psalm-return IssuerMetadataObject
+     * @psalm-return IssuerMetadataType
      *
      * @psalm-suppress MixedReturnTypeCoercion
      */
@@ -63,7 +64,7 @@ final class CachedProviderDecorator implements RemoteProviderInterface
         $cached = $this->cache->get($cacheId) ?? '';
 
         try {
-            /** @psalm-var null|string|IssuerMetadataObject $data */
+            /** @psalm-var null|string|IssuerMetadataType $data */
             $data = json_decode($cached, true, 512, JSON_THROW_ON_ERROR);
         } catch (JsonException $e) {
             $data = null;

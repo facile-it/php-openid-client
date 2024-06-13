@@ -9,18 +9,19 @@ use function array_key_exists;
 use function array_keys;
 use function array_merge;
 use function count;
+use Facile\JoseVerifier\TokenVerifierInterface;
 use Facile\OpenIDClient\Exception\InvalidArgumentException;
 use function implode;
 
 /**
- * @psalm-import-type IssuerMetadataObject from \Facile\JoseVerifier\Psalm\PsalmTypes
+ * @psalm-import-type IssuerMetadataType from TokenVerifierInterface
  */
 final class IssuerMetadata implements IssuerMetadataInterface
 {
     /**
      * @var array<string, mixed>
      *
-     * @psalm-var IssuerMetadataObject
+     * @psalm-var IssuerMetadataType
      */
     private $metadata;
 
@@ -48,7 +49,7 @@ final class IssuerMetadata implements IssuerMetadataInterface
             'jwks_uri' => $jwksUri,
         ];
 
-        /** @var IssuerMetadataObject $merged */
+        /** @var IssuerMetadataType $merged */
         $merged = array_merge($claims, $requiredClaims);
         $this->metadata = $merged;
     }
@@ -58,7 +59,7 @@ final class IssuerMetadata implements IssuerMetadataInterface
      *
      * @return static
      *
-     * @psalm-param IssuerMetadataObject $claims
+     * @psalm-param IssuerMetadataType $claims
      */
     public static function fromArray(array $claims): self
     {

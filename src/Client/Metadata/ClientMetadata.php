@@ -9,18 +9,19 @@ use function array_key_exists;
 use function array_keys;
 use function array_merge;
 use function count;
+use Facile\JoseVerifier\TokenVerifierInterface;
 use Facile\OpenIDClient\Exception\InvalidArgumentException;
 use function implode;
 
 /**
- * @psalm-import-type ClientMetadataObject from \Facile\JoseVerifier\Psalm\PsalmTypes
+ * @psalm-import-type ClientMetadataType from TokenVerifierInterface
  */
 final class ClientMetadata implements ClientMetadataInterface
 {
     /**
      * @var array<string, mixed>
      *
-     * @psalm-var ClientMetadataObject
+     * @psalm-var ClientMetadataType
      */
     private $metadata;
 
@@ -37,7 +38,7 @@ final class ClientMetadata implements ClientMetadataInterface
      *
      * @param array<string, mixed> $claims
      *
-     * @psalm-param ClientMetadataObject|array<empty, empty> $claims
+     * @psalm-param ClientMetadataType|array<empty, empty> $claims
      */
     public function __construct(string $clientId, array $claims = [])
     {
@@ -47,7 +48,7 @@ final class ClientMetadata implements ClientMetadataInterface
 
         $defaults = self::$defaults;
 
-        /** @var ClientMetadataObject $merged */
+        /** @var ClientMetadataType $merged */
         $merged = array_merge($defaults, $claims, $requiredClaims);
         $this->metadata = $merged;
     }
@@ -57,7 +58,7 @@ final class ClientMetadata implements ClientMetadataInterface
      *
      * @return static
      *
-     * @psalm-param ClientMetadataObject $claims
+     * @psalm-param ClientMetadataType $claims
      */
     public static function fromArray(array $claims): self
     {

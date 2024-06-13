@@ -46,7 +46,7 @@ final class IssuerBuilder implements IssuerBuilderInterface
         $metadata = IssuerMetadata::fromArray($metadataBuilder->build()->fetch($resource));
 
         $jwksProviderBuilder = $this->buildJwksProviderBuilder();
-        $jwksProviderBuilder->setJwksUri($metadata->getJwksUri());
+        $jwksProviderBuilder->withJwksUri($metadata->getJwksUri());
         $jwksProvider = $jwksProviderBuilder->build();
 
         return new Issuer(

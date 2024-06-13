@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Facile\OpenIDClient\Issuer\Metadata\Provider;
 
 use function array_key_exists;
+use Facile\JoseVerifier\TokenVerifierInterface;
 use Facile\OpenIDClient\Exception\RuntimeException;
 use function Facile\OpenIDClient\parse_metadata_response;
 use function preg_match;
@@ -16,7 +17,7 @@ use function rtrim;
 use function strpos;
 
 /**
- * @psalm-import-type IssuerMetadataObject from \Facile\JoseVerifier\Psalm\PsalmTypes
+ * @psalm-import-type IssuerMetadataType from TokenVerifierInterface
  */
 final class DiscoveryProvider implements DiscoveryProviderInterface
 {
@@ -51,7 +52,7 @@ final class DiscoveryProvider implements DiscoveryProviderInterface
     /**
      * @return array<string, mixed>
      *
-     * @psalm-return IssuerMetadataObject
+     * @psalm-return IssuerMetadataType
      *
      * @psalm-suppress MixedReturnTypeCoercion
      */
@@ -84,7 +85,7 @@ final class DiscoveryProvider implements DiscoveryProviderInterface
     /**
      * @return array<mixed, string>
      *
-     * @psalm-return IssuerMetadataObject
+     * @psalm-return IssuerMetadataType
      */
     private function fetchOpenIdConfiguration(string $uri): array
     {
@@ -92,7 +93,7 @@ final class DiscoveryProvider implements DiscoveryProviderInterface
             ->withHeader('accept', 'application/json');
 
         try {
-            /** @psalm-var IssuerMetadataObject $data */
+            /** @psalm-var IssuerMetadataType $data */
             $data = parse_metadata_response($this->client->sendRequest($request));
         } catch (ClientExceptionInterface $e) {
             throw new RuntimeException('Unable to fetch provider metadata', 0, $e);
