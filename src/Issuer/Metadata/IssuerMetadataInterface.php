@@ -4,18 +4,15 @@ declare(strict_types=1);
 
 namespace Facile\OpenIDClient\Issuer\Metadata;
 
+use Facile\JoseVerifier\TokenVerifierInterface;
 use JsonSerializable;
 
 /**
- * @psalm-import-type IssuerMetadataObject from \Facile\JoseVerifier\Psalm\PsalmTypes
- * @psalm-import-type OpenIdDisplayType from \Facile\JoseVerifier\Psalm\PsalmTypes
- * @psalm-import-type OpenIdClaimType from \Facile\JoseVerifier\Psalm\PsalmTypes
- * @psalm-import-type OpenIdResponseType from \Facile\JoseVerifier\Psalm\PsalmTypes
- * @psalm-import-type OpenIdResponseMode from \Facile\JoseVerifier\Psalm\PsalmTypes
- * @psalm-import-type OpenIdGrantType from \Facile\JoseVerifier\Psalm\PsalmTypes
- * @psalm-import-type OpenIdApplicationType from \Facile\JoseVerifier\Psalm\PsalmTypes
- * @psalm-import-type OpenIdSubjectType from \Facile\JoseVerifier\Psalm\PsalmTypes
- * @psalm-import-type OpenIdAuthMethod from \Facile\JoseVerifier\Psalm\PsalmTypes
+ * @psalm-import-type IssuerMetadataType from TokenVerifierInterface
+ * @psalm-import-type OpenIdResponseMode from TokenVerifierInterface
+ * @psalm-import-type OpenIdGrantType from TokenVerifierInterface
+ * @psalm-import-type OpenIdClaimType from TokenVerifierInterface
+ * @psalm-import-type OpenIdSubjectType from TokenVerifierInterface
  */
 interface IssuerMetadataInterface extends JsonSerializable
 {
@@ -348,14 +345,14 @@ interface IssuerMetadataInterface extends JsonSerializable
     /**
      * @return array<string, mixed>
      *
-     * @psalm-return IssuerMetadataObject
+     * @psalm-return IssuerMetadataType
      */
     public function jsonSerialize(): array;
 
     /**
      * @return array<string, mixed>
      *
-     * @psalm-return IssuerMetadataObject
+     * @psalm-return IssuerMetadataType
      */
     public function toArray(): array;
 }

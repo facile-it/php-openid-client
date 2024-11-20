@@ -31,15 +31,9 @@ final class IdTokenVerifierBuilder implements IdTokenVerifierBuilderInterface
 
     public function build(ClientInterface $client): IdTokenVerifierInterface
     {
-        $builder = new \Facile\JoseVerifier\IdTokenVerifierBuilder();
-
-        $builder->setJwksProvider($client->getIssuer()->getJwksProvider());
-        $builder->setClientMetadata($client->getMetadata()->toArray());
-        $builder->setClientJwksProvider($client->getJwksProvider());
-        $builder->setIssuerMetadata($client->getIssuer()->getMetadata()->toArray());
-        $builder->setClockTolerance($this->clockTolerance);
-        $builder->setAadIssValidation($this->aadIssValidation);
-
-        return $builder->build();
+        return \Facile\JoseVerifier\Builder\IdTokenVerifierBuilder::create(
+            $client->getIssuer()->getMetadata()->toArray(),
+            $client->getMetadata()->toArray(),
+        )->build();
     }
 }

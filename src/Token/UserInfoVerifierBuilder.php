@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Facile\OpenIDClient\Token;
 
+use Facile\JoseVerifier\TokenVerifierInterface;
 use Facile\OpenIDClient\Client\ClientInterface;
 
 final class UserInfoVerifierBuilder implements TokenVerifierBuilderInterface
@@ -28,17 +29,11 @@ final class UserInfoVerifierBuilder implements TokenVerifierBuilderInterface
         return $this;
     }
 
-    public function build(ClientInterface $client): \Facile\JoseVerifier\TokenVerifierInterface
+    public function build(ClientInterface $client): TokenVerifierInterface
     {
-        $builder = new \Facile\JoseVerifier\UserInfoVerifierBuilder();
-
-        $builder->setJwksProvider($client->getIssuer()->getJwksProvider());
-        $builder->setClientMetadata($client->getMetadata()->toArray());
-        $builder->setClientJwksProvider($client->getJwksProvider());
-        $builder->setIssuerMetadata($client->getIssuer()->getMetadata()->toArray());
-        $builder->setClockTolerance($this->clockTolerance);
-        $builder->setAadIssValidation($this->aadIssValidation);
-
-        return $builder->build();
+        return \Facile\JoseVerifier\Builder\UserInfoVerifierBuilder::create(
+            $client->getIssuer()->getMetadata()->toArray(),
+            $client->getMetadata()->toArray(),
+        )->build();
     }
 }

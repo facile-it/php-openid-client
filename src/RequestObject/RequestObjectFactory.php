@@ -14,8 +14,6 @@ use function Facile\OpenIDClient\jose_secret_key;
 use function implode;
 use Jose\Component\Core\AlgorithmManager;
 use Jose\Component\Core\JWKSet;
-use Jose\Component\Encryption\Compression\CompressionMethodManager;
-use Jose\Component\Encryption\Compression\Deflate;
 use Jose\Component\Encryption\JWEBuilder;
 use Jose\Component\Encryption\Serializer\CompactSerializer as EncryptionCompactSerializer;
 use Jose\Component\Encryption\Serializer\JWESerializer;
@@ -55,11 +53,7 @@ class RequestObjectFactory
     ) {
         $this->algorithmManager = $algorithmManager ?? (new AlgorithmManagerBuilder())->build();
         $this->jwsBuilder = $jwsBuilder ?? new JWSBuilder($this->algorithmManager);
-        $this->jweBuilder = $jweBuilder ?? new JWEBuilder(
-            $this->algorithmManager,
-            $this->algorithmManager,
-            new CompressionMethodManager([new Deflate()])
-        );
+        $this->jweBuilder = $jweBuilder ?? new JWEBuilder($this->algorithmManager);
         $this->signatureSerializer = $signatureSerializer ?? new SignatureCompactSerializer();
         $this->encryptionSerializer = $encryptionSerializer ?? new EncryptionCompactSerializer();
     }
