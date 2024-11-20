@@ -29,15 +29,8 @@ jobs:
         with:
           php-version: "${{ matrix.php-version }}"
 
-      - name: "Cache dependencies installed with composer"
-        uses: "actions/cache@v3"
-        with:
-          path: "~/.composer/cache"
-          key: "php-${{ matrix.php-version }}-composer-${{ hashFiles('composer.lock') }}"
-          restore-keys: "php-${{ matrix.php-version }}-composer-"
-
-      - name: "Install dependencies with composer"
-        run: "composer install --no-interaction --no-progress --no-suggest --prefer-dist"
+      - name: Install dependencies
+        uses: ramsey/composer-install@v3
 
       - name: "Run psalm"
         run: "vendor/bin/psalm --long-progress --output-format=github --report=psalm.sarif --php-version=${{ matrix.php-version }}"
@@ -62,17 +55,16 @@ jobs:
           - "8.3"
           - "8.4"
         deps:
-          - "--prefer-lowest"
-          - ""
-        coverage:
-          - "false"
+          - "highest"
         codestyle:
           - "false"
         include:
           - php-version: "8.2"
-            deps: ""
-            coverage: "true"
+            deps: "locked"
             codestyle: "true"
+          - php-version: "7.4"
+            deps: "lowest"
+            codestyle: "false"
 
     steps:
       - name: "Checkout"
@@ -86,35 +78,19 @@ jobs:
           ini-values: "zend.assertions=1"
           extensions: "bcmath, gmp"
 
-      - name: "Cache dependencies installed with composer"
-        uses: "actions/cache@v3"
+      - name: Install dependencies
+        uses: ramsey/composer-install@v3
         with:
-          path: "~/.composer/cache"
-          key: "php-${{ matrix.php-version }}-composer-${{ hashFiles('composer.lock') }}"
-          restore-keys: "php-${{ matrix.php-version }}-composer-"
-
-      - name: "Install dependencies with composer"
-        run: "composer update --no-interaction --no-progress --no-suggest --prefer-dist ${{ matrix.deps }}"
-        if: "${{ matrix.codestyle == 'false' }}"
-
-      - name: "Install dependencies with composer"
-        run: "composer install --no-interaction --no-progress --no-suggest --prefer-dist ${{ matrix.deps }}"
-        if: "${{ matrix.codestyle == 'true' }}"
+          dependency-versions: "${{ matrix.deps }}"
 
       - name: "Run PHPCS check"
         run: "composer cs-check"
         if: "${{ matrix.codestyle == 'true' }}"
 
-      - name: "Run PHPUnit"
-        run: "vendor/bin/phpunit -c phpunit.xml.dist"
-        if: "${{ matrix.coverage != 'true' }}"
-
       - name: "Run PHPUnit with coverage"
         run: "vendor/bin/phpunit -c phpunit.xml.dist --coverage-clover=coverage-report.xml"
-        if: "${{ matrix.coverage == 'true' }}"
 
       - name: Upload code coverage
         uses: codecov/codecov-action@v3
         with:
           files: coverage-report.xml
-        if: "${{ matrix.coverage == 'true' }}"
