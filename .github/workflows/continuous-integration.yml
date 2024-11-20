@@ -94,3 +94,5 @@ jobs:
         uses: codecov/codecov-action@v5
         with:
           files: coverage-report.xml
+          fail_ci_if_error: true
+          token: ${{ secrets.CODECOV_TOKEN }}
