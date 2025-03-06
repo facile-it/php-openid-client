@@ -15,7 +15,7 @@ final class UserInfoServiceBuilder extends AbstractServiceBuilder
 
     protected function getUserInfoVerifierBuilder(): TokenVerifierBuilderInterface
     {
-        return $this->userInfoVerifierBuilder = $this->userInfoVerifierBuilder ?? new UserInfoVerifierBuilder();
+        return $this->userInfoVerifierBuilder ??= new UserInfoVerifierBuilder();
     }
 
     public function build(): UserInfoService

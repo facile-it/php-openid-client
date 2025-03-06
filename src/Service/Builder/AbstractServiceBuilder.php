@@ -33,11 +33,11 @@ abstract class AbstractServiceBuilder
 
     protected function getHttpClient(): ClientInterface
     {
-        return $this->httpClient = $this->httpClient ?? Psr18ClientDiscovery::find();
+        return $this->httpClient ??= Psr18ClientDiscovery::find();
     }
 
     protected function getRequestFactory(): RequestFactoryInterface
     {
-        return $this->requestFactory = $this->requestFactory ?? Psr17FactoryDiscovery::findRequestFactory();
+        return $this->requestFactory ??= Psr17FactoryDiscovery::findRequestFactory();
     }
 }
