@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Facile\OpenIDClient\Token;
 
 use Facile\JoseVerifier\Builder\AuthorizationResponseVerifierBuilder;
+use Facile\JoseVerifier\TokenVerifierInterface;
 use Facile\OpenIDClient\Client\ClientInterface;
 
 final class ResponseVerifierBuilder implements TokenVerifierBuilderInterface
@@ -27,7 +28,7 @@ final class ResponseVerifierBuilder implements TokenVerifierBuilderInterface
         return $this;
     }
 
-    public function build(ClientInterface $client): \Facile\JoseVerifier\TokenVerifierInterface
+    public function build(ClientInterface $client): TokenVerifierInterface
     {
         return AuthorizationResponseVerifierBuilder::create(
             $client->getIssuer()->getMetadata()->toArray(),
