@@ -9,11 +9,9 @@ use Facile\OpenIDClient\Client\ClientInterface;
 
 final class AccessTokenVerifierBuilder implements AccessTokenVerifierBuilderInterface
 {
-    /** @var bool */
-    private $aadIssValidation = false;
+    private bool $aadIssValidation = false;
 
-    /** @var int */
-    private $clockTolerance = 0;
+    private int $clockTolerance = 0;
 
     public function setAadIssValidation(bool $aadIssValidation): self
     {
@@ -34,6 +32,11 @@ final class AccessTokenVerifierBuilder implements AccessTokenVerifierBuilderInte
         return \Facile\JoseVerifier\Builder\AccessTokenVerifierBuilder::create(
             $client->getIssuer()->getMetadata()->toArray(),
             $client->getMetadata()->toArray(),
-        )->build();
+        )
+            ->withJwksProvider($client->getIssuer()->getJwksProvider())
+            ->withClientJwksProvider($client->getJwksProvider())
+            ->withClockTolerance($this->clockTolerance)
+            ->withAadIssValidation($this->aadIssValidation)
+            ->build();
     }
 }
