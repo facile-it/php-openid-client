@@ -47,7 +47,7 @@ final class DistributedParser extends AbstractClaims implements DistributedParse
         $claimSources = $claims['_claim_sources'] ?? null;
         $claimNames = $claims['_claim_names'] ?? null;
 
-        if (! is_array($claimSources)) {
+        if (! array_key_exists('_claim_sources', $claims) || ! is_array($claimSources)) {
             return $claims;
         }
 
@@ -64,7 +64,7 @@ final class DistributedParser extends AbstractClaims implements DistributedParse
                 ->withHeader('accept', 'application/jwt');
 
             $accessToken = $source['access_token'] ?? ($accessTokens[$sourceName] ?? null);
-            if ($accessToken) {
+            if ($accessToken !== null) {
                 $request = $request->withHeader('authorization', 'Bearer ' . $accessToken);
             }
 

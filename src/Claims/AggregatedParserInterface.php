@@ -5,9 +5,10 @@ declare(strict_types=1);
 namespace Facile\OpenIDClient\Claims;
 
 use Facile\OpenIDClient\Client\ClientInterface;
+use Facile\OpenIDClient\Token\TokenSetInterface;
 
 /**
- * @psalm-import-type TokenSetClaimsType from \Facile\OpenIDClient\Token\TokenSetInterface
+ * @psalm-import-type TokenSetClaimsType from TokenSetInterface
  */
 interface AggregatedParserInterface
 {

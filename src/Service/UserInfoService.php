@@ -80,7 +80,7 @@ final class UserInfoService
         } else {
             $request = $this->requestFactory->createRequest('GET', $endpointUri)
                 ->withHeader('accept', $expectJwt ? 'application/jwt' : 'application/json')
-                ->withHeader('authorization', ($tokenSet->getTokenType() ?: 'Bearer') . ' ' . $accessToken);
+                ->withHeader('authorization', ($tokenSet->getTokenType() ?? 'Bearer') . ' ' . $accessToken);
         }
 
         $httpClient = $client->getHttpClient() ?? $this->client;

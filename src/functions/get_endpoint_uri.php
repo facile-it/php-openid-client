@@ -27,7 +27,7 @@ function get_endpoint_uri(OpenIDClient $client, string $endpointMetadata): strin
             ->getMtlsEndpointAliases()['token_endpoint'] ?? null;
     }
 
-    if (! $endpoint) {
+    if ($endpoint === null) {
         /** @var null|string $endpoint */
         $endpoint = $client->getIssuer()->getMetadata()->get($endpointMetadata);
     }
