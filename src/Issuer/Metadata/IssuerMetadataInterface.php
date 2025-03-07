@@ -8,7 +8,7 @@ use Facile\JoseVerifier\TokenVerifierInterface;
 use JsonSerializable;
 
 /**
- * @psalm-import-type IssuerMetadataType from TokenVerifierInterface
+ * @psalm-import-type IssuerRemoteMetadataType from TokenVerifierInterface
  * @psalm-import-type OpenIdResponseMode from TokenVerifierInterface
  * @psalm-import-type OpenIdGrantType from TokenVerifierInterface
  * @psalm-import-type OpenIdClaimType from TokenVerifierInterface
@@ -154,9 +154,9 @@ interface IssuerMetadataInterface extends JsonSerializable
     public function getOpTosUri(): ?string;
 
     /**
-     * @return string[]
+     * @return string[]|null
      *
-     * @psalm-return list<non-empty-string>
+     * @psalm-return list<non-empty-string>|null
      */
     public function getCodeChallengeMethodsSupported(): ?array;
 
@@ -345,14 +345,14 @@ interface IssuerMetadataInterface extends JsonSerializable
     /**
      * @return array<string, mixed>
      *
-     * @psalm-return IssuerMetadataType
+     * @psalm-return IssuerRemoteMetadataType
      */
     public function jsonSerialize(): array;
 
     /**
      * @return array<string, mixed>
      *
-     * @psalm-return IssuerMetadataType
+     * @psalm-return IssuerRemoteMetadataType
      */
     public function toArray(): array;
 }
