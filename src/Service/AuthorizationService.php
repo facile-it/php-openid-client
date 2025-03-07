@@ -169,11 +169,11 @@ final class AuthorizationService
         if (null !== $idToken) {
             /** @psalm-var TokenSetClaimsType $claims */
             $claims = $this->idTokenVerifierBuilder->build($client)
-                ->withNonce(null !== $authSession ? $authSession->getNonce() : null)
-                ->withState(null !== $authSession ? $authSession->getState() : null)
+                ->withState($authSession?->getState())
                 ->withCode($tokenSet->getCode())
-                ->withMaxAge($maxAge)
                 ->withAccessToken($tokenSet->getAccessToken())
+                ->withMaxAge($maxAge)
+                ->withNonce($authSession?->getNonce())
                 ->verify($idToken);
             $tokenSet = $tokenSet->withClaims($claims);
         }
@@ -227,9 +227,9 @@ final class AuthorizationService
         if (null !== $idToken) {
             /** @psalm-var TokenSetClaimsType $claims */
             $claims = $this->idTokenVerifierBuilder->build($client)
-                ->withNonce(null !== $authSession ? $authSession->getNonce() : null)
-                ->withState(null !== $authSession ? $authSession->getState() : null)
+                ->withState($authSession?->getState())
                 ->withMaxAge($maxAge)
+                ->withNonce($authSession?->getNonce())
                 ->verify($idToken);
             $tokenSet = $tokenSet->withClaims($claims);
         }

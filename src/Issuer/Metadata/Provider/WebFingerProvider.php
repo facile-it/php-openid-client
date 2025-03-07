@@ -25,7 +25,7 @@ use function strpos;
 use function substr;
 
 /**
- * @psalm-import-type IssuerMetadataType from TokenVerifierInterface
+ * @psalm-import-type IssuerRemoteMetadataType from TokenVerifierInterface
  */
 final class WebFingerProvider implements RemoteProviderInterface, WebFingerProviderInterface
 {
@@ -129,7 +129,7 @@ final class WebFingerProvider implements RemoteProviderInterface, WebFingerProvi
             throw new RuntimeException('Discovered issuer mismatch');
         }
 
-        /** @var IssuerMetadataType $metadata */
+        /** @var IssuerRemoteMetadataType $metadata */
         return $metadata;
     }
 

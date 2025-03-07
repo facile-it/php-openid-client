@@ -17,7 +17,7 @@ use function rtrim;
 use function strpos;
 
 /**
- * @psalm-import-type IssuerMetadataType from TokenVerifierInterface
+ * @psalm-import-type IssuerRemoteMetadataType from TokenVerifierInterface
  */
 final class DiscoveryProvider implements DiscoveryProviderInterface
 {
@@ -52,7 +52,7 @@ final class DiscoveryProvider implements DiscoveryProviderInterface
     /**
      * @return array<string, mixed>
      *
-     * @psalm-return IssuerMetadataType
+     * @psalm-return IssuerRemoteMetadataType
      *
      * @psalm-suppress MixedReturnTypeCoercion
      */
@@ -85,7 +85,7 @@ final class DiscoveryProvider implements DiscoveryProviderInterface
     /**
      * @return array<mixed, string>
      *
-     * @psalm-return IssuerMetadataType
+     * @psalm-return IssuerRemoteMetadataType
      */
     private function fetchOpenIdConfiguration(string $uri): array
     {
@@ -93,7 +93,7 @@ final class DiscoveryProvider implements DiscoveryProviderInterface
             ->withHeader('accept', 'application/json');
 
         try {
-            /** @psalm-var IssuerMetadataType $data */
+            /** @psalm-var IssuerRemoteMetadataType $data */
             $data = parse_metadata_response($this->client->sendRequest($request));
         } catch (ClientExceptionInterface $e) {
             throw new RuntimeException('Unable to fetch provider metadata', 0, $e);

@@ -14,7 +14,7 @@ use function sha1;
 use function substr;
 
 /**
- * @psalm-import-type IssuerMetadataType from TokenVerifierInterface
+ * @psalm-import-type IssuerRemoteMetadataType from TokenVerifierInterface
  */
 final class CachedProviderDecorator implements RemoteProviderInterface
 {
@@ -52,7 +52,7 @@ final class CachedProviderDecorator implements RemoteProviderInterface
     /**
      * @return array<string, mixed>
      *
-     * @psalm-return IssuerMetadataType
+     * @psalm-return IssuerRemoteMetadataType
      *
      * @psalm-suppress MixedReturnTypeCoercion
      */
@@ -64,7 +64,7 @@ final class CachedProviderDecorator implements RemoteProviderInterface
         $cached = $this->cache->get($cacheId) ?? '';
 
         try {
-            /** @psalm-var null|string|IssuerMetadataType $data */
+            /** @psalm-var null|string|IssuerRemoteMetadataType $data */
             $data = json_decode($cached, true, 512, JSON_THROW_ON_ERROR);
         } catch (JsonException $e) {
             $data = null;
