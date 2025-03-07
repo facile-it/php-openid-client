@@ -29,6 +29,7 @@ final class IdTokenVerifierBuilder implements IdTokenVerifierBuilderInterface
 
     public function build(ClientInterface $client): IdTokenVerifierInterface
     {
+        /** @psalm-var IdTokenVerifierInterface */
         return \Facile\JoseVerifier\Builder\IdTokenVerifierBuilder::create(
             $client->getIssuer()->getMetadata()->toArray(),
             $client->getMetadata()->toArray(),
