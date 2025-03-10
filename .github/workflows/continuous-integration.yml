@@ -57,12 +57,12 @@ jobs:
         codestyle:
           - "false"
         include:
-          - php-version: "8.1"
-            deps: "lowest"
-            codestyle: "false"
           - php-version: "8.4"
             deps: "locked"
             codestyle: "true"
+          - php-version: "8.1"
+            deps: "lowest"
+            codestyle: "false"
 
     steps:
       - name: "Checkout"
