@@ -60,9 +60,6 @@ jobs:
           - php-version: "8.2"
             deps: "locked"
             codestyle: "true"
-          - php-version: "7.4"
-            deps: "lowest"
-            codestyle: "false"
 
     steps:
       - name: "Checkout"
