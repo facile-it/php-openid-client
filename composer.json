@@ -87,8 +87,8 @@
         "dflydev/fig-cookies": "To use the SessionCookieMiddleware"
     },
     "scripts": {
-        "cs-check": "php-cs-fixer fix --dry-run --diff --allow-risky=yes",
-        "cs-fix": "php-cs-fixer fix --diff --allow-risky=yes",
+        "cs-check": "PHP_CS_FIXER_IGNORE_ENV=1 php-cs-fixer fix --dry-run --diff --allow-risky=yes",
+        "cs-fix": "PHP_CS_FIXER_IGNORE_ENV=1 php-cs-fixer fix --diff --allow-risky=yes",
         "psalm": "psalm",
         "test": "phpunit",
         "test-coverage": "phpunit --coverage-text",
