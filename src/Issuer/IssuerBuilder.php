@@ -10,11 +10,9 @@ use Facile\OpenIDClient\Issuer\Metadata\Provider\MetadataProviderBuilder;
 
 final class IssuerBuilder implements IssuerBuilderInterface
 {
-    /** @psalm-suppress PropertyNotSetInConstructor */
-    private ?MetadataProviderBuilder $metadataProviderBuilder;
+    private ?MetadataProviderBuilder $metadataProviderBuilder = null;
 
-    /** @psalm-suppress PropertyNotSetInConstructor */
-    private ?JwksProviderBuilder $jwksProviderBuilder;
+    private ?JwksProviderBuilder $jwksProviderBuilder = null;
 
     public function setMetadataProviderBuilder(?MetadataProviderBuilder $metadataProviderBuilder): self
     {

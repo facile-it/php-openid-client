@@ -15,7 +15,7 @@ final class AggregateParser extends AbstractClaims implements AggregatedParserIn
         $claimSources = $claims['_claim_sources'] ?? null;
         $claimNames = $claims['_claim_names'] ?? null;
 
-        if (! array_key_exists('_claim_sources', $claims) || ! is_array($claimSources)) {
+        if (! is_array($claimSources)) {
             return $claims;
         }
 
