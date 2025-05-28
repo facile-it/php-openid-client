@@ -80,6 +80,7 @@ final class DistributedParser extends AbstractClaims implements DistributedParse
             try {
                 check_server_response($response);
                 $claimPayloads[$sourceName] = $this->claimJWT($client, (string) $response->getBody());
+                /** @psalm-suppress PossiblyNullArrayAccess */
                 unset($claims['_claim_sources'][$sourceName]);
             } catch (Throwable $e) {
                 throw new RuntimeException("Unable to fetch distributed claim for \"{$sourceName}\"", 0, $e);

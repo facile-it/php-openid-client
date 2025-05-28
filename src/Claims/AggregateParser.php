@@ -28,6 +28,7 @@ final class AggregateParser extends AbstractClaims implements AggregatedParserIn
         $claimPayloads = [];
         foreach ($aggregatedSources as $sourceName => $source) {
             $claimPayloads[$sourceName] = $this->claimJWT($client, $source['JWT']);
+            /** @psalm-suppress PossiblyNullArrayAccess */
             unset($claims['_claim_sources'][$sourceName]);
         }
 
