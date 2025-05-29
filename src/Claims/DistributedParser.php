@@ -44,18 +44,15 @@ final class DistributedParser extends AbstractClaims implements DistributedParse
 
     public function fetch(OpenIDClient $client, array $claims, array $accessTokens = []): array
     {
-        $claimSources = $claims['_claim_sources'] ?? null;
-        $claimNames = $claims['_claim_names'] ?? null;
-
-        if (! is_array($claimSources)) {
+        if (! array_key_exists('_claim_sources', $claims)) {
             return $claims;
         }
 
-        if (! is_array($claimNames)) {
+        if (! array_key_exists('_claim_names', $claims)) {
             return $claims;
         }
 
-        $distributedSources = array_filter($claimSources, fn ($value): bool => $this->isDistributedSource($value));
+        $distributedSources = array_filter($claims['_claim_sources'], fn ($value): bool => $this->isDistributedSource($value));
 
         /** @var array<string, ResponseInterface> $responses */
         $responses = [];
@@ -80,13 +77,12 @@ final class DistributedParser extends AbstractClaims implements DistributedParse
             try {
                 check_server_response($response);
                 $claimPayloads[$sourceName] = $this->claimJWT($client, (string) $response->getBody());
-                /** @psalm-suppress PossiblyNullArrayAccess */
                 unset($claims['_claim_sources'][$sourceName]);
             } catch (Throwable $e) {
                 throw new RuntimeException("Unable to fetch distributed claim for \"{$sourceName}\"", 0, $e);
             }
         }
 
-        return $this->cleanClaims($this->assignClaims($claims, $claimNames, $claimPayloads));
+        return $this->cleanClaims($this->assignClaims($claims, $claims['_claim_names'], $claimPayloads));
     }
 }
