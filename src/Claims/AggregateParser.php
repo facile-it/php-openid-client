@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Facile\OpenIDClient\Claims;
 
 use function array_filter;
+use function array_key_exists;
 use Facile\OpenIDClient\Client\ClientInterface;
-use function is_array;
 
 final class AggregateParser extends AbstractClaims implements AggregatedParserInterface
 {

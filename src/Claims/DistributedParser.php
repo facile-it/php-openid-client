@@ -5,13 +5,13 @@ declare(strict_types=1);
 namespace Facile\OpenIDClient\Claims;
 
 use function array_filter;
+use function array_key_exists;
 use function Facile\OpenIDClient\check_server_response;
 use Facile\OpenIDClient\Client\ClientInterface as OpenIDClient;
 use Facile\OpenIDClient\Exception\RuntimeException;
 use Facile\OpenIDClient\Issuer\IssuerBuilderInterface;
 use Http\Discovery\Psr17FactoryDiscovery;
 use Http\Discovery\Psr18ClientDiscovery;
-use function is_array;
 use Jose\Component\Core\AlgorithmManager;
 use Jose\Component\Signature\JWSVerifier;
 use Jose\Component\Signature\Serializer\JWSSerializer;
@@ -22,11 +22,9 @@ use Throwable;
 
 final class DistributedParser extends AbstractClaims implements DistributedParserInterface
 {
-    /** @var ClientInterface */
-    private $client;
+    private ClientInterface $client;
 
-    /** @var RequestFactoryInterface */
-    private $requestFactory;
+    private RequestFactoryInterface $requestFactory;
 
     public function __construct(
         ?IssuerBuilderInterface $issuerBuilder = null,
