@@ -48,8 +48,6 @@ jobs:
     strategy:
       matrix:
         php-version:
-          - "7.4"
-          - "8.0"
           - "8.1"
           - "8.2"
           - "8.3"
@@ -59,10 +57,10 @@ jobs:
         codestyle:
           - "false"
         include:
-          - php-version: "8.2"
+          - php-version: "8.4"
             deps: "locked"
             codestyle: "true"
-          - php-version: "7.4"
+          - php-version: "8.1"
             deps: "lowest"
             codestyle: "false"
 

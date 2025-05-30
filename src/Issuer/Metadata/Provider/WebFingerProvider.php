@@ -7,6 +7,7 @@ namespace Facile\OpenIDClient\Issuer\Metadata\Provider;
 use function array_key_exists;
 use function array_pop;
 use function explode;
+use Facile\JoseVerifier\TokenVerifierInterface;
 use Facile\OpenIDClient\Exception\InvalidArgumentException;
 use Facile\OpenIDClient\Exception\RuntimeException;
 use function Facile\OpenIDClient\parse_metadata_response;
@@ -24,7 +25,7 @@ use function strpos;
 use function substr;
 
 /**
- * @psalm-import-type IssuerMetadataObject from \Facile\JoseVerifier\Psalm\PsalmTypes
+ * @psalm-import-type IssuerRemoteMetadataType from TokenVerifierInterface
  */
 final class WebFingerProvider implements RemoteProviderInterface, WebFingerProviderInterface
 {
@@ -128,7 +129,7 @@ final class WebFingerProvider implements RemoteProviderInterface, WebFingerProvi
             throw new RuntimeException('Discovered issuer mismatch');
         }
 
-        /** @var IssuerMetadataObject $metadata */
+        /** @var IssuerRemoteMetadataType $metadata */
         return $metadata;
     }
 

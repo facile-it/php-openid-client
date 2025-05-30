@@ -10,11 +10,9 @@ use Facile\OpenIDClient\Issuer\Metadata\Provider\MetadataProviderBuilder;
 
 final class IssuerBuilder implements IssuerBuilderInterface
 {
-    /** @var MetadataProviderBuilder|null */
-    private $metadataProviderBuilder;
+    private ?MetadataProviderBuilder $metadataProviderBuilder = null;
 
-    /** @var JwksProviderBuilder|null */
-    private $jwksProviderBuilder;
+    private ?JwksProviderBuilder $jwksProviderBuilder = null;
 
     public function setMetadataProviderBuilder(?MetadataProviderBuilder $metadataProviderBuilder): self
     {
@@ -45,8 +43,7 @@ final class IssuerBuilder implements IssuerBuilderInterface
         $metadataBuilder = $this->buildMetadataProviderBuilder();
         $metadata = IssuerMetadata::fromArray($metadataBuilder->build()->fetch($resource));
 
-        $jwksProviderBuilder = $this->buildJwksProviderBuilder();
-        $jwksProviderBuilder->setJwksUri($metadata->getJwksUri());
+        $jwksProviderBuilder = ($this->buildJwksProviderBuilder())->withJwksUri($metadata->getJwksUri());
         $jwksProvider = $jwksProviderBuilder->build();
 
         return new Issuer(

@@ -17,7 +17,7 @@ class AlgorithmManagerBuilder
      *
      * @psalm-var list<class-string<\Jose\Component\Core\Algorithm>>
      */
-    private $algorithmClasses;
+    private array $algorithmClasses;
 
     /**
      * @param string[]|null $algorithmClasses

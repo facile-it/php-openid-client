@@ -4,16 +4,15 @@ declare(strict_types=1);
 
 namespace Facile\OpenIDClient\Token;
 
-use Facile\JoseVerifier\AuthorizationResponseVerifierBuilder;
+use Facile\JoseVerifier\Builder\AuthorizationResponseVerifierBuilder;
+use Facile\JoseVerifier\TokenVerifierInterface;
 use Facile\OpenIDClient\Client\ClientInterface;
 
 final class ResponseVerifierBuilder implements TokenVerifierBuilderInterface
 {
-    /** @var bool */
-    private $aadIssValidation = false;
+    private bool $aadIssValidation = false;
 
-    /** @var int */
-    private $clockTolerance = 0;
+    private int $clockTolerance = 0;
 
     public function setAadIssValidation(bool $aadIssValidation): self
     {
@@ -29,17 +28,16 @@ final class ResponseVerifierBuilder implements TokenVerifierBuilderInterface
         return $this;
     }
 
-    public function build(ClientInterface $client): \Facile\JoseVerifier\TokenVerifierInterface
+    public function build(ClientInterface $client): TokenVerifierInterface
     {
-        $builder = new AuthorizationResponseVerifierBuilder();
-
-        $builder->setJwksProvider($client->getIssuer()->getJwksProvider());
-        $builder->setClientMetadata($client->getMetadata()->toArray());
-        $builder->setClientJwksProvider($client->getJwksProvider());
-        $builder->setIssuerMetadata($client->getIssuer()->getMetadata()->toArray());
-        $builder->setClockTolerance($this->clockTolerance);
-        $builder->setAadIssValidation($this->aadIssValidation);
-
-        return $builder->build();
+        return AuthorizationResponseVerifierBuilder::create(
+            $client->getIssuer()->getMetadata()->toArray(),
+            $client->getMetadata()->toArray(),
+        )
+            ->withJwksProvider($client->getIssuer()->getJwksProvider())
+            ->withClientJwksProvider($client->getJwksProvider())
+            ->withClockTolerance($this->clockTolerance)
+            ->withAadIssValidation($this->aadIssValidation)
+            ->build();
     }
 }

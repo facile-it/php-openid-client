@@ -46,17 +46,17 @@ final class AuthorizationServiceBuilder extends AbstractServiceBuilder
 
     protected function getTokenSetFactory(): TokenSetFactoryInterface
     {
-        return $this->tokenSetFactory = $this->tokenSetFactory ?? new TokenSetFactory();
+        return $this->tokenSetFactory ??= new TokenSetFactory();
     }
 
     protected function getIdTokenVerifierBuilder(): IdTokenVerifierBuilderInterface
     {
-        return $this->idTokenVerifierBuilder = $this->idTokenVerifierBuilder ?? new IdTokenVerifierBuilder();
+        return $this->idTokenVerifierBuilder ??= new IdTokenVerifierBuilder();
     }
 
     protected function getResponseVerifierBuilder(): TokenVerifierBuilderInterface
     {
-        return $this->responseVerifierBuilder = $this->responseVerifierBuilder ?? new ResponseVerifierBuilder();
+        return $this->responseVerifierBuilder ??= new ResponseVerifierBuilder();
     }
 
     public function build(): AuthorizationService
