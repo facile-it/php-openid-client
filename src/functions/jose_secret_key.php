@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Facile\OpenIDClient;
 
 use Jose\Component\Core\JWK;
+
 use function preg_match;
 
 function jose_secret_key(string $secret, ?string $alg = null): JWK

@@ -4,14 +4,15 @@ declare(strict_types=1);
 
 namespace Facile\OpenIDClient\Exception;
 
-use function array_key_exists;
-use function is_array;
-use function json_decode;
 use JsonException;
 use JsonSerializable;
 use Psr\Http\Message\ResponseInterface;
-use function sprintf;
 use Throwable;
+
+use function array_key_exists;
+use function is_array;
+use function json_decode;
+use function sprintf;
 
 /**
  * @psalm-type OAuth2ErrorType = array{}&array{

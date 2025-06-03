@@ -6,6 +6,7 @@ namespace Facile\OpenIDClientTest\Authorization;
 
 use Facile\OpenIDClient\Authorization\AuthRequest;
 use Facile\OpenIDClientTest\TestCase;
+
 use function json_decode;
 use function json_encode;
 

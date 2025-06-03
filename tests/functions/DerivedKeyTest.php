@@ -4,8 +4,9 @@ declare(strict_types=1);
 
 namespace Facile\OpenIDClientTest\functions;
 
-use function Facile\OpenIDClient\derived_key;
 use Facile\OpenIDClientTest\TestCase;
+
+use function Facile\OpenIDClient\derived_key;
 
 class DerivedKeyTest extends TestCase
 {

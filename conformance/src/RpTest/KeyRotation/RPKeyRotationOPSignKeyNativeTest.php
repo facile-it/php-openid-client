@@ -4,17 +4,18 @@ declare(strict_types=1);
 
 namespace Facile\OpenIDClient\ConformanceTest\RpTest\KeyRotation;
 
-use function Facile\OpenIDClient\base64url_encode;
 use Facile\OpenIDClient\ConformanceTest\RpTest\AbstractRpTest;
 use Facile\OpenIDClient\ConformanceTest\TestInfo;
 use Facile\OpenIDClient\Service\AuthorizationService;
 use Facile\OpenIDClient\Session\AuthSession;
 use PHPUnit\Framework\Assert;
+
+use function Facile\OpenIDClient\base64url_encode;
 use function random_bytes;
 
 /**
  * Request an ID Token and verify its signature.
- * Will have to retrieve new keys from the OP to be able to verify the ID Token
+ * Will have to retrieve new keys from the OP to be able to verify the ID Token.
  *
  * Successfully verify the ID Token signature, fetching the rotated signing keys if the 'kid' claim in the
  * JOSE header is unknown.

@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Facile\OpenIDClient\ConformanceTest\RpTest\NonceRequestParameter;
 
-use function Facile\OpenIDClient\base64url_encode;
 use Facile\OpenIDClient\ConformanceTest\RpTest\AbstractRpTest;
 use Facile\OpenIDClient\ConformanceTest\TestInfo;
 use Facile\OpenIDClient\Exception\InvalidArgumentException;
@@ -12,6 +11,8 @@ use Facile\OpenIDClient\Service\AuthorizationService;
 use Facile\OpenIDClient\Session\AuthSession;
 use PHPUnit\Framework\Assert;
 use PHPUnit\Framework\AssertionFailedError;
+
+use function Facile\OpenIDClient\base64url_encode;
 use function random_bytes;
 
 /**

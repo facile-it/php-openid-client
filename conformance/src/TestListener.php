@@ -4,26 +4,27 @@ declare(strict_types=1);
 
 namespace Facile\OpenIDClient\ConformanceTest;
 
+use Closure;
+use Facile\OpenIDClient\ConformanceTest\RpTest\ResponseTypeAndResponseMode\RPResponseTypeCodeTest;
+use Facile\OpenIDClient\ConformanceTest\RpTest\RpTestInterface;
+use PHPUnit\Framework\Test;
+use PHPUnit\Framework\TestListener as TestListenerInterface;
+use PHPUnit\Framework\TestListenerDefaultImplementation;
+use PHPUnit\Framework\TestSuite;
+use Psr\Container\ContainerInterface;
+use ReflectionFunction;
+
 use function array_map;
 use function array_pop;
 use function array_push;
 use function array_shift;
 use function array_slice;
 use function array_unshift;
-use Closure;
-use Facile\OpenIDClient\ConformanceTest\RpTest\ResponseTypeAndResponseMode\RPResponseTypeCodeTest;
-use Facile\OpenIDClient\ConformanceTest\RpTest\RpTestInterface;
 use function file;
 use function implode;
 use function is_callable;
-use PHPUnit\Framework\Test;
-use PHPUnit\Framework\TestListener as TestListenerInterface;
-use PHPUnit\Framework\TestListenerDefaultImplementation;
-use PHPUnit\Framework\TestSuite;
 use function preg_match;
 use function preg_replace;
-use Psr\Container\ContainerInterface;
-use ReflectionFunction;
 use function sprintf;
 use function str_repeat;
 use function strlen;
@@ -150,11 +151,11 @@ class TestListener implements TestListenerInterface
         // remove spaces based on first line
         if (preg_match('/^( +)/', $lines[0] ?? '', $matches)) {
             $toTrim = strlen($matches[1]);
-            $lines = array_map(static fn (string $line) => preg_replace(sprintf('/^ {0,%d}/', $toTrim), '', $line), $lines);
+            $lines = array_map(static fn(string $line) => preg_replace(sprintf('/^ {0,%d}/', $toTrim), '', $line), $lines);
         }
 
         if ($indent) {
-            $lines = array_map(static fn (string $line) => str_repeat(' ', $indent) . $line, $lines);
+            $lines = array_map(static fn(string $line) => str_repeat(' ', $indent) . $line, $lines);
         }
 
         return implode('', $lines);

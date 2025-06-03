@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Facile\OpenIDClient\ConformanceTest\RpTest\UserInfoEndpoint;
 
-use function Facile\OpenIDClient\base64url_encode;
 use Facile\OpenIDClient\ConformanceTest\RpTest\AbstractRpTest;
 use Facile\OpenIDClient\ConformanceTest\TestInfo;
 use Facile\OpenIDClient\Service\AuthorizationService;
@@ -12,8 +11,10 @@ use Facile\OpenIDClient\Service\UserInfoService;
 use Facile\OpenIDClient\Session\AuthSession;
 use PHPUnit\Framework\Assert;
 use PHPUnit\Framework\AssertionFailedError;
-use function random_bytes;
 use Throwable;
+
+use function Facile\OpenIDClient\base64url_encode;
+use function random_bytes;
 
 /**
  * Make a UserInfo Request and verify the 'sub' value of the UserInfo Response by comparing it with the ID Token's 'sub' value.

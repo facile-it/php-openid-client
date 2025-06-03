@@ -56,7 +56,7 @@ namespace Facile\OpenIDClient\Token;
 interface TokenSetInterface
 {
     /**
-     * Get all attributes
+     * Get all attributes.
      *
      * @return array<string, mixed>
      *

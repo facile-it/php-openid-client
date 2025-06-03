@@ -4,13 +4,7 @@ declare(strict_types=1);
 
 namespace Facile\OpenIDClient\Claims;
 
-use function array_diff_key;
-use function array_flip;
-use function array_key_exists;
-use function count;
-use function explode;
 use Facile\OpenIDClient\AlgorithmManagerBuilder;
-use function Facile\OpenIDClient\base64url_decode;
 use Facile\OpenIDClient\Client\ClientInterface as OpenIDClient;
 use Facile\OpenIDClient\Exception\InvalidArgumentException;
 use Facile\OpenIDClient\Exception\RuntimeException;
@@ -22,8 +16,15 @@ use Jose\Component\Core\JWKSet;
 use Jose\Component\Signature\JWSVerifier;
 use Jose\Component\Signature\Serializer\CompactSerializer;
 use Jose\Component\Signature\Serializer\JWSSerializer;
-use function json_decode;
 use JsonException;
+
+use function array_diff_key;
+use function array_flip;
+use function array_key_exists;
+use function count;
+use function explode;
+use function Facile\OpenIDClient\base64url_decode;
+use function json_decode;
 use function sprintf;
 
 /**

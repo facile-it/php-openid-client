@@ -4,11 +4,12 @@ declare(strict_types=1);
 
 namespace Facile\OpenIDClient\ConformanceTest\RpTest\ClientAuthentication;
 
-use function Facile\OpenIDClient\base64url_encode;
 use Facile\OpenIDClient\ConformanceTest\RpTest\AbstractRpTest;
 use Facile\OpenIDClient\ConformanceTest\TestInfo;
 use Facile\OpenIDClient\Service\AuthorizationService;
 use PHPUnit\Framework\Assert;
+
+use function Facile\OpenIDClient\base64url_encode;
 use function random_bytes;
 
 /**

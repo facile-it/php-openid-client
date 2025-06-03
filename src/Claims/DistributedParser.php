@@ -4,9 +4,6 @@ declare(strict_types=1);
 
 namespace Facile\OpenIDClient\Claims;
 
-use function array_filter;
-use function array_key_exists;
-use function Facile\OpenIDClient\check_server_response;
 use Facile\OpenIDClient\Client\ClientInterface as OpenIDClient;
 use Facile\OpenIDClient\Exception\RuntimeException;
 use Facile\OpenIDClient\Issuer\IssuerBuilderInterface;
@@ -19,6 +16,10 @@ use Psr\Http\Client\ClientInterface;
 use Psr\Http\Message\RequestFactoryInterface;
 use Psr\Http\Message\ResponseInterface;
 use Throwable;
+
+use function array_filter;
+use function array_key_exists;
+use function Facile\OpenIDClient\check_server_response;
 
 final class DistributedParser extends AbstractClaims implements DistributedParserInterface
 {
@@ -50,7 +51,7 @@ final class DistributedParser extends AbstractClaims implements DistributedParse
             return $claims;
         }
 
-        $distributedSources = array_filter($claims['_claim_sources'], fn ($value): bool => $this->isDistributedSource($value));
+        $distributedSources = array_filter($claims['_claim_sources'], fn($value): bool => $this->isDistributedSource($value));
 
         /** @var array<string, ResponseInterface> $responses */
         $responses = [];

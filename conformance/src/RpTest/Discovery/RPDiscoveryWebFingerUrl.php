@@ -8,6 +8,7 @@ use Facile\OpenIDClient\ConformanceTest\RpTest\AbstractRpTest;
 use Facile\OpenIDClient\ConformanceTest\TestInfo;
 use Facile\OpenIDClient\Issuer\IssuerBuilder;
 use PHPUnit\Framework\Assert;
+
 use function sprintf;
 
 /**

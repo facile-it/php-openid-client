@@ -4,13 +4,14 @@ declare(strict_types=1);
 
 namespace Facile\OpenIDClient\Authorization;
 
+use Facile\OpenIDClient\Exception\InvalidArgumentException;
+
 use function array_diff;
 use function array_diff_key;
 use function array_flip;
 use function array_keys;
 use function array_merge;
 use function count;
-use Facile\OpenIDClient\Exception\InvalidArgumentException;
 use function implode;
 
 /**

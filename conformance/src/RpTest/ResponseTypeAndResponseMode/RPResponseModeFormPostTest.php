@@ -4,15 +4,16 @@ declare(strict_types=1);
 
 namespace Facile\OpenIDClient\ConformanceTest\RpTest\ResponseTypeAndResponseMode;
 
-use function array_combine;
-use function Facile\OpenIDClient\base64url_encode;
 use Facile\OpenIDClient\ConformanceTest\RpTest\AbstractRpTest;
 use Facile\OpenIDClient\ConformanceTest\TestInfo;
 use Facile\OpenIDClient\Service\AuthorizationService;
 use Facile\OpenIDClient\Session\AuthSession;
-use function http_build_query;
 use Laminas\Diactoros\ServerRequestFactory;
 use PHPUnit\Framework\Assert;
+
+use function array_combine;
+use function Facile\OpenIDClient\base64url_encode;
+use function http_build_query;
 use function preg_match_all;
 use function random_bytes;
 

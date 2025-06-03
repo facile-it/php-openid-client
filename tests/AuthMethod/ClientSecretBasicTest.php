@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Facile\OpenIDClientTest\AuthMethod;
 
-use function base64_encode;
 use Facile\OpenIDClient\AuthMethod\ClientSecretBasic;
 use Facile\OpenIDClient\Client\ClientInterface;
 use Facile\OpenIDClient\Client\Metadata\ClientMetadataInterface;
@@ -12,6 +11,8 @@ use Facile\OpenIDClient\Exception\InvalidArgumentException;
 use Facile\OpenIDClientTest\TestCase;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\StreamInterface;
+
+use function base64_encode;
 
 class ClientSecretBasicTest extends TestCase
 {

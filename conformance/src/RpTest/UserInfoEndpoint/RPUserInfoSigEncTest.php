@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace Facile\OpenIDClient\ConformanceTest\RpTest\UserInfoEndpoint;
 
-use function array_map;
-use function Facile\OpenIDClient\base64url_encode;
 use Facile\OpenIDClient\ConformanceTest\RpTest\AbstractRpTest;
 use Facile\OpenIDClient\ConformanceTest\TestInfo;
 use Facile\OpenIDClient\Service\AuthorizationService;
@@ -14,9 +12,12 @@ use Facile\OpenIDClient\Session\AuthSession;
 use Jose\Component\Core\JWK;
 use Jose\Component\Core\JWKSet;
 use Jose\Component\KeyManagement\JWKFactory;
+use PHPUnit\Framework\Assert;
+
+use function array_map;
+use function Facile\OpenIDClient\base64url_encode;
 use function json_decode;
 use function json_encode;
-use PHPUnit\Framework\Assert;
 use function random_bytes;
 
 /**
@@ -33,11 +34,11 @@ class RPUserInfoSigEncTest extends AbstractRpTest
 
     public function execute(TestInfo $testInfo): void
     {
-        $jwkSig = JWKFactory::createRSAKey(2048, ['alg' => 'RS256', 'use' => 'sig']);
-        $jwkEncAlg = JWKFactory::createRSAKey(2048, ['alg' => 'RSA1_5', 'use' => 'enc']);
+        $jwkSig = JWKFactory::createRSAKey(2_048, ['alg' => 'RS256', 'use' => 'sig']);
+        $jwkEncAlg = JWKFactory::createRSAKey(2_048, ['alg' => 'RSA1_5', 'use' => 'enc']);
 
         $jwks = new JWKSet([$jwkSig, $jwkEncAlg]);
-        $publicJwks = new JWKSet(array_map(static fn (JWK $jwk) => $jwk->toPublic(), $jwks->all()));
+        $publicJwks = new JWKSet(array_map(static fn(JWK $jwk) => $jwk->toPublic(), $jwks->all()));
 
         $client = $this->registerClient($testInfo, [
             'userinfo_signed_response_alg' => 'RS256',

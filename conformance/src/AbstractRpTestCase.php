@@ -4,27 +4,16 @@ declare(strict_types=1);
 
 namespace Facile\OpenIDClient\ConformanceTest;
 
-use function array_merge;
-use function dirname;
 use Facile\OpenIDClient\Client\ClientBuilder;
 use Facile\OpenIDClient\Client\ClientInterface;
 use Facile\OpenIDClient\Client\Metadata\ClientMetadata;
 use Facile\OpenIDClient\Issuer\IssuerBuilder;
 use Facile\OpenIDClient\Service\RegistrationService;
-use function file;
-use function file_exists;
-use function file_put_contents;
 use Http\Discovery\Psr17FactoryDiscovery;
 use Http\Discovery\Psr18ClientDiscovery;
-use function implode;
-use function is_dir;
 use Laminas\Diactoros\RequestFactory;
 use Laminas\Diactoros\ServerRequestFactory;
 use Laminas\Diactoros\Uri;
-use function ltrim;
-use function mkdir;
-use function parse_str;
-use const PHP_EOL;
 use PHPUnit\Framework\TestCase;
 use Psr\Container\ContainerInterface;
 use Psr\Http\Client\ClientInterface as HttpClient;
@@ -32,9 +21,22 @@ use Psr\Http\Message\RequestFactoryInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use ReflectionFunction;
 use RuntimeException;
-use function sprintf;
 use Throwable;
+
+use function array_merge;
+use function dirname;
+use function file;
+use function file_exists;
+use function file_put_contents;
+use function implode;
+use function is_dir;
+use function ltrim;
+use function mkdir;
+use function parse_str;
+use function sprintf;
 use function var_export;
+
+use const PHP_EOL;
 
 abstract class AbstractRpTestCase extends TestCase
 {
@@ -190,7 +192,7 @@ abstract class AbstractRpTestCase extends TestCase
         $logFilePath = __DIR__ . '/../log/' . ltrim($profile, '@') . '/' . $testName . '.txt';
         $dirname = dirname($logFilePath);
 
-        if (! file_exists($dirname) && ! mkdir($concurrentDirectory = $dirname, 0777, true) && ! is_dir($concurrentDirectory)) {
+        if (! file_exists($dirname) && ! mkdir($concurrentDirectory = $dirname, 0o777, true) && ! is_dir($concurrentDirectory)) {
             throw new RuntimeException(sprintf('Directory "%s" was not created', $concurrentDirectory));
         }
 

@@ -7,8 +7,6 @@ namespace Facile\OpenIDClientTest\Issuer\Metadata\Provider;
 use Facile\OpenIDClient\Issuer\Metadata\Provider\DiscoveryProviderInterface;
 use Facile\OpenIDClient\Issuer\Metadata\Provider\WebFingerProvider;
 use Facile\OpenIDClientTest\TestCase;
-use function http_build_query;
-use function json_encode;
 use Psr\Http\Client\ClientInterface;
 use Psr\Http\Message\RequestFactoryInterface;
 use Psr\Http\Message\RequestInterface;
@@ -16,6 +14,9 @@ use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\StreamInterface;
 use Psr\Http\Message\UriFactoryInterface;
 use Psr\Http\Message\UriInterface;
+
+use function http_build_query;
+use function json_encode;
 
 class WebFingerProviderTest extends TestCase
 {

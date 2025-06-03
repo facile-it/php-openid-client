@@ -6,6 +6,7 @@ namespace Facile\OpenIDClientTest\Issuer\Metadata;
 
 use Facile\OpenIDClient\Issuer\Metadata\IssuerMetadata;
 use Facile\OpenIDClientTest\TestCase;
+
 use function json_decode;
 use function json_encode;
 
