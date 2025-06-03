@@ -37,7 +37,7 @@ class AlgorithmManagerBuilder
                 try {
                     $algorithms[] = new $algorithmClass();
                 } catch (Throwable $throwable) {
-                    //does nothing
+                    // does nothing
                 }
             }
         }

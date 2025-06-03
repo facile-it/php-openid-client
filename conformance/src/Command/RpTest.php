@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace Facile\OpenIDClient\ConformanceTest\Command;
 
-use function array_filter;
-use function count;
 use DateTimeImmutable;
 use Facile\OpenIDClient\ConformanceTest\Helper\RPLogsHelper;
 use Facile\OpenIDClient\ConformanceTest\Provider\RpProfileTestsProvider;
@@ -13,13 +11,16 @@ use Facile\OpenIDClient\ConformanceTest\RpTest\RpTestInterface;
 use Facile\OpenIDClient\ConformanceTest\Runner\RpTestResult;
 use Facile\OpenIDClient\ConformanceTest\Runner\RpTestRunner;
 use Facile\OpenIDClient\ConformanceTest\TestInfo;
-use function fnmatch;
-use function sprintf;
-use function str_repeat;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
+
+use function array_filter;
+use function count;
+use function fnmatch;
+use function sprintf;
+use function str_repeat;
 
 class RpTest extends Command
 {
@@ -94,7 +95,7 @@ class RpTest extends Command
                     }
 
                     return false;
-                    //return \in_array($test->getTestId(), $testIds, true);
+                    // return \in_array($test->getTestId(), $testIds, true);
                 });
             }
 
@@ -112,10 +113,10 @@ class RpTest extends Command
                     $result = $this->testRunner->run($test, $testInfo);
                 } while (null !== $result->getException() && ++$count < $retries);
 
-                $output->writeln("<comment>Test:</comment> <info>$testName</info>", OutputInterface::VERBOSITY_NORMAL);
+                $output->writeln("<comment>Test:</comment> <info>{$testName}</info>", OutputInterface::VERBOSITY_NORMAL);
 
                 if ($count > 1) {
-                    $output->writeln("<comment>Attempts:</comment> <info>$count</info>", OutputInterface::VERBOSITY_NORMAL);
+                    $output->writeln("<comment>Attempts:</comment> <info>{$count}</info>", OutputInterface::VERBOSITY_NORMAL);
                 }
 
                 if ($showEnvironment) {

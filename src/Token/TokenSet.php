@@ -4,8 +4,9 @@ declare(strict_types=1);
 
 namespace Facile\OpenIDClient\Token;
 
-use function array_key_exists;
 use JsonSerializable;
+
+use function array_key_exists;
 
 /**
  * @psalm-import-type TokenSetType from TokenSetInterface

@@ -9,6 +9,7 @@ use Facile\OpenIDClient\ConformanceTest\TestInfo;
 use Facile\OpenIDClient\Issuer\IssuerBuilder;
 use Facile\OpenIDClient\Service\RegistrationService;
 use PHPUnit\Framework\Assert;
+
 use function sprintf;
 
 /**

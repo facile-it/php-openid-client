@@ -4,16 +4,17 @@ declare(strict_types=1);
 
 namespace Facile\OpenIDClient\ConformanceTest\RpTest\ScopeRequestParameter;
 
-use function explode;
-use function Facile\OpenIDClient\base64url_decode;
-use function Facile\OpenIDClient\base64url_encode;
 use Facile\OpenIDClient\ConformanceTest\RpTest\AbstractRpTest;
 use Facile\OpenIDClient\ConformanceTest\TestInfo;
 use Facile\OpenIDClient\Service\AuthorizationService;
 use Facile\OpenIDClient\Service\UserInfoService;
 use Facile\OpenIDClient\Session\AuthSession;
-use function json_decode;
 use PHPUnit\Framework\Assert;
+
+use function explode;
+use function Facile\OpenIDClient\base64url_decode;
+use function Facile\OpenIDClient\base64url_encode;
+use function json_decode;
 use function random_bytes;
 
 class RpScopeUserinfoClaimsTest extends AbstractRpTest

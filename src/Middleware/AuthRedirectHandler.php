@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Facile\OpenIDClient\Middleware;
 
 use Facile\OpenIDClient\Authorization\AuthRequestInterface;
-use function Facile\OpenIDClient\base64url_encode;
 use Facile\OpenIDClient\Client\ClientInterface;
 use Facile\OpenIDClient\Exception\LogicException;
 use Facile\OpenIDClient\Exception\RuntimeException;
@@ -16,6 +15,8 @@ use Psr\Http\Message\ResponseFactoryInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
+
+use function Facile\OpenIDClient\base64url_encode;
 use function random_bytes;
 
 class AuthRedirectHandler implements RequestHandlerInterface

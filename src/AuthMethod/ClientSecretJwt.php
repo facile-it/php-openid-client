@@ -4,18 +4,19 @@ declare(strict_types=1);
 
 namespace Facile\OpenIDClient\AuthMethod;
 
-use function class_exists;
-use function Facile\OpenIDClient\base64url_encode;
 use Facile\OpenIDClient\Client\ClientInterface as OpenIDClient;
 use Facile\OpenIDClient\Exception\InvalidArgumentException;
 use Facile\OpenIDClient\Exception\LogicException;
-use function Facile\OpenIDClient\get_endpoint_uri;
-use function Facile\OpenIDClient\jose_secret_key;
 use Jose\Component\Core\AlgorithmManager;
 use Jose\Component\Signature\Algorithm\HS256;
 use Jose\Component\Signature\JWSBuilder;
 use Jose\Component\Signature\Serializer\CompactSerializer;
 use Jose\Component\Signature\Serializer\JWSSerializer;
+
+use function class_exists;
+use function Facile\OpenIDClient\base64url_encode;
+use function Facile\OpenIDClient\get_endpoint_uri;
+use function Facile\OpenIDClient\jose_secret_key;
 use function json_encode;
 use function random_bytes;
 use function time;
@@ -72,8 +73,8 @@ final class ClientSecretJwt extends AbstractJwtAuth
         $time = time();
         $jti = base64url_encode(random_bytes(32));
 
-        $payload = json_encode($claims +
-            [
+        $payload = json_encode($claims
+            + [
                 'iss' => $clientId,
                 'sub' => $clientId,
                 'aud' => get_endpoint_uri($client, 'token_endpoint'),

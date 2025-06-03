@@ -6,10 +6,11 @@ namespace Facile\OpenIDClient\ConformanceTest\Helper;
 
 use Http\Discovery\Psr17FactoryDiscovery;
 use Http\Discovery\Psr18ClientDiscovery;
-use function preg_match;
 use Psr\Http\Client\ClientInterface;
 use Psr\Http\Message\RequestFactoryInterface;
 use Psr\Http\Message\ResponseInterface;
+
+use function preg_match;
 
 class RPLogsHelper
 {

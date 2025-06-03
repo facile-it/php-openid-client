@@ -4,9 +4,10 @@ declare(strict_types=1);
 
 namespace Facile\OpenIDClient\Issuer\Metadata\Provider;
 
-use function array_filter;
 use Facile\OpenIDClient\Exception\ExceptionInterface;
 use Facile\OpenIDClient\Exception\RuntimeException;
+
+use function array_filter;
 
 final class RemoteProvider implements RemoteProviderInterface
 {
@@ -30,7 +31,7 @@ final class RemoteProvider implements RemoteProviderInterface
     {
         $lastException = null;
 
-        $providers = array_filter($this->providers, static fn (RemoteProviderInterface $provider): bool => $provider->isAllowedUri($uri));
+        $providers = array_filter($this->providers, static fn(RemoteProviderInterface $provider): bool => $provider->isAllowedUri($uri));
 
         foreach ($providers as $provider) {
             try {

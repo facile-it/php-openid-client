@@ -4,8 +4,9 @@ declare(strict_types=1);
 
 namespace Facile\OpenIDClientTest\functions;
 
-use function Facile\OpenIDClient\base64url_decode;
 use Facile\OpenIDClientTest\TestCase;
+
+use function Facile\OpenIDClient\base64url_decode;
 
 class Base64UrlDecodeTest extends TestCase
 {

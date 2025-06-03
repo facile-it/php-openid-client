@@ -4,35 +4,36 @@ declare(strict_types=1);
 
 namespace Facile\OpenIDClient\Service;
 
-use function array_filter;
-use function array_key_exists;
-use function array_merge;
 use Facile\OpenIDClient\Client\ClientInterface as OpenIDClient;
 use Facile\OpenIDClient\Exception\InvalidArgumentException;
 use Facile\OpenIDClient\Exception\OAuth2Exception;
 use Facile\OpenIDClient\Exception\RuntimeException;
-use function Facile\OpenIDClient\get_endpoint_uri;
-use function Facile\OpenIDClient\parse_callback_params;
-use function Facile\OpenIDClient\parse_metadata_response;
 use Facile\OpenIDClient\Session\AuthSessionInterface;
 use Facile\OpenIDClient\Token\IdTokenVerifierBuilderInterface;
 use Facile\OpenIDClient\Token\TokenSetFactoryInterface;
 use Facile\OpenIDClient\Token\TokenSetInterface;
 use Facile\OpenIDClient\Token\TokenVerifierBuilderInterface;
-use function http_build_query;
-use function is_array;
-use function is_string;
-use function json_encode;
 use JsonSerializable;
 use Psr\Http\Client\ClientExceptionInterface;
 use Psr\Http\Client\ClientInterface;
 use Psr\Http\Message\RequestFactoryInterface;
 use Psr\Http\Message\ServerRequestInterface;
 
+use function array_filter;
+use function array_key_exists;
+use function array_merge;
+use function Facile\OpenIDClient\get_endpoint_uri;
+use function Facile\OpenIDClient\parse_callback_params;
+use function Facile\OpenIDClient\parse_metadata_response;
+use function http_build_query;
+use function is_array;
+use function is_string;
+use function json_encode;
+
 /**
- * OAuth 2.0
+ * OAuth 2.0.
  *
- * @link https://tools.ietf.org/html/rfc6749 RFC 6749
+ * @see https://tools.ietf.org/html/rfc6749 RFC 6749
  *
  * @psalm-import-type TokenSetAttributesType from TokenSetInterface
  * @psalm-import-type TokenSetClaimsType from TokenSetInterface
@@ -102,7 +103,7 @@ final class AuthorizationService
             'redirect_uri' => $clientMetadata->getRedirectUris()[0] ?? null,
         ], $params);
 
-        $params = array_filter($params, static fn ($value): bool => null !== $value);
+        $params = array_filter($params, static fn($value): bool => null !== $value);
 
         /**
          * @var string $key

@@ -4,8 +4,9 @@ declare(strict_types=1);
 
 namespace Facile\OpenIDClientTest\functions;
 
-use function Facile\OpenIDClient\jose_secret_key;
 use Facile\OpenIDClientTest\TestCase;
+
+use function Facile\OpenIDClient\jose_secret_key;
 
 class JoseSecretKeyTest extends TestCase
 {

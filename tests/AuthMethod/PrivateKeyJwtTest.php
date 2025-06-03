@@ -11,16 +11,17 @@ use Facile\OpenIDClient\Client\Metadata\ClientMetadata;
 use Facile\OpenIDClient\Issuer\IssuerInterface;
 use Facile\OpenIDClient\Issuer\Metadata\IssuerMetadata;
 use Facile\OpenIDClientTest\TestCase;
-use function http_build_query;
 use Jose\Component\Core\JWK;
 use Jose\Component\KeyManagement\JWKFactory;
 use Jose\Component\Signature\JWS;
 use Jose\Component\Signature\JWSBuilder;
 use Jose\Component\Signature\Serializer\JWSSerializer;
-use function json_decode;
 use Prophecy\Argument;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\StreamInterface;
+
+use function http_build_query;
+use function json_decode;
 use function time;
 
 class PrivateKeyJwtTest extends TestCase
@@ -133,7 +134,7 @@ class PrivateKeyJwtTest extends TestCase
         $jwsBuilder3->addSignature(
             Argument::allOf(
                 Argument::type(JWK::class),
-                Argument::that(fn (JWK $key) => 'foo' === $key->get('kid'))
+                Argument::that(fn(JWK $key) => 'foo' === $key->get('kid'))
             ),
             Argument::allOf(
                 Argument::type('array'),

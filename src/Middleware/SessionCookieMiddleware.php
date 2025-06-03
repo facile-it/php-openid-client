@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace Facile\OpenIDClient\Middleware;
 
-use function bin2hex;
-use function class_exists;
 use Dflydev\FigCookies\Cookies;
 use Dflydev\FigCookies\FigResponseCookies;
 use Dflydev\FigCookies\Modifier\SameSite;
@@ -14,14 +12,17 @@ use Facile\OpenIDClient\Exception\LogicException;
 use Facile\OpenIDClient\Exception\RuntimeException;
 use Facile\OpenIDClient\Session\AuthSession;
 use Facile\OpenIDClient\Session\AuthSessionInterface;
-use function is_array;
-use function json_decode;
-use function json_encode;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\MiddlewareInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 use Psr\SimpleCache\CacheInterface;
+
+use function bin2hex;
+use function class_exists;
+use function is_array;
+use function json_decode;
+use function json_encode;
 use function random_bytes;
 
 /**

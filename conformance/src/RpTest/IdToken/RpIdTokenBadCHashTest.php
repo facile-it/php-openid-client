@@ -4,19 +4,20 @@ declare(strict_types=1);
 
 namespace Facile\OpenIDClient\ConformanceTest\RpTest\IdToken;
 
-use function Facile\OpenIDClient\base64url_encode;
 use Facile\OpenIDClient\ConformanceTest\RpTest\AbstractRpTest;
 use Facile\OpenIDClient\ConformanceTest\TestInfo;
 use Facile\OpenIDClient\Service\AuthorizationService;
 use Facile\OpenIDClient\Session\AuthSession;
 use PHPUnit\Framework\Assert;
 use PHPUnit\Framework\AssertionFailedError;
-use function random_bytes;
 use Throwable;
+
+use function Facile\OpenIDClient\base64url_encode;
+use function random_bytes;
 
 /**
  * Retrieve Authorization Code and ID Token from the Authorization Endpoint, using Hybrid Flow.
- * Verify the c_hash value in the returned ID token. 'id_token_signed_response_alg' must NOT be 'none'
+ * Verify the c_hash value in the returned ID token. 'id_token_signed_response_alg' must NOT be 'none'.
  *
  * Identify the incorrect 'c_hash' value and reject the ID Token after doing Authorization Code Validation.
  */

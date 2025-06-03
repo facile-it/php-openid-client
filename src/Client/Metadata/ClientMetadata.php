@@ -4,13 +4,14 @@ declare(strict_types=1);
 
 namespace Facile\OpenIDClient\Client\Metadata;
 
+use Facile\JoseVerifier\TokenVerifierInterface;
+use Facile\OpenIDClient\Exception\InvalidArgumentException;
+
 use function array_diff;
 use function array_key_exists;
 use function array_keys;
 use function array_merge;
 use function count;
-use Facile\JoseVerifier\TokenVerifierInterface;
-use Facile\OpenIDClient\Exception\InvalidArgumentException;
 use function implode;
 
 /**

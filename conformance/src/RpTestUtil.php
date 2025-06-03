@@ -4,20 +4,21 @@ declare(strict_types=1);
 
 namespace Facile\OpenIDClient\ConformanceTest;
 
-use function fclose;
-use function file_exists;
-use function fopen;
-use function fwrite;
 use Http\Discovery\Psr17FactoryDiscovery;
 use Http\Discovery\Psr18ClientDiscovery;
-use function is_dir;
-use function ltrim;
-use function mkdir;
-use function preg_match;
 use Psr\Http\Client\ClientInterface;
 use Psr\Http\Message\RequestFactoryInterface;
 use Psr\Http\Message\ResponseInterface;
 use RuntimeException;
+
+use function fclose;
+use function file_exists;
+use function fopen;
+use function fwrite;
+use function is_dir;
+use function ltrim;
+use function mkdir;
+use function preg_match;
 use function sprintf;
 
 class RpTestUtil
@@ -43,7 +44,7 @@ class RpTestUtil
 
     private function mkdir(string $dirname): void
     {
-        if (! file_exists($dirname) && ! mkdir($concurrentDirectory = $dirname, 0777, true) && ! is_dir($concurrentDirectory)) {
+        if (! file_exists($dirname) && ! mkdir($concurrentDirectory = $dirname, 0o777, true) && ! is_dir($concurrentDirectory)) {
             throw new RuntimeException(sprintf('Directory "%s" was not created', $concurrentDirectory));
         }
     }

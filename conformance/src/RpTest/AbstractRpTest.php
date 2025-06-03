@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Facile\OpenIDClient\ConformanceTest\RpTest;
 
-use function array_merge;
 use Facile\JoseVerifier\JWK\MemoryJwksProvider;
 use Facile\OpenIDClient\Client\ClientBuilder;
 use Facile\OpenIDClient\Client\ClientInterface;
@@ -17,16 +16,19 @@ use Facile\OpenIDClient\Service\RegistrationService;
 use Http\Discovery\Psr17FactoryDiscovery;
 use Http\Discovery\Psr18ClientDiscovery;
 use Jose\Component\Core\JWKSet;
-use function json_decode;
-use function json_encode;
 use Laminas\Diactoros\ServerRequestFactory;
-use const PHP_EOL;
 use Psr\Container\ContainerInterface;
 use Psr\Http\Client\ClientInterface as HttpClient;
 use Psr\Http\Message\RequestFactoryInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
+
+use function array_merge;
+use function json_decode;
+use function json_encode;
 use function sprintf;
+
+use const PHP_EOL;
 
 abstract class AbstractRpTest implements RpTestInterface
 {

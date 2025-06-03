@@ -20,8 +20,9 @@ use Jose\Component\Signature\JWSBuilder;
 use Jose\Component\Signature\JWSVerifier;
 use Jose\Component\Signature\Serializer\CompactSerializer;
 use Jose\Component\Signature\Serializer\JWSSerializer;
-use function json_encode;
 use Prophecy\Argument;
+
+use function json_encode;
 
 class AggregatedClaimsTest extends TestCase
 {
@@ -121,7 +122,7 @@ class AggregatedClaimsTest extends TestCase
 
     public function testUnpackAggregatedClaimsWithSignedJWT(): void
     {
-        $jwk = JWKFactory::createRSAKey(2048, ['alg' => 'RS256', 'use' => 'sig']);
+        $jwk = JWKFactory::createRSAKey(2_048, ['alg' => 'RS256', 'use' => 'sig']);
         $jwkPublic = $jwk->toPublic();
 
         $jwsBuilder = new JWSBuilder(new AlgorithmManager([new RS256()]));
@@ -146,7 +147,7 @@ class AggregatedClaimsTest extends TestCase
         $algorithm = new RS256();
         $algorithmManager->get('RS256')->willReturn($algorithm);
 
-        $JWSVerifier->verifyWithKey(Argument::type(JWS::class), Argument::that(fn (JWK $key) => $jwkPublic->all() === $key->all()), 0)
+        $JWSVerifier->verifyWithKey(Argument::type(JWS::class), Argument::that(fn(JWK $key) => $jwkPublic->all() === $key->all()), 0)
             ->willReturn(true);
 
         $client->getIssuer()->willReturn($issuer->reveal());

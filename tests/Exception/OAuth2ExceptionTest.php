@@ -9,10 +9,11 @@ use Facile\OpenIDClient\Exception\InvalidArgumentException;
 use Facile\OpenIDClient\Exception\OAuth2Exception;
 use Facile\OpenIDClient\Exception\RemoteException;
 use Facile\OpenIDClientTest\TestCase;
-use function json_decode;
-use function json_encode;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\StreamInterface;
+
+use function json_decode;
+use function json_encode;
 
 class OAuth2ExceptionTest extends TestCase
 {

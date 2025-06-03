@@ -4,13 +4,14 @@ declare(strict_types=1);
 
 namespace Facile\OpenIDClient\ConformanceTest\Provider;
 
-use function array_keys;
-use function array_map;
 use Facile\OpenIDClient\ConformanceTest\RpTest;
 use Facile\OpenIDClient\ConformanceTest\RpTest\RpTestInterface;
 use Facile\OpenIDClient\ConformanceTest\TestInfo;
 use InvalidArgumentException;
 use Psr\Container\ContainerInterface;
+
+use function array_keys;
+use function array_map;
 
 class RpProfileTestsProvider
 {

@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Facile\OpenIDClientTest\AuthMethod;
 
 use Facile\OpenIDClient\AuthMethod\ClientSecretJwt;
-use function Facile\OpenIDClient\base64url_encode;
 use Facile\OpenIDClient\Client\ClientInterface;
 use Facile\OpenIDClient\Client\Metadata\ClientMetadata;
 use Facile\OpenIDClient\Client\Metadata\ClientMetadataInterface;
@@ -13,15 +12,17 @@ use Facile\OpenIDClient\Exception\InvalidArgumentException;
 use Facile\OpenIDClient\Issuer\IssuerInterface;
 use Facile\OpenIDClient\Issuer\Metadata\IssuerMetadata;
 use Facile\OpenIDClientTest\TestCase;
-use function http_build_query;
 use Jose\Component\Core\JWK;
 use Jose\Component\Signature\JWS;
 use Jose\Component\Signature\JWSBuilder;
 use Jose\Component\Signature\Serializer\JWSSerializer;
-use function json_decode;
 use Prophecy\Argument;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\StreamInterface;
+
+use function Facile\OpenIDClient\base64url_encode;
+use function http_build_query;
+use function json_decode;
 use function time;
 
 class ClientSecretJwtTest extends TestCase

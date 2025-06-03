@@ -7,8 +7,9 @@ namespace Facile\OpenIDClient\ConformanceTest\RpTest\Discovery;
 use Facile\OpenIDClient\ConformanceTest\RpTest\AbstractRpTest;
 use Facile\OpenIDClient\ConformanceTest\TestInfo;
 use Facile\OpenIDClient\Issuer\IssuerBuilder;
-use function parse_url;
 use PHPUnit\Framework\Assert;
+
+use function parse_url;
 use function rtrim;
 use function sprintf;
 

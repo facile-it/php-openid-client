@@ -6,11 +6,12 @@ namespace Facile\OpenIDClient;
 
 use Facile\OpenIDClient\Client\ClientInterface as OpenIDClient;
 use Facile\OpenIDClient\Exception\RuntimeException;
+
 use function is_string;
 use function strpos;
 
 /**
- * Handle endpoint URI based on auth method
+ * Handle endpoint URI based on auth method.
  *
  * @internal
  */
