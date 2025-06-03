@@ -72,7 +72,7 @@
         "laminas/laminas-di": "^3.1",
         "laminas/laminas-diactoros": "^2.1 || ^3.0",
         "laminas/laminas-servicemanager": "^3.4",
-        "php-http/cache-plugin": "^1.6",
+        "php-http/cache-plugin": "^1.6 || ^2.0",
         "php-http/curl-client": "^2.0",
         "php-http/guzzle7-adapter": "^0.1.0 || ^1.0",
         "phpspec/prophecy": "^1.10.3",
