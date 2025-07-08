@@ -142,9 +142,9 @@ abstract class AbstractClaims
      * @param array<string, string> $sourceNames
      * @param array<string, array<string, mixed>> $sources
      *
-     * @return array<string, mixed>
-     *
      * @psalm-param TokenSetClaimsType $claims
+     *
+     * @return array<string, mixed>
      *
      * @psalm-return TokenSetClaimsType
      */
@@ -173,9 +173,9 @@ abstract class AbstractClaims
     /**
      * @param array<string, mixed> $claims
      *
-     * @return array<string, mixed>
-     *
      * @psalm-param TokenSetClaimsType $claims
+     *
+     * @return array<string, mixed>
      *
      * @psalm-return TokenSetClaimsType
      */

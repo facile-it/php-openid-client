@@ -57,9 +57,9 @@ final class AuthRequest implements AuthRequestInterface
     /**
      * @param array<string, mixed> $params
      *
-     * @return static
-     *
      * @psalm-param array{client_id: string, redirect_uri: string} $params
+     *
+     * @return static
      */
     public static function fromParams(array $params): self
     {

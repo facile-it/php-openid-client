@@ -313,11 +313,11 @@ final class AuthorizationService
     /**
      * @param array<string, mixed> $params
      *
+     * @psalm-param array<string, mixed> $params
+     *
      * @throws OAuth2Exception
      *
      * @return array<string, mixed>
-     *
-     * @psalm-param array<string, mixed> $params
      *
      * @psalm-return TokenSetAttributesType
      */

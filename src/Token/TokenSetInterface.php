@@ -92,9 +92,9 @@ interface TokenSetInterface
     /**
      * @param array<string, mixed> $claims
      *
-     * @return $this
-     *
      * @psalm-param TokenSetClaimsType $claims
+     *
+     * @return $this
      */
     public function withClaims(array $claims): self;
 }
