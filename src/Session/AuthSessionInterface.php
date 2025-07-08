@@ -36,9 +36,9 @@ interface AuthSessionInterface extends JsonSerializable
     /**
      * @param array<string, mixed> $array
      *
-     * @return static
-     *
      * @psalm-param AuthSessionType $array
+     *
+     * @return static
      */
     public static function fromArray(array $array): self;
 

@@ -15,9 +15,9 @@ interface AggregatedParserInterface
     /**
      * @param array<string, mixed> $claims
      *
-     * @return array<string, mixed>
-     *
      * @psalm-param TokenSetClaimsType $claims
+     *
+     * @return array<string, mixed>
      *
      * @psalm-return TokenSetClaimsType
      */
