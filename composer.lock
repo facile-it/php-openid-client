@@ -2722,16 +2722,16 @@
         },
         {
             "name": "dflydev/fig-cookies",
-            "version": "v3.1.0",
+            "version": "v3.2.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/dflydev/dflydev-fig-cookies.git",
-                "reference": "ebe6c15c9895fc490efe620ad734c8ef4a85bdb0"
+                "reference": "f9c63878e75483800477db4f897237b36556617b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/dflydev/dflydev-fig-cookies/zipball/ebe6c15c9895fc490efe620ad734c8ef4a85bdb0",
-                "reference": "ebe6c15c9895fc490efe620ad734c8ef4a85bdb0",
+                "url": "https://api.github.com/repos/dflydev/dflydev-fig-cookies/zipball/f9c63878e75483800477db4f897237b36556617b",
+                "reference": "f9c63878e75483800477db4f897237b36556617b",
                 "shasum": ""
             },
             "require": {
@@ -2778,9 +2778,9 @@
             ],
             "support": {
                 "issues": "https://github.com/dflydev/dflydev-fig-cookies/issues",
-                "source": "https://github.com/dflydev/dflydev-fig-cookies/tree/v3.1.0"
+                "source": "https://github.com/dflydev/dflydev-fig-cookies/tree/v3.2.0"
             },
-            "time": "2023-07-18T20:41:43+00:00"
+            "time": "2025-09-03T20:01:04+00:00"
         },
         {
             "name": "dnoegel/php-xdg-base-dir",
