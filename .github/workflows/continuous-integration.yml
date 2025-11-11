@@ -11,14 +11,9 @@ on:
     - cron: "45 9 * * 1"
 
 jobs:
-  psalm:
-    name: "Static Analysis"
+  codestyle:
+    name: "Code Style"
     runs-on: ubuntu-latest
-
-    strategy:
-      matrix:
-        php-version:
-          - "8.2"
 
     steps:
       - name: "Checkout"
@@ -27,7 +22,26 @@ jobs:
       - name: "Install PHP"
         uses: "shivammathur/setup-php@v2"
         with:
-          php-version: "${{ matrix.php-version }}"
+          php-version: "8.1"
+
+      - name: Install dependencies
+        uses: ramsey/composer-install@v3
+
+      - name: "Run PHP-CS-Fixer"
+        run: "vendor/bin/php-cs-fixer fix --ansi --verbose --dry-run"
+
+  psalm:
+    name: "Static Analysis"
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: "Checkout"
+        uses: "actions/checkout@v5"
+
+      - name: "Install PHP"
+        uses: "shivammathur/setup-php@v2"
+        with:
+          php-version: "8.2"
 
       - name: Install dependencies
         uses: ramsey/composer-install@v3
