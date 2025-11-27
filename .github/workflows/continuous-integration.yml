@@ -95,6 +95,8 @@ jobs:
         with:
           dependency-versions: "${{ matrix.deps }}"
           composer-options: '--ignore-platform-req=php+'
+        env:
+          COMPOSER_NO_SECURITY_BLOCKING: "1"
 
       - name: "Run PHPCS check"
         run: "composer cs-check"
