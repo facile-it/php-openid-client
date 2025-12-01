@@ -4383,16 +4383,16 @@
         },
         {
             "name": "php-http/cache-plugin",
-            "version": "2.0.1",
+            "version": "2.0.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/php-http/cache-plugin.git",
-                "reference": "5c591e9e04602cec12307e3e1be3abefeb005e29"
+                "reference": "c7fd57abaf6d08578aee51a8f1f34ea33ddbfdef"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/php-http/cache-plugin/zipball/5c591e9e04602cec12307e3e1be3abefeb005e29",
-                "reference": "5c591e9e04602cec12307e3e1be3abefeb005e29",
+                "url": "https://api.github.com/repos/php-http/cache-plugin/zipball/c7fd57abaf6d08578aee51a8f1f34ea33ddbfdef",
+                "reference": "c7fd57abaf6d08578aee51a8f1f34ea33ddbfdef",
                 "shasum": ""
             },
             "require": {
@@ -4400,11 +4400,11 @@
                 "php-http/client-common": "^1.9 || ^2.0",
                 "psr/cache": "^1.0 || ^2.0 || ^3.0",
                 "psr/http-factory-implementation": "^1.0",
-                "symfony/options-resolver": "^2.6 || ^3.0 || ^4.0 || ^5.0 || ^6.0 || ^7.0"
+                "symfony/options-resolver": "^2.6 || ^3.0 || ^4.0 || ^5.0 || ^6.0 || ^7.0 || ^8.0"
             },
             "require-dev": {
                 "nyholm/psr7": "^1.6.1",
-                "phpspec/phpspec": "^5.1 || ^6.0 || ^7.0"
+                "phpunit/phpunit": "^7.5 || ^8.5 || ^9.6"
             },
             "type": "library",
             "autoload": {
@@ -4432,22 +4432,22 @@
             ],
             "support": {
                 "issues": "https://github.com/php-http/cache-plugin/issues",
-                "source": "https://github.com/php-http/cache-plugin/tree/2.0.1"
+                "source": "https://github.com/php-http/cache-plugin/tree/2.0.2"
             },
-            "time": "2024-10-02T11:25:38+00:00"
+            "time": "2025-12-01T08:38:41+00:00"
         },
         {
             "name": "php-http/client-common",
-            "version": "2.7.2",
+            "version": "2.7.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/php-http/client-common.git",
-                "reference": "0cfe9858ab9d3b213041b947c881d5b19ceeca46"
+                "reference": "dcc6de29c90dd74faab55f71b79d89409c4bf0c1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/php-http/client-common/zipball/0cfe9858ab9d3b213041b947c881d5b19ceeca46",
-                "reference": "0cfe9858ab9d3b213041b947c881d5b19ceeca46",
+                "url": "https://api.github.com/repos/php-http/client-common/zipball/dcc6de29c90dd74faab55f71b79d89409c4bf0c1",
+                "reference": "dcc6de29c90dd74faab55f71b79d89409c4bf0c1",
                 "shasum": ""
             },
             "require": {
@@ -4457,15 +4457,13 @@
                 "psr/http-client": "^1.0",
                 "psr/http-factory": "^1.0",
                 "psr/http-message": "^1.0 || ^2.0",
-                "symfony/options-resolver": "~4.0.15 || ~4.1.9 || ^4.2.1 || ^5.0 || ^6.0 || ^7.0",
+                "symfony/options-resolver": "~4.0.15 || ~4.1.9 || ^4.2.1 || ^5.0 || ^6.0 || ^7.0 || ^8.0",
                 "symfony/polyfill-php80": "^1.17"
             },
             "require-dev": {
                 "doctrine/instantiator": "^1.1",
                 "guzzlehttp/psr7": "^1.4",
                 "nyholm/psr7": "^1.2",
-                "phpspec/phpspec": "^5.1 || ^6.3 || ^7.1",
-                "phpspec/prophecy": "^1.10.2",
                 "phpunit/phpunit": "^7.5.20 || ^8.5.33 || ^9.6.7"
             },
             "suggest": {
@@ -4501,9 +4499,9 @@
             ],
             "support": {
                 "issues": "https://github.com/php-http/client-common/issues",
-                "source": "https://github.com/php-http/client-common/tree/2.7.2"
+                "source": "https://github.com/php-http/client-common/tree/2.7.3"
             },
-            "time": "2024-09-24T06:21:48+00:00"
+            "time": "2025-11-29T19:12:34+00:00"
         },
         {
             "name": "php-http/curl-client",
