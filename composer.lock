@@ -3001,16 +3001,16 @@
         },
         {
             "name": "facile-it/facile-coding-standard",
-            "version": "1.4.0",
+            "version": "1.4.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/facile-it/facile-coding-standard.git",
-                "reference": "82b64fa481d07e8a4b93ea3a553dc456b0d7eca9"
+                "reference": "d3554136624c16f2be471ec9ec32574e7a37b168"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/facile-it/facile-coding-standard/zipball/82b64fa481d07e8a4b93ea3a553dc456b0d7eca9",
-                "reference": "82b64fa481d07e8a4b93ea3a553dc456b0d7eca9",
+                "url": "https://api.github.com/repos/facile-it/facile-coding-standard/zipball/d3554136624c16f2be471ec9ec32574e7a37b168",
+                "reference": "d3554136624c16f2be471ec9ec32574e7a37b168",
                 "shasum": ""
             },
             "require": {
@@ -3018,7 +3018,7 @@
                 "ext-json": "*",
                 "friendsofphp/php-cs-fixer": "^3.88",
                 "php": "^7.4 || ^8.0",
-                "symfony/console": "^5.4 || ^6.0 || ^7.0",
+                "symfony/console": "^5.4 || ^6.0 || ^7.0 || ^8.0",
                 "symfony/polyfill-php80": "^1.0"
             },
             "require-dev": {
@@ -3052,9 +3052,9 @@
             ],
             "support": {
                 "issues": "https://github.com/facile-it/facile-coding-standard/issues",
-                "source": "https://github.com/facile-it/facile-coding-standard/tree/1.4.0"
+                "source": "https://github.com/facile-it/facile-coding-standard/tree/1.4.1"
             },
-            "time": "2025-10-13T22:00:39+00:00"
+            "time": "2025-12-05T22:26:23+00:00"
         },
         {
             "name": "felixfbecker/advanced-json-rpc",
