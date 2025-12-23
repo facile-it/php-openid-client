@@ -47,7 +47,7 @@ abstract class AbstractRpTest implements RpTestInterface
         return $this->container;
     }
 
-    public function registerClient(TestInfo $testInfo, array $metadata = [], JWKSet $jwks = null): ClientInterface
+    public function registerClient(TestInfo $testInfo, array $metadata = [], ?JWKSet $jwks = null): ClientInterface
     {
         $issuer = (new IssuerBuilder())
             ->build($testInfo->getRpUri() . '/' . $this->getTestId() . '/.well-known/openid-configuration');

@@ -46,7 +46,7 @@ class OAuth2Exception extends RuntimeException implements JsonSerializable
     /**
      * @throws RemoteException
      */
-    public static function fromResponse(ResponseInterface $response, Throwable $previous = null): self
+    public static function fromResponse(ResponseInterface $response, ?Throwable $previous = null): self
     {
         try {
             /** @psalm-var false|array{error?: string, error_description?: string, error_uri?: string}  $data */
@@ -67,7 +67,7 @@ class OAuth2Exception extends RuntimeException implements JsonSerializable
      *
      * @psalm-param OAuth2ErrorType $params
      */
-    public static function fromParameters(array $params, Throwable $previous = null): self
+    public static function fromParameters(array $params, ?Throwable $previous = null): self
     {
         if (! static::isOAuth2Error($params)) {
             throw new InvalidArgumentException('Invalid OAuth2 exception', 0, $previous);
@@ -87,7 +87,7 @@ class OAuth2Exception extends RuntimeException implements JsonSerializable
         ?string $description = null,
         ?string $errorUri = null,
         int $code = 0,
-        Throwable $previous = null
+        ?Throwable $previous = null
     ) {
         $message = $error;
         if (null !== $description) {

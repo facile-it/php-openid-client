@@ -12,7 +12,7 @@ class RemoteException extends RuntimeException
     /** @var ResponseInterface */
     private $response;
 
-    public function __construct(ResponseInterface $response, ?string $message = null, Throwable $previous = null)
+    public function __construct(ResponseInterface $response, ?string $message = null, ?Throwable $previous = null)
     {
         parent::__construct(
             $message ?? $response->getReasonPhrase(),
