@@ -6,8 +6,11 @@ namespace Facile\OpenIDClient\Client\Metadata;
 
 use Facile\JoseVerifier\TokenVerifierInterface;
 use JsonSerializable;
+use Override;
 
 /**
+ * @psalm-api
+ *
  * @psalm-import-type ClientMetadataType from TokenVerifierInterface
  * @psalm-import-type JWTPayloadType from TokenVerifierInterface
  * @psalm-import-type JWKSetType from TokenVerifierInterface
@@ -75,12 +78,11 @@ interface ClientMetadataInterface extends JsonSerializable
      *
      * @psalm-return ClientMetadataType
      */
-    public function jsonSerialize(): array;
+    public function toArray(): array;
 
     /**
-     * @return array<string, mixed>
-     *
-     * @psalm-return ClientMetadataType
+     * @return ClientMetadataType
      */
-    public function toArray(): array;
+    #[Override]
+    public function jsonSerialize(): array;
 }

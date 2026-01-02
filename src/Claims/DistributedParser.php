@@ -16,11 +16,15 @@ use Psr\Http\Client\ClientInterface;
 use Psr\Http\Message\RequestFactoryInterface;
 use Psr\Http\Message\ResponseInterface;
 use Throwable;
+use Override;
 
 use function array_filter;
 use function array_key_exists;
 use function Facile\OpenIDClient\check_server_response;
 
+/**
+ * @psalm-api
+ */
 final class DistributedParser extends AbstractClaims implements DistributedParserInterface
 {
     private ClientInterface $client;
@@ -41,6 +45,7 @@ final class DistributedParser extends AbstractClaims implements DistributedParse
         $this->requestFactory = $requestFactory ?? Psr17FactoryDiscovery::findRequestFactory();
     }
 
+    #[Override]
     public function fetch(OpenIDClient $client, array $claims, array $accessTokens = []): array
     {
         if (! array_key_exists('_claim_sources', $claims)) {

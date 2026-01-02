@@ -26,17 +26,17 @@ use function json_encode;
  *
  * @see https://tools.ietf.org/html/rfc7591
  * @see https://openid.net/specs/openid-connect-registration-1_0.html
+ *
+ * @psalm-api
  */
 final class RegistrationService
 {
-    /** @var ClientInterface */
-    private $client;
+    private ClientInterface $client;
 
-    /** @var RequestFactoryInterface */
-    private $requestFactory;
+    private RequestFactoryInterface $requestFactory;
 
     /** @var string[] */
-    private static $registrationClaims = [
+    private static array $registrationClaims = [
         'registration_access_token',
         'registration_client_uri',
         'client_secret_expires_at',

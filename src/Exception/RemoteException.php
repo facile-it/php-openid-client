@@ -7,10 +7,12 @@ namespace Facile\OpenIDClient\Exception;
 use Psr\Http\Message\ResponseInterface;
 use Throwable;
 
-class RemoteException extends RuntimeException
+/**
+ * @psalm-api
+ */
+final class RemoteException extends RuntimeException
 {
-    /** @var ResponseInterface */
-    private $response;
+    private ResponseInterface $response;
 
     public function __construct(ResponseInterface $response, ?string $message = null, ?Throwable $previous = null)
     {

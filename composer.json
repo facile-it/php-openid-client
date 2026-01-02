@@ -30,7 +30,7 @@
     "require": {
         "php": "^8.1",
         "ext-json": "*",
-        "facile-it/php-jose-verifier": "^0.5.0-beta1",
+        "facile-it/php-jose-verifier": "^0.5.0",
         "php-http/discovery": "^1.6",
         "psr/http-client": "^1.0",
         "psr/http-client-implementation": "^1.0",
@@ -40,6 +40,7 @@
         "psr/http-message-implementation": "^1.0",
         "psr/http-server-middleware": "^1.0",
         "spomky-labs/aes-key-wrap": "^7.0",
+        "symfony/polyfill-php83": "^1.33",
         "web-token/jwt-library": "^3.4.3"
     },
     "autoload": {
@@ -71,15 +72,15 @@
         "laminas/laminas-config-aggregator": "^1.1",
         "laminas/laminas-di": "^3.1",
         "laminas/laminas-diactoros": "^2.1 || ^3.0",
-        "laminas/laminas-servicemanager": "^3.4",
+        "laminas/laminas-servicemanager": "^3.4 || ^4.0",
         "php-http/cache-plugin": "^1.6 || ^2.0",
         "php-http/curl-client": "^2.0",
         "php-http/guzzle7-adapter": "^0.1.0 || ^1.0",
         "phpspec/prophecy": "^1.10.3",
         "phpspec/prophecy-phpunit": "^2.0",
-        "phpunit/phpunit": "^8.5.14 || ^9.3",
+        "phpunit/phpunit": "^10.5.60 || ^11.5.46 || ^12.0.0",
         "symfony/console": "^4.3 || ^5.0 || ^6.0",
-        "vimeo/psalm": "^5.6.0"
+        "vimeo/psalm": "^6.14.3"
     },
     "suggest": {
         "facile-it/php-oauth2-http-client": "To use a PSR HTTP client to interact with OAuth2/OpenID protected APIs",

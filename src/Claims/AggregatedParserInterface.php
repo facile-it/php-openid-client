@@ -8,6 +8,8 @@ use Facile\OpenIDClient\Client\ClientInterface;
 use Facile\OpenIDClient\Token\TokenSetInterface;
 
 /**
+ * @psalm-api
+ *
  * @psalm-import-type TokenSetClaimsType from TokenSetInterface
  */
 interface AggregatedParserInterface

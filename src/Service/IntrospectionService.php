@@ -17,14 +17,14 @@ use function Facile\OpenIDClient\parse_metadata_response;
  * RFC 7662 Token Introspection.
  *
  * @see https://tools.ietf.org/html/rfc7662 RFC 7662
+ *
+ * @psalm-api
  */
 final class IntrospectionService
 {
-    /** @var ClientInterface */
-    private $client;
+    private ClientInterface $client;
 
-    /** @var RequestFactoryInterface */
-    private $requestFactory;
+    private RequestFactoryInterface $requestFactory;
 
     public function __construct(
         ClientInterface $client,

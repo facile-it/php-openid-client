@@ -17,6 +17,7 @@ use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\MiddlewareInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 use Psr\SimpleCache\CacheInterface;
+use Override;
 
 use function bin2hex;
 use function class_exists;
@@ -26,20 +27,19 @@ use function json_encode;
 use function random_bytes;
 
 /**
+ * @psalm-api
+ *
  * @psalm-import-type AuthSessionType from AuthSessionInterface
  */
-class SessionCookieMiddleware implements MiddlewareInterface
+final class SessionCookieMiddleware implements MiddlewareInterface
 {
     public const SESSION_ATTRIBUTE = AuthSessionInterface::class;
 
-    /** @var string */
-    private $cookieName;
+    private string $cookieName;
 
-    /** @var int */
-    private $ttl;
+    private int $ttl;
 
-    /** @var CacheInterface */
-    private $cache;
+    private CacheInterface $cache;
 
     public function __construct(CacheInterface $cache, string $cookieName = 'openid', int $ttl = 300)
     {
@@ -48,6 +48,7 @@ class SessionCookieMiddleware implements MiddlewareInterface
         $this->ttl = $ttl;
     }
 
+    #[Override]
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
     {
         if (! class_exists(Cookies::class)) {

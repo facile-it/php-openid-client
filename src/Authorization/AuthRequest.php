@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Facile\OpenIDClient\Authorization;
 
 use Facile\OpenIDClient\Exception\InvalidArgumentException;
+use Override;
 
 use function array_diff;
 use function array_diff_key;
@@ -24,10 +25,10 @@ final class AuthRequest implements AuthRequestInterface
      *
      * @psalm-var AuthRequestParams
      */
-    private $params;
+    private array $params;
 
     /** @var string[] */
-    private static $requiredKeys = [
+    private static array $requiredKeys = [
         'client_id',
         'redirect_uri',
     ];
@@ -55,6 +56,8 @@ final class AuthRequest implements AuthRequestInterface
     }
 
     /**
+     * @psalm-api
+     *
      * @param array<string, mixed> $params
      *
      * @psalm-param array{client_id: string, redirect_uri: string} $params
@@ -78,6 +81,7 @@ final class AuthRequest implements AuthRequestInterface
     /**
      * OpenID Connect requests MUST contain the openid scope value.
      */
+    #[Override]
     public function getScope(): string
     {
         return $this->params['scope'];
@@ -88,6 +92,7 @@ final class AuthRequest implements AuthRequestInterface
      * including what parameters are returned from the endpoints used. When using the Authorization Code Flow,
      * this value is code.
      */
+    #[Override]
     public function getResponseType(): string
     {
         return $this->params['response_type'];
@@ -96,6 +101,7 @@ final class AuthRequest implements AuthRequestInterface
     /**
      * OAuth 2.0 Client Identifier valid at the Authorization Server.
      */
+    #[Override]
     public function getClientId(): string
     {
         return $this->params['client_id'];
@@ -104,6 +110,7 @@ final class AuthRequest implements AuthRequestInterface
     /**
      * Redirection URI to which the response will be sent.
      */
+    #[Override]
     public function getRedirectUri(): string
     {
         return $this->params['redirect_uri'];
@@ -112,6 +119,7 @@ final class AuthRequest implements AuthRequestInterface
     /**
      * Opaque value used to maintain state between the request and the callback.
      */
+    #[Override]
     public function getState(): ?string
     {
         return $this->params['state'] ?? null;
@@ -121,6 +129,7 @@ final class AuthRequest implements AuthRequestInterface
      * Informs the Authorization Server of the mechanism to be used for returning parameters from
      * the Authorization Endpoint.
      */
+    #[Override]
     public function getResponseMode(): ?string
     {
         return $this->params['response_mode'] ?? null;
@@ -129,6 +138,7 @@ final class AuthRequest implements AuthRequestInterface
     /**
      * String value used to associate a Client session with an ID Token, and to mitigate replay attacks.
      */
+    #[Override]
     public function getNonce(): ?string
     {
         return $this->params['nonce'] ?? null;
@@ -144,6 +154,7 @@ final class AuthRequest implements AuthRequestInterface
      * - touch
      * - wrap
      */
+    #[Override]
     public function getDisplay(): ?string
     {
         return $this->params['display'] ?? null;
@@ -159,6 +170,7 @@ final class AuthRequest implements AuthRequestInterface
      * - consent
      * - select_account
      */
+    #[Override]
     public function getPrompt(): ?string
     {
         return $this->params['prompt'] ?? null;
@@ -168,6 +180,7 @@ final class AuthRequest implements AuthRequestInterface
      * Maximum Authentication Age. Specifies the allowable elapsed time in seconds since the last time the End-User
      * was actively authenticated by the OP.
      */
+    #[Override]
     public function getMaxAge(): ?int
     {
         return $this->params['max_age'] ?? null;
@@ -177,6 +190,7 @@ final class AuthRequest implements AuthRequestInterface
      * End-User's preferred languages and scripts for the user interface, represented as a space-separated list
      * of BCP47 [RFC5646] language tag values, ordered by preference.
      */
+    #[Override]
     public function getUiLocales(): ?string
     {
         return $this->params['ui_locales'] ?? null;
@@ -186,6 +200,7 @@ final class AuthRequest implements AuthRequestInterface
      * ID Token previously issued by the Authorization Server being passed as a hint about the End-User's current or
      * past authenticated session with the Client.
      */
+    #[Override]
     public function getIdTokenHint(): ?string
     {
         return $this->params['id_token_hint'] ?? null;
@@ -194,6 +209,7 @@ final class AuthRequest implements AuthRequestInterface
     /**
      * Hint to the Authorization Server about the login identifier the End-User might use to log in (if necessary).
      */
+    #[Override]
     public function getLoginHint(): ?string
     {
         return $this->params['login_hint'] ?? null;
@@ -202,21 +218,25 @@ final class AuthRequest implements AuthRequestInterface
     /**
      * Requested Authentication Context Class Reference values.
      */
+    #[Override]
     public function getAcrValues(): ?string
     {
         return $this->params['acr_values'] ?? null;
     }
 
+    #[Override]
     public function getRequest(): ?string
     {
         return $this->params['request'] ?? null;
     }
 
+    #[Override]
     public function getCodeChallenge(): ?string
     {
         return $this->params['code_challenge'] ?? null;
     }
 
+    #[Override]
     public function getCodeChallengeMethod(): ?string
     {
         return $this->params['code_challenge_method'] ?? null;
@@ -227,6 +247,7 @@ final class AuthRequest implements AuthRequestInterface
      *
      * @param array<string, mixed> $params
      */
+    #[Override]
     public function withParams(array $params): AuthRequestInterface
     {
         $instance = clone $this;
@@ -247,6 +268,7 @@ final class AuthRequest implements AuthRequestInterface
      *
      * @return array<string, mixed>
      */
+    #[Override]
     public function createParams(): array
     {
         return $this->params;
@@ -255,6 +277,7 @@ final class AuthRequest implements AuthRequestInterface
     /**
      * @return array<string, mixed>
      */
+    #[Override]
     public function jsonSerialize(): array
     {
         return $this->createParams();

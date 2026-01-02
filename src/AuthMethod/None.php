@@ -6,17 +6,20 @@ namespace Facile\OpenIDClient\AuthMethod;
 
 use Facile\OpenIDClient\Client\ClientInterface as OpenIDClient;
 use Psr\Http\Message\RequestInterface;
+use Override;
 
 use function array_merge;
 use function http_build_query;
 
 final class None implements AuthMethodInterface
 {
+    #[Override]
     public function getSupportedMethod(): string
     {
         return 'none';
     }
 
+    #[Override]
     public function createRequest(
         RequestInterface $request,
         OpenIDClient $client,

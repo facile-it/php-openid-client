@@ -8,10 +8,12 @@ use Facile\OpenIDClient\Service\UserInfoService;
 use Facile\OpenIDClient\Token\TokenVerifierBuilderInterface;
 use Facile\OpenIDClient\Token\UserInfoVerifierBuilder;
 
+/**
+ * @psalm-api
+ */
 final class UserInfoServiceBuilder extends AbstractServiceBuilder
 {
-    /** @var TokenVerifierBuilderInterface|null */
-    private $userInfoVerifierBuilder;
+    private ?TokenVerifierBuilderInterface $userInfoVerifierBuilder = null;
 
     protected function getUserInfoVerifierBuilder(): TokenVerifierBuilderInterface
     {

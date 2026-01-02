@@ -5,8 +5,11 @@ declare(strict_types=1);
 namespace Facile\OpenIDClient\Session;
 
 use JsonSerializable;
+use Override;
 
 /**
+ * @psalm-api
+ *
  * @psalm-type AuthSessionType = array{state?: string, nonce?: string, code_verifier?: string, customs?: array<string, mixed>}
  */
 interface AuthSessionInterface extends JsonSerializable
@@ -47,5 +50,6 @@ interface AuthSessionInterface extends JsonSerializable
      *
      * @psalm-return AuthSessionType
      */
+    #[Override]
     public function jsonSerialize(): array;
 }

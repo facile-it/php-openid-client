@@ -9,13 +9,14 @@ use Http\Discovery\Psr18ClientDiscovery;
 use Psr\Http\Client\ClientInterface;
 use Psr\Http\Message\RequestFactoryInterface;
 
+/**
+ * @psalm-api
+ */
 abstract class AbstractServiceBuilder
 {
-    /** @var null|ClientInterface */
-    private $httpClient;
+    private ?ClientInterface $httpClient = null;
 
-    /** @var null|RequestFactoryInterface */
-    private $requestFactory;
+    private ?RequestFactoryInterface $requestFactory = null;
 
     public function setHttpClient(ClientInterface $httpClient): self
     {

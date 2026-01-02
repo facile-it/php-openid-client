@@ -6,7 +6,11 @@ namespace Facile\OpenIDClient\Token;
 
 use Facile\JoseVerifier\TokenVerifierInterface;
 use Facile\OpenIDClient\Client\ClientInterface;
+use Override;
 
+/**
+ * @psalm-api
+ */
 final class UserInfoVerifierBuilder implements TokenVerifierBuilderInterface
 {
     private bool $aadIssValidation = false;
@@ -27,6 +31,7 @@ final class UserInfoVerifierBuilder implements TokenVerifierBuilderInterface
         return $this;
     }
 
+    #[Override]
     public function build(ClientInterface $client): TokenVerifierInterface
     {
         return \Facile\JoseVerifier\Builder\UserInfoVerifierBuilder::create(

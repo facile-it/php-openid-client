@@ -10,12 +10,12 @@ use Psr\Http\Client\ClientExceptionInterface;
 use Psr\Http\Client\ClientInterface;
 use Psr\Http\Message\RequestFactoryInterface;
 use Psr\Http\Message\UriFactoryInterface;
+use Override;
 
 use function array_key_exists;
 use function Facile\OpenIDClient\parse_metadata_response;
 use function preg_match;
 use function rtrim;
-use function strpos;
 
 /**
  * @psalm-import-type IssuerRemoteMetadataType from TokenVerifierInterface
@@ -26,14 +26,11 @@ final class DiscoveryProvider implements DiscoveryProviderInterface
 
     private const OAUTH2_DISCOVERY = '/.well-known/oauth-authorization-server';
 
-    /** @var ClientInterface */
-    private $client;
+    private ClientInterface $client;
 
-    /** @var RequestFactoryInterface */
-    private $requestFactory;
+    private RequestFactoryInterface $requestFactory;
 
-    /** @var UriFactoryInterface */
-    private $uriFactory;
+    private UriFactoryInterface $uriFactory;
 
     public function __construct(
         ClientInterface $client,
@@ -45,6 +42,7 @@ final class DiscoveryProvider implements DiscoveryProviderInterface
         $this->uriFactory = $uriFactory;
     }
 
+    #[Override]
     public function isAllowedUri(string $uri): bool
     {
         return (int) preg_match('/https?:\/\//', $uri) > 0;
@@ -57,12 +55,13 @@ final class DiscoveryProvider implements DiscoveryProviderInterface
      *
      * @psalm-suppress MixedReturnTypeCoercion
      */
+    #[Override]
     public function discovery(string $url): array
     {
         $uri = $this->uriFactory->createUri($url);
         $uriPath = $uri->getPath() ?: '/';
 
-        if (false !== strpos($uriPath, '/.well-known/')) {
+        if (str_contains($uriPath, '/.well-known/')) {
             return $this->fetchOpenIdConfiguration((string) $uri);
         }
 
@@ -107,6 +106,7 @@ final class DiscoveryProvider implements DiscoveryProviderInterface
         return $data;
     }
 
+    #[Override]
     public function fetch(string $uri): array
     {
         return $this->discovery($uri);

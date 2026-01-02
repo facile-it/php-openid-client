@@ -12,6 +12,7 @@ use Jose\Component\Signature\Algorithm\HS256;
 use Jose\Component\Signature\JWSBuilder;
 use Jose\Component\Signature\Serializer\CompactSerializer;
 use Jose\Component\Signature\Serializer\JWSSerializer;
+use Override;
 
 use function class_exists;
 use function Facile\OpenIDClient\base64url_encode;
@@ -23,11 +24,9 @@ use function time;
 
 final class ClientSecretJwt extends AbstractJwtAuth
 {
-    /** @var null|JWSBuilder */
-    private $jwsBuilder;
+    private ?JWSBuilder $jwsBuilder;
 
-    /** @var JWSSerializer */
-    private $jwsSerializer;
+    private JWSSerializer $jwsSerializer;
 
     /**
      * ClientSecretJwt constructor.
@@ -40,6 +39,7 @@ final class ClientSecretJwt extends AbstractJwtAuth
         $this->jwsSerializer = $jwsSerializer ?? new CompactSerializer();
     }
 
+    #[Override]
     public function getSupportedMethod(): string
     {
         return 'client_secret_jwt';
@@ -58,6 +58,7 @@ final class ClientSecretJwt extends AbstractJwtAuth
         return $this->jwsBuilder = new JWSBuilder(new AlgorithmManager([new HS256()]));
     }
 
+    #[Override]
     protected function createAuthJwt(OpenIDClient $client, array $claims = []): string
     {
         $clientSecret = $client->getMetadata()->getClientSecret();

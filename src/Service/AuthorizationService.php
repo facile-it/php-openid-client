@@ -35,6 +35,8 @@ use function json_encode;
  *
  * @see https://tools.ietf.org/html/rfc6749 RFC 6749
  *
+ * @psalm-api
+ *
  * @psalm-import-type TokenSetAttributesType from TokenSetInterface
  * @psalm-import-type TokenSetClaimsType from TokenSetInterface
  * @psalm-import-type OAuth2ErrorType from OAuth2Exception
@@ -56,20 +58,15 @@ use function json_encode;
  */
 final class AuthorizationService
 {
-    /** @var TokenSetFactoryInterface */
-    private $tokenSetFactory;
+    private TokenSetFactoryInterface $tokenSetFactory;
 
-    /** @var ClientInterface */
-    private $client;
+    private ClientInterface $client;
 
-    /** @var RequestFactoryInterface */
-    private $requestFactory;
+    private RequestFactoryInterface $requestFactory;
 
-    /** @var IdTokenVerifierBuilderInterface */
-    private $idTokenVerifierBuilder;
+    private IdTokenVerifierBuilderInterface $idTokenVerifierBuilder;
 
-    /** @var TokenVerifierBuilderInterface */
-    private $responseVerifierBuilder;
+    private TokenVerifierBuilderInterface $responseVerifierBuilder;
 
     public function __construct(
         TokenSetFactoryInterface $tokenSetFactory,
@@ -106,7 +103,6 @@ final class AuthorizationService
         $params = array_filter($params, static fn($value): bool => null !== $value);
 
         /**
-         * @var string $key
          * @var mixed $value
          */
         foreach ($params as $key => $value) {

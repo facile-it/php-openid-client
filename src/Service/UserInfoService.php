@@ -24,14 +24,11 @@ use function sprintf;
  */
 final class UserInfoService
 {
-    /** @var ClientInterface */
-    private $client;
+    private ClientInterface $client;
 
-    /** @var RequestFactoryInterface */
-    private $requestFactory;
+    private RequestFactoryInterface $requestFactory;
 
-    /** @var TokenVerifierBuilderInterface */
-    private $userInfoVerifierBuilder;
+    private TokenVerifierBuilderInterface $userInfoVerifierBuilder;
 
     public function __construct(
         TokenVerifierBuilderInterface $userInfoVerifierBuilder,
