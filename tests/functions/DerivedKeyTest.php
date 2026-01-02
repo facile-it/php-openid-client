@@ -5,14 +5,13 @@ declare(strict_types=1);
 namespace Facile\OpenIDClientTest\functions;
 
 use Facile\OpenIDClientTest\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 use function Facile\OpenIDClient\derived_key;
 
 class DerivedKeyTest extends TestCase
 {
-    /**
-     * @dataProvider valuesProvider
-     */
+    #[DataProvider('valuesProvider')]
     public function testDerivedKey(string $secret, int $length, string $expected): void
     {
         $jwk = derived_key($secret, $length);
@@ -20,7 +19,7 @@ class DerivedKeyTest extends TestCase
         static::assertSame($expected, $jwk->get('k'));
     }
 
-    public function valuesProvider(): array
+    public static function valuesProvider(): array
     {
         $string = 'abcdefghijklmnopqrstuvwxyz0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
 

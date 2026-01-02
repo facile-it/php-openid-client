@@ -7,6 +7,8 @@ namespace Facile\OpenIDClient\Client\Metadata;
 use Facile\JoseVerifier\TokenVerifierInterface;
 
 /**
+ * @psalm-api
+ *
  * @psalm-import-type ClientMetadataType from TokenVerifierInterface
  */
 interface MetadataFactoryInterface

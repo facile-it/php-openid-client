@@ -7,6 +7,7 @@ namespace Facile\OpenIDClient\Issuer\Metadata\Provider;
 use Facile\JoseVerifier\TokenVerifierInterface;
 use JsonException;
 use Psr\SimpleCache\CacheInterface;
+use Override;
 
 use function is_array;
 use function json_decode;
@@ -19,14 +20,11 @@ use function substr;
  */
 final class CachedProviderDecorator implements RemoteProviderInterface
 {
-    /** @var RemoteProviderInterface */
-    private $provider;
+    private RemoteProviderInterface $provider;
 
-    /** @var CacheInterface */
-    private $cache;
+    private CacheInterface $cache;
 
-    /** @var null|int */
-    private $cacheTtl;
+    private ?int $cacheTtl = null;
 
     /**
      * @var callable
@@ -53,10 +51,11 @@ final class CachedProviderDecorator implements RemoteProviderInterface
     /**
      * @return array<string, mixed>
      *
-     * @psalm-return IssuerRemoteMetadataType
-     *
      * @psalm-suppress MixedReturnTypeCoercion
+     *
+     * @psalm-return IssuerRemoteMetadataType
      */
+    #[Override]
     public function fetch(string $uri): array
     {
         $cacheId = ($this->cacheIdGenerator)($uri);
@@ -72,6 +71,7 @@ final class CachedProviderDecorator implements RemoteProviderInterface
         }
 
         if (is_array($data)) {
+            /** @psalm-var IssuerRemoteMetadataType $data */
             return $data;
         }
 
@@ -82,6 +82,7 @@ final class CachedProviderDecorator implements RemoteProviderInterface
         return $data;
     }
 
+    #[Override]
     public function isAllowedUri(string $uri): bool
     {
         return $this->provider->isAllowedUri($uri);

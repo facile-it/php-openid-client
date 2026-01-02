@@ -7,6 +7,8 @@ namespace Facile\OpenIDClient\Claims;
 use Facile\OpenIDClient\Client\ClientInterface;
 
 /**
+ * @psalm-api
+ *
  * @psalm-import-type TokenSetClaimsType from \Facile\OpenIDClient\Token\TokenSetInterface
  */
 interface DistributedParserInterface

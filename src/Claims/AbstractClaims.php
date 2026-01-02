@@ -35,17 +35,13 @@ use function sprintf;
  */
 abstract class AbstractClaims
 {
-    /** @var IssuerBuilderInterface */
-    protected $issuerBuilder;
+    protected IssuerBuilderInterface $issuerBuilder;
 
-    /** @var AlgorithmManager */
-    protected $algorithmManager;
+    protected AlgorithmManager $algorithmManager;
 
-    /** @var JWSVerifier */
-    protected $JWSVerifier;
+    protected JWSVerifier $JWSVerifier;
 
-    /** @var JWSSerializer */
-    protected $serializer;
+    protected JWSSerializer $serializer;
 
     public function __construct(
         ?IssuerBuilderInterface $issuerBuilder = null,

@@ -17,14 +17,14 @@ use function Facile\OpenIDClient\get_endpoint_uri;
  * RFC 7009 Token Revocation.
  *
  * @see https://tools.ietf.org/html/rfc7009 RFC 7009
+ *
+ * @psalm-api
  */
 final class RevocationService
 {
-    /** @var ClientInterface */
-    private $client;
+    private ClientInterface $client;
 
-    /** @var RequestFactoryInterface */
-    private $requestFactory;
+    private RequestFactoryInterface $requestFactory;
 
     public function __construct(
         ClientInterface $client,

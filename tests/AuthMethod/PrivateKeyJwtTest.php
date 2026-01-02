@@ -16,6 +16,7 @@ use Jose\Component\KeyManagement\JWKFactory;
 use Jose\Component\Signature\JWS;
 use Jose\Component\Signature\JWSBuilder;
 use Jose\Component\Signature\Serializer\JWSSerializer;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Prophecy\Argument;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\StreamInterface;
@@ -40,7 +41,7 @@ class PrivateKeyJwtTest extends TestCase
         static::assertSame('private_key_jwt', $auth->getSupportedMethod());
     }
 
-    public function createRequestProvider(): array
+    public static function createRequestProvider(): array
     {
         return [
             [true],
@@ -48,9 +49,7 @@ class PrivateKeyJwtTest extends TestCase
         ];
     }
 
-    /**
-     * @dataProvider createRequestProvider
-     */
+    #[DataProvider('createRequestProvider')]
     public function testCreateRequest(bool $jwkAsDependency = false): void
     {
         $jwsBuilder = $this->prophesize(JWSBuilder::class);

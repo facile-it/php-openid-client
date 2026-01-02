@@ -28,22 +28,20 @@ use function random_bytes;
 use function strpos;
 use function time;
 
-class RequestObjectFactory
+/**
+ * @psalm-api
+ */
+final class RequestObjectFactory
 {
-    /** @var AlgorithmManager */
-    private $algorithmManager;
+    private AlgorithmManager $algorithmManager;
 
-    /** @var JWSBuilder */
-    private $jwsBuilder;
+    private JWSBuilder $jwsBuilder;
 
-    /** @var JWEBuilder */
-    private $jweBuilder;
+    private JWEBuilder $jweBuilder;
 
-    /** @var JWSSerializer */
-    private $signatureSerializer;
+    private JWSSerializer $signatureSerializer;
 
-    /** @var JWESerializer */
-    private $encryptionSerializer;
+    private JWESerializer $encryptionSerializer;
 
     public function __construct(
         ?AlgorithmManager $algorithmManager = null,

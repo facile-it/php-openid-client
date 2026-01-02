@@ -6,6 +6,7 @@ namespace Facile\OpenIDClient\Client\Metadata;
 
 use Facile\JoseVerifier\TokenVerifierInterface;
 use Facile\OpenIDClient\Exception\InvalidArgumentException;
+use Override;
 
 use function array_diff;
 use function array_key_exists;
@@ -24,15 +25,15 @@ final class ClientMetadata implements ClientMetadataInterface
      *
      * @psalm-var ClientMetadataType
      */
-    private $metadata;
+    private array $metadata;
 
     /** @var string[] */
-    private static $requiredKeys = [
+    private static array $requiredKeys = [
         'client_id',
     ];
 
     /** @var array<string, mixed> */
-    private static $defaults = [];
+    private static array $defaults = [];
 
     /**
      * IssuerMetadata constructor.
@@ -73,116 +74,139 @@ final class ClientMetadata implements ClientMetadataInterface
         return new static($claims['client_id'], $claims);
     }
 
+    #[Override]
     public function getClientId(): string
     {
         return $this->metadata['client_id'];
     }
 
+    #[Override]
     public function getClientSecret(): ?string
     {
         return $this->metadata['client_secret'] ?? null;
     }
 
+    #[Override]
     public function getRedirectUris(): array
     {
         return $this->metadata['redirect_uris'] ?? [];
     }
 
+    #[Override]
     public function getResponseTypes(): array
     {
         return $this->metadata['response_types'] ?? ['code'];
     }
 
+    #[Override]
     public function getTokenEndpointAuthMethod(): string
     {
         return $this->metadata['token_endpoint_auth_method'] ?? 'client_secret_basic';
     }
 
+    #[Override]
     public function getAuthorizationSignedResponseAlg(): ?string
     {
         return $this->metadata['authorization_signed_response_alg'] ?? null;
     }
 
+    #[Override]
     public function getAuthorizationEncryptedResponseAlg(): ?string
     {
         return $this->metadata['authorization_encrypted_response_alg'] ?? null;
     }
 
+    #[Override]
     public function getAuthorizationEncryptedResponseEnc(): ?string
     {
         return $this->metadata['authorization_encrypted_response_enc'] ?? null;
     }
 
+    #[Override]
     public function getIdTokenSignedResponseAlg(): string
     {
         return $this->metadata['id_token_signed_response_alg'] ?? 'RS256';
     }
 
+    #[Override]
     public function getIdTokenEncryptedResponseAlg(): ?string
     {
         return $this->metadata['id_token_encrypted_response_alg'] ?? null;
     }
 
+    #[Override]
     public function getIdTokenEncryptedResponseEnc(): ?string
     {
         return $this->metadata['id_token_encrypted_response_enc'] ?? null;
     }
 
+    #[Override]
     public function getUserinfoSignedResponseAlg(): ?string
     {
         return $this->metadata['userinfo_signed_response_alg'] ?? null;
     }
 
+    #[Override]
     public function getUserinfoEncryptedResponseAlg(): ?string
     {
         return $this->metadata['userinfo_encrypted_response_alg'] ?? null;
     }
 
+    #[Override]
     public function getUserinfoEncryptedResponseEnc(): ?string
     {
         return $this->metadata['userinfo_encrypted_response_enc'] ?? null;
     }
 
+    #[Override]
     public function getRequestObjectSigningAlg(): ?string
     {
         return $this->metadata['request_object_signing_alg'] ?? null;
     }
 
+    #[Override]
     public function getRequestObjectEncryptionAlg(): ?string
     {
         return $this->metadata['request_object_encryption_alg'] ?? null;
     }
 
+    #[Override]
     public function getRequestObjectEncryptionEnc(): ?string
     {
         return $this->metadata['request_object_encryption_enc'] ?? null;
     }
 
+    #[Override]
     public function getIntrospectionEndpointAuthMethod(): string
     {
         return $this->metadata['introspection_endpoint_auth_method'] ?? $this->getTokenEndpointAuthMethod();
     }
 
+    #[Override]
     public function getRevocationEndpointAuthMethod(): string
     {
         return $this->metadata['revocation_endpoint_auth_method'] ?? $this->getTokenEndpointAuthMethod();
     }
 
+    #[Override]
     public function getJwks(): ?array
     {
         return $this->metadata['jwks'] ?? null;
     }
 
+    #[Override]
     public function jsonSerialize(): array
     {
         return $this->toArray();
     }
 
+    #[Override]
     public function toArray(): array
     {
         return $this->metadata;
     }
 
+    #[Override]
     public function has(string $name): bool
     {
         return array_key_exists($name, $this->metadata);
@@ -191,6 +215,7 @@ final class ClientMetadata implements ClientMetadataInterface
     /**
      * @return mixed|null
      */
+    #[Override]
     public function get(string $name)
     {
         return $this->metadata[$name] ?? null;

@@ -6,6 +6,7 @@ namespace Facile\OpenIDClient\AuthMethod;
 
 use Facile\OpenIDClient\Client\ClientInterface as OpenIDClient;
 use Psr\Http\Message\RequestInterface;
+use Override;
 
 use function array_merge;
 use function http_build_query;
@@ -17,6 +18,7 @@ abstract class AbstractJwtAuth implements AuthMethodInterface
      */
     abstract protected function createAuthJwt(OpenIDClient $client, array $claims = []): string;
 
+    #[Override]
     public function createRequest(
         RequestInterface $request,
         OpenIDClient $client,

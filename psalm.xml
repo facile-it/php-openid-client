@@ -1,12 +1,22 @@
 <?xml version="1.0"?>
 <psalm
     errorLevel="1"
+    phpVersion="8.1"
     resolveFromConfigFile="true"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xmlns="https://getpsalm.org/schema/config"
     xsi:schemaLocation="https://getpsalm.org/schema/config vendor/vimeo/psalm/config.xsd"
     findUnusedBaselineEntry="true"
-    findUnusedCode="false"
+    findUnusedCode="true"
+    ensureArrayIntOffsetsExist="true"
+    ensureArrayStringOffsetsExist="true"
+    findUnusedVariablesAndParams="true"
+    findUnusedPsalmSuppress="true"
+    checkForThrowsDocblock="false"
+    sealAllMethods="true"
+    sealAllProperties="true"
+    strictBinaryOperands="false"
+    errorBaseline="psalm-baseline.xml"
 >
     <projectFiles>
         <directory name="src" />

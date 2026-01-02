@@ -8,6 +8,7 @@ use JsonException;
 use JsonSerializable;
 use Psr\Http\Message\ResponseInterface;
 use Throwable;
+use Override;
 
 use function array_key_exists;
 use function is_array;
@@ -22,16 +23,13 @@ use function sprintf;
  *     state?: string,
  * }
  */
-class OAuth2Exception extends RuntimeException implements JsonSerializable
+final class OAuth2Exception extends RuntimeException implements JsonSerializable
 {
-    /** @var string */
-    private $error;
+    private string $error;
 
-    /** @var null|string */
-    private $description;
+    private ?string $description;
 
-    /** @var null|string */
-    private $errorUri;
+    private ?string $errorUri;
 
     /**
      * @psalm-param array<string, mixed> $data
@@ -120,6 +118,7 @@ class OAuth2Exception extends RuntimeException implements JsonSerializable
      *
      * @psalm-return array{error: string, error_description?: string, error_uri?: string}
      */
+    #[Override]
     public function jsonSerialize(): array
     {
         $data = [

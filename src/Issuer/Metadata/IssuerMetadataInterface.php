@@ -6,8 +6,11 @@ namespace Facile\OpenIDClient\Issuer\Metadata;
 
 use Facile\JoseVerifier\TokenVerifierInterface;
 use JsonSerializable;
+use Override;
 
 /**
+ * @psalm-api
+ *
  * @psalm-import-type IssuerRemoteMetadataType from TokenVerifierInterface
  * @psalm-import-type OpenIdResponseMode from TokenVerifierInterface
  * @psalm-import-type OpenIdGrantType from TokenVerifierInterface
@@ -347,6 +350,7 @@ interface IssuerMetadataInterface extends JsonSerializable
      *
      * @psalm-return IssuerRemoteMetadataType
      */
+    #[Override]
     public function jsonSerialize(): array;
 
     /**

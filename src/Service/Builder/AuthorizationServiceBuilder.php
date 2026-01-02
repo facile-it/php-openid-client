@@ -12,16 +12,16 @@ use Facile\OpenIDClient\Token\TokenSetFactory;
 use Facile\OpenIDClient\Token\TokenSetFactoryInterface;
 use Facile\OpenIDClient\Token\TokenVerifierBuilderInterface;
 
+/**
+ * @psalm-api
+ */
 final class AuthorizationServiceBuilder extends AbstractServiceBuilder
 {
-    /** @var null|TokenSetFactoryInterface */
-    private $tokenSetFactory;
+    private ?TokenSetFactoryInterface $tokenSetFactory = null;
 
-    /** @var null|IdTokenVerifierBuilderInterface */
-    private $idTokenVerifierBuilder;
+    private ?IdTokenVerifierBuilderInterface $idTokenVerifierBuilder = null;
 
-    /** @var null|TokenVerifierBuilderInterface */
-    private $responseVerifierBuilder;
+    private ?TokenVerifierBuilderInterface $responseVerifierBuilder = null;
 
     public function setTokenSetFactory(TokenSetFactoryInterface $tokenSetFactory): self
     {

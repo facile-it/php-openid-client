@@ -6,7 +6,11 @@ namespace Facile\OpenIDClient\Token;
 
 use Facile\JoseVerifier\IdTokenVerifierInterface;
 use Facile\OpenIDClient\Client\ClientInterface;
+use Override;
 
+/**
+ * @psalm-api
+ */
 final class IdTokenVerifierBuilder implements IdTokenVerifierBuilderInterface
 {
     private bool $aadIssValidation = false;
@@ -27,6 +31,7 @@ final class IdTokenVerifierBuilder implements IdTokenVerifierBuilderInterface
         return $this;
     }
 
+    #[Override]
     public function build(ClientInterface $client): IdTokenVerifierInterface
     {
         /** @psalm-var IdTokenVerifierInterface */

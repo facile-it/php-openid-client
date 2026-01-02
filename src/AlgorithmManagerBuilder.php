@@ -10,7 +10,7 @@ use Jose\Component\Encryption\Algorithm\KeyEncryption;
 use Jose\Component\Signature\Algorithm;
 use Throwable;
 
-class AlgorithmManagerBuilder
+final class AlgorithmManagerBuilder
 {
     /**
      * @var string[]
