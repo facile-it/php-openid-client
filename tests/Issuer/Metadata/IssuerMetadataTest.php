@@ -6,6 +6,7 @@ namespace Facile\OpenIDClientTest\Issuer\Metadata;
 
 use Facile\OpenIDClient\Issuer\Metadata\IssuerMetadata;
 use Facile\OpenIDClientTest\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 use function json_decode;
 use function json_encode;
@@ -76,11 +77,10 @@ class IssuerMetadataTest extends TestCase
     }
 
     /**
-     * @dataProvider getClaimGetterProvider
-     *
      * @param mixed $value
      */
-    public function testGetters(string $claim, string $methodName, $value): void
+    #[DataProvider('getClaimGetterProvider')]
+    public static function testGetters(string $claim, string $methodName, $value): void
     {
         $metadata = new IssuerMetadata(
             'foo',
@@ -96,7 +96,7 @@ class IssuerMetadataTest extends TestCase
         static::assertSame($value, $callable());
     }
 
-    public function getClaimGetterProvider(): array
+    public static function getClaimGetterProvider(): array
     {
         return [
             'issuer' => ['issuer', 'getIssuer', 'foo'],

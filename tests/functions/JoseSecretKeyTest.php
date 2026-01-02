@@ -5,14 +5,13 @@ declare(strict_types=1);
 namespace Facile\OpenIDClientTest\functions;
 
 use Facile\OpenIDClientTest\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 use function Facile\OpenIDClient\jose_secret_key;
 
 class JoseSecretKeyTest extends TestCase
 {
-    /**
-     * @dataProvider valuesProvider
-     */
+    #[DataProvider('valuesProvider')]
     public function testJoseSecretKey(string $secret, string $alg, string $expected): void
     {
         $jwk = jose_secret_key($secret, $alg);
@@ -20,7 +19,7 @@ class JoseSecretKeyTest extends TestCase
         static::assertSame($expected, $jwk->get('k'));
     }
 
-    public function valuesProvider(): array
+    public static function valuesProvider(): array
     {
         $string = 'abcdefghijklmnopqrstuvwxyz0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
 
