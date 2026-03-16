@@ -25,7 +25,7 @@ jobs:
           php-version: "8.1"
 
       - name: Install dependencies
-        uses: ramsey/composer-install@v3
+        uses: ramsey/composer-install@v4
 
       - name: "Run PHP-CS-Fixer"
         run: "vendor/bin/php-cs-fixer fix --ansi --verbose --dry-run"
@@ -44,7 +44,7 @@ jobs:
           php-version: "8.2"
 
       - name: Install dependencies
-        uses: ramsey/composer-install@v3
+        uses: ramsey/composer-install@v4
 
       - name: "Run psalm"
         run: "vendor/bin/psalm --long-progress --output-format=github --report=psalm.sarif --php-version=${{ matrix.php-version }}"
@@ -91,7 +91,7 @@ jobs:
           extensions: "bcmath, gmp"
 
       - name: Install dependencies
-        uses: ramsey/composer-install@v3
+        uses: ramsey/composer-install@v4
         with:
           dependency-versions: "${{ matrix.deps }}"
           composer-options: '--ignore-platform-req=php+'
