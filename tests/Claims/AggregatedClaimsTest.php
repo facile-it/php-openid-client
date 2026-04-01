@@ -142,7 +142,11 @@ class AggregatedClaimsTest extends TestCase
 
         $algorithmManager = new AlgorithmManager([new RS256()]);
 
-        $JWSVerifier->verifyWithKey(Argument::type(JWS::class), Argument::that(fn(JWK $key) => $jwkPublic->all() === $key->all()), 0)
+        $JWSVerifier->verifyWithKey(
+            Argument::type(JWS::class),
+            Argument::that(fn(JWK $key): bool => $jwkPublic->all() === $key->all()),
+            0
+        )
             ->willReturn(true);
 
         $client->getIssuer()->willReturn($issuer->reveal());
