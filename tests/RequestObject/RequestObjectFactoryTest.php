@@ -31,7 +31,7 @@ use function json_decode;
 
 class RequestObjectFactoryTest extends TestCase
 {
-    /** @var ObjectProphecy|AlgorithmManager */
+    /** @var AlgorithmManager|null */
     private $algorithmManager;
 
     /** @var ObjectProphecy|JWSBuilder */
@@ -58,14 +58,11 @@ class RequestObjectFactoryTest extends TestCase
     /** @var ObjectProphecy|IssuerMetadataInterface */
     private $issuerMetadata;
 
-    /** @var RequestObjectFactory */
-    private $factory;
-
     protected function setUp(): void
     {
         parent::setUp();
 
-        $this->algorithmManager = $this->prophesize(AlgorithmManager::class);
+        $this->algorithmManager = null;
         $this->jwsBuilder = $this->prophesize(JWSBuilder::class);
         $this->jweBuilder = $this->prophesize(JWEBuilder::class);
         $this->jwsSerializer = $this->prophesize(JWSSerializer::class);
@@ -87,9 +84,12 @@ class RequestObjectFactoryTest extends TestCase
         $this->clientMetadata = $clientMetadata;
         $this->issuer = $issuer;
         $this->issuerMetadata = $issuerMetadata;
+    }
 
-        $this->factory = new RequestObjectFactory(
-            $this->algorithmManager->reveal(),
+    private function getSUT(): RequestObjectFactory
+    {
+        return new RequestObjectFactory(
+            $this->algorithmManager ?? new AlgorithmManager([]),
             $this->jwsBuilder->reveal(),
             $this->jweBuilder->reveal(),
             $this->jwsSerializer->reveal(),
@@ -109,7 +109,7 @@ class RequestObjectFactoryTest extends TestCase
         $this->clientMetadata->get('request_object_encryption_alg')->willReturn(null);
         $this->clientMetadata->get('request_object_encryption_enc')->willReturn(null);
 
-        $token = $this->factory->create($this->client->reveal(), ['foo' => 'bar']);
+        $token = $this->getSUT()->create($this->client->reveal(), ['foo' => 'bar']);
 
         [$header, $payload] = explode('.', $token);
         $header = json_decode(base64url_decode($header), true);
@@ -149,7 +149,7 @@ class RequestObjectFactoryTest extends TestCase
         $this->jwsSerializer->serialize($jws->reveal(), 0)
             ->willReturn('token');
 
-        $token = $this->factory->create($this->client->reveal(), ['foo' => 'bar']);
+        $token = $this->getSUT()->create($this->client->reveal(), ['foo' => 'bar']);
 
         self::assertSame('token', $token);
     }
@@ -160,8 +160,7 @@ class RequestObjectFactoryTest extends TestCase
         $this->clientMetadata->get('request_object_encryption_alg')->willReturn(null);
         $this->clientMetadata->get('request_object_encryption_enc')->willReturn(null);
 
-        $alg = new RS256();
-        $this->algorithmManager->get('RS256')->willReturn($alg);
+        $this->algorithmManager = new AlgorithmManager([new RS256()]);
 
         $jwksProvider = $this->prophesize(JwksProviderInterface::class);
         $jwksProvider->getJwks()->willReturn([
@@ -187,7 +186,7 @@ class RequestObjectFactoryTest extends TestCase
         $this->jwsSerializer->serialize($jws->reveal(), 0)
             ->willReturn('token');
 
-        $token = $this->factory->create($this->client->reveal(), ['foo' => 'bar']);
+        $token = $this->getSUT()->create($this->client->reveal(), ['foo' => 'bar']);
 
         self::assertSame('token', $token);
     }
@@ -218,7 +217,7 @@ class RequestObjectFactoryTest extends TestCase
         $this->jweSerializer->serialize($jwe->reveal(), 0)
             ->willReturn('token');
 
-        $token = $this->factory->create($this->client->reveal(), ['foo' => 'bar']);
+        $token = $this->getSUT()->create($this->client->reveal(), ['foo' => 'bar']);
 
         self::assertSame('token', $token);
     }
@@ -229,8 +228,7 @@ class RequestObjectFactoryTest extends TestCase
         $this->clientMetadata->get('request_object_encryption_alg')->willReturn('RSA-OAEP');
         $this->clientMetadata->get('request_object_encryption_enc')->willReturn('ASY2');
 
-        $alg = new RSAOAEP();
-        $this->algorithmManager->get('RSA-OAEP')->willReturn($alg);
+        $this->algorithmManager = new AlgorithmManager([new RSAOAEP()]);
 
         $jwksProvider = $this->prophesize(JwksProviderInterface::class);
         $jwksProvider->getJwks()->willReturn([
@@ -257,7 +255,7 @@ class RequestObjectFactoryTest extends TestCase
         $this->jweSerializer->serialize($jwe->reveal(), 0)
             ->willReturn('token');
 
-        $token = $this->factory->create($this->client->reveal(), ['foo' => 'bar']);
+        $token = $this->getSUT()->create($this->client->reveal(), ['foo' => 'bar']);
 
         self::assertSame('token', $token);
     }
