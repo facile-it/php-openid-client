@@ -80,8 +80,6 @@ final readonly class SessionCookieMiddleware implements MiddlewareInterface
             ->withPath('/')
             ->withSameSite(SameSite::strict());
 
-        $response = FigResponseCookies::set($response, $sessionCookie);
-
-        return $response;
+        return FigResponseCookies::set($response, $sessionCookie);
     }
 }

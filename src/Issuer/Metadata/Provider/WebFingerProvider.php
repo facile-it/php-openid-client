@@ -56,11 +56,9 @@ final readonly class WebFingerProvider implements RemoteProviderInterface, WebFi
     {
         $uri = $this->normalizeWebfinger($uri);
         $parts = explode('@', $uri, 2);
-        if (isset($parts[1])) {
-            $parsedUrl = parse_url('https://' . $parts[1]);
-        } else {
-            $parsedUrl = parse_url($uri);
-        }
+        $parsedUrl = isset($parts[1]) 
+            ? parse_url('https://' . $parts[1]) 
+            : parse_url($uri);
 
         if (! is_array($parsedUrl) || ! array_key_exists('host', $parsedUrl)) {
             throw new RuntimeException('Unable to parse resource');

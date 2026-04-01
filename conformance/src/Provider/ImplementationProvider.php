@@ -27,7 +27,7 @@ class ImplementationProvider
         private readonly int $indent = 4
     ) {}
 
-    public function getCallableCode(callable $closure)
+    public function getCallableCode(callable $closure): string
     {
         if (is_callable($closure)) {
             $closure = Closure::fromCallable($closure);
