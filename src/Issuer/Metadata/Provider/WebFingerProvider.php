@@ -19,7 +19,6 @@ use function explode;
 use function Facile\OpenIDClient\parse_metadata_response;
 use function http_build_query;
 use function is_array;
-use function is_string;
 use function parse_url;
 use function preg_match;
 use function preg_replace;
@@ -90,7 +89,7 @@ final readonly class WebFingerProvider implements RemoteProviderInterface, WebFi
 
         /** @var array<array-key, null|array{rel?: string, href?: string}> $links */
         $links = $data['links'] ?? [];
-        $href = null;
+        $href = '';
         foreach ($links as $link) {
             if (! is_array($link)) {
                 continue;
@@ -107,7 +106,7 @@ final readonly class WebFingerProvider implements RemoteProviderInterface, WebFi
             $href = $link['href'];
         }
 
-        if (! is_string($href) || ! str_starts_with($href, 'https://')) {
+        if (! str_starts_with($href, 'https://')) {
             throw new InvalidArgumentException('Invalid issuer location');
         }
 
