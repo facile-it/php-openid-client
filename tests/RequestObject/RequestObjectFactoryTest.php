@@ -31,32 +31,28 @@ use function json_decode;
 
 class RequestObjectFactoryTest extends TestCase
 {
-    /** @var AlgorithmManager|null */
-    private $algorithmManager;
+    private ?AlgorithmManager $algorithmManager = null;
 
     /** @var ObjectProphecy|JWSBuilder */
-    private $jwsBuilder;
+    private ObjectProphecy $jwsBuilder;
 
     /** @var ObjectProphecy|JWEBuilder */
-    private $jweBuilder;
+    private ObjectProphecy $jweBuilder;
 
     /** @var ObjectProphecy|JWSSerializer */
-    private $jwsSerializer;
+    private ObjectProphecy $jwsSerializer;
 
     /** @var ObjectProphecy|JWESerializer */
-    private $jweSerializer;
+    private ObjectProphecy $jweSerializer;
 
     /** @var ObjectProphecy|ClientInterface */
-    private $client;
+    private ObjectProphecy $client;
 
     /** @var ObjectProphecy|ClientMetadataInterface */
-    private $clientMetadata;
+    private ObjectProphecy $clientMetadata;
 
     /** @var ObjectProphecy|IssuerInterface */
-    private $issuer;
-
-    /** @var ObjectProphecy|IssuerMetadataInterface */
-    private $issuerMetadata;
+    private ObjectProphecy $issuer;
 
     protected function setUp(): void
     {
@@ -83,7 +79,6 @@ class RequestObjectFactoryTest extends TestCase
         $this->client = $client;
         $this->clientMetadata = $clientMetadata;
         $this->issuer = $issuer;
-        $this->issuerMetadata = $issuerMetadata;
     }
 
     private function getSUT(): RequestObjectFactory
@@ -137,8 +132,8 @@ class RequestObjectFactoryTest extends TestCase
         $this->jwsBuilder->withPayload(Argument::type('string'))->willReturn($this->jwsBuilder->reveal());
         $this->jwsBuilder->addSignature(Argument::allOf(
             Argument::type(JWK::class),
-            Argument::that(fn(JWK $jwk) => $jwk->get('k') === base64url_encode('client-secret')),
-            Argument::that(fn(JWK $jwk) => $jwk->get('kty') === 'oct')
+            Argument::that(fn(JWK $jwk): bool => $jwk->get('k') === base64url_encode('client-secret')),
+            Argument::that(fn(JWK $jwk): bool => $jwk->get('kty') === 'oct')
         ), [
             'alg' => 'HS256',
             'typ' => 'JWT',
@@ -175,7 +170,7 @@ class RequestObjectFactoryTest extends TestCase
 
         $this->jwsBuilder->create()->willReturn($this->jwsBuilder->reveal());
         $this->jwsBuilder->withPayload(Argument::type('string'))->willReturn($this->jwsBuilder->reveal());
-        $this->jwsBuilder->addSignature(Argument::that(fn(JWK $key) => 'some-key-id' === $key->get('kid')), [
+        $this->jwsBuilder->addSignature(Argument::that(fn(JWK $key): bool => 'some-key-id' === $key->get('kid')), [
             'alg' => 'RS256',
             'typ' => 'JWT',
             'kid' => 'some-key-id',
@@ -208,8 +203,8 @@ class RequestObjectFactoryTest extends TestCase
         ])->willReturn($this->jweBuilder->reveal());
         $this->jweBuilder->addRecipient(Argument::allOf(
             Argument::type(JWK::class),
-            Argument::that(fn(JWK $jwk) => $jwk->get('k') === base64url_encode('client-secret')),
-            Argument::that(fn(JWK $jwk) => $jwk->get('kty') === 'oct')
+            Argument::that(fn(JWK $jwk): bool => $jwk->get('k') === base64url_encode('client-secret')),
+            Argument::that(fn(JWK $jwk): bool => $jwk->get('kty') === 'oct')
         ))
             ->willReturn($this->jweBuilder->reveal());
         $this->jweBuilder->build()->willReturn($jwe->reveal());
@@ -248,7 +243,7 @@ class RequestObjectFactoryTest extends TestCase
             'cty' => 'JWT',
             'kid' => 'some-key-id',
         ])->willReturn($this->jweBuilder->reveal());
-        $this->jweBuilder->addRecipient(Argument::that(fn(JWK $key) => 'some-key-id' === $key->get('kid')))
+        $this->jweBuilder->addRecipient(Argument::that(fn(JWK $key): bool => 'some-key-id' === $key->get('kid')))
             ->willReturn($this->jweBuilder->reveal());
         $this->jweBuilder->build()->willReturn($jwe->reveal());
 

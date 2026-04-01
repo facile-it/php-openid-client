@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Facile\OpenIDClient\Middleware;
 
+use Dflydev\FigCookies\Cookie;
 use Dflydev\FigCookies\Cookies;
 use Dflydev\FigCookies\FigResponseCookies;
 use Dflydev\FigCookies\Modifier\SameSite;
@@ -31,22 +32,15 @@ use function random_bytes;
  *
  * @psalm-import-type AuthSessionType from AuthSessionInterface
  */
-final class SessionCookieMiddleware implements MiddlewareInterface
+final readonly class SessionCookieMiddleware implements MiddlewareInterface
 {
     public const SESSION_ATTRIBUTE = AuthSessionInterface::class;
 
-    private string $cookieName;
-
-    private int $ttl;
-
-    private CacheInterface $cache;
-
-    public function __construct(CacheInterface $cache, string $cookieName = 'openid', int $ttl = 300)
-    {
-        $this->cache = $cache;
-        $this->cookieName = $cookieName;
-        $this->ttl = $ttl;
-    }
+    public function __construct(
+        private CacheInterface $cache,
+        private string $cookieName = 'openid',
+        private int $ttl = 300
+    ) {}
 
     #[Override]
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
@@ -58,7 +52,7 @@ final class SessionCookieMiddleware implements MiddlewareInterface
         $cookies = Cookies::fromRequest($request);
         $sessionCookie = $cookies->get($this->cookieName);
 
-        $sessionId = null !== $sessionCookie ? $sessionCookie->getValue() : null;
+        $sessionId = $sessionCookie instanceof Cookie ? $sessionCookie->getValue() : null;
         /** @var string|null $sessionValue */
         $sessionValue = null !== $sessionId ? $this->cache->get($sessionId) : null;
         /** @var false|AuthSessionType $data */
@@ -87,8 +81,6 @@ final class SessionCookieMiddleware implements MiddlewareInterface
             ->withPath('/')
             ->withSameSite(SameSite::strict());
 
-        $response = FigResponseCookies::set($response, $sessionCookie);
-
-        return $response;
+        return FigResponseCookies::set($response, $sessionCookie);
     }
 }

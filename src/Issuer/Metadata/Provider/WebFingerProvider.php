@@ -19,7 +19,6 @@ use function explode;
 use function Facile\OpenIDClient\parse_metadata_response;
 use function http_build_query;
 use function is_array;
-use function is_string;
 use function parse_url;
 use function preg_match;
 use function preg_replace;
@@ -29,35 +28,18 @@ use function substr;
 /**
  * @psalm-import-type IssuerRemoteMetadataType from TokenVerifierInterface
  */
-final class WebFingerProvider implements RemoteProviderInterface, WebFingerProviderInterface
+final readonly class WebFingerProvider implements RemoteProviderInterface, WebFingerProviderInterface
 {
-    private const OIDC_DISCOVERY = '/.well-known/openid-configuration';
-
     private const WEBFINGER = '/.well-known/webfinger';
 
     private const REL = 'http://openid.net/specs/connect/1.0/issuer';
 
-    private const AAD_MULTITENANT_DISCOVERY = 'https://login.microsoftonline.com/common/v2.0$' . self::OIDC_DISCOVERY;
-
-    private ClientInterface $client;
-
-    private RequestFactoryInterface $requestFactory;
-
-    private UriFactoryInterface $uriFactory;
-
-    private DiscoveryProviderInterface $discoveryProvider;
-
     public function __construct(
-        ClientInterface $client,
-        RequestFactoryInterface $requestFactory,
-        UriFactoryInterface $uriFactory,
-        DiscoveryProviderInterface $discoveryProvider
-    ) {
-        $this->client = $client;
-        $this->requestFactory = $requestFactory;
-        $this->uriFactory = $uriFactory;
-        $this->discoveryProvider = $discoveryProvider;
-    }
+        private ClientInterface $client,
+        private RequestFactoryInterface $requestFactory,
+        private UriFactoryInterface $uriFactory,
+        private DiscoveryProviderInterface $discoveryProvider
+    ) {}
 
     #[Override]
     public function isAllowedUri(string $uri): bool
@@ -70,11 +52,9 @@ final class WebFingerProvider implements RemoteProviderInterface, WebFingerProvi
     {
         $uri = $this->normalizeWebfinger($uri);
         $parts = explode('@', $uri, 2);
-        if (isset($parts[1])) {
-            $parsedUrl = parse_url('https://' . $parts[1]);
-        } else {
-            $parsedUrl = parse_url($uri);
-        }
+        $parsedUrl = isset($parts[1])
+            ? parse_url('https://' . $parts[1])
+            : parse_url($uri);
 
         if (! is_array($parsedUrl) || ! array_key_exists('host', $parsedUrl)) {
             throw new RuntimeException('Unable to parse resource');
@@ -103,7 +83,7 @@ final class WebFingerProvider implements RemoteProviderInterface, WebFingerProvi
 
         /** @var array<array-key, null|array{rel?: string, href?: string}> $links */
         $links = $data['links'] ?? [];
-        $href = null;
+        $href = '';
         foreach ($links as $link) {
             if (! is_array($link)) {
                 continue;
@@ -120,7 +100,7 @@ final class WebFingerProvider implements RemoteProviderInterface, WebFingerProvi
             $href = $link['href'];
         }
 
-        if (! is_string($href) || 0 !== strpos($href, 'https://')) {
+        if (! str_starts_with($href, 'https://')) {
             throw new InvalidArgumentException('Invalid issuer location');
         }
 
@@ -137,7 +117,7 @@ final class WebFingerProvider implements RemoteProviderInterface, WebFingerProvi
     private function normalizeWebfinger(string $input): string
     {
         $hasScheme = static function (string $resource): bool {
-            if (false !== strpos($resource, '://')) {
+            if (str_contains($resource, '://')) {
                 return true;
             }
 
@@ -153,7 +133,7 @@ final class WebFingerProvider implements RemoteProviderInterface, WebFingerProvi
         };
 
         $acctSchemeAssumed = static function (string $input): bool {
-            if (false === strpos($input, '@')) {
+            if (! str_contains($input, '@')) {
                 return false;
             }
 

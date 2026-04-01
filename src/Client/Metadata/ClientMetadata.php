@@ -59,8 +59,6 @@ final class ClientMetadata implements ClientMetadataInterface
      * @param array<string, mixed> $claims
      *
      * @psalm-param ClientMetadataType $claims
-     *
-     * @return static
      */
     public static function fromArray(array $claims): self
     {
@@ -71,7 +69,7 @@ final class ClientMetadata implements ClientMetadataInterface
             );
         }
 
-        return new static($claims['client_id'], $claims);
+        return new self($claims['client_id'], $claims);
     }
 
     #[Override]

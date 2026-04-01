@@ -15,8 +15,8 @@ class DerivedKeyTest extends TestCase
     public function testDerivedKey(string $secret, int $length, string $expected): void
     {
         $jwk = derived_key($secret, $length);
-        static::assertSame('oct', $jwk->get('kty'));
-        static::assertSame($expected, $jwk->get('k'));
+        self::assertSame('oct', $jwk->get('kty'));
+        self::assertSame($expected, $jwk->get('k'));
     }
 
     public static function valuesProvider(): array

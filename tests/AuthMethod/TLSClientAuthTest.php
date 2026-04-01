@@ -16,7 +16,7 @@ class TLSClientAuthTest extends TestCase
     public function testGetSupportedMethod(): void
     {
         $auth = new TLSClientAuth();
-        static::assertSame('tls_client_auth', $auth->getSupportedMethod());
+        self::assertSame('tls_client_auth', $auth->getSupportedMethod());
     }
 
     public function testCreateRequest(): void
@@ -42,6 +42,6 @@ class TLSClientAuthTest extends TestCase
             ['foo' => 'bar']
         );
 
-        static::assertSame($request->reveal(), $result);
+        self::assertSame($request->reveal(), $result);
     }
 }

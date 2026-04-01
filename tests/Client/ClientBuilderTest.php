@@ -21,12 +21,12 @@ class ClientBuilderTest extends TestCase
             ->setClientMetadata($metadata->reveal())
             ->setIssuer($issuer->reveal());
         $client = $builder->build();
-        $provider = $client->getJwksProvider();
+        $client->getJwksProvider();
 
-        static::assertSame($issuer->reveal(), $client->getIssuer());
-        static::assertSame($metadata->reveal(), $client->getMetadata());
-        static::assertInstanceOf(MemoryJwksProvider::class, $client->getJwksProvider());
-        static::assertSame(['keys' => []], $client->getJwksProvider()->getJwks());
+        self::assertSame($issuer->reveal(), $client->getIssuer());
+        self::assertSame($metadata->reveal(), $client->getMetadata());
+        self::assertInstanceOf(MemoryJwksProvider::class, $client->getJwksProvider());
+        self::assertSame(['keys' => []], $client->getJwksProvider()->getJwks());
     }
 
     public function testBuildWithClientJwks(): void
@@ -43,11 +43,11 @@ class ClientBuilderTest extends TestCase
             ->setClientMetadata($metadata->reveal())
             ->setIssuer($issuer->reveal());
         $client = $builder->build();
-        $provider = $client->getJwksProvider();
+        $client->getJwksProvider();
 
-        static::assertSame($issuer->reveal(), $client->getIssuer());
-        static::assertSame($metadata->reveal(), $client->getMetadata());
-        static::assertInstanceOf(MemoryJwksProvider::class, $client->getJwksProvider());
-        static::assertSame($jwks, $client->getJwksProvider()->getJwks());
+        self::assertSame($issuer->reveal(), $client->getIssuer());
+        self::assertSame($metadata->reveal(), $client->getMetadata());
+        self::assertInstanceOf(MemoryJwksProvider::class, $client->getJwksProvider());
+        self::assertSame($jwks, $client->getJwksProvider()->getJwks());
     }
 }

@@ -56,31 +56,15 @@ use function json_encode;
  * }
  * @psalm-type CallbackParamsType = array<string, mixed>
  */
-final class AuthorizationService
+final readonly class AuthorizationService
 {
-    private TokenSetFactoryInterface $tokenSetFactory;
-
-    private ClientInterface $client;
-
-    private RequestFactoryInterface $requestFactory;
-
-    private IdTokenVerifierBuilderInterface $idTokenVerifierBuilder;
-
-    private TokenVerifierBuilderInterface $responseVerifierBuilder;
-
     public function __construct(
-        TokenSetFactoryInterface $tokenSetFactory,
-        ClientInterface $client,
-        RequestFactoryInterface $requestFactory,
-        IdTokenVerifierBuilderInterface $idTokenVerifierBuilder,
-        TokenVerifierBuilderInterface $responseVerifierBuilder
-    ) {
-        $this->tokenSetFactory = $tokenSetFactory;
-        $this->client = $client;
-        $this->requestFactory = $requestFactory;
-        $this->idTokenVerifierBuilder = $idTokenVerifierBuilder;
-        $this->responseVerifierBuilder = $responseVerifierBuilder;
-    }
+        private TokenSetFactoryInterface $tokenSetFactory,
+        private ClientInterface $client,
+        private RequestFactoryInterface $requestFactory,
+        private IdTokenVerifierBuilderInterface $idTokenVerifierBuilder,
+        private TokenVerifierBuilderInterface $responseVerifierBuilder
+    ) {}
 
     /**
      * @param array<string, mixed> $params
@@ -213,7 +197,7 @@ final class AuthorizationService
             'redirect_uri' => $redirectUri,
         ];
 
-        if (null !== $authSession && null !== $authSession->getCodeVerifier()) {
+        if ($authSession instanceof AuthSessionInterface && null !== $authSession->getCodeVerifier()) {
             $params['code_verifier'] = $authSession->getCodeVerifier();
         }
 

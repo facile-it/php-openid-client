@@ -15,6 +15,7 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
+use Throwable;
 
 use function array_filter;
 use function count;
@@ -24,24 +25,11 @@ use function str_repeat;
 
 class RpTest extends Command
 {
-    /** @var RpTestRunner */
-    private $testRunner;
-
-    /** @var RpProfileTestsProvider */
-    private $testsProvider;
-
-    /** @var RPLogsHelper */
-    private $logsHelper;
-
     public function __construct(
-        RpTestRunner $testRunner,
-        RpProfileTestsProvider $testsProvider,
-        RPLogsHelper $logsHelper
+        private readonly RpTestRunner $testRunner,
+        private readonly RpProfileTestsProvider $testsProvider,
+        private readonly RPLogsHelper $logsHelper
     ) {
-        $this->testRunner = $testRunner;
-        $this->testsProvider = $testsProvider;
-        $this->logsHelper = $logsHelper;
-
         parent::__construct('test');
     }
 
@@ -86,8 +74,8 @@ class RpTest extends Command
                 $this->logsHelper->clearLogs($testInfo->getRoot(), $testInfo->getRpId());
             }
 
-            if (count($testIds)) {
-                $tests = array_filter($tests, static function (RpTestInterface $test) use ($testIds) {
+            if (count($testIds) > 0) {
+                $tests = array_filter($tests, static function (RpTestInterface $test) use ($testIds): bool {
                     foreach ($testIds as $testId) {
                         if (fnmatch($testId, $test->getTestId())) {
                             return true;
@@ -111,7 +99,7 @@ class RpTest extends Command
 
                 do {
                     $result = $this->testRunner->run($test, $testInfo);
-                } while (null !== $result->getException() && ++$count < $retries);
+                } while ($result->getException() instanceof Throwable && ++$count < $retries);
 
                 $output->writeln("<comment>Test:</comment> <info>{$testName}</info>", OutputInterface::VERBOSITY_NORMAL);
 
@@ -134,7 +122,7 @@ class RpTest extends Command
                     $this->printRemoteLog($result, $output);
                 }
 
-                if ($exception = $result->getException()) {
+                if (($exception = $result->getException()) instanceof Throwable) {
                     $counters['errors'][] = $testName;
                     $output->writeln('<comment>Result:</comment> <error>Test failed!</error>', OutputInterface::VERBOSITY_NORMAL);
                     $output->writeln((string) $exception, OutputInterface::VERBOSITY_DEBUG);

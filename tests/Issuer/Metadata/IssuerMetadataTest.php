@@ -27,7 +27,7 @@ class IssuerMetadataTest extends TestCase
             'jwks_uri' => 'foo-jwks',
         ];
 
-        static::assertSame($expected, json_decode(json_encode($metadata), true));
+        self::assertSame($expected, json_decode(json_encode($metadata), true));
     }
 
     public function testFromArray(): void
@@ -38,10 +38,10 @@ class IssuerMetadataTest extends TestCase
             'jwks_uri' => 'foo-jwks',
         ]);
 
-        static::assertInstanceOf(IssuerMetadata::class, $metadata);
-        static::assertSame('foo', $metadata->getIssuer());
-        static::assertSame('foo-endpoint', $metadata->getAuthorizationEndpoint());
-        static::assertSame('foo-jwks', $metadata->getJwksUri());
+        self::assertInstanceOf(IssuerMetadata::class, $metadata);
+        self::assertSame('foo', $metadata->getIssuer());
+        self::assertSame('foo-endpoint', $metadata->getAuthorizationEndpoint());
+        self::assertSame('foo-jwks', $metadata->getJwksUri());
     }
 
     public function testGet(): void
@@ -55,9 +55,9 @@ class IssuerMetadataTest extends TestCase
             ]
         );
 
-        static::assertSame('foo-issuer', $metadata->get('issuer'));
-        static::assertSame('bar', $metadata->get('foo'));
-        static::assertNull($metadata->get('foo2'));
+        self::assertSame('foo-issuer', $metadata->get('issuer'));
+        self::assertSame('bar', $metadata->get('foo'));
+        self::assertNull($metadata->get('foo2'));
     }
 
     public function testHas(): void
@@ -71,16 +71,13 @@ class IssuerMetadataTest extends TestCase
             ]
         );
 
-        static::assertTrue($metadata->has('issuer'));
-        static::assertTrue($metadata->has('foo'));
-        static::assertFalse($metadata->has('foo2'));
+        self::assertTrue($metadata->has('issuer'));
+        self::assertTrue($metadata->has('foo'));
+        self::assertFalse($metadata->has('foo2'));
     }
 
-    /**
-     * @param mixed $value
-     */
     #[DataProvider('getClaimGetterProvider')]
-    public static function testGetters(string $claim, string $methodName, $value): void
+    public static function testGetters(string $claim, string $methodName, string|bool|array $value): void
     {
         $metadata = new IssuerMetadata(
             'foo',
@@ -93,7 +90,7 @@ class IssuerMetadataTest extends TestCase
 
         /** @var callable $callable */
         $callable = [$metadata, $methodName];
-        static::assertSame($value, $callable());
+        self::assertSame($value, $callable());
     }
 
     public static function getClaimGetterProvider(): array

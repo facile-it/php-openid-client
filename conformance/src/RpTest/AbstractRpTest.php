@@ -34,13 +34,9 @@ abstract class AbstractRpTest implements RpTestInterface
 {
     protected const REDIRECT_URI = 'https://rp.test/callback';
 
-    /** @var ContainerInterface */
-    private $container;
-
-    public function __construct(ContainerInterface $container)
-    {
-        $this->container = $container;
-    }
+    public function __construct(
+        private readonly ContainerInterface $container
+    ) {}
 
     public function getContainer(): ContainerInterface
     {
@@ -88,7 +84,6 @@ abstract class AbstractRpTest implements RpTestInterface
 
     protected function httpGet(string $uri, array $headers = []): ResponseInterface
     {
-        /** @var HttpClient $client */
         $httpClient = $this->getContainer()->has(HttpClient::class)
             ? $this->getContainer()->get(HttpClient::class)
             : Psr18ClientDiscovery::find();

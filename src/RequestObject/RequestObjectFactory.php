@@ -8,6 +8,7 @@ use Facile\OpenIDClient\AlgorithmManagerBuilder;
 use Facile\OpenIDClient\Client\ClientInterface;
 use Facile\OpenIDClient\Exception\RuntimeException;
 use Jose\Component\Core\AlgorithmManager;
+use Jose\Component\Core\JWK;
 use Jose\Component\Core\JWKSet;
 use Jose\Component\Encryption\JWEBuilder;
 use Jose\Component\Encryption\Serializer\CompactSerializer as EncryptionCompactSerializer;
@@ -25,13 +26,12 @@ use function implode;
 use function json_encode;
 use function preg_match;
 use function random_bytes;
-use function strpos;
 use function time;
 
 /**
  * @psalm-api
  */
-final class RequestObjectFactory
+final readonly class RequestObjectFactory
 {
     private AlgorithmManager $algorithmManager;
 
@@ -39,22 +39,16 @@ final class RequestObjectFactory
 
     private JWEBuilder $jweBuilder;
 
-    private JWSSerializer $signatureSerializer;
-
-    private JWESerializer $encryptionSerializer;
-
     public function __construct(
         ?AlgorithmManager $algorithmManager = null,
         ?JWSBuilder $jwsBuilder = null,
         ?JWEBuilder $jweBuilder = null,
-        ?JWSSerializer $signatureSerializer = null,
-        ?JWESerializer $encryptionSerializer = null
+        private JWSSerializer $signatureSerializer = new SignatureCompactSerializer(),
+        private JWESerializer $encryptionSerializer = new EncryptionCompactSerializer()
     ) {
         $this->algorithmManager = $algorithmManager ?? (new AlgorithmManagerBuilder())->build();
         $this->jwsBuilder = $jwsBuilder ?? new JWSBuilder($this->algorithmManager);
         $this->jweBuilder = $jweBuilder ?? new JWEBuilder($this->algorithmManager);
-        $this->signatureSerializer = $signatureSerializer ?? new SignatureCompactSerializer();
-        $this->encryptionSerializer = $encryptionSerializer ?? new EncryptionCompactSerializer();
     }
 
     /**
@@ -109,14 +103,14 @@ final class RequestObjectFactory
             ]);
         }
 
-        if (0 === strpos($alg, 'HS')) {
+        if (str_starts_with($alg, 'HS')) {
             $jwk = jose_secret_key($metadata->getClientSecret() ?? '');
         } else {
             $jwk = JWKSet::createFromKeyData($client->getJwksProvider()->getJwks())
                 ->selectKey('sig', $this->algorithmManager->get($alg));
         }
 
-        if (null === $jwk) {
+        if (! $jwk instanceof JWK) {
             throw new RuntimeException('No key to sign with alg ' . $alg);
         }
 
@@ -160,7 +154,7 @@ final class RequestObjectFactory
             );
         }
 
-        if (null === $jwk) {
+        if (! $jwk instanceof JWK) {
             throw new RuntimeException('No key to encrypt with alg ' . $alg);
         }
 

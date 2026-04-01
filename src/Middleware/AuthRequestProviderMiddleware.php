@@ -14,14 +14,11 @@ use Override;
 /**
  * @psalm-api
  */
-final class AuthRequestProviderMiddleware implements MiddlewareInterface
+final readonly class AuthRequestProviderMiddleware implements MiddlewareInterface
 {
-    private AuthRequestInterface $authRequest;
-
-    public function __construct(AuthRequestInterface $authRequest)
-    {
-        $this->authRequest = $authRequest;
-    }
+    public function __construct(
+        private AuthRequestInterface $authRequest
+    ) {}
 
     #[Override]
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface

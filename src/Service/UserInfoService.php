@@ -22,23 +22,13 @@ use function sprintf;
 /**
  * @psalm-import-type TokenSetClaimsType from TokenSetInterface
  */
-final class UserInfoService
+final readonly class UserInfoService
 {
-    private ClientInterface $client;
-
-    private RequestFactoryInterface $requestFactory;
-
-    private TokenVerifierBuilderInterface $userInfoVerifierBuilder;
-
     public function __construct(
-        TokenVerifierBuilderInterface $userInfoVerifierBuilder,
-        ClientInterface $client,
-        RequestFactoryInterface $requestFactory
-    ) {
-        $this->userInfoVerifierBuilder = $userInfoVerifierBuilder;
-        $this->client = $client;
-        $this->requestFactory = $requestFactory;
-    }
+        private TokenVerifierBuilderInterface $userInfoVerifierBuilder,
+        private ClientInterface $client,
+        private RequestFactoryInterface $requestFactory
+    ) {}
 
     /**
      * @return array<string, mixed>

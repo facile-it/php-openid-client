@@ -21,7 +21,7 @@ class IssuerTest extends TestCase
             $jwksProvider->reveal()
         );
 
-        static::assertSame($metadata->reveal(), $issuer->getMetadata());
-        static::assertSame($jwksProvider->reveal(), $issuer->getJwksProvider());
+        self::assertSame($metadata->reveal(), $issuer->getMetadata());
+        self::assertSame($jwksProvider->reveal(), $issuer->getJwksProvider());
     }
 }

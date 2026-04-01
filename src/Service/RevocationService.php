@@ -20,19 +20,12 @@ use function Facile\OpenIDClient\get_endpoint_uri;
  *
  * @psalm-api
  */
-final class RevocationService
+final readonly class RevocationService
 {
-    private ClientInterface $client;
-
-    private RequestFactoryInterface $requestFactory;
-
     public function __construct(
-        ClientInterface $client,
-        RequestFactoryInterface $requestFactory
-    ) {
-        $this->client = $client;
-        $this->requestFactory = $requestFactory;
-    }
+        private ClientInterface $client,
+        private RequestFactoryInterface $requestFactory
+    ) {}
 
     /**
      * @param array<string, mixed> $params

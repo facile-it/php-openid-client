@@ -16,7 +16,7 @@ class NoneTest extends TestCase
     public function testGetSupportedMethod(): void
     {
         $auth = new None();
-        static::assertSame('none', $auth->getSupportedMethod());
+        self::assertSame('none', $auth->getSupportedMethod());
     }
 
     public function testCreateRequest(): void
@@ -40,6 +40,6 @@ class NoneTest extends TestCase
             ['foo' => 'bar']
         );
 
-        static::assertSame($request->reveal(), $result);
+        self::assertSame($request->reveal(), $result);
     }
 }

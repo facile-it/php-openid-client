@@ -61,8 +61,6 @@ final class AuthRequest implements AuthRequestInterface
      * @param array<string, mixed> $params
      *
      * @psalm-param array{client_id: string, redirect_uri: string} $params
-     *
-     * @return static
      */
     public static function fromParams(array $params): self
     {
@@ -71,7 +69,7 @@ final class AuthRequest implements AuthRequestInterface
             throw new InvalidArgumentException(implode(', ', $missingKeys) . ' keys not provided');
         }
 
-        return new static(
+        return new self(
             $params['client_id'],
             $params['redirect_uri'],
             $params

@@ -79,6 +79,7 @@
         "phpspec/prophecy": "^1.10.3",
         "phpspec/prophecy-phpunit": "^2.0",
         "phpunit/phpunit": "^10.5.60 || ^11.5.46 || ^12.0.0",
+        "rector/rector": "2.3.9",
         "symfony/console": "^4.3 || ^5.0 || ^6.0 || ^7.0 || ^8.0",
         "vimeo/psalm": "^6.14.3"
     },
@@ -88,13 +89,16 @@
         "dflydev/fig-cookies": "To use the SessionCookieMiddleware"
     },
     "scripts": {
+        "rector-check": "rector --dry-run",
+        "rector-fix": "rector",
         "cs-check": "PHP_CS_FIXER_IGNORE_ENV=1 php-cs-fixer fix --dry-run --diff --allow-risky=yes",
         "cs-fix": "PHP_CS_FIXER_IGNORE_ENV=1 php-cs-fixer fix --diff --allow-risky=yes",
         "psalm": "psalm",
         "test": "phpunit",
         "test-coverage": "phpunit --coverage-text",
         "check": [
-            "@cs-check",
+            "@rector-fix",
+            "@cs-fix",
             "@psalm",
             "@test"
         ]

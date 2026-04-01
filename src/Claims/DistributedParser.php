@@ -18,7 +18,6 @@ use Psr\Http\Message\ResponseInterface;
 use Throwable;
 use Override;
 
-use function array_filter;
 use function array_key_exists;
 use function Facile\OpenIDClient\check_server_response;
 
@@ -27,9 +26,9 @@ use function Facile\OpenIDClient\check_server_response;
  */
 final class DistributedParser extends AbstractClaims implements DistributedParserInterface
 {
-    private ClientInterface $client;
+    private readonly ClientInterface $client;
 
-    private RequestFactoryInterface $requestFactory;
+    private readonly RequestFactoryInterface $requestFactory;
 
     public function __construct(
         ?IssuerBuilderInterface $issuerBuilder = null,
@@ -56,11 +55,13 @@ final class DistributedParser extends AbstractClaims implements DistributedParse
             return $claims;
         }
 
-        $distributedSources = array_filter($claims['_claim_sources'], fn($value): bool => $this->isDistributedSource($value));
-
         /** @var array<string, ResponseInterface> $responses */
         $responses = [];
-        foreach ($distributedSources as $sourceName => $source) {
+        foreach ($claims['_claim_sources'] as $sourceName => $source) {
+            if (! $this->isDistributedSource($source)) {
+                continue;
+            }
+
             $request = $this->requestFactory->createRequest('GET', $source['endpoint'])
                 ->withHeader('accept', 'application/jwt');
 

@@ -7,7 +7,6 @@ namespace Facile\OpenIDClient\Claims;
 use Facile\OpenIDClient\Client\ClientInterface;
 use Override;
 
-use function array_filter;
 use function array_key_exists;
 
 /**
@@ -26,10 +25,12 @@ final class AggregateParser extends AbstractClaims implements AggregatedParserIn
             return $claims;
         }
 
-        $aggregatedSources = array_filter($claims['_claim_sources'], fn($value): bool => $this->isAggregateSource($value));
-
         $claimPayloads = [];
-        foreach ($aggregatedSources as $sourceName => $source) {
+        foreach ($claims['_claim_sources'] as $sourceName => $source) {
+            if (! $this->isAggregateSource($source)) {
+                continue;
+            }
+
             $claimPayloads[$sourceName] = $this->claimJWT($client, $source['JWT']);
             unset($claims['_claim_sources'][$sourceName]);
         }

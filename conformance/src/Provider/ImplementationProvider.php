@@ -23,18 +23,11 @@ use function strlen;
 
 class ImplementationProvider
 {
-    /** @var int */
-    private $indent;
+    public function __construct(
+        private readonly int $indent = 4
+    ) {}
 
-    /**
-     * ImplementationProvider constructor.
-     */
-    public function __construct(int $indent = 4)
-    {
-        $this->indent = $indent;
-    }
-
-    public function getCallableCode(callable $closure)
+    public function getCallableCode(callable $closure): string
     {
         if (is_callable($closure)) {
             $closure = Closure::fromCallable($closure);
@@ -49,23 +42,23 @@ class ImplementationProvider
 
         $firstLine = array_shift($lines) ?: '';
 
-        if (! preg_match('/^ *{ *$/', $firstLine)) {
+        if (! preg_match('/^ *{ *$/', (string) $firstLine)) {
             array_unshift($lines, $firstLine);
         }
 
         $lastLine = array_pop($lines) ?: '';
-        if (! preg_match('/^ *} *$/', $lastLine)) {
+        if (! preg_match('/^ *} *$/', (string) $lastLine)) {
             $lines[] = $lastLine;
         }
 
         // remove spaces based on first line
         if (preg_match('/^( +)/', $lines[0] ?? '', $matches)) {
             $toTrim = strlen($matches[1]);
-            $lines = array_map(static fn(string $line) => preg_replace(sprintf('/^ {0,%d}/', $toTrim), '', $line), $lines);
+            $lines = array_map(static fn(string $line): ?string => preg_replace(sprintf('/^ {0,%d}/', $toTrim), '', $line), $lines);
         }
 
-        if ($this->indent) {
-            $lines = array_map(fn(string $line) => str_repeat(' ', $this->indent) . $line, $lines);
+        if ($this->indent !== 0) {
+            $lines = array_map(fn(string $line): string => str_repeat(' ', $this->indent) . $line, $lines);
         }
 
         return implode('', $lines);

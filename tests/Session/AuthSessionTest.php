@@ -16,44 +16,44 @@ class AuthSessionTest extends TestCase
     {
         $session = new AuthSession();
 
-        static::assertNull($session->getState());
+        self::assertNull($session->getState());
 
         $session->setState('foo');
 
-        static::assertSame('foo', $session->getState());
+        self::assertSame('foo', $session->getState());
     }
 
     public function testSetNonce(): void
     {
         $session = new AuthSession();
 
-        static::assertNull($session->getNonce());
+        self::assertNull($session->getNonce());
 
         $session->setNonce('foo');
 
-        static::assertSame('foo', $session->getNonce());
+        self::assertSame('foo', $session->getNonce());
     }
 
     public function testSetCodeVerifier(): void
     {
         $session = new AuthSession();
 
-        static::assertNull($session->getCodeVerifier());
+        self::assertNull($session->getCodeVerifier());
 
         $session->setCodeVerifier('foo');
 
-        static::assertSame('foo', $session->getCodeVerifier());
+        self::assertSame('foo', $session->getCodeVerifier());
     }
 
     public function testSetCustoms(): void
     {
         $session = new AuthSession();
 
-        static::assertSame([], $session->getCustoms());
+        self::assertSame([], $session->getCustoms());
 
         $session->setCustoms(['foo' => 'bar']);
 
-        static::assertSame(['foo' => 'bar'], $session->getCustoms());
+        self::assertSame(['foo' => 'bar'], $session->getCustoms());
     }
 
     public function testFromArray(): void
@@ -63,8 +63,8 @@ class AuthSessionTest extends TestCase
             'nonce' => 'bar',
         ]);
 
-        static::assertSame('foo', $session->getState());
-        static::assertSame('bar', $session->getNonce());
+        self::assertSame('foo', $session->getState());
+        self::assertSame('bar', $session->getNonce());
     }
 
     public function testJsonSerializer(): void
@@ -74,7 +74,7 @@ class AuthSessionTest extends TestCase
             'nonce' => 'bar',
         ]);
 
-        static::assertSame([
+        self::assertSame([
             'state' => 'foo',
             'nonce' => 'bar',
         ], json_decode(json_encode($session), true));
