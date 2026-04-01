@@ -84,7 +84,6 @@ abstract class AbstractRpTest implements RpTestInterface
 
     protected function httpGet(string $uri, array $headers = []): ResponseInterface
     {
-        /** @var HttpClient $client */
         $httpClient = $this->getContainer()->has(HttpClient::class)
             ? $this->getContainer()->get(HttpClient::class)
             : Psr18ClientDiscovery::find();

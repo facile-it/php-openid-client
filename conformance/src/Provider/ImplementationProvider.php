@@ -57,7 +57,7 @@ class ImplementationProvider
             $lines = array_map(static fn(string $line): ?string => preg_replace(sprintf('/^ {0,%d}/', $toTrim), '', $line), $lines);
         }
 
-        if ($this->indent) {
+        if ($this->indent !== 0) {
             $lines = array_map(fn(string $line): string => str_repeat(' ', $this->indent) . $line, $lines);
         }
 

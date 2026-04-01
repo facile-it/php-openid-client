@@ -153,7 +153,7 @@ class TestListener implements TestListenerInterface
             $lines = array_map(static fn(string $line): ?string => preg_replace(sprintf('/^ {0,%d}/', $toTrim), '', $line), $lines);
         }
 
-        if ($indent) {
+        if ($indent !== 0) {
             $lines = array_map(static fn(string $line): string => str_repeat(' ', $indent) . $line, $lines);
         }
 

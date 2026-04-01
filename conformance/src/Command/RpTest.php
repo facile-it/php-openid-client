@@ -15,6 +15,7 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
+use Throwable;
 
 use function array_filter;
 use function count;
@@ -73,7 +74,7 @@ class RpTest extends Command
                 $this->logsHelper->clearLogs($testInfo->getRoot(), $testInfo->getRpId());
             }
 
-            if (count($testIds)) {
+            if (count($testIds) > 0) {
                 $tests = array_filter($tests, static function (RpTestInterface $test) use ($testIds) {
                     foreach ($testIds as $testId) {
                         if (fnmatch($testId, $test->getTestId())) {
@@ -121,7 +122,7 @@ class RpTest extends Command
                     $this->printRemoteLog($result, $output);
                 }
 
-                if ($exception = $result->getException()) {
+                if (($exception = $result->getException()) instanceof Throwable) {
                     $counters['errors'][] = $testName;
                     $output->writeln('<comment>Result:</comment> <error>Test failed!</error>', OutputInterface::VERBOSITY_NORMAL);
                     $output->writeln((string) $exception, OutputInterface::VERBOSITY_DEBUG);
