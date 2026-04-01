@@ -12,6 +12,9 @@
     "minimum-stability": "stable",
     "config": {
         "sort-packages": true,
+        "platform": {
+            "php": "8.2.99"
+        },
         "allow-plugins": {
             "facile-it/facile-coding-standard": true,
             "laminas/laminas-component-installer": true,
