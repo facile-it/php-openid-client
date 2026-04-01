@@ -37,7 +37,7 @@ final class ClientSecretJwt extends AbstractJwtAuth
 
     private function getJwsBuilder(): JWSBuilder
     {
-        if (null !== $this->jwsBuilder) {
+        if ($this->jwsBuilder instanceof JWSBuilder) {
             return $this->jwsBuilder;
         }
 

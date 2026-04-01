@@ -65,7 +65,7 @@ final class OAuth2Exception extends RuntimeException implements JsonSerializable
      */
     public static function fromParameters(array $params, ?Throwable $previous = null): self
     {
-        if (! static::isOAuth2Error($params)) {
+        if (! self::isOAuth2Error($params)) {
             throw new InvalidArgumentException('Invalid OAuth2 exception', 0, $previous);
         }
 

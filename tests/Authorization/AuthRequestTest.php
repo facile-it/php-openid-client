@@ -20,9 +20,9 @@ class AuthRequestTest extends TestCase
             'redirect_uri' => 'bar',
         ]);
 
-        static::assertSame('foo', $authRequest->getClientId());
-        static::assertSame('bar', $authRequest->getRedirectUri());
-        static::assertSame('fooscope', $authRequest->getScope());
+        self::assertSame('foo', $authRequest->getClientId());
+        self::assertSame('bar', $authRequest->getRedirectUri());
+        self::assertSame('fooscope', $authRequest->getScope());
     }
 
     public function testJsonSerialize(): void
@@ -34,11 +34,11 @@ class AuthRequestTest extends TestCase
 
         $array = json_decode(json_encode($authRequest), true);
 
-        static::assertSame('foo', $array['client_id']);
-        static::assertSame('bar', $array['redirect_uri']);
-        static::assertSame('openid', $array['scope']);
-        static::assertSame('code', $array['response_type']);
-        static::assertSame('query', $array['response_mode']);
+        self::assertSame('foo', $array['client_id']);
+        self::assertSame('bar', $array['redirect_uri']);
+        self::assertSame('openid', $array['scope']);
+        self::assertSame('code', $array['response_type']);
+        self::assertSame('query', $array['response_mode']);
     }
 
     public function testCreateParams(): void
@@ -50,38 +50,38 @@ class AuthRequestTest extends TestCase
 
         $array = $authRequest->createParams();
 
-        static::assertSame('foo', $array['client_id']);
-        static::assertSame('bar', $array['redirect_uri']);
-        static::assertSame('openid', $array['scope']);
-        static::assertSame('code', $array['response_type']);
-        static::assertSame('query', $array['response_mode']);
+        self::assertSame('foo', $array['client_id']);
+        self::assertSame('bar', $array['redirect_uri']);
+        self::assertSame('openid', $array['scope']);
+        self::assertSame('code', $array['response_type']);
+        self::assertSame('query', $array['response_mode']);
     }
 
     public function testGetClientId(): void
     {
         $authRequest = new AuthRequest('foo', 'bar');
 
-        static::assertSame('foo', $authRequest->getClientId());
+        self::assertSame('foo', $authRequest->getClientId());
     }
 
     public function testGetUiLocales(): void
     {
         $authRequest = new AuthRequest('foo', 'bar');
 
-        static::assertNull($authRequest->getUiLocales());
+        self::assertNull($authRequest->getUiLocales());
 
         $authRequest = new AuthRequest('foo', 'bar', ['ui_locales' => 'it_IT']);
-        static::assertSame('it_IT', $authRequest->getUiLocales());
+        self::assertSame('it_IT', $authRequest->getUiLocales());
     }
 
     public function testGetRequest(): void
     {
         $authRequest = new AuthRequest('foo', 'bar');
 
-        static::assertNull($authRequest->getRequest());
+        self::assertNull($authRequest->getRequest());
 
         $authRequest = new AuthRequest('foo', 'bar', ['request' => 'foo']);
-        static::assertSame('foo', $authRequest->getRequest());
+        self::assertSame('foo', $authRequest->getRequest());
     }
 
     public function testWithParams(): void
@@ -90,145 +90,145 @@ class AuthRequestTest extends TestCase
 
         $authRequest2 = $authRequest->withParams(['request' => 'foo']);
 
-        static::assertNotSame($authRequest2, $authRequest);
-        static::assertNull($authRequest->getRequest());
-        static::assertSame('foo', $authRequest2->getRequest());
+        self::assertNotSame($authRequest2, $authRequest);
+        self::assertNull($authRequest->getRequest());
+        self::assertSame('foo', $authRequest2->getRequest());
     }
 
     public function testGetCodeChallengeMethod(): void
     {
         $authRequest = new AuthRequest('foo', 'bar');
 
-        static::assertNull($authRequest->getCodeChallengeMethod());
+        self::assertNull($authRequest->getCodeChallengeMethod());
 
         $authRequest = new AuthRequest('foo', 'bar', ['code_challenge_method' => 'foo']);
-        static::assertSame('foo', $authRequest->getCodeChallengeMethod());
+        self::assertSame('foo', $authRequest->getCodeChallengeMethod());
     }
 
     public function testGetState(): void
     {
         $authRequest = new AuthRequest('foo', 'bar');
 
-        static::assertNull($authRequest->getState());
+        self::assertNull($authRequest->getState());
 
         $authRequest = new AuthRequest('foo', 'bar', ['state' => 'foo']);
-        static::assertSame('foo', $authRequest->getState());
+        self::assertSame('foo', $authRequest->getState());
     }
 
     public function testGetLoginHint(): void
     {
         $authRequest = new AuthRequest('foo', 'bar');
 
-        static::assertNull($authRequest->getLoginHint());
+        self::assertNull($authRequest->getLoginHint());
 
         $authRequest = new AuthRequest('foo', 'bar', ['login_hint' => 'foo']);
-        static::assertSame('foo', $authRequest->getLoginHint());
+        self::assertSame('foo', $authRequest->getLoginHint());
     }
 
     public function testGetDisplay(): void
     {
         $authRequest = new AuthRequest('foo', 'bar');
 
-        static::assertNull($authRequest->getDisplay());
+        self::assertNull($authRequest->getDisplay());
 
         $authRequest = new AuthRequest('foo', 'bar', ['display' => 'foo']);
-        static::assertSame('foo', $authRequest->getDisplay());
+        self::assertSame('foo', $authRequest->getDisplay());
     }
 
     public function testGetMaxAge(): void
     {
         $authRequest = new AuthRequest('foo', 'bar');
 
-        static::assertNull($authRequest->getMaxAge());
+        self::assertNull($authRequest->getMaxAge());
 
         $authRequest = new AuthRequest('foo', 'bar', ['max_age' => 3]);
-        static::assertSame(3, $authRequest->getMaxAge());
+        self::assertSame(3, $authRequest->getMaxAge());
     }
 
     public function testGetRedirectUri(): void
     {
         $authRequest = new AuthRequest('foo', 'bar');
 
-        static::assertSame('bar', $authRequest->getRedirectUri());
+        self::assertSame('bar', $authRequest->getRedirectUri());
     }
 
     public function testGetNonce(): void
     {
         $authRequest = new AuthRequest('foo', 'bar');
 
-        static::assertNull($authRequest->getNonce());
+        self::assertNull($authRequest->getNonce());
 
         $authRequest = new AuthRequest('foo', 'bar', ['nonce' => 'foo']);
-        static::assertSame('foo', $authRequest->getNonce());
+        self::assertSame('foo', $authRequest->getNonce());
     }
 
     public function testGetCodeChallenge(): void
     {
         $authRequest = new AuthRequest('foo', 'bar');
 
-        static::assertNull($authRequest->getCodeChallenge());
+        self::assertNull($authRequest->getCodeChallenge());
 
         $authRequest = new AuthRequest('foo', 'bar', ['code_challenge' => 'foo']);
-        static::assertSame('foo', $authRequest->getCodeChallenge());
+        self::assertSame('foo', $authRequest->getCodeChallenge());
     }
 
     public function testGetAcrValues(): void
     {
         $authRequest = new AuthRequest('foo', 'bar');
 
-        static::assertNull($authRequest->getAcrValues());
+        self::assertNull($authRequest->getAcrValues());
 
         $authRequest = new AuthRequest('foo', 'bar', ['acr_values' => 'foo']);
-        static::assertSame('foo', $authRequest->getAcrValues());
+        self::assertSame('foo', $authRequest->getAcrValues());
     }
 
     public function testGetScope(): void
     {
         $authRequest = new AuthRequest('foo', 'bar');
 
-        static::assertSame('openid', $authRequest->getScope());
+        self::assertSame('openid', $authRequest->getScope());
 
         $authRequest = new AuthRequest('foo', 'bar', ['scope' => 'foo']);
-        static::assertSame('foo', $authRequest->getScope());
+        self::assertSame('foo', $authRequest->getScope());
     }
 
     public function testGetResponseMode(): void
     {
         $authRequest = new AuthRequest('foo', 'bar');
 
-        static::assertSame('query', $authRequest->getResponseMode());
+        self::assertSame('query', $authRequest->getResponseMode());
 
         $authRequest = new AuthRequest('foo', 'bar', ['response_mode' => 'foo']);
-        static::assertSame('foo', $authRequest->getResponseMode());
+        self::assertSame('foo', $authRequest->getResponseMode());
     }
 
     public function testGetPrompt(): void
     {
         $authRequest = new AuthRequest('foo', 'bar');
 
-        static::assertNull($authRequest->getPrompt());
+        self::assertNull($authRequest->getPrompt());
 
         $authRequest = new AuthRequest('foo', 'bar', ['prompt' => 'foo']);
-        static::assertSame('foo', $authRequest->getPrompt());
+        self::assertSame('foo', $authRequest->getPrompt());
     }
 
     public function testGetIdTokenHint(): void
     {
         $authRequest = new AuthRequest('foo', 'bar');
 
-        static::assertNull($authRequest->getIdTokenHint());
+        self::assertNull($authRequest->getIdTokenHint());
 
         $authRequest = new AuthRequest('foo', 'bar', ['id_token_hint' => 'foo']);
-        static::assertSame('foo', $authRequest->getIdTokenHint());
+        self::assertSame('foo', $authRequest->getIdTokenHint());
     }
 
     public function testGetResponseType(): void
     {
         $authRequest = new AuthRequest('foo', 'bar');
 
-        static::assertSame('code', $authRequest->getResponseType());
+        self::assertSame('code', $authRequest->getResponseType());
 
         $authRequest = new AuthRequest('foo', 'bar', ['response_type' => 'foo']);
-        static::assertSame('foo', $authRequest->getResponseType());
+        self::assertSame('foo', $authRequest->getResponseType());
     }
 }

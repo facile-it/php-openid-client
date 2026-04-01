@@ -13,6 +13,6 @@ class LogicExceptionTest extends TestCase
     public function testException(): void
     {
         $exception = new LogicException();
-        static::assertInstanceOf(ExceptionInterface::class, $exception);
+        self::assertInstanceOf(ExceptionInterface::class, $exception);
     }
 }

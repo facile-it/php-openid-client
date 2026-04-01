@@ -130,7 +130,7 @@ final class MetadataProviderBuilder
             $this->buildWebFingerProvider(),
         ]);
 
-        if (null !== $this->cache) {
+        if ($this->cache instanceof CacheInterface) {
             $provider = new CachedProviderDecorator($provider, $this->cache, $this->cacheTtl);
         }
 

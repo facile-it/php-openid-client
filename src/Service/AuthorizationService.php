@@ -197,7 +197,7 @@ final readonly class AuthorizationService
             'redirect_uri' => $redirectUri,
         ];
 
-        if (null !== $authSession && null !== $authSession->getCodeVerifier()) {
+        if ($authSession instanceof AuthSessionInterface && null !== $authSession->getCodeVerifier()) {
             $params['code_verifier'] = $authSession->getCodeVerifier();
         }
 

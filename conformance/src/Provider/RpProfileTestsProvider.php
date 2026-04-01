@@ -16,7 +16,7 @@ use function array_map;
 class RpProfileTestsProvider
 {
     /** @var array<string, string> */
-    private static $responseTypeMap = [
+    private static array $responseTypeMap = [
         TestInfo::PROFILE_BASIC_CODE => 'code',
         TestInfo::PROFILE_IMPLICIT_IDTOKEN => 'id_token',
         TestInfo::PROFILE_IMPLICIT_IDTOKEN_TOKEN => 'id_token token',
@@ -27,7 +27,7 @@ class RpProfileTestsProvider
         TestInfo::PROFILE_DYNAMIC => 'code',
     ];
 
-    private static $testMap = [
+    private static array $testMap = [
         TestInfo::PROFILE_BASIC_CODE => [
             RpTest\ResponseTypeAndResponseMode\RPResponseTypeCodeTest::class,
             RpTest\ScopeRequestParameter\RpScopeUserinfoClaimsTest::class,
@@ -399,12 +399,12 @@ class RpProfileTestsProvider
 
     public function getAvailableProfiles(): array
     {
-        return array_keys(static::$testMap);
+        return array_keys(self::$testMap);
     }
 
     public function getResponseTypeForProfile(string $profile): string
     {
-        $responseType = static::$responseTypeMap[$profile] ?? null;
+        $responseType = self::$responseTypeMap[$profile] ?? null;
 
         if (null === $responseType) {
             throw new InvalidArgumentException('No response type for profile ' . $profile);
@@ -418,6 +418,6 @@ class RpProfileTestsProvider
      */
     public function getTests(string $profile): array
     {
-        return array_map($this->container->get(...), static::$testMap[$profile] ?? []);
+        return array_map($this->container->get(...), self::$testMap[$profile] ?? []);
     }
 }

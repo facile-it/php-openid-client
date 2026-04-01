@@ -8,6 +8,7 @@ use Facile\OpenIDClient\AlgorithmManagerBuilder;
 use Facile\OpenIDClient\Client\ClientInterface;
 use Facile\OpenIDClient\Exception\RuntimeException;
 use Jose\Component\Core\AlgorithmManager;
+use Jose\Component\Core\JWK;
 use Jose\Component\Core\JWKSet;
 use Jose\Component\Encryption\JWEBuilder;
 use Jose\Component\Encryption\Serializer\CompactSerializer as EncryptionCompactSerializer;
@@ -109,7 +110,7 @@ final readonly class RequestObjectFactory
                 ->selectKey('sig', $this->algorithmManager->get($alg));
         }
 
-        if (null === $jwk) {
+        if (! $jwk instanceof JWK) {
             throw new RuntimeException('No key to sign with alg ' . $alg);
         }
 
@@ -153,7 +154,7 @@ final readonly class RequestObjectFactory
             );
         }
 
-        if (null === $jwk) {
+        if (! $jwk instanceof JWK) {
             throw new RuntimeException('No key to encrypt with alg ' . $alg);
         }
 

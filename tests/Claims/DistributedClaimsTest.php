@@ -49,7 +49,7 @@ class DistributedClaimsTest extends TestCase
 
         $distributed = $service->fetch($client->reveal(), $claims);
 
-        static::assertSame($claims, $distributed);
+        self::assertSame($claims, $distributed);
     }
 
     public function testUnpackAggregatedClaimsWithNoClaimNames(): void
@@ -80,7 +80,7 @@ class DistributedClaimsTest extends TestCase
 
         $distributed = $service->fetch($client->reveal(), $claims);
 
-        static::assertSame($claims, $distributed);
+        self::assertSame($claims, $distributed);
     }
 
     public function testUnpackAggregatedClaims(): void
@@ -141,9 +141,9 @@ class DistributedClaimsTest extends TestCase
 
         $unpacked = $service->fetch($client->reveal(), $claims);
 
-        static::assertSame(30, $unpacked['age'] ?? null);
-        static::assertArrayNotHasKey('_claim_names', $unpacked);
-        static::assertArrayNotHasKey('_claim_sources', $unpacked);
+        self::assertSame(30, $unpacked['age'] ?? null);
+        self::assertArrayNotHasKey('_claim_names', $unpacked);
+        self::assertArrayNotHasKey('_claim_sources', $unpacked);
     }
 
     public function testUnpackAggregatedClaimsWithResourceError(): void
@@ -208,6 +208,6 @@ class DistributedClaimsTest extends TestCase
 
         $unpacked = $service->fetch($client->reveal(), $claims);
 
-        static::assertSame($claims, $unpacked);
+        self::assertSame($claims, $unpacked);
     }
 }

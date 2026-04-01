@@ -75,7 +75,7 @@ class RpTest extends Command
             }
 
             if (count($testIds) > 0) {
-                $tests = array_filter($tests, static function (RpTestInterface $test) use ($testIds) {
+                $tests = array_filter($tests, static function (RpTestInterface $test) use ($testIds): bool {
                     foreach ($testIds as $testId) {
                         if (fnmatch($testId, $test->getTestId())) {
                             return true;
@@ -99,7 +99,7 @@ class RpTest extends Command
 
                 do {
                     $result = $this->testRunner->run($test, $testInfo);
-                } while (null !== $result->getException() && ++$count < $retries);
+                } while ($result->getException() instanceof Throwable && ++$count < $retries);
 
                 $output->writeln("<comment>Test:</comment> <info>{$testName}</info>", OutputInterface::VERBOSITY_NORMAL);
 

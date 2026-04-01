@@ -30,8 +30,6 @@ use function substr;
  */
 final readonly class WebFingerProvider implements RemoteProviderInterface, WebFingerProviderInterface
 {
-    private const OIDC_DISCOVERY = '/.well-known/openid-configuration';
-
     private const WEBFINGER = '/.well-known/webfinger';
 
     private const REL = 'http://openid.net/specs/connect/1.0/issuer';

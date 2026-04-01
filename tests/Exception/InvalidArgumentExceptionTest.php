@@ -13,6 +13,6 @@ class InvalidArgumentExceptionTest extends TestCase
     public function testException(): void
     {
         $exception = new InvalidArgumentException();
-        static::assertInstanceOf(ExceptionInterface::class, $exception);
+        self::assertInstanceOf(ExceptionInterface::class, $exception);
     }
 }

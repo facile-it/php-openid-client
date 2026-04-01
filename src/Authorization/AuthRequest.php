@@ -69,7 +69,7 @@ final class AuthRequest implements AuthRequestInterface
             throw new InvalidArgumentException(implode(', ', $missingKeys) . ' keys not provided');
         }
 
-        return new static(
+        return new self(
             $params['client_id'],
             $params['redirect_uri'],
             $params

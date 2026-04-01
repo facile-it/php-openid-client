@@ -76,7 +76,7 @@ final class AuthSession implements AuthSessionInterface
     #[Override]
     public static function fromArray(array $array): AuthSessionInterface
     {
-        $session = new static();
+        $session = new self();
         $session->setState($array['state'] ?? null);
         $session->setNonce($array['nonce'] ?? null);
         $session->setCodeVerifier($array['code_verifier'] ?? null);

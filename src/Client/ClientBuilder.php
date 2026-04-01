@@ -73,11 +73,11 @@ final class ClientBuilder
 
     private function buildJwksProvider(): JwksProviderInterface
     {
-        if (null !== $this->jwksProvider) {
+        if ($this->jwksProvider instanceof JwksProviderInterface) {
             return $this->jwksProvider;
         }
 
-        if (null === $this->clientMetadata) {
+        if (! $this->clientMetadata instanceof ClientMetadataInterface) {
             return new MemoryJwksProvider(['keys' => []]);
         }
 
@@ -110,11 +110,11 @@ final class ClientBuilder
 
     public function build(): ClientInterface
     {
-        if (null === $this->issuer) {
+        if (! $this->issuer instanceof IssuerInterface) {
             throw new InvalidArgumentException('Issuer must be provided');
         }
 
-        if (null === $this->clientMetadata) {
+        if (! $this->clientMetadata instanceof ClientMetadataInterface) {
             throw new InvalidArgumentException('Client metadata must be provided');
         }
 

@@ -101,7 +101,7 @@ class DiscoveryProviderTest extends TestCase
 
         $this->prepareForDiscovery('https://example.com/.well-known/openid-configuration');
 
-        static::assertSame(['issuer' => 'https://openid-uri'], $provider->discovery($uri));
+        self::assertSame(['issuer' => 'https://openid-uri'], $provider->discovery($uri));
     }
 
     public function testDiscoveryWithBaseUri(): void
@@ -137,7 +137,7 @@ class DiscoveryProviderTest extends TestCase
 
         $this->prepareForDiscovery('https://example.com' . $baseUri . '/.well-known/openid-configuration', $baseUri);
 
-        static::assertSame(['issuer' => 'https://openid-uri' . $baseUri], $provider->discovery($uri));
+        self::assertSame(['issuer' => 'https://openid-uri' . $baseUri], $provider->discovery($uri));
     }
 
     public function testDiscoveryWithWellKnown(): void
@@ -155,6 +155,6 @@ class DiscoveryProviderTest extends TestCase
 
         $this->prepareForDiscovery('https://example.com/.well-known/openid-configuration');
 
-        static::assertSame(['issuer' => 'https://openid-uri'], $provider->discovery($uri));
+        self::assertSame(['issuer' => 'https://openid-uri'], $provider->discovery($uri));
     }
 }

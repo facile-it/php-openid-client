@@ -38,7 +38,7 @@ class PrivateKeyJwtTest extends TestCase
             null,
             60
         );
-        static::assertSame('private_key_jwt', $auth->getSupportedMethod());
+        self::assertSame('private_key_jwt', $auth->getSupportedMethod());
     }
 
     public static function createRequestProvider(): array
@@ -105,25 +105,25 @@ class PrivateKeyJwtTest extends TestCase
         $jws = $this->prophesize(JWS::class);
 
         $jwsBuilder->create()->shouldBeCalled()->willReturn($jwsBuilder2->reveal());
-        $jwsBuilder2->withPayload(Argument::that(function (string $payload) {
+        $jwsBuilder2->withPayload(Argument::that(function (string $payload): true {
             $decoded = json_decode($payload, true);
 
-            static::assertIsArray($decoded);
+            self::assertIsArray($decoded);
 
-            static::assertArrayHasKey('iss', $decoded);
-            static::assertArrayHasKey('sub', $decoded);
-            static::assertArrayHasKey('aud', $decoded);
-            static::assertArrayHasKey('iat', $decoded);
-            static::assertArrayHasKey('exp', $decoded);
-            static::assertArrayHasKey('jti', $decoded);
+            self::assertArrayHasKey('iss', $decoded);
+            self::assertArrayHasKey('sub', $decoded);
+            self::assertArrayHasKey('aud', $decoded);
+            self::assertArrayHasKey('iat', $decoded);
+            self::assertArrayHasKey('exp', $decoded);
+            self::assertArrayHasKey('jti', $decoded);
 
-            static::assertSame('bar', $decoded['foo'] ?? null);
-            static::assertSame('foo', $decoded['iss'] ?? null);
-            static::assertSame('foo', $decoded['sub'] ?? null);
-            static::assertSame('https://issuer.com/token', $decoded['aud'] ?? null);
-            static::assertLessThanOrEqual(time(), $decoded['iat']);
-            static::assertLessThanOrEqual(time() + 60, $decoded['exp']);
-            static::assertGreaterThan(time(), $decoded['exp']);
+            self::assertSame('bar', $decoded['foo'] ?? null);
+            self::assertSame('foo', $decoded['iss'] ?? null);
+            self::assertSame('foo', $decoded['sub'] ?? null);
+            self::assertSame('https://issuer.com/token', $decoded['aud'] ?? null);
+            self::assertLessThanOrEqual(time(), $decoded['iat']);
+            self::assertLessThanOrEqual(time() + 60, $decoded['exp']);
+            self::assertGreaterThan(time(), $decoded['exp']);
 
             return true;
         }))
@@ -165,6 +165,6 @@ class PrivateKeyJwtTest extends TestCase
             ['foo' => 'bar']
         );
 
-        static::assertSame($request->reveal(), $result);
+        self::assertSame($request->reveal(), $result);
     }
 }

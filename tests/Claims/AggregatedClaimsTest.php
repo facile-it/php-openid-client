@@ -50,7 +50,7 @@ class AggregatedClaimsTest extends TestCase
 
         $unpacked = $service->unpack($client->reveal(), $claims);
 
-        static::assertSame($claims, $unpacked);
+        self::assertSame($claims, $unpacked);
     }
 
     public function testUnpackAggregatedClaimsWithNoClaimNames(): void
@@ -76,7 +76,7 @@ class AggregatedClaimsTest extends TestCase
 
         $unpacked = $service->unpack($client->reveal(), $claims);
 
-        static::assertSame($claims, $unpacked);
+        self::assertSame($claims, $unpacked);
     }
 
     public function testUnpackAggregatedClaims(): void
@@ -111,10 +111,10 @@ class AggregatedClaimsTest extends TestCase
 
         $unpacked = $service->unpack($client->reveal(), $claims);
 
-        static::assertSame('blue', $unpacked['eye_color'] ?? null);
-        static::assertSame(8, $unpacked['shoe_size'] ?? null);
-        static::assertArrayNotHasKey('_claim_names', $unpacked);
-        static::assertArrayNotHasKey('_claim_sources', $unpacked);
+        self::assertSame('blue', $unpacked['eye_color'] ?? null);
+        self::assertSame(8, $unpacked['shoe_size'] ?? null);
+        self::assertArrayNotHasKey('_claim_names', $unpacked);
+        self::assertArrayNotHasKey('_claim_sources', $unpacked);
     }
 
     public function testUnpackAggregatedClaimsWithSignedJWT(): void
@@ -140,7 +140,7 @@ class AggregatedClaimsTest extends TestCase
         $issuerBuilder = $this->prophesize(IssuerBuilderInterface::class);
         $issuerJwksProvider = $this->prophesize(JwksProviderInterface::class);
 
-        $algorithmManager = new AlgorithmManager([new RS256()]);
+        new AlgorithmManager([new RS256()]);
 
         $JWSVerifier->verifyWithKey(
             Argument::type(JWS::class),
@@ -179,8 +179,8 @@ class AggregatedClaimsTest extends TestCase
 
         $unpacked = $service->unpack($client->reveal(), $claims);
 
-        static::assertSame('blue', $unpacked['eye_color'] ?? null);
-        static::assertArrayNotHasKey('_claim_names', $unpacked);
-        static::assertArrayNotHasKey('_claim_sources', $unpacked);
+        self::assertSame('blue', $unpacked['eye_color'] ?? null);
+        self::assertArrayNotHasKey('_claim_names', $unpacked);
+        self::assertArrayNotHasKey('_claim_sources', $unpacked);
     }
 }

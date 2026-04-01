@@ -56,7 +56,7 @@ class RpNonceUnlessCodeFlowTest extends AbstractRpTest
         $serverRequest = $this->simulateAuthRedirect($uri);
 
         $params = $authorizationService->getCallbackParams($serverRequest, $client);
-        $tokenSet = $authorizationService->callback($client, $params, null, $authSession);
+        $authorizationService->callback($client, $params, null, $authSession);
 
         Assert::assertTrue(true);
     }

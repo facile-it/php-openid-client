@@ -30,11 +30,11 @@ class OAuth2ExceptionTest extends TestCase
 
         $exception = OAuth2Exception::fromResponse($response->reveal());
 
-        static::assertInstanceOf(ExceptionInterface::class, $exception);
-        static::assertSame('error_code', $exception->getMessage());
-        static::assertSame('error_code', $exception->getError());
-        static::assertNull($exception->getDescription());
-        static::assertNull($exception->getErrorUri());
+        self::assertInstanceOf(ExceptionInterface::class, $exception);
+        self::assertSame('error_code', $exception->getMessage());
+        self::assertSame('error_code', $exception->getError());
+        self::assertNull($exception->getDescription());
+        self::assertNull($exception->getErrorUri());
     }
 
     public function testFromResponseComplete(): void
@@ -50,11 +50,11 @@ class OAuth2ExceptionTest extends TestCase
 
         $exception = OAuth2Exception::fromResponse($response->reveal());
 
-        static::assertInstanceOf(ExceptionInterface::class, $exception);
-        static::assertSame('Error message (error_code)', $exception->getMessage());
-        static::assertSame('error_code', $exception->getError());
-        static::assertSame('Error message', $exception->getDescription());
-        static::assertSame('uri', $exception->getErrorUri());
+        self::assertInstanceOf(ExceptionInterface::class, $exception);
+        self::assertSame('Error message (error_code)', $exception->getMessage());
+        self::assertSame('error_code', $exception->getError());
+        self::assertSame('Error message', $exception->getDescription());
+        self::assertSame('uri', $exception->getErrorUri());
     }
 
     public function testFromResponseNoOAuthError(): void
@@ -81,11 +81,11 @@ class OAuth2ExceptionTest extends TestCase
             'error_uri' => 'uri',
         ]);
 
-        static::assertInstanceOf(ExceptionInterface::class, $exception);
-        static::assertSame('Error message (error_code)', $exception->getMessage());
-        static::assertSame('error_code', $exception->getError());
-        static::assertSame('Error message', $exception->getDescription());
-        static::assertSame('uri', $exception->getErrorUri());
+        self::assertInstanceOf(ExceptionInterface::class, $exception);
+        self::assertSame('Error message (error_code)', $exception->getMessage());
+        self::assertSame('error_code', $exception->getError());
+        self::assertSame('Error message', $exception->getDescription());
+        self::assertSame('uri', $exception->getErrorUri());
     }
 
     public function testFromInvalidParameters(): void
@@ -107,7 +107,7 @@ class OAuth2ExceptionTest extends TestCase
         ];
         $exception = OAuth2Exception::fromParameters($params);
 
-        static::assertInstanceOf(ExceptionInterface::class, $exception);
-        static::assertSame($params, json_decode(json_encode($exception), true));
+        self::assertInstanceOf(ExceptionInterface::class, $exception);
+        self::assertSame($params, json_decode(json_encode($exception), true));
     }
 }

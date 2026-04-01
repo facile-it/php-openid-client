@@ -44,7 +44,7 @@ final class TokenSet implements TokenSetInterface, JsonSerializable
 
         /** @psalm-var TokenSetAttributesType $data */
 
-        return new static($data, $claims);
+        return new self($data, $claims);
     }
 
     #[Override]

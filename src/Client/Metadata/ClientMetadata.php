@@ -69,7 +69,7 @@ final class ClientMetadata implements ClientMetadataInterface
             );
         }
 
-        return new static($claims['client_id'], $claims);
+        return new self($claims['client_id'], $claims);
     }
 
     #[Override]

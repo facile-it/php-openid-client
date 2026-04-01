@@ -28,7 +28,7 @@ class ParseCallbackParamsTest extends TestCase
 
         $params = parse_callback_params($serverRequest->reveal());
 
-        static::assertSame($expected, $params);
+        self::assertSame($expected, $params);
     }
 
     public function testWithGetFragment(): void
@@ -45,7 +45,7 @@ class ParseCallbackParamsTest extends TestCase
 
         $params = parse_callback_params($serverRequest->reveal());
 
-        static::assertSame($expected, $params);
+        self::assertSame($expected, $params);
     }
 
     public function testWithGetQuery(): void
@@ -63,7 +63,7 @@ class ParseCallbackParamsTest extends TestCase
 
         $params = parse_callback_params($serverRequest->reveal());
 
-        static::assertSame($expected, $params);
+        self::assertSame($expected, $params);
     }
 
     public function testWithInvalidMethod(): void

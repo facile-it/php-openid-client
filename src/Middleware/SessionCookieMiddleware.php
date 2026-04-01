@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Facile\OpenIDClient\Middleware;
 
+use Dflydev\FigCookies\Cookie;
 use Dflydev\FigCookies\Cookies;
 use Dflydev\FigCookies\FigResponseCookies;
 use Dflydev\FigCookies\Modifier\SameSite;
@@ -51,7 +52,7 @@ final readonly class SessionCookieMiddleware implements MiddlewareInterface
         $cookies = Cookies::fromRequest($request);
         $sessionCookie = $cookies->get($this->cookieName);
 
-        $sessionId = null !== $sessionCookie ? $sessionCookie->getValue() : null;
+        $sessionId = $sessionCookie instanceof Cookie ? $sessionCookie->getValue() : null;
         /** @var string|null $sessionValue */
         $sessionValue = null !== $sessionId ? $this->cache->get($sessionId) : null;
         /** @var false|AuthSessionType $data */
