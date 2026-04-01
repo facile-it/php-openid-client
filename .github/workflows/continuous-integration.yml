@@ -22,7 +22,7 @@ jobs:
       - name: "Install PHP"
         uses: "shivammathur/setup-php@v2"
         with:
-          php-version: "8.1"
+          php-version: "8.2"
 
       - name: Install dependencies
         uses: ramsey/composer-install@v4
@@ -62,10 +62,10 @@ jobs:
     strategy:
       matrix:
         php-version:
-          - "8.1"
           - "8.2"
           - "8.3"
           - "8.4"
+          - "8.5"
         deps:
           - "highest"
         codestyle:
@@ -74,7 +74,7 @@ jobs:
           - php-version: "8.4"
             deps: "locked"
             codestyle: "true"
-          - php-version: "8.1"
+          - php-version: "8.2"
             deps: "lowest"
             codestyle: "false"
 
