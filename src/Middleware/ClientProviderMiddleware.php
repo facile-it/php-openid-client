@@ -14,14 +14,11 @@ use Override;
 /**
  * @psalm-api
  */
-final class ClientProviderMiddleware implements MiddlewareInterface
+final readonly class ClientProviderMiddleware implements MiddlewareInterface
 {
-    private ClientInterface $client;
-
-    public function __construct(ClientInterface $client)
-    {
-        $this->client = $client;
-    }
+    public function __construct(
+        private ClientInterface $client
+    ) {}
 
     #[Override]
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface

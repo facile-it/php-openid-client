@@ -18,21 +18,14 @@ use Override;
 /**
  * @psalm-api
  */
-final class UserInfoMiddleware implements MiddlewareInterface
+final readonly class UserInfoMiddleware implements MiddlewareInterface
 {
     public const USERINFO_ATTRIBUTE = self::class;
 
-    private UserInfoService $userInfoService;
-
-    private ?ClientInterface $client;
-
     public function __construct(
-        UserInfoService $userInfoService,
-        ?ClientInterface $client = null
-    ) {
-        $this->userInfoService = $userInfoService;
-        $this->client = $client;
-    }
+        private UserInfoService $userInfoService,
+        private ?ClientInterface $client = null
+    ) {}
 
     #[Override]
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface

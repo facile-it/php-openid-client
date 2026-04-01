@@ -25,30 +25,14 @@ class TestInfo
 
     public const PROFILE_DYNAMIC = 'dynamic';
 
-    /** @var string */
-    private $profile;
+    private readonly string $root;
 
-    /** @var string */
-    private $responseType;
-
-    /** @var string */
-    private $rpId;
-
-    /** @var string */
-    private $root;
-
-    /**
-     * TestInfo constructor.
-     */
     public function __construct(
-        string $profile,
-        string $responseType = 'code',
-        string $baseRpId = 'tmv_php-openid-client',
+        private readonly string $profile,
+        private readonly string $responseType = 'code',
+        private readonly string $rpId = 'tmv_php-openid-client',
         string $root = 'https://rp.certification.openid.net:8080/'
     ) {
-        $this->profile = $profile;
-        $this->responseType = $responseType;
-        $this->rpId = $baseRpId;
         $this->root = rtrim($root, '/');
     }
 

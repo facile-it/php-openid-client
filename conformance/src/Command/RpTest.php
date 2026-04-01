@@ -24,24 +24,11 @@ use function str_repeat;
 
 class RpTest extends Command
 {
-    /** @var RpTestRunner */
-    private $testRunner;
-
-    /** @var RpProfileTestsProvider */
-    private $testsProvider;
-
-    /** @var RPLogsHelper */
-    private $logsHelper;
-
     public function __construct(
-        RpTestRunner $testRunner,
-        RpProfileTestsProvider $testsProvider,
-        RPLogsHelper $logsHelper
+        private readonly RpTestRunner $testRunner,
+        private readonly RpProfileTestsProvider $testsProvider,
+        private readonly RPLogsHelper $logsHelper
     ) {
-        $this->testRunner = $testRunner;
-        $this->testsProvider = $testsProvider;
-        $this->logsHelper = $logsHelper;
-
         parent::__construct('test');
     }
 

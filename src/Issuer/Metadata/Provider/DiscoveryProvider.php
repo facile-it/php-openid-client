@@ -20,27 +20,17 @@ use function rtrim;
 /**
  * @psalm-import-type IssuerRemoteMetadataType from TokenVerifierInterface
  */
-final class DiscoveryProvider implements DiscoveryProviderInterface
+final readonly class DiscoveryProvider implements DiscoveryProviderInterface
 {
     private const OIDC_DISCOVERY = '/.well-known/openid-configuration';
 
     private const OAUTH2_DISCOVERY = '/.well-known/oauth-authorization-server';
 
-    private ClientInterface $client;
-
-    private RequestFactoryInterface $requestFactory;
-
-    private UriFactoryInterface $uriFactory;
-
     public function __construct(
-        ClientInterface $client,
-        RequestFactoryInterface $requestFactory,
-        UriFactoryInterface $uriFactory
-    ) {
-        $this->client = $client;
-        $this->requestFactory = $requestFactory;
-        $this->uriFactory = $uriFactory;
-    }
+        private ClientInterface $client,
+        private RequestFactoryInterface $requestFactory,
+        private UriFactoryInterface $uriFactory
+    ) {}
 
     #[Override]
     public function isAllowedUri(string $uri): bool
@@ -75,7 +65,7 @@ final class DiscoveryProvider implements DiscoveryProviderInterface
         foreach ($uris as $wellKnownUri) {
             try {
                 return $this->fetchOpenIdConfiguration((string) $wellKnownUri);
-            } catch (RuntimeException $e) {
+            } catch (RuntimeException) {
             }
         }
 

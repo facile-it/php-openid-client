@@ -26,7 +26,7 @@ final class AggregateParser extends AbstractClaims implements AggregatedParserIn
             return $claims;
         }
 
-        $aggregatedSources = array_filter($claims['_claim_sources'], fn($value): bool => $this->isAggregateSource($value));
+        $aggregatedSources = array_filter($claims['_claim_sources'], $this->isAggregateSource(...));
 
         $claimPayloads = [];
         foreach ($aggregatedSources as $sourceName => $source) {

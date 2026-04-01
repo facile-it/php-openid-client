@@ -15,9 +15,6 @@ use function array_map;
 
 class RpProfileTestsProvider
 {
-    /** @var ContainerInterface */
-    private $container;
-
     /** @var array<string, string> */
     private static $responseTypeMap = [
         TestInfo::PROFILE_BASIC_CODE => 'code',
@@ -396,10 +393,9 @@ class RpProfileTestsProvider
     /**
      * ProfileTestsProvider constructor.
      */
-    public function __construct(ContainerInterface $container)
-    {
-        $this->container = $container;
-    }
+    public function __construct(
+        private readonly ContainerInterface $container
+    ) {}
 
     public function getAvailableProfiles(): array
     {
@@ -422,6 +418,6 @@ class RpProfileTestsProvider
      */
     public function getTests(string $profile): array
     {
-        return array_map([$this->container, 'get'], static::$testMap[$profile] ?? []);
+        return array_map($this->container->get(...), static::$testMap[$profile] ?? []);
     }
 }

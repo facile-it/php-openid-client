@@ -27,9 +27,9 @@ use function Facile\OpenIDClient\check_server_response;
  */
 final class DistributedParser extends AbstractClaims implements DistributedParserInterface
 {
-    private ClientInterface $client;
+    private readonly ClientInterface $client;
 
-    private RequestFactoryInterface $requestFactory;
+    private readonly RequestFactoryInterface $requestFactory;
 
     public function __construct(
         ?IssuerBuilderInterface $issuerBuilder = null,
@@ -56,7 +56,7 @@ final class DistributedParser extends AbstractClaims implements DistributedParse
             return $claims;
         }
 
-        $distributedSources = array_filter($claims['_claim_sources'], fn($value): bool => $this->isDistributedSource($value));
+        $distributedSources = array_filter($claims['_claim_sources'], $this->isDistributedSource(...));
 
         /** @var array<string, ResponseInterface> $responses */
         $responses = [];

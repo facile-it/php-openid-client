@@ -29,7 +29,7 @@ use function substr;
 /**
  * @psalm-import-type IssuerRemoteMetadataType from TokenVerifierInterface
  */
-final class WebFingerProvider implements RemoteProviderInterface, WebFingerProviderInterface
+final readonly class WebFingerProvider implements RemoteProviderInterface, WebFingerProviderInterface
 {
     private const OIDC_DISCOVERY = '/.well-known/openid-configuration';
 
@@ -39,25 +39,12 @@ final class WebFingerProvider implements RemoteProviderInterface, WebFingerProvi
 
     private const AAD_MULTITENANT_DISCOVERY = 'https://login.microsoftonline.com/common/v2.0$' . self::OIDC_DISCOVERY;
 
-    private ClientInterface $client;
-
-    private RequestFactoryInterface $requestFactory;
-
-    private UriFactoryInterface $uriFactory;
-
-    private DiscoveryProviderInterface $discoveryProvider;
-
     public function __construct(
-        ClientInterface $client,
-        RequestFactoryInterface $requestFactory,
-        UriFactoryInterface $uriFactory,
-        DiscoveryProviderInterface $discoveryProvider
-    ) {
-        $this->client = $client;
-        $this->requestFactory = $requestFactory;
-        $this->uriFactory = $uriFactory;
-        $this->discoveryProvider = $discoveryProvider;
-    }
+        private ClientInterface $client,
+        private RequestFactoryInterface $requestFactory,
+        private UriFactoryInterface $uriFactory,
+        private DiscoveryProviderInterface $discoveryProvider
+    ) {}
 
     #[Override]
     public function isAllowedUri(string $uri): bool
@@ -120,7 +107,7 @@ final class WebFingerProvider implements RemoteProviderInterface, WebFingerProvi
             $href = $link['href'];
         }
 
-        if (! is_string($href) || 0 !== strpos($href, 'https://')) {
+        if (! is_string($href) || ! str_starts_with($href, 'https://')) {
             throw new InvalidArgumentException('Invalid issuer location');
         }
 
@@ -137,7 +124,7 @@ final class WebFingerProvider implements RemoteProviderInterface, WebFingerProvi
     private function normalizeWebfinger(string $input): string
     {
         $hasScheme = static function (string $resource): bool {
-            if (false !== strpos($resource, '://')) {
+            if (str_contains($resource, '://')) {
                 return true;
             }
 
@@ -153,7 +140,7 @@ final class WebFingerProvider implements RemoteProviderInterface, WebFingerProvi
         };
 
         $acctSchemeAssumed = static function (string $input): bool {
-            if (false === strpos($input, '@')) {
+            if (! str_contains($input, '@')) {
                 return false;
             }
 

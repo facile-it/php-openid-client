@@ -8,17 +8,12 @@ use Facile\JoseVerifier\JWK\JwksProviderInterface;
 use Facile\OpenIDClient\Issuer\Metadata\IssuerMetadataInterface;
 use Override;
 
-final class Issuer implements IssuerInterface
+final readonly class Issuer implements IssuerInterface
 {
-    private IssuerMetadataInterface $metadata;
-
-    private JwksProviderInterface $jwksProvider;
-
-    public function __construct(IssuerMetadataInterface $metadata, JwksProviderInterface $jwksProvider)
-    {
-        $this->metadata = $metadata;
-        $this->jwksProvider = $jwksProvider;
-    }
+    public function __construct(
+        private IssuerMetadataInterface $metadata,
+        private JwksProviderInterface $jwksProvider
+    ) {}
 
     #[Override]
     public function getMetadata(): IssuerMetadataInterface

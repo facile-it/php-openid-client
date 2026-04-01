@@ -13,23 +13,16 @@ use Throwable;
 
 class RpTestRunner
 {
-    /** @var ImplementationProvider */
-    private $implementationProvider;
-
-    /**
-     * RpTestRunner constructor.
-     */
-    public function __construct(ImplementationProvider $implementationProvider)
-    {
-        $this->implementationProvider = $implementationProvider;
-    }
+    public function __construct(
+        private readonly ImplementationProvider $implementationProvider
+    ) {}
 
     public function run(RpTestInterface $test, TestInfo $testInfo)
     {
         $testResult = new RpTestResult(
             $test,
             $testInfo,
-            $this->implementationProvider->getCallableCode([$test, 'execute'])
+            $this->implementationProvider->getCallableCode($test->execute(...))
         );
 
         try {

@@ -10,28 +10,13 @@ use Throwable;
 
 class RpTestResult
 {
-    /** @var RpTestInterface */
-    private $test;
-
-    /** @var TestInfo */
-    private $testInfo;
-
-    /** @var string */
-    private $implementation;
-
-    /** @var Throwable */
-    private $exception;
-
-    /**
-     * RpTestResult constructor.
-     */
-    public function __construct(RpTestInterface $test, TestInfo $testInfo, string $implementation, ?Throwable $exception = null)
-    {
-        $this->test = $test;
-        $this->testInfo = $testInfo;
-        $this->implementation = $implementation;
-        $this->exception = $exception;
-    }
+    public function __construct(
+        private readonly RpTestInterface $test,
+        private readonly TestInfo $testInfo,
+        private readonly string $implementation,
+        /** @var Throwable */
+        private ?Throwable $exception = null
+    ) {}
 
     public function getTest(): RpTestInterface
     {
