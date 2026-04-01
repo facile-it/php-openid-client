@@ -28,7 +28,6 @@ class AggregatedClaimsTest extends TestCase
 {
     public function testUnpackAggregatedClaimsWithNoClaimSources(): void
     {
-        $algorithmManager = $this->prophesize(AlgorithmManager::class);
         $JWSVerifier = $this->prophesize(JWSVerifier::class);
         $JWSSerializer = $this->prophesize(JWSSerializer::class);
         $client = $this->prophesize(ClientInterface::class);
@@ -36,7 +35,7 @@ class AggregatedClaimsTest extends TestCase
 
         $service = new AggregateParser(
             $issuerBuilder->reveal(),
-            $algorithmManager->reveal(),
+            new AlgorithmManager([]),
             $JWSVerifier->reveal(),
             $JWSSerializer->reveal()
         );
@@ -56,14 +55,13 @@ class AggregatedClaimsTest extends TestCase
 
     public function testUnpackAggregatedClaimsWithNoClaimNames(): void
     {
-        $algorithmManager = $this->prophesize(AlgorithmManager::class);
         $JWSVerifier = $this->prophesize(JWSVerifier::class);
         $issuerBuilder = $this->prophesize(IssuerBuilderInterface::class);
         $client = $this->prophesize(ClientInterface::class);
 
         $service = new AggregateParser(
             $issuerBuilder->reveal(),
-            $algorithmManager->reveal(),
+            new AlgorithmManager([]),
             $JWSVerifier->reveal()
         );
 
@@ -85,7 +83,6 @@ class AggregatedClaimsTest extends TestCase
     {
         $jwt = 'eyJhbGciOiJub25lIn0.eyJleWVfY29sb3IiOiAiYmx1ZSIsICJzaG9lX3NpemUiOiA4fQ.';
 
-        $algorithmManager = $this->prophesize(AlgorithmManager::class);
         $JWSVerifier = $this->prophesize(JWSVerifier::class);
         $issuerBuilder = $this->prophesize(IssuerBuilderInterface::class);
         $client = $this->prophesize(ClientInterface::class);
@@ -95,7 +92,7 @@ class AggregatedClaimsTest extends TestCase
 
         $service = new AggregateParser(
             $issuerBuilder->reveal(),
-            $algorithmManager->reveal(),
+            new AlgorithmManager([]),
             $JWSVerifier->reveal()
         );
 
@@ -136,7 +133,6 @@ class AggregatedClaimsTest extends TestCase
 
         $jwt = $serializer->serialize($jws, 0);
 
-        $algorithmManager = $this->prophesize(AlgorithmManager::class);
         $JWSVerifier = $this->prophesize(JWSVerifier::class);
         $client = $this->prophesize(ClientInterface::class);
         $issuer = $this->prophesize(IssuerInterface::class);
@@ -144,8 +140,7 @@ class AggregatedClaimsTest extends TestCase
         $issuerBuilder = $this->prophesize(IssuerBuilderInterface::class);
         $issuerJwksProvider = $this->prophesize(JwksProviderInterface::class);
 
-        $algorithm = new RS256();
-        $algorithmManager->get('RS256')->willReturn($algorithm);
+        $algorithmManager = new AlgorithmManager([new RS256()]);
 
         $JWSVerifier->verifyWithKey(Argument::type(JWS::class), Argument::that(fn(JWK $key) => $jwkPublic->all() === $key->all()), 0)
             ->willReturn(true);
@@ -162,7 +157,7 @@ class AggregatedClaimsTest extends TestCase
 
         $service = new AggregateParser(
             $issuerBuilder->reveal(),
-            $algorithmManager->reveal(),
+            new AlgorithmManager([new RS256()]),
             $JWSVerifier->reveal()
         );
 
