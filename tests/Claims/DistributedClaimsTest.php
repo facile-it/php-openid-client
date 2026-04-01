@@ -26,7 +26,6 @@ class DistributedClaimsTest extends TestCase
 {
     public function testUnpackAggregatedClaimsWithNoClaimSources(): void
     {
-        $algorithmManager = $this->prophesize(AlgorithmManager::class);
         $JWSVerifier = $this->prophesize(JWSVerifier::class);
         $issuerBuilder = $this->prophesize(IssuerBuilderInterface::class);
         $httpClient = $this->prophesize(HttpClient::class);
@@ -37,7 +36,7 @@ class DistributedClaimsTest extends TestCase
             $issuerBuilder->reveal(),
             $httpClient->reveal(),
             $requestFactory->reveal(),
-            $algorithmManager->reveal(),
+            new AlgorithmManager([]),
             $JWSVerifier->reveal()
         );
 
@@ -55,7 +54,6 @@ class DistributedClaimsTest extends TestCase
 
     public function testUnpackAggregatedClaimsWithNoClaimNames(): void
     {
-        $algorithmManager = $this->prophesize(AlgorithmManager::class);
         $JWSVerifier = $this->prophesize(JWSVerifier::class);
         $issuerBuilder = $this->prophesize(IssuerBuilderInterface::class);
         $httpClient = $this->prophesize(HttpClient::class);
@@ -66,7 +64,7 @@ class DistributedClaimsTest extends TestCase
             $issuerBuilder->reveal(),
             $httpClient->reveal(),
             $requestFactory->reveal(),
-            $algorithmManager->reveal(),
+            new AlgorithmManager([]),
             $JWSVerifier->reveal()
         );
 
@@ -93,7 +91,6 @@ class DistributedClaimsTest extends TestCase
             '.',
         ]);
 
-        $algorithmManager = $this->prophesize(AlgorithmManager::class);
         $JWSVerifier = $this->prophesize(JWSVerifier::class);
         $issuerBuilder = $this->prophesize(IssuerBuilderInterface::class);
         $httpClient = $this->prophesize(HttpClient::class);
@@ -125,7 +122,7 @@ class DistributedClaimsTest extends TestCase
             $issuerBuilder->reveal(),
             $httpClient->reveal(),
             $requestFactory->reveal(),
-            $algorithmManager->reveal(),
+            new AlgorithmManager([]),
             $JWSVerifier->reveal()
         );
 
@@ -160,7 +157,6 @@ class DistributedClaimsTest extends TestCase
             '.',
         ]);
 
-        $algorithmManager = $this->prophesize(AlgorithmManager::class);
         $JWSVerifier = $this->prophesize(JWSVerifier::class);
         $issuerBuilder = $this->prophesize(IssuerBuilderInterface::class);
         $httpClient = $this->prophesize(HttpClient::class);
@@ -193,7 +189,7 @@ class DistributedClaimsTest extends TestCase
             $issuerBuilder->reveal(),
             $httpClient->reveal(),
             $requestFactory->reveal(),
-            $algorithmManager->reveal(),
+            new AlgorithmManager([]),
             $JWSVerifier->reveal()
         );
 
