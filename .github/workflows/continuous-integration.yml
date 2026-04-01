@@ -12,7 +12,7 @@ on:
 
 jobs:
   codestyle:
-    name: "Code Style"
+    name: "Rector + Code Style"
     runs-on: ubuntu-latest
 
     steps:
@@ -26,6 +26,9 @@ jobs:
 
       - name: Install dependencies
         uses: ramsey/composer-install@v4
+
+      - name: "Run Rector"
+        run: "vendor/bin/rector --dry-run"
 
       - name: "Run PHP-CS-Fixer"
         run: "vendor/bin/php-cs-fixer fix --ansi --verbose --dry-run"
