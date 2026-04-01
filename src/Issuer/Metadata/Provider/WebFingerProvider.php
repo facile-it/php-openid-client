@@ -36,8 +36,6 @@ final readonly class WebFingerProvider implements RemoteProviderInterface, WebFi
 
     private const REL = 'http://openid.net/specs/connect/1.0/issuer';
 
-    private const AAD_MULTITENANT_DISCOVERY = 'https://login.microsoftonline.com/common/v2.0$' . self::OIDC_DISCOVERY;
-
     public function __construct(
         private ClientInterface $client,
         private RequestFactoryInterface $requestFactory,
@@ -56,8 +54,8 @@ final readonly class WebFingerProvider implements RemoteProviderInterface, WebFi
     {
         $uri = $this->normalizeWebfinger($uri);
         $parts = explode('@', $uri, 2);
-        $parsedUrl = isset($parts[1]) 
-            ? parse_url('https://' . $parts[1]) 
+        $parsedUrl = isset($parts[1])
+            ? parse_url('https://' . $parts[1])
             : parse_url($uri);
 
         if (! is_array($parsedUrl) || ! array_key_exists('host', $parsedUrl)) {

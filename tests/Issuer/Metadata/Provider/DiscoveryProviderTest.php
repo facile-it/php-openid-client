@@ -18,13 +18,13 @@ use Psr\Http\Message\UriInterface;
 class DiscoveryProviderTest extends TestCase
 {
     /** @var ClientInterface|ObjectProphecy */
-    private $client;
+    private ObjectProphecy $client;
 
     /** @var RequestFactoryInterface|ObjectProphecy */
-    private $requestFactory;
+    private ObjectProphecy $requestFactory;
 
     /** @var UriFactoryInterface|ObjectProphecy */
-    private $uriFactory;
+    private ObjectProphecy $uriFactory;
 
     protected function setUp(): void
     {

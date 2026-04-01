@@ -76,11 +76,8 @@ class IssuerMetadataTest extends TestCase
         static::assertFalse($metadata->has('foo2'));
     }
 
-    /**
-     * @param mixed $value
-     */
     #[DataProvider('getClaimGetterProvider')]
-    public static function testGetters(string $claim, string $methodName, $value): void
+    public static function testGetters(string $claim, string $methodName, string|bool|array $value): void
     {
         $metadata = new IssuerMetadata(
             'foo',

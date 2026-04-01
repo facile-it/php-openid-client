@@ -35,28 +35,25 @@ class RequestObjectFactoryTest extends TestCase
     private $algorithmManager;
 
     /** @var ObjectProphecy|JWSBuilder */
-    private $jwsBuilder;
+    private ObjectProphecy $jwsBuilder;
 
     /** @var ObjectProphecy|JWEBuilder */
-    private $jweBuilder;
+    private ObjectProphecy $jweBuilder;
 
     /** @var ObjectProphecy|JWSSerializer */
-    private $jwsSerializer;
+    private ObjectProphecy $jwsSerializer;
 
     /** @var ObjectProphecy|JWESerializer */
-    private $jweSerializer;
+    private ObjectProphecy $jweSerializer;
 
     /** @var ObjectProphecy|ClientInterface */
-    private $client;
+    private ObjectProphecy $client;
 
     /** @var ObjectProphecy|ClientMetadataInterface */
-    private $clientMetadata;
+    private ObjectProphecy $clientMetadata;
 
     /** @var ObjectProphecy|IssuerInterface */
-    private $issuer;
-
-    /** @var ObjectProphecy|IssuerMetadataInterface */
-    private $issuerMetadata;
+    private ObjectProphecy $issuer;
 
     protected function setUp(): void
     {
@@ -83,7 +80,6 @@ class RequestObjectFactoryTest extends TestCase
         $this->client = $client;
         $this->clientMetadata = $clientMetadata;
         $this->issuer = $issuer;
-        $this->issuerMetadata = $issuerMetadata;
     }
 
     private function getSUT(): RequestObjectFactory

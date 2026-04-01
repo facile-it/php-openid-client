@@ -22,6 +22,7 @@ use Psr\Http\Message\ServerRequestInterface;
 use ReflectionFunction;
 use RuntimeException;
 use Throwable;
+use ReflectionClass;
 
 use function array_merge;
 use function dirname;
@@ -82,7 +83,6 @@ abstract class AbstractRpTestCase extends TestCase
 
     protected function simulateAuthRedirect(string $uri): ServerRequestInterface
     {
-        /** @var HttpClient $client */
         $httpClient = $this->getContainer()->has(HttpClient::class)
             ? $this->getContainer()->get(HttpClient::class)
             : Psr18ClientDiscovery::find();
@@ -153,7 +153,7 @@ abstract class AbstractRpTestCase extends TestCase
             $s = '';
             if ($p->isArray()) {
                 $s .= 'array ';
-            } elseif ($p->getClass()) {
+            } elseif ($p->getClass() instanceof ReflectionClass) {
                 $s .= $p->getClass()->name . ' ';
             }
             if ($p->isPassedByReference()) {

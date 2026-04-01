@@ -60,8 +60,6 @@ final class IssuerMetadata implements IssuerMetadataInterface
      * @param array<string, mixed> $claims
      *
      * @psalm-param IssuerRemoteMetadataType $claims
-     *
-     * @return static
      */
     public static function fromArray(array $claims): self
     {
