@@ -31,8 +31,7 @@ use function json_decode;
 
 class RequestObjectFactoryTest extends TestCase
 {
-    /** @var AlgorithmManager|null */
-    private $algorithmManager;
+    private ?AlgorithmManager $algorithmManager = null;
 
     /** @var ObjectProphecy|JWSBuilder */
     private ObjectProphecy $jwsBuilder;

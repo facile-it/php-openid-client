@@ -16,7 +16,6 @@ use ReflectionFunction;
 
 use function array_map;
 use function array_pop;
-use function array_push;
 use function array_shift;
 use function array_slice;
 use function array_unshift;
@@ -102,12 +101,7 @@ class TestListener implements TestListenerInterface
     /**
      * A test started.
      */
-    public function startTest(Test $test): void
-    {
-        if (! $test instanceof RpTestInterface) {
-            return;
-        }
-    }
+    public function startTest(Test $test): void {}
 
     /**
      * A test ended.
@@ -118,9 +112,9 @@ class TestListener implements TestListenerInterface
             return;
         }
 
-        $testUtil = $this->container->get(RpTestUtil::class);
+        $this->container->get(RpTestUtil::class);
 
-        $implementation = $this->getClosureDump([$test, 'execute']);
+        $this->getClosureDump([$test, 'execute']);
     }
 
     protected function getClosureDump(callable $closure, int $indent = 4): string
@@ -144,7 +138,7 @@ class TestListener implements TestListenerInterface
 
         $lastLine = array_pop($lines) ?: '';
         if (! preg_match('/^ *} *$/', (string) $lastLine)) {
-            array_push($lines, $lastLine);
+            $lines[] = $lastLine;
         }
 
         // remove spaces based on first line

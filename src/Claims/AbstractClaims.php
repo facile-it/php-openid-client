@@ -12,6 +12,7 @@ use Facile\OpenIDClient\Issuer\IssuerBuilder;
 use Facile\OpenIDClient\Issuer\IssuerBuilderInterface;
 use Facile\OpenIDClient\Token\TokenSetInterface;
 use Jose\Component\Core\AlgorithmManager;
+use Jose\Component\Core\JWK;
 use Jose\Component\Core\JWKSet;
 use Jose\Component\Signature\JWSVerifier;
 use Jose\Component\Signature\Serializer\CompactSerializer;
@@ -122,7 +123,7 @@ abstract class AbstractClaims
 
         $jwk = $jwks->selectKey('sig', $this->algorithmManager->get($alg), null !== $kid ? ['kid' => $kid] : []);
 
-        if (null === $jwk) {
+        if (! $jwk instanceof JWK) {
             throw new RuntimeException('Unable to get a key to verify claim source JWT');
         }
 

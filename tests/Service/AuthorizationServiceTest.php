@@ -56,7 +56,7 @@ class AuthorizationServiceTest extends TestCase
         $issuer->getMetadata()->willReturn($issuerMetadata);
         $issuerMetadata->getAuthorizationEndpoint()->willReturn('https://foo-endpoint');
 
-        static::assertSame(
+        self::assertSame(
             'https://foo-endpoint?client_id=clientId&scope=openid&response_type=code&redirect_uri=redirect_uri_1',
             $service->getAuthorizationUri($openIdClient->reveal())
         );
@@ -92,7 +92,7 @@ class AuthorizationServiceTest extends TestCase
         $issuer->getMetadata()->willReturn($issuerMetadata);
         $issuerMetadata->getAuthorizationEndpoint()->willReturn('https://foo-endpoint?param=value');
 
-        static::assertSame(
+        self::assertSame(
             'https://foo-endpoint?param=value&client_id=clientId&scope=openid&response_type=code&redirect_uri=redirect_uri_1',
             $service->getAuthorizationUri($openIdClient->reveal())
         );
@@ -162,7 +162,7 @@ class AuthorizationServiceTest extends TestCase
         $tokenSet = $this->prophesize(TokenSetInterface::class);
         $tokenSetFactory->fromArray(['foo' => 'bar'])->willReturn($tokenSet->reveal());
 
-        static::assertSame($tokenSet->reveal(), $service->grant($openIdClient->reveal(), $claims));
+        self::assertSame($tokenSet->reveal(), $service->grant($openIdClient->reveal(), $claims));
     }
 
     public function testCallbackShouldNotProcessUnknownParams(): void

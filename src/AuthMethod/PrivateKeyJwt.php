@@ -53,7 +53,7 @@ final class PrivateKeyJwt extends AbstractJwtAuth
 
         $jwk = $this->jwk ?? JWKSet::createFromKeyData($client->getJwksProvider()->getJwks())->selectKey('sig');
 
-        if (null === $jwk) {
+        if (! $jwk instanceof JWK) {
             throw new RuntimeException('Unable to get a client signature jwk');
         }
 

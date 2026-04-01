@@ -114,8 +114,6 @@ abstract class AbstractRpTestCase extends TestCase
     {
         echo $this->getClosureDump($callback);
 
-        $testUtil = $this->getContainer()->get(RpTestUtil::class);
-
         try {
             $callback($profile, $testName);
         } catch (Throwable $e) {
