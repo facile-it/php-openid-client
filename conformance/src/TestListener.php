@@ -123,7 +123,7 @@ class TestListener implements TestListenerInterface
         $implementation = $this->getClosureDump([$test, 'execute']);
     }
 
-    protected function getClosureDump(callable $closure, int $indent = 4)
+    protected function getClosureDump(callable $closure, int $indent = 4): string
     {
         if (is_callable($closure)) {
             $closure = Closure::fromCallable($closure);

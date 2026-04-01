@@ -17,7 +17,7 @@ class RpTestRunner
         private readonly ImplementationProvider $implementationProvider
     ) {}
 
-    public function run(RpTestInterface $test, TestInfo $testInfo)
+    public function run(RpTestInterface $test, TestInfo $testInfo): RpTestResult
     {
         $testResult = new RpTestResult(
             $test,
