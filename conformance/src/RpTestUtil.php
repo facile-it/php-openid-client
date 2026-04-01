@@ -29,17 +29,13 @@ class RpTestUtil
     /** @var RequestFactoryInterface */
     private $requestFactory;
 
-    /** @var string */
-    private $logDir;
-
     public function __construct(
         ?ClientInterface $client = null,
         ?RequestFactoryInterface $requestFactory = null,
-        string $logDir = __DIR__ . '/../log'
+        private readonly string $logDir = __DIR__ . '/../log'
     ) {
         $this->client = $client ?? Psr18ClientDiscovery::find();
         $this->requestFactory = $requestFactory ?? Psr17FactoryDiscovery::findRequestFactory();
-        $this->logDir = $logDir;
     }
 
     private function mkdir(string $dirname): void

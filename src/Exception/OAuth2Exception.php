@@ -25,11 +25,9 @@ use function sprintf;
  */
 final class OAuth2Exception extends RuntimeException implements JsonSerializable
 {
-    private string $error;
+    private readonly string $error;
 
-    private ?string $description;
-
-    private ?string $errorUri;
+    private readonly ?string $description;
 
     /**
      * @psalm-param array<string, mixed> $data
@@ -49,7 +47,7 @@ final class OAuth2Exception extends RuntimeException implements JsonSerializable
         try {
             /** @psalm-var false|array{error?: string, error_description?: string, error_uri?: string}  $data */
             $data = json_decode((string) $response->getBody(), true, 512, JSON_THROW_ON_ERROR);
-        } catch (JsonException $e) {
+        } catch (JsonException) {
             throw new RemoteException($response, $response->getReasonPhrase(), $previous);
         }
 
@@ -83,7 +81,7 @@ final class OAuth2Exception extends RuntimeException implements JsonSerializable
     public function __construct(
         string $error,
         ?string $description = null,
-        ?string $errorUri = null,
+        private readonly ?string $errorUri = null,
         int $code = 0,
         ?Throwable $previous = null
     ) {
@@ -95,7 +93,6 @@ final class OAuth2Exception extends RuntimeException implements JsonSerializable
         parent::__construct($message, $code, $previous);
         $this->error = $error;
         $this->description = $description;
-        $this->errorUri = $errorUri;
     }
 
     public function getError(): string

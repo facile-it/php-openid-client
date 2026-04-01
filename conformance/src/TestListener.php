@@ -28,7 +28,6 @@ use function preg_replace;
 use function sprintf;
 use function str_repeat;
 use function strlen;
-use function strpos;
 use function substr;
 
 class TestListener implements TestListenerInterface
@@ -71,7 +70,7 @@ class TestListener implements TestListenerInterface
      */
     public function startTestSuite(TestSuite $suite): void
     {
-        if (0 !== strpos($suite->getName(), 'rp-')) {
+        if (! str_starts_with($suite->getName(), 'rp-')) {
             return;
         }
 
@@ -139,12 +138,12 @@ class TestListener implements TestListenerInterface
 
         $firstLine = array_shift($lines) ?: '';
 
-        if (! preg_match('/^ *{ *$/', $firstLine)) {
+        if (! preg_match('/^ *{ *$/', (string) $firstLine)) {
             array_unshift($lines, $firstLine);
         }
 
         $lastLine = array_pop($lines) ?: '';
-        if (! preg_match('/^ *} *$/', $lastLine)) {
+        if (! preg_match('/^ *} *$/', (string) $lastLine)) {
             array_push($lines, $lastLine);
         }
 

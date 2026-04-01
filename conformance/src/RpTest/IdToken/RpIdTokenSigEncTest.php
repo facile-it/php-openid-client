@@ -66,6 +66,6 @@ class RpIdTokenSigEncTest extends AbstractRpTest
         $tokenSet = $authorizationService->callback($client, $params, null, $authSession);
 
         Assert::assertNotNull($tokenSet->getIdToken());
-        Assert::arrayHasKey('email', $tokenSet->claims());
+        Assert::assertArrayHasKey('email', $tokenSet->claims());
     }
 }

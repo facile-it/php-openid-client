@@ -25,13 +25,12 @@ use function implode;
 use function json_encode;
 use function preg_match;
 use function random_bytes;
-use function strpos;
 use function time;
 
 /**
  * @psalm-api
  */
-final class RequestObjectFactory
+final readonly class RequestObjectFactory
 {
     private AlgorithmManager $algorithmManager;
 
@@ -39,22 +38,16 @@ final class RequestObjectFactory
 
     private JWEBuilder $jweBuilder;
 
-    private JWSSerializer $signatureSerializer;
-
-    private JWESerializer $encryptionSerializer;
-
     public function __construct(
         ?AlgorithmManager $algorithmManager = null,
         ?JWSBuilder $jwsBuilder = null,
         ?JWEBuilder $jweBuilder = null,
-        ?JWSSerializer $signatureSerializer = null,
-        ?JWESerializer $encryptionSerializer = null
+        private JWSSerializer $signatureSerializer = new SignatureCompactSerializer(),
+        private JWESerializer $encryptionSerializer = new EncryptionCompactSerializer()
     ) {
         $this->algorithmManager = $algorithmManager ?? (new AlgorithmManagerBuilder())->build();
         $this->jwsBuilder = $jwsBuilder ?? new JWSBuilder($this->algorithmManager);
         $this->jweBuilder = $jweBuilder ?? new JWEBuilder($this->algorithmManager);
-        $this->signatureSerializer = $signatureSerializer ?? new SignatureCompactSerializer();
-        $this->encryptionSerializer = $encryptionSerializer ?? new EncryptionCompactSerializer();
     }
 
     /**
@@ -109,7 +102,7 @@ final class RequestObjectFactory
             ]);
         }
 
-        if (0 === strpos($alg, 'HS')) {
+        if (str_starts_with($alg, 'HS')) {
             $jwk = jose_secret_key($metadata->getClientSecret() ?? '');
         } else {
             $jwk = JWKSet::createFromKeyData($client->getJwksProvider()->getJwks())

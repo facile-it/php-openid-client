@@ -20,19 +20,12 @@ use function Facile\OpenIDClient\parse_metadata_response;
  *
  * @psalm-api
  */
-final class IntrospectionService
+final readonly class IntrospectionService
 {
-    private ClientInterface $client;
-
-    private RequestFactoryInterface $requestFactory;
-
     public function __construct(
-        ClientInterface $client,
-        RequestFactoryInterface $requestFactory
-    ) {
-        $this->client = $client;
-        $this->requestFactory = $requestFactory;
-    }
+        private ClientInterface $client,
+        private RequestFactoryInterface $requestFactory
+    ) {}
 
     /**
      * @param array<string, mixed> $params

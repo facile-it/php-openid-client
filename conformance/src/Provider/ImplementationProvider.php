@@ -23,16 +23,9 @@ use function strlen;
 
 class ImplementationProvider
 {
-    /** @var int */
-    private $indent;
-
-    /**
-     * ImplementationProvider constructor.
-     */
-    public function __construct(int $indent = 4)
-    {
-        $this->indent = $indent;
-    }
+    public function __construct(
+        private readonly int $indent = 4
+    ) {}
 
     public function getCallableCode(callable $closure)
     {
@@ -49,12 +42,12 @@ class ImplementationProvider
 
         $firstLine = array_shift($lines) ?: '';
 
-        if (! preg_match('/^ *{ *$/', $firstLine)) {
+        if (! preg_match('/^ *{ *$/', (string) $firstLine)) {
             array_unshift($lines, $firstLine);
         }
 
         $lastLine = array_pop($lines) ?: '';
-        if (! preg_match('/^ *} *$/', $lastLine)) {
+        if (! preg_match('/^ *} *$/', (string) $lastLine)) {
             $lines[] = $lastLine;
         }
 

@@ -20,32 +20,13 @@ use Facile\OpenIDClient\Issuer\IssuerInterface;
 use Psr\Http\Client\ClientInterface as HttpClient;
 use Override;
 
-final class Client implements ClientInterface
+final readonly class Client implements ClientInterface
 {
-    private IssuerInterface $issuer;
-
-    private ClientMetadataInterface $metadata;
-
-    private JwksProviderInterface $jwksProvider;
-
-    private AuthMethodFactoryInterface $authMethodFactory;
-
-    private ?HttpClient $httpClient;
-
-    /**
-     * Client constructor.
-     */
     public function __construct(
-        IssuerInterface $issuer,
-        ClientMetadataInterface $metadata,
-        ?JwksProviderInterface $jwksProvider = null,
-        ?AuthMethodFactoryInterface $authMethodFactory = null,
-        ?HttpClient $httpClient = null
-    ) {
-        $this->issuer = $issuer;
-        $this->metadata = $metadata;
-        $this->jwksProvider = $jwksProvider ?? new MemoryJwksProvider();
-        $this->authMethodFactory = $authMethodFactory ?? new AuthMethodFactory([
+        private IssuerInterface $issuer,
+        private ClientMetadataInterface $metadata,
+        private JwksProviderInterface $jwksProvider = new MemoryJwksProvider(),
+        private AuthMethodFactoryInterface $authMethodFactory = new AuthMethodFactory([
             new ClientSecretBasic(),
             new ClientSecretJwt(),
             new ClientSecretPost(),
@@ -53,9 +34,9 @@ final class Client implements ClientInterface
             new PrivateKeyJwt(),
             new TLSClientAuth(),
             new SelfSignedTLSClientAuth(),
-        ]);
-        $this->httpClient = $httpClient;
-    }
+        ]),
+        private ?HttpClient $httpClient = null
+    ) {}
 
     #[Override]
     public function getIssuer(): IssuerInterface

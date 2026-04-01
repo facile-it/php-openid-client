@@ -34,13 +34,9 @@ abstract class AbstractRpTest implements RpTestInterface
 {
     protected const REDIRECT_URI = 'https://rp.test/callback';
 
-    /** @var ContainerInterface */
-    private $container;
-
-    public function __construct(ContainerInterface $container)
-    {
-        $this->container = $container;
-    }
+    public function __construct(
+        private readonly ContainerInterface $container
+    ) {}
 
     public function getContainer(): ContainerInterface
     {

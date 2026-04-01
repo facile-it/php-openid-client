@@ -31,10 +31,6 @@ use function json_encode;
  */
 final class RegistrationService
 {
-    private ClientInterface $client;
-
-    private RequestFactoryInterface $requestFactory;
-
     /** @var string[] */
     private static array $registrationClaims = [
         'registration_access_token',
@@ -44,12 +40,9 @@ final class RegistrationService
     ];
 
     public function __construct(
-        ClientInterface $client,
-        RequestFactoryInterface $requestFactory
-    ) {
-        $this->client = $client;
-        $this->requestFactory = $requestFactory;
-    }
+        private readonly ClientInterface $client,
+        private readonly RequestFactoryInterface $requestFactory
+    ) {}
 
     /**
      * @param array<string, mixed> $metadata

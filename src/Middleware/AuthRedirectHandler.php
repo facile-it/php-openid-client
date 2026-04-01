@@ -23,30 +23,20 @@ use function random_bytes;
 /**
  * @psalm-api
  */
-final class AuthRedirectHandler implements RequestHandlerInterface
+final readonly class AuthRedirectHandler implements RequestHandlerInterface
 {
-    private AuthorizationService $authorizationService;
-
     private ResponseFactoryInterface $responseFactory;
-
-    private ?ClientInterface $client = null;
-
-    /** @psalm-var positive-int */
-    private int $randomBytes;
 
     /**
      * @psalm-param positive-int $randomBytes
      */
     public function __construct(
-        AuthorizationService $authorizationService,
+        private AuthorizationService $authorizationService,
         ?ResponseFactoryInterface $responseFactory = null,
-        ?ClientInterface $client = null,
-        int $randomBytes = 32
+        private ?ClientInterface $client = null,
+        private int $randomBytes = 32
     ) {
-        $this->authorizationService = $authorizationService;
         $this->responseFactory = $responseFactory ?? Psr17FactoryDiscovery::findResponseFactory();
-        $this->client = $client;
-        $this->randomBytes = $randomBytes;
     }
 
     #[Override]

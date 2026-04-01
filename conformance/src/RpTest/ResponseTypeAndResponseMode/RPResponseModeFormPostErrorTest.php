@@ -70,7 +70,7 @@ class RPResponseModeFormPostErrorTest extends AbstractRpTest
             throw new AssertionFailedError('No assertions');
         } catch (OAuth2Exception $e) {
             Assert::assertSame('login_required', $e->getError());
-        } catch (Throwable $e) {
+        } catch (Throwable) {
             throw new AssertionFailedError('No assertions');
         }
     }

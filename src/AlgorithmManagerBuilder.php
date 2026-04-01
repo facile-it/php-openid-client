@@ -10,7 +10,7 @@ use Jose\Component\Encryption\Algorithm\KeyEncryption;
 use Jose\Component\Signature\Algorithm;
 use Throwable;
 
-final class AlgorithmManagerBuilder
+final readonly class AlgorithmManagerBuilder
 {
     /**
      * @var string[]
@@ -36,7 +36,7 @@ final class AlgorithmManagerBuilder
             if (class_exists($algorithmClass)) {
                 try {
                     $algorithms[] = new $algorithmClass();
-                } catch (Throwable $throwable) {
+                } catch (Throwable) {
                     // does nothing
                 }
             }

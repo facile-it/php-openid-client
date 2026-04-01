@@ -10,18 +10,12 @@ use Override;
 
 use function array_filter;
 
-final class RemoteProvider implements RemoteProviderInterface
+final readonly class RemoteProvider implements RemoteProviderInterface
 {
-    /** @var RemoteProviderInterface[] */
-    private array $providers;
-
     /**
      * @param RemoteProviderInterface[] $providers
      */
-    public function __construct(array $providers)
-    {
-        $this->providers = $providers;
-    }
+    public function __construct(private array $providers) {}
 
     #[Override]
     public function isAllowedUri(string $uri): bool

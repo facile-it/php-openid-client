@@ -23,27 +23,18 @@ use function time;
 
 final class PrivateKeyJwt extends AbstractJwtAuth
 {
-    private JWSBuilder $jwsBuilder;
+    private readonly JWSBuilder $jwsBuilder;
 
-    private JWSSerializer $jwsSerializer;
+    private readonly JWSSerializer $jwsSerializer;
 
-    private ?JWK $jwk;
-
-    private int $tokenTTL;
-
-    /**
-     * PrivateKeyJwt constructor.
-     */
     public function __construct(
         ?JWSBuilder $jwsBuilder = null,
         ?JWSSerializer $serializer = null,
-        ?JWK $jwk = null,
-        int $tokenTTL = 60
+        private readonly ?JWK $jwk = null,
+        private readonly int $tokenTTL = 60
     ) {
         $this->jwsBuilder = $jwsBuilder ?? new JWSBuilder((new AlgorithmManagerBuilder())->build());
         $this->jwsSerializer = $serializer ?? new CompactSerializer();
-        $this->jwk = $jwk;
-        $this->tokenTTL = $tokenTTL;
     }
 
     #[Override]
