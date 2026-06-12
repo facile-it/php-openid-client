@@ -15,7 +15,7 @@ final class IntrospectionServiceBuilder extends AbstractServiceBuilder
     {
         return new IntrospectionService(
             $this->getHttpClient(),
-            $this->getRequestFactory()
+            $this->getRequestFactory(),
         );
     }
 }

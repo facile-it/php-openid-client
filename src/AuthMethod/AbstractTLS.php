@@ -17,7 +17,7 @@ abstract class AbstractTLS implements AuthMethodInterface
     public function createRequest(
         RequestInterface $request,
         OpenIDClient $client,
-        array $claims
+        array $claims,
     ): RequestInterface {
         $clientId = $client->getMetadata()->getClientId();
 

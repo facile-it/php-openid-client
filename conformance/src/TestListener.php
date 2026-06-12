@@ -16,19 +16,13 @@ use ReflectionFunction;
 
 use function array_map;
 use function array_pop;
-use function array_push;
 use function array_shift;
-use function array_slice;
 use function array_unshift;
 use function file;
 use function implode;
-use function is_callable;
 use function preg_match;
 use function preg_replace;
-use function sprintf;
 use function str_repeat;
-use function strlen;
-use function strpos;
 use function substr;
 
 class TestListener implements TestListenerInterface
@@ -71,7 +65,7 @@ class TestListener implements TestListenerInterface
      */
     public function startTestSuite(TestSuite $suite): void
     {
-        if (0 !== strpos($suite->getName(), 'rp-')) {
+        if (! str_starts_with($suite->getName(), 'rp-')) {
             return;
         }
 
@@ -103,12 +97,7 @@ class TestListener implements TestListenerInterface
     /**
      * A test started.
      */
-    public function startTest(Test $test): void
-    {
-        if (! $test instanceof RpTestInterface) {
-            return;
-        }
-    }
+    public function startTest(Test $test): void {}
 
     /**
      * A test ended.
@@ -119,43 +108,43 @@ class TestListener implements TestListenerInterface
             return;
         }
 
-        $testUtil = $this->container->get(RpTestUtil::class);
+        $this->container->get(RpTestUtil::class);
 
-        $implementation = $this->getClosureDump([$test, 'execute']);
+        $this->getClosureDump([$test, 'execute']);
     }
 
-    protected function getClosureDump(callable $closure, int $indent = 4)
+    protected function getClosureDump(callable $closure, int $indent = 4): string
     {
-        if (is_callable($closure)) {
+        if (\is_callable($closure)) {
             $closure = Closure::fromCallable($closure);
         }
 
         $r = new ReflectionFunction($closure);
         $lines = file($r->getFileName());
-        $lines = array_slice($lines, $r->getStartLine(), $r->getEndLine() - $r->getStartLine());
+        $lines = \array_slice($lines, $r->getStartLine(), $r->getEndLine() - $r->getStartLine());
         if (preg_match('/^ *{ *$/', $lines[0] ?? '')) {
             unset($lines[0]);
         }
 
         $firstLine = array_shift($lines) ?: '';
 
-        if (! preg_match('/^ *{ *$/', $firstLine)) {
+        if (! preg_match('/^ *{ *$/', (string) $firstLine)) {
             array_unshift($lines, $firstLine);
         }
 
         $lastLine = array_pop($lines) ?: '';
-        if (! preg_match('/^ *} *$/', $lastLine)) {
-            array_push($lines, $lastLine);
+        if (! preg_match('/^ *} *$/', (string) $lastLine)) {
+            $lines[] = $lastLine;
         }
 
         // remove spaces based on first line
         if (preg_match('/^( +)/', $lines[0] ?? '', $matches)) {
-            $toTrim = strlen($matches[1]);
-            $lines = array_map(static fn(string $line) => preg_replace(sprintf('/^ {0,%d}/', $toTrim), '', $line), $lines);
+            $toTrim = \strlen($matches[1]);
+            $lines = array_map(static fn(string $line): ?string => preg_replace(\sprintf('/^ {0,%d}/', $toTrim), '', $line), $lines);
         }
 
-        if ($indent) {
-            $lines = array_map(static fn(string $line) => str_repeat(' ', $indent) . $line, $lines);
+        if ($indent !== 0) {
+            $lines = array_map(static fn(string $line): string => str_repeat(' ', $indent) . $line, $lines);
         }
 
         return implode('', $lines);

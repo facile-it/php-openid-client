@@ -19,7 +19,7 @@ class ClientSecretBasicTest extends TestCase
     public function testGetSupportedMethod(): void
     {
         $auth = new ClientSecretBasic();
-        static::assertSame('client_secret_basic', $auth->getSupportedMethod());
+        self::assertSame('client_secret_basic', $auth->getSupportedMethod());
     }
 
     public function testCreateRequest(): void
@@ -48,10 +48,10 @@ class ClientSecretBasicTest extends TestCase
         $result = $auth->createRequest(
             $request->reveal(),
             $client->reveal(),
-            ['foo' => 'bar']
+            ['foo' => 'bar'],
         );
 
-        static::assertSame($requestWithHeader->reveal(), $result);
+        self::assertSame($requestWithHeader->reveal(), $result);
     }
 
     public function testCreateRequestWithNoClientSecret(): void
@@ -71,7 +71,7 @@ class ClientSecretBasicTest extends TestCase
         $auth->createRequest(
             $request->reveal(),
             $client->reveal(),
-            []
+            [],
         );
     }
 }

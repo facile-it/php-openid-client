@@ -12,6 +12,7 @@ use Facile\OpenIDClient\Issuer\IssuerBuilder;
 use Facile\OpenIDClient\Issuer\IssuerBuilderInterface;
 use Facile\OpenIDClient\Token\TokenSetInterface;
 use Jose\Component\Core\AlgorithmManager;
+use Jose\Component\Core\JWK;
 use Jose\Component\Core\JWKSet;
 use Jose\Component\Signature\JWSVerifier;
 use Jose\Component\Signature\Serializer\CompactSerializer;
@@ -20,12 +21,9 @@ use JsonException;
 
 use function array_diff_key;
 use function array_flip;
-use function array_key_exists;
-use function count;
 use function explode;
 use function Facile\OpenIDClient\base64url_decode;
 use function json_decode;
-use function sprintf;
 
 /**
  * @psalm-import-type TokenSetClaimsType from TokenSetInterface
@@ -47,7 +45,7 @@ abstract class AbstractClaims
         ?IssuerBuilderInterface $issuerBuilder = null,
         ?AlgorithmManager $algorithmManager = null,
         ?JWSVerifier $JWSVerifier = null,
-        ?JWSSerializer $serializer = null
+        ?JWSSerializer $serializer = null,
     ) {
         $this->issuerBuilder = $issuerBuilder ?? new IssuerBuilder();
         $this->algorithmManager = $algorithmManager ?? (new AlgorithmManagerBuilder())->build();
@@ -64,7 +62,7 @@ abstract class AbstractClaims
      */
     protected function isAggregateSource(array $data): bool
     {
-        return array_key_exists('JWT', $data);
+        return \array_key_exists('JWT', $data);
     }
 
     /**
@@ -76,7 +74,7 @@ abstract class AbstractClaims
      */
     protected function isDistributedSource(array $data): bool
     {
-        return array_key_exists('endpoint', $data);
+        return \array_key_exists('endpoint', $data);
     }
 
     /**
@@ -88,9 +86,9 @@ abstract class AbstractClaims
 
         try {
             /** @var null|array<string, mixed> $header */
-            $header = json_decode(base64url_decode(explode('.', $jwt)[0] ?? '{}'), true, 512, JSON_THROW_ON_ERROR);
+            $header = json_decode(base64url_decode(explode('.', $jwt)[0] ?? '{}'), true, 512, \JSON_THROW_ON_ERROR);
             /** @var array<string, mixed> $payload */
-            $payload = json_decode(base64url_decode(explode('.', $jwt)[1] ?? '{}'), true, 512, JSON_THROW_ON_ERROR);
+            $payload = json_decode(base64url_decode(explode('.', $jwt)[1] ?? '{}'), true, 512, \JSON_THROW_ON_ERROR);
         } catch (JsonException $e) {
             throw new InvalidArgumentException('Invalid JWT content', 0, $e);
         }
@@ -122,7 +120,7 @@ abstract class AbstractClaims
 
         $jwk = $jwks->selectKey('sig', $this->algorithmManager->get($alg), null !== $kid ? ['kid' => $kid] : []);
 
-        if (null === $jwk) {
+        if (! $jwk instanceof JWK) {
             throw new RuntimeException('Unable to get a key to verify claim source JWT');
         }
 
@@ -147,12 +145,12 @@ abstract class AbstractClaims
     protected function assignClaims(array $claims, array $sourceNames, array $sources): array
     {
         foreach ($sourceNames as $claim => $inSource) {
-            if (! array_key_exists($inSource, $sources)) {
+            if (! \array_key_exists($inSource, $sources)) {
                 continue;
             }
 
-            if (! array_key_exists($claim, $sources[$inSource])) {
-                throw new RuntimeException(sprintf('Unable to find claim "%s" in source "%s"', $claim, $inSource));
+            if (! \array_key_exists($claim, $sources[$inSource])) {
+                throw new RuntimeException(\sprintf('Unable to find claim "%s" in source "%s"', $claim, $inSource));
             }
 
             /** @psalm-var scalar $value */
@@ -177,12 +175,12 @@ abstract class AbstractClaims
      */
     protected function cleanClaims(array $claims): array
     {
-        if (array_key_exists('_claim_names', $claims) && 0 === count($claims['_claim_names'] ?? [])) {
+        if (\array_key_exists('_claim_names', $claims) && 0 === \count($claims['_claim_names'] ?? [])) {
             /** @var TokenSetClaimsType $claims */
             $claims = array_diff_key($claims, array_flip(['_claim_names']));
         }
 
-        if (array_key_exists('_claim_sources', $claims) && 0 === count($claims['_claim_sources'] ?? [])) {
+        if (\array_key_exists('_claim_sources', $claims) && 0 === \count($claims['_claim_sources'] ?? [])) {
             /** @var TokenSetClaimsType $claims */
             $claims = array_diff_key($claims, array_flip(['_claim_sources']));
         }

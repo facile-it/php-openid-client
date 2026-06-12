@@ -32,7 +32,7 @@ class WebFingerProviderTest extends TestCase
             $client->reveal(),
             $requestFactory->reveal(),
             $uriFactory->reveal(),
-            $discoveryProvider->reveal()
+            $discoveryProvider->reveal(),
         );
 
         $webFingerUrl = $this->prophesize(UriInterface::class);
@@ -85,6 +85,6 @@ class WebFingerProviderTest extends TestCase
             'issuer' => 'https://openid-uri',
         ]);
 
-        static::assertSame(['issuer' => 'https://openid-uri'], $provider->fetch($resource));
+        self::assertSame(['issuer' => 'https://openid-uri'], $provider->fetch($resource));
     }
 }

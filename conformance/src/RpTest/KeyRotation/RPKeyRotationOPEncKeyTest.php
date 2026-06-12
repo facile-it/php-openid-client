@@ -40,7 +40,7 @@ class RPKeyRotationOPEncKeyTest extends AbstractRpTest
         $jwkEncAlg = JWKFactory::createRSAKey(2_048, ['alg' => 'RSA-OAEP', 'use' => 'enc']);
 
         $jwks = new JWKSet([$jwkSig, $jwkEncAlg]);
-        $publicJwks = new JWKSet(array_map(static fn(JWK $jwk) => $jwk->toPublic(), $jwks->all()));
+        $publicJwks = new JWKSet(array_map(static fn(JWK $jwk): JWK => $jwk->toPublic(), $jwks->all()));
 
         $client = $this->registerClient($testInfo, [
             'request_object_signing_alg' => 'RS256',

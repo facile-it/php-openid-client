@@ -24,20 +24,10 @@ use function time;
 
 final class ClientSecretJwt extends AbstractJwtAuth
 {
-    private ?JWSBuilder $jwsBuilder;
-
-    private JWSSerializer $jwsSerializer;
-
-    /**
-     * ClientSecretJwt constructor.
-     */
     public function __construct(
-        ?JWSBuilder $jwsBuilder = null,
-        ?JWSSerializer $jwsSerializer = null
-    ) {
-        $this->jwsBuilder = $jwsBuilder;
-        $this->jwsSerializer = $jwsSerializer ?? new CompactSerializer();
-    }
+        private ?JWSBuilder $jwsBuilder = null,
+        private readonly JWSSerializer $jwsSerializer = new CompactSerializer(),
+    ) {}
 
     #[Override]
     public function getSupportedMethod(): string
@@ -47,7 +37,7 @@ final class ClientSecretJwt extends AbstractJwtAuth
 
     private function getJwsBuilder(): JWSBuilder
     {
-        if (null !== $this->jwsBuilder) {
+        if ($this->jwsBuilder instanceof JWSBuilder) {
             return $this->jwsBuilder;
         }
 
@@ -82,7 +72,7 @@ final class ClientSecretJwt extends AbstractJwtAuth
                 'iat' => $time,
                 'exp' => $time + 60,
                 'jti' => $jti,
-            ], JSON_THROW_ON_ERROR);
+            ], \JSON_THROW_ON_ERROR);
 
         $jws = $this->getJwsBuilder()->create()
             ->withPayload($payload)

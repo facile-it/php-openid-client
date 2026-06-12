@@ -37,7 +37,7 @@ class RpIdTokenSigEncTest extends AbstractRpTest
         $jwkEncAlg = JWKFactory::createRSAKey(2_048, ['alg' => 'RSA1_5', 'use' => 'enc']);
 
         $jwks = new JWKSet([$jwkSig, $jwkEncAlg]);
-        $publicJwks = new JWKSet(array_map(fn(JWK $jwk) => $jwk->toPublic(), $jwks->all()));
+        $publicJwks = new JWKSet(array_map(fn(JWK $jwk): JWK => $jwk->toPublic(), $jwks->all()));
 
         $client = $this->registerClient($testInfo, [
             'id_token_signed_response_alg' => 'RS256',
@@ -66,6 +66,6 @@ class RpIdTokenSigEncTest extends AbstractRpTest
         $tokenSet = $authorizationService->callback($client, $params, null, $authSession);
 
         Assert::assertNotNull($tokenSet->getIdToken());
-        Assert::arrayHasKey('email', $tokenSet->claims());
+        Assert::assertArrayHasKey('email', $tokenSet->claims());
     }
 }

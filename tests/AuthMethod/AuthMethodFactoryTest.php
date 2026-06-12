@@ -24,9 +24,9 @@ class AuthMethodFactoryTest extends TestCase
             $authMethod2->reveal(),
         ]);
 
-        static::assertCount(2, $factory->all());
-        static::assertSame($authMethod1->reveal(), $factory->create('foo'));
-        static::assertSame($authMethod2->reveal(), $factory->create('bar'));
+        self::assertCount(2, $factory->all());
+        self::assertSame($authMethod1->reveal(), $factory->create('foo'));
+        self::assertSame($authMethod2->reveal(), $factory->create('bar'));
     }
 
     public function testCreateWithUnknownAuthMethod(): void

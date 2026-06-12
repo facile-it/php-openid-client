@@ -22,9 +22,9 @@ use Psr\Http\Message\ServerRequestInterface;
 use ReflectionFunction;
 use RuntimeException;
 use Throwable;
+use ReflectionClass;
 
 use function array_merge;
-use function dirname;
 use function file;
 use function file_exists;
 use function file_put_contents;
@@ -33,7 +33,6 @@ use function is_dir;
 use function ltrim;
 use function mkdir;
 use function parse_str;
-use function sprintf;
 use function var_export;
 
 use const PHP_EOL;
@@ -82,7 +81,6 @@ abstract class AbstractRpTestCase extends TestCase
 
     protected function simulateAuthRedirect(string $uri): ServerRequestInterface
     {
-        /** @var HttpClient $client */
         $httpClient = $this->getContainer()->has(HttpClient::class)
             ? $this->getContainer()->get(HttpClient::class)
             : Psr18ClientDiscovery::find();
@@ -113,8 +111,6 @@ abstract class AbstractRpTestCase extends TestCase
     protected function executeRpTest(string $profile, string $testName, callable $callback): void
     {
         echo $this->getClosureDump($callback);
-
-        $testUtil = $this->getContainer()->get(RpTestUtil::class);
 
         try {
             $callback($profile, $testName);
@@ -153,7 +149,7 @@ abstract class AbstractRpTestCase extends TestCase
             $s = '';
             if ($p->isArray()) {
                 $s .= 'array ';
-            } elseif ($p->getClass()) {
+            } elseif ($p->getClass() instanceof ReflectionClass) {
                 $s .= $p->getClass()->name . ' ';
             }
             if ($p->isPassedByReference()) {
@@ -190,10 +186,10 @@ abstract class AbstractRpTestCase extends TestCase
         $log = (string) $response->getBody();
 
         $logFilePath = __DIR__ . '/../log/' . ltrim($profile, '@') . '/' . $testName . '.txt';
-        $dirname = dirname($logFilePath);
+        $dirname = \dirname($logFilePath);
 
         if (! file_exists($dirname) && ! mkdir($concurrentDirectory = $dirname, 0o777, true) && ! is_dir($concurrentDirectory)) {
-            throw new RuntimeException(sprintf('Directory "%s" was not created', $concurrentDirectory));
+            throw new RuntimeException(\sprintf('Directory "%s" was not created', $concurrentDirectory));
         }
 
         file_put_contents($logFilePath, $log);

@@ -19,10 +19,10 @@ class RemoteExceptionTest extends TestCase
 
         $exception = new RemoteException($response->reveal());
 
-        static::assertInstanceOf(ExceptionInterface::class, $exception);
-        static::assertSame('Error message', $exception->getMessage());
-        static::assertSame(400, $exception->getCode());
-        static::assertSame($response->reveal(), $exception->getResponse());
+        self::assertInstanceOf(ExceptionInterface::class, $exception);
+        self::assertSame('Error message', $exception->getMessage());
+        self::assertSame(400, $exception->getCode());
+        self::assertSame($response->reveal(), $exception->getResponse());
     }
 
     public function testExceptionWithCustomMessage(): void
@@ -33,9 +33,9 @@ class RemoteExceptionTest extends TestCase
 
         $exception = new RemoteException($response->reveal(), 'foo');
 
-        static::assertInstanceOf(ExceptionInterface::class, $exception);
-        static::assertSame('foo', $exception->getMessage());
-        static::assertSame(400, $exception->getCode());
-        static::assertSame($response->reveal(), $exception->getResponse());
+        self::assertInstanceOf(ExceptionInterface::class, $exception);
+        self::assertSame('foo', $exception->getMessage());
+        self::assertSame(400, $exception->getCode());
+        self::assertSame($response->reveal(), $exception->getResponse());
     }
 }

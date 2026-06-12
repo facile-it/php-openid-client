@@ -12,7 +12,6 @@ use function array_diff_key;
 use function array_flip;
 use function array_keys;
 use function array_merge;
-use function count;
 use function implode;
 
 /**
@@ -39,7 +38,7 @@ final class AuthRequest implements AuthRequestInterface
     public function __construct(
         string $clientId,
         string $redirectUri,
-        array $params = []
+        array $params = [],
     ) {
         $defaults = [
             'scope' => 'openid',
@@ -61,20 +60,18 @@ final class AuthRequest implements AuthRequestInterface
      * @param array<string, mixed> $params
      *
      * @psalm-param array{client_id: string, redirect_uri: string} $params
-     *
-     * @return static
      */
     public static function fromParams(array $params): self
     {
         $missingKeys = array_diff(self::$requiredKeys, array_keys($params));
-        if (0 !== count($missingKeys)) {
+        if (0 !== \count($missingKeys)) {
             throw new InvalidArgumentException(implode(', ', $missingKeys) . ' keys not provided');
         }
 
-        return new static(
+        return new self(
             $params['client_id'],
             $params['redirect_uri'],
-            $params
+            $params,
         );
     }
 
@@ -256,7 +253,7 @@ final class AuthRequest implements AuthRequestInterface
 
         $instance->params = $params;
 
-        if (0 === count(array_diff_key($instance->params, array_flip(self::$requiredKeys)))) {
+        if (0 === \count(array_diff_key($instance->params, array_flip(self::$requiredKeys)))) {
             throw new InvalidArgumentException(implode(', ', self::$requiredKeys) . ' should be provided');
         }
 

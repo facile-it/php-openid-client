@@ -52,7 +52,7 @@ class RpScopeUserinfoClaimsTest extends AbstractRpTest
         if ($accessToken) {
             $userInfo = $userInfoService->getUserInfo($client, $tokenSet);
         } else {
-            $userInfo = json_decode(base64url_decode(explode('.', $tokenSet->getIdToken())[1]), true);
+            $userInfo = json_decode(base64url_decode(explode('.', (string) $tokenSet->getIdToken())[1]), true);
         }
 
         Assert::assertArrayHasKey('email', $userInfo);

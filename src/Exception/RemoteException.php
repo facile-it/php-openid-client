@@ -12,14 +12,14 @@ use Throwable;
  */
 final class RemoteException extends RuntimeException
 {
-    private ResponseInterface $response;
+    private readonly ResponseInterface $response;
 
     public function __construct(ResponseInterface $response, ?string $message = null, ?Throwable $previous = null)
     {
         parent::__construct(
             $message ?? $response->getReasonPhrase(),
             $response->getStatusCode(),
-            $previous
+            $previous,
         );
         $this->response = $response;
     }

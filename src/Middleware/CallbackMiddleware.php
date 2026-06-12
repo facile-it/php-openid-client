@@ -20,25 +20,12 @@ use Override;
  */
 class CallbackMiddleware implements MiddlewareInterface
 {
-    private AuthorizationService $authorizationService;
-
-    private ?string $redirectUri;
-
-    private ?ClientInterface $client;
-
-    private ?int $maxAge;
-
     public function __construct(
-        AuthorizationService $authorizationService,
-        ?ClientInterface $client = null,
-        ?string $redirectUri = null,
-        ?int $maxAge = null
-    ) {
-        $this->authorizationService = $authorizationService;
-        $this->client = $client;
-        $this->redirectUri = $redirectUri;
-        $this->maxAge = $maxAge;
-    }
+        private readonly AuthorizationService $authorizationService,
+        private readonly ?ClientInterface $client = null,
+        private readonly ?string $redirectUri = null,
+        private readonly ?int $maxAge = null,
+    ) {}
 
     #[Override]
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
@@ -60,7 +47,7 @@ class CallbackMiddleware implements MiddlewareInterface
             $params,
             $this->redirectUri,
             $authSession,
-            $this->maxAge
+            $this->maxAge,
         );
 
         return $handler->handle($request->withAttribute(TokenSetInterface::class, $tokenSet));

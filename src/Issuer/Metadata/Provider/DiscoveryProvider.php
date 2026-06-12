@@ -12,7 +12,6 @@ use Psr\Http\Message\RequestFactoryInterface;
 use Psr\Http\Message\UriFactoryInterface;
 use Override;
 
-use function array_key_exists;
 use function Facile\OpenIDClient\parse_metadata_response;
 use function preg_match;
 use function rtrim;
@@ -20,27 +19,17 @@ use function rtrim;
 /**
  * @psalm-import-type IssuerRemoteMetadataType from TokenVerifierInterface
  */
-final class DiscoveryProvider implements DiscoveryProviderInterface
+final readonly class DiscoveryProvider implements DiscoveryProviderInterface
 {
     private const OIDC_DISCOVERY = '/.well-known/openid-configuration';
 
     private const OAUTH2_DISCOVERY = '/.well-known/oauth-authorization-server';
 
-    private ClientInterface $client;
-
-    private RequestFactoryInterface $requestFactory;
-
-    private UriFactoryInterface $uriFactory;
-
     public function __construct(
-        ClientInterface $client,
-        RequestFactoryInterface $requestFactory,
-        UriFactoryInterface $uriFactory
-    ) {
-        $this->client = $client;
-        $this->requestFactory = $requestFactory;
-        $this->uriFactory = $uriFactory;
-    }
+        private ClientInterface $client,
+        private RequestFactoryInterface $requestFactory,
+        private UriFactoryInterface $uriFactory,
+    ) {}
 
     #[Override]
     public function isAllowedUri(string $uri): bool
@@ -75,7 +64,7 @@ final class DiscoveryProvider implements DiscoveryProviderInterface
         foreach ($uris as $wellKnownUri) {
             try {
                 return $this->fetchOpenIdConfiguration((string) $wellKnownUri);
-            } catch (RuntimeException $e) {
+            } catch (RuntimeException) {
             }
         }
 
@@ -99,7 +88,7 @@ final class DiscoveryProvider implements DiscoveryProviderInterface
             throw new RuntimeException('Unable to fetch provider metadata', 0, $e);
         }
 
-        if (! array_key_exists('issuer', $data)) {
+        if (! \array_key_exists('issuer', $data)) {
             throw new RuntimeException('Invalid metadata content, no "issuer" key found');
         }
 

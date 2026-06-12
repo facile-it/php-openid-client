@@ -17,28 +17,17 @@ use Psr\Http\Message\RequestFactoryInterface;
 
 use function http_build_query;
 use function json_decode;
-use function sprintf;
 
 /**
  * @psalm-import-type TokenSetClaimsType from TokenSetInterface
  */
-final class UserInfoService
+final readonly class UserInfoService
 {
-    private ClientInterface $client;
-
-    private RequestFactoryInterface $requestFactory;
-
-    private TokenVerifierBuilderInterface $userInfoVerifierBuilder;
-
     public function __construct(
-        TokenVerifierBuilderInterface $userInfoVerifierBuilder,
-        ClientInterface $client,
-        RequestFactoryInterface $requestFactory
-    ) {
-        $this->userInfoVerifierBuilder = $userInfoVerifierBuilder;
-        $this->client = $client;
-        $this->requestFactory = $requestFactory;
-    }
+        private TokenVerifierBuilderInterface $userInfoVerifierBuilder,
+        private ClientInterface $client,
+        private RequestFactoryInterface $requestFactory,
+    ) {}
 
     /**
      * @return array<string, mixed>
@@ -100,7 +89,7 @@ final class UserInfoService
         } else {
             try {
                 /** @var TokenSetClaimsType $payload */
-                $payload = json_decode((string) $response->getBody(), true, 512, JSON_THROW_ON_ERROR);
+                $payload = json_decode((string) $response->getBody(), true, 512, \JSON_THROW_ON_ERROR);
             } catch (JsonException $e) {
                 throw new RuntimeException('Unable to parse userinfo claims', 0, $e);
             }
@@ -121,7 +110,7 @@ final class UserInfoService
 
         if ($expectedSub !== ($payload['sub'] ?? null)) {
             throw new RuntimeException(
-                sprintf('Userinfo sub mismatch, expected %s, got: %s', $expectedSub, $payload['sub'] ?? '')
+                \sprintf('Userinfo sub mismatch, expected %s, got: %s', $expectedSub, $payload['sub'] ?? ''),
             );
         }
 

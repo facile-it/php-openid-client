@@ -18,13 +18,13 @@ use Psr\Http\Message\UriInterface;
 class DiscoveryProviderTest extends TestCase
 {
     /** @var ClientInterface|ObjectProphecy */
-    private $client;
+    private ObjectProphecy $client;
 
     /** @var RequestFactoryInterface|ObjectProphecy */
-    private $requestFactory;
+    private ObjectProphecy $requestFactory;
 
     /** @var UriFactoryInterface|ObjectProphecy */
-    private $uriFactory;
+    private ObjectProphecy $uriFactory;
 
     protected function setUp(): void
     {
@@ -79,7 +79,7 @@ class DiscoveryProviderTest extends TestCase
         $provider = new DiscoveryProvider(
             $client->reveal(),
             $requestFactory->reveal(),
-            $uriFactory->reveal()
+            $uriFactory->reveal(),
         );
 
         $uri2 = $this->prophesize(UriInterface::class);
@@ -101,7 +101,7 @@ class DiscoveryProviderTest extends TestCase
 
         $this->prepareForDiscovery('https://example.com/.well-known/openid-configuration');
 
-        static::assertSame(['issuer' => 'https://openid-uri'], $provider->discovery($uri));
+        self::assertSame(['issuer' => 'https://openid-uri'], $provider->discovery($uri));
     }
 
     public function testDiscoveryWithBaseUri(): void
@@ -115,7 +115,7 @@ class DiscoveryProviderTest extends TestCase
         $provider = new DiscoveryProvider(
             $client->reveal(),
             $requestFactory->reveal(),
-            $uriFactory->reveal()
+            $uriFactory->reveal(),
         );
 
         $uri2 = $this->prophesize(UriInterface::class);
@@ -137,7 +137,7 @@ class DiscoveryProviderTest extends TestCase
 
         $this->prepareForDiscovery('https://example.com' . $baseUri . '/.well-known/openid-configuration', $baseUri);
 
-        static::assertSame(['issuer' => 'https://openid-uri' . $baseUri], $provider->discovery($uri));
+        self::assertSame(['issuer' => 'https://openid-uri' . $baseUri], $provider->discovery($uri));
     }
 
     public function testDiscoveryWithWellKnown(): void
@@ -150,11 +150,11 @@ class DiscoveryProviderTest extends TestCase
         $provider = new DiscoveryProvider(
             $client->reveal(),
             $requestFactory->reveal(),
-            $uriFactory->reveal()
+            $uriFactory->reveal(),
         );
 
         $this->prepareForDiscovery('https://example.com/.well-known/openid-configuration');
 
-        static::assertSame(['issuer' => 'https://openid-uri'], $provider->discovery($uri));
+        self::assertSame(['issuer' => 'https://openid-uri'], $provider->discovery($uri));
     }
 }

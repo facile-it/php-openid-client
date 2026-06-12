@@ -42,7 +42,7 @@ class RemoteProviderTest extends TestCase
         $provider1->isAllowedUri($uri)->willReturn(true);
         $provider2->isAllowedUri($uri)->willReturn(true);
 
-        $provider1->fetch($uri)->shouldBeCalled()->willThrow(new RuntimeException('Error'));
+        $provider1->fetch($uri)->shouldBeCalled()->willThrow(new RuntimeException(\Error::class));
         $provider2->fetch($uri)->shouldBeCalled()->willReturn([
             'foo1' => 'bar1',
         ]);

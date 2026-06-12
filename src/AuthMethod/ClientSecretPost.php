@@ -24,7 +24,7 @@ final class ClientSecretPost implements AuthMethodInterface
     public function createRequest(
         RequestInterface $request,
         OpenIDClient $client,
-        array $claims
+        array $claims,
     ): RequestInterface {
         $clientSecret = $client->getMetadata()->getClientSecret();
 

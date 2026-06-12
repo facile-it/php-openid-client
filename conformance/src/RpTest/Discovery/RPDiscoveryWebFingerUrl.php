@@ -9,8 +9,6 @@ use Facile\OpenIDClient\ConformanceTest\TestInfo;
 use Facile\OpenIDClient\Issuer\IssuerBuilder;
 use PHPUnit\Framework\Assert;
 
-use function sprintf;
-
 /**
  * Use WebFinger (RFC7033) and OpenID Provider Issuer Discovery to determine the location of the OpenID Provider.
  * The discovery should be done using URL syntax as user input identifier.
@@ -31,7 +29,7 @@ class RPDiscoveryWebFingerUrl extends AbstractRpTest
         $issuer = (new IssuerBuilder())
             ->build($input);
 
-        $expected = sprintf('%s/%s/%s', $testInfo->getRoot(), $testInfo->getRpId(), $this->getTestId());
+        $expected = \sprintf('%s/%s/%s', $testInfo->getRoot(), $testInfo->getRpId(), $this->getTestId());
         Assert::assertSame($expected, $issuer->getMetadata()->getIssuer());
     }
 }

@@ -20,14 +20,11 @@ use Psr\Http\Message\RequestFactoryInterface;
 use Psr\Http\Message\ServerRequestInterface;
 
 use function array_filter;
-use function array_key_exists;
 use function array_merge;
 use function Facile\OpenIDClient\get_endpoint_uri;
 use function Facile\OpenIDClient\parse_callback_params;
 use function Facile\OpenIDClient\parse_metadata_response;
 use function http_build_query;
-use function is_array;
-use function is_string;
 use function json_encode;
 
 /**
@@ -56,31 +53,15 @@ use function json_encode;
  * }
  * @psalm-type CallbackParamsType = array<string, mixed>
  */
-final class AuthorizationService
+final readonly class AuthorizationService
 {
-    private TokenSetFactoryInterface $tokenSetFactory;
-
-    private ClientInterface $client;
-
-    private RequestFactoryInterface $requestFactory;
-
-    private IdTokenVerifierBuilderInterface $idTokenVerifierBuilder;
-
-    private TokenVerifierBuilderInterface $responseVerifierBuilder;
-
     public function __construct(
-        TokenSetFactoryInterface $tokenSetFactory,
-        ClientInterface $client,
-        RequestFactoryInterface $requestFactory,
-        IdTokenVerifierBuilderInterface $idTokenVerifierBuilder,
-        TokenVerifierBuilderInterface $responseVerifierBuilder
-    ) {
-        $this->tokenSetFactory = $tokenSetFactory;
-        $this->client = $client;
-        $this->requestFactory = $requestFactory;
-        $this->idTokenVerifierBuilder = $idTokenVerifierBuilder;
-        $this->responseVerifierBuilder = $responseVerifierBuilder;
-    }
+        private TokenSetFactoryInterface $tokenSetFactory,
+        private ClientInterface $client,
+        private RequestFactoryInterface $requestFactory,
+        private IdTokenVerifierBuilderInterface $idTokenVerifierBuilder,
+        private TokenVerifierBuilderInterface $responseVerifierBuilder,
+    ) {}
 
     /**
      * @param array<string, mixed> $params
@@ -108,14 +89,14 @@ final class AuthorizationService
         foreach ($params as $key => $value) {
             if (null === $value) {
                 unset($params[$key]);
-            } elseif ('claims' === $key && (is_array($value) || $value instanceof JsonSerializable)) {
-                $params['claims'] = json_encode($value, JSON_THROW_ON_ERROR);
-            } elseif (! is_string($value)) {
+            } elseif ('claims' === $key && (\is_array($value) || $value instanceof JsonSerializable)) {
+                $params['claims'] = json_encode($value, \JSON_THROW_ON_ERROR);
+            } elseif (! \is_string($value)) {
                 $params[$key] = (string) $value;
             }
         }
 
-        if (! array_key_exists('nonce', $params) && 'code' !== ($params['response_type'] ?? '')) {
+        if (! \array_key_exists('nonce', $params) && 'code' !== ($params['response_type'] ?? '')) {
             throw new InvalidArgumentException('nonce MUST be provided for implicit and hybrid flows');
         }
 
@@ -151,13 +132,13 @@ final class AuthorizationService
         array $params,
         ?string $redirectUri = null,
         ?AuthSessionInterface $authSession = null,
-        ?int $maxAge = null
+        ?int $maxAge = null,
     ): TokenSetInterface {
         $allowedParams = ['code', 'state', 'token_type', 'access_token', 'id_token', 'refresh_token', 'expires_in', 'code_verifier'];
         /** @psalm-var AuthorizationResponseType $safeParams */
         $safeParams = array_intersect_key(
             $params,
-            array_fill_keys($allowedParams, true)
+            array_fill_keys($allowedParams, true),
         );
         $tokenSet = $this->tokenSetFactory->fromArray($safeParams);
 
@@ -191,7 +172,7 @@ final class AuthorizationService
         TokenSetInterface $tokenSet,
         ?string $redirectUri = null,
         ?AuthSessionInterface $authSession = null,
-        ?int $maxAge = null
+        ?int $maxAge = null,
     ): TokenSetInterface {
         $code = $tokenSet->getCode();
 
@@ -213,7 +194,7 @@ final class AuthorizationService
             'redirect_uri' => $redirectUri,
         ];
 
-        if (null !== $authSession && null !== $authSession->getCodeVerifier()) {
+        if ($authSession instanceof AuthSessionInterface && null !== $authSession->getCodeVerifier()) {
             $params['code_verifier'] = $authSession->getCodeVerifier();
         }
 
@@ -303,7 +284,7 @@ final class AuthorizationService
      */
     private function isAuthorizationResponseObject(array $params): bool
     {
-        return array_key_exists('response', $params);
+        return \array_key_exists('response', $params);
     }
 
     /**

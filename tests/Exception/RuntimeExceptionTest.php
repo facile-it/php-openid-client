@@ -13,6 +13,6 @@ class RuntimeExceptionTest extends TestCase
     public function testException(): void
     {
         $exception = new RuntimeException();
-        static::assertInstanceOf(ExceptionInterface::class, $exception);
+        self::assertInstanceOf(ExceptionInterface::class, $exception);
     }
 }

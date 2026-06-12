@@ -15,33 +15,19 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
+use Throwable;
 
 use function array_filter;
-use function count;
 use function fnmatch;
-use function sprintf;
 use function str_repeat;
 
 class RpTest extends Command
 {
-    /** @var RpTestRunner */
-    private $testRunner;
-
-    /** @var RpProfileTestsProvider */
-    private $testsProvider;
-
-    /** @var RPLogsHelper */
-    private $logsHelper;
-
     public function __construct(
-        RpTestRunner $testRunner,
-        RpProfileTestsProvider $testsProvider,
-        RPLogsHelper $logsHelper
+        private readonly RpTestRunner $testRunner,
+        private readonly RpProfileTestsProvider $testsProvider,
+        private readonly RPLogsHelper $logsHelper,
     ) {
-        $this->testRunner = $testRunner;
-        $this->testsProvider = $testsProvider;
-        $this->logsHelper = $logsHelper;
-
         parent::__construct('test');
     }
 
@@ -86,8 +72,8 @@ class RpTest extends Command
                 $this->logsHelper->clearLogs($testInfo->getRoot(), $testInfo->getRpId());
             }
 
-            if (count($testIds)) {
-                $tests = array_filter($tests, static function (RpTestInterface $test) use ($testIds) {
+            if (\count($testIds) > 0) {
+                $tests = array_filter($tests, static function (RpTestInterface $test) use ($testIds): bool {
                     foreach ($testIds as $testId) {
                         if (fnmatch($testId, $test->getTestId())) {
                             return true;
@@ -111,7 +97,7 @@ class RpTest extends Command
 
                 do {
                     $result = $this->testRunner->run($test, $testInfo);
-                } while (null !== $result->getException() && ++$count < $retries);
+                } while ($result->getException() instanceof Throwable && ++$count < $retries);
 
                 $output->writeln("<comment>Test:</comment> <info>{$testName}</info>", OutputInterface::VERBOSITY_NORMAL);
 
@@ -134,7 +120,7 @@ class RpTest extends Command
                     $this->printRemoteLog($result, $output);
                 }
 
-                if ($exception = $result->getException()) {
+                if (($exception = $result->getException()) instanceof Throwable) {
                     $counters['errors'][] = $testName;
                     $output->writeln('<comment>Result:</comment> <error>Test failed!</error>', OutputInterface::VERBOSITY_NORMAL);
                     $output->writeln((string) $exception, OutputInterface::VERBOSITY_DEBUG);
@@ -152,20 +138,20 @@ class RpTest extends Command
         }
 
         $output->writeln('<info>--- SUMMARY ---</info>', OutputInterface::VERBOSITY_NORMAL);
-        $output->writeln(sprintf('<comment>Executed:</comment> <info>%d</info>', count($counters['executed'])), OutputInterface::VERBOSITY_NORMAL);
-        $output->writeln(sprintf('<comment>Success:</comment> <info>%d</info>', count($counters['success'])), OutputInterface::VERBOSITY_NORMAL);
-        $output->writeln(sprintf('<comment>Errors:</comment> <info>%d</info>', count($counters['errors'])), OutputInterface::VERBOSITY_NORMAL);
+        $output->writeln(\sprintf('<comment>Executed:</comment> <info>%d</info>', \count($counters['executed'])), OutputInterface::VERBOSITY_NORMAL);
+        $output->writeln(\sprintf('<comment>Success:</comment> <info>%d</info>', \count($counters['success'])), OutputInterface::VERBOSITY_NORMAL);
+        $output->writeln(\sprintf('<comment>Errors:</comment> <info>%d</info>', \count($counters['errors'])), OutputInterface::VERBOSITY_NORMAL);
 
-        if (count($counters['errors'])) {
+        if (\count($counters['errors'])) {
             $this->printSeparator($output, OutputInterface::VERBOSITY_NORMAL);
             $output->writeln('<info>Failed tests</info>', OutputInterface::VERBOSITY_NORMAL);
 
             foreach ($counters['errors'] as $testName) {
-                $output->writeln(sprintf('  - <comment>%s</comment>', $testName), OutputInterface::VERBOSITY_NORMAL);
+                $output->writeln(\sprintf('  - <comment>%s</comment>', $testName), OutputInterface::VERBOSITY_NORMAL);
             }
         }
 
-        if (count($counters['errors'])) {
+        if (\count($counters['errors'])) {
             return 1;
         }
 
@@ -183,7 +169,7 @@ class RpTest extends Command
         $body = (string) $this->logsHelper->getLog(
             $testInfo->getRoot(),
             $testInfo->getRpId(),
-            $result->getTest()->getTestId()
+            $result->getTest()->getTestId(),
         )
             ->getBody();
         $output->writeln('<comment>Remote Log:</comment>');

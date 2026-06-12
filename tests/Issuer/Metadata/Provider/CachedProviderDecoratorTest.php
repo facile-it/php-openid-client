@@ -27,7 +27,7 @@ class CachedProviderDecoratorTest extends TestCase
 
         $provider = new CachedProviderDecorator(
             $provider1->reveal(),
-            $cache->reveal()
+            $cache->reveal(),
         );
 
         $cache->get(Argument::type('string'))
@@ -53,7 +53,7 @@ class CachedProviderDecoratorTest extends TestCase
 
         $provider = new CachedProviderDecorator(
             $provider1->reveal(),
-            $cache->reveal()
+            $cache->reveal(),
         );
 
         $cache->get(Argument::type('string'))

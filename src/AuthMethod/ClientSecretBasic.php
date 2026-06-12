@@ -25,7 +25,7 @@ final class ClientSecretBasic implements AuthMethodInterface
     public function createRequest(
         RequestInterface $request,
         OpenIDClient $client,
-        array $claims
+        array $claims,
     ): RequestInterface {
         $clientId = $client->getMetadata()->getClientId();
         $clientSecret = $client->getMetadata()->getClientSecret();
@@ -36,7 +36,7 @@ final class ClientSecretBasic implements AuthMethodInterface
 
         $request = $request->withHeader(
             'Authorization',
-            'Basic ' . base64_encode(urlencode($clientId) . ':' . urlencode($clientSecret))
+            'Basic ' . base64_encode(urlencode($clientId) . ':' . urlencode($clientSecret)),
         );
 
         $request->getBody()->write(http_build_query($claims));

@@ -18,8 +18,6 @@ use Psr\Http\Message\ResponseInterface;
 use Throwable;
 use Override;
 
-use function array_filter;
-use function array_key_exists;
 use function Facile\OpenIDClient\check_server_response;
 
 /**
@@ -27,9 +25,9 @@ use function Facile\OpenIDClient\check_server_response;
  */
 final class DistributedParser extends AbstractClaims implements DistributedParserInterface
 {
-    private ClientInterface $client;
+    private readonly ClientInterface $client;
 
-    private RequestFactoryInterface $requestFactory;
+    private readonly RequestFactoryInterface $requestFactory;
 
     public function __construct(
         ?IssuerBuilderInterface $issuerBuilder = null,
@@ -37,7 +35,7 @@ final class DistributedParser extends AbstractClaims implements DistributedParse
         ?RequestFactoryInterface $requestFactory = null,
         ?AlgorithmManager $algorithmManager = null,
         ?JWSVerifier $JWSVerifier = null,
-        ?JWSSerializer $serializer = null
+        ?JWSSerializer $serializer = null,
     ) {
         parent::__construct($issuerBuilder, $algorithmManager, $JWSVerifier, $serializer);
 
@@ -48,19 +46,21 @@ final class DistributedParser extends AbstractClaims implements DistributedParse
     #[Override]
     public function fetch(OpenIDClient $client, array $claims, array $accessTokens = []): array
     {
-        if (! array_key_exists('_claim_sources', $claims)) {
+        if (! \array_key_exists('_claim_sources', $claims)) {
             return $claims;
         }
 
-        if (! array_key_exists('_claim_names', $claims)) {
+        if (! \array_key_exists('_claim_names', $claims)) {
             return $claims;
         }
-
-        $distributedSources = array_filter($claims['_claim_sources'], fn($value): bool => $this->isDistributedSource($value));
 
         /** @var array<string, ResponseInterface> $responses */
         $responses = [];
-        foreach ($distributedSources as $sourceName => $source) {
+        foreach ($claims['_claim_sources'] as $sourceName => $source) {
+            if (! $this->isDistributedSource($source)) {
+                continue;
+            }
+
             $request = $this->requestFactory->createRequest('GET', $source['endpoint'])
                 ->withHeader('accept', 'application/jwt');
 

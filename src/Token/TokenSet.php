@@ -7,8 +7,6 @@ namespace Facile\OpenIDClient\Token;
 use JsonSerializable;
 use Override;
 
-use function array_key_exists;
-
 /**
  * @psalm-import-type TokenSetType from TokenSetInterface
  * @psalm-import-type TokenSetAttributesType from TokenSetInterface
@@ -18,28 +16,16 @@ use function array_key_exists;
 final class TokenSet implements TokenSetInterface, JsonSerializable
 {
     /**
-     * @var array<string, mixed>
+     * @param array<string, mixed> $attributes
+     * @param array<string, mixed> $claims
      *
-     * @psalm-var TokenSetAttributesType
-     */
-    private array $attributes;
-
-    /**
-     * @var array<string, mixed>
-     *
-     * @psalm-var TokenSetClaimsType
-     */
-    private array $claims;
-
-    /**
      * @psalm-param TokenSetAttributesType $attributes
      * @psalm-param TokenSetClaimsType $claims
      */
-    private function __construct(array $attributes, array $claims)
-    {
-        $this->attributes = $attributes;
-        $this->claims = $claims;
-    }
+    private function __construct(
+        private array $attributes,
+        private array $claims,
+    ) {}
 
     /**
      * @param array<string, mixed> $data
@@ -49,14 +35,14 @@ final class TokenSet implements TokenSetInterface, JsonSerializable
     public static function fromParams(array $data): TokenSetInterface
     {
         $claims = [];
-        if (array_key_exists('claims', $data)) {
+        if (\array_key_exists('claims', $data)) {
             $claims = $data['claims'];
             unset($data['claims']);
         }
 
         /** @psalm-var TokenSetAttributesType $data */
 
-        return new static($data, $claims);
+        return new self($data, $claims);
     }
 
     #[Override]

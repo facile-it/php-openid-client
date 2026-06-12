@@ -25,7 +25,7 @@ final class UserInfoServiceBuilder extends AbstractServiceBuilder
         return new UserInfoService(
             $this->getUserInfoVerifierBuilder(),
             $this->getHttpClient(),
-            $this->getRequestFactory()
+            $this->getRequestFactory(),
         );
     }
 }
