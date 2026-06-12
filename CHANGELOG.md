@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 Release notes are also published on [GitHub Releases](https://github.com/facile-it/php-openid-client/releases).
 
+## [1.0.0] - 2026-06-12
+
+### Changed
+- Drop support for PHP 8.1
+- [BC] Upgrade to `web-token/jwt-library` 4.x - since this contains breaking changes, refer to the [upgrade guide](https://web-token.spomky-labs.com/migration/from-v3.x-to-v4.0)
+
 ## [0.4.0] - 2026-01-02
 
 ### Changed
