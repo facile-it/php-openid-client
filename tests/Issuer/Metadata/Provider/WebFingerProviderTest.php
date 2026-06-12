@@ -32,7 +32,7 @@ class WebFingerProviderTest extends TestCase
             $client->reveal(),
             $requestFactory->reveal(),
             $uriFactory->reveal(),
-            $discoveryProvider->reveal()
+            $discoveryProvider->reveal(),
         );
 
         $webFingerUrl = $this->prophesize(UriInterface::class);

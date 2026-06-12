@@ -7,8 +7,6 @@ namespace Facile\OpenIDClient;
 use Facile\OpenIDClient\Client\ClientInterface as OpenIDClient;
 use Facile\OpenIDClient\Exception\RuntimeException;
 
-use function is_string;
-
 /**
  * Handle endpoint URI based on auth method.
  *
@@ -32,7 +30,7 @@ function get_endpoint_uri(OpenIDClient $client, string $endpointMetadata): strin
         $endpoint = $client->getIssuer()->getMetadata()->get($endpointMetadata);
     }
 
-    if (! is_string($endpoint)) {
+    if (! \is_string($endpoint)) {
         throw new RuntimeException('Unable to retrieve the token endpoint');
     }
 

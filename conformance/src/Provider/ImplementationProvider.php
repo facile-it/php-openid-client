@@ -10,32 +10,28 @@ use ReflectionFunction;
 use function array_map;
 use function array_pop;
 use function array_shift;
-use function array_slice;
 use function array_unshift;
 use function file;
 use function implode;
-use function is_callable;
 use function preg_match;
 use function preg_replace;
-use function sprintf;
 use function str_repeat;
-use function strlen;
 
 class ImplementationProvider
 {
     public function __construct(
-        private readonly int $indent = 4
+        private readonly int $indent = 4,
     ) {}
 
     public function getCallableCode(callable $closure): string
     {
-        if (is_callable($closure)) {
+        if (\is_callable($closure)) {
             $closure = Closure::fromCallable($closure);
         }
 
         $r = new ReflectionFunction($closure);
         $lines = file($r->getFileName());
-        $lines = array_slice($lines, $r->getStartLine(), $r->getEndLine() - $r->getStartLine());
+        $lines = \array_slice($lines, $r->getStartLine(), $r->getEndLine() - $r->getStartLine());
         if (preg_match('/^ *{ *$/', $lines[0] ?? '')) {
             unset($lines[0]);
         }
@@ -53,8 +49,8 @@ class ImplementationProvider
 
         // remove spaces based on first line
         if (preg_match('/^( +)/', $lines[0] ?? '', $matches)) {
-            $toTrim = strlen($matches[1]);
-            $lines = array_map(static fn(string $line): ?string => preg_replace(sprintf('/^ {0,%d}/', $toTrim), '', $line), $lines);
+            $toTrim = \strlen($matches[1]);
+            $lines = array_map(static fn(string $line): ?string => preg_replace(\sprintf('/^ {0,%d}/', $toTrim), '', $line), $lines);
         }
 
         if ($this->indent !== 0) {

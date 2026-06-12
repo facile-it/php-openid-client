@@ -66,7 +66,7 @@ final class AuthorizationServiceBuilder extends AbstractServiceBuilder
             $this->getHttpClient(),
             $this->getRequestFactory(),
             $this->getIdTokenVerifierBuilder(),
-            $this->getResponseVerifierBuilder()
+            $this->getResponseVerifierBuilder(),
         );
     }
 }

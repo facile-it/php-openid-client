@@ -34,7 +34,7 @@ final readonly class AuthRedirectHandler implements RequestHandlerInterface
         private AuthorizationService $authorizationService,
         ?ResponseFactoryInterface $responseFactory = null,
         private ?ClientInterface $client = null,
-        private int $randomBytes = 32
+        private int $randomBytes = 32,
     ) {
         $this->responseFactory = $responseFactory ?? Psr17FactoryDiscovery::findResponseFactory();
     }

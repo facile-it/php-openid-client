@@ -24,7 +24,7 @@ final readonly class RevocationService
 {
     public function __construct(
         private ClientInterface $client,
-        private RequestFactoryInterface $requestFactory
+        private RequestFactoryInterface $requestFactory,
     ) {}
 
     /**

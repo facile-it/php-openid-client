@@ -26,7 +26,7 @@ final class ClientSecretJwt extends AbstractJwtAuth
 {
     public function __construct(
         private ?JWSBuilder $jwsBuilder = null,
-        private readonly JWSSerializer $jwsSerializer = new CompactSerializer()
+        private readonly JWSSerializer $jwsSerializer = new CompactSerializer(),
     ) {}
 
     #[Override]
@@ -72,7 +72,7 @@ final class ClientSecretJwt extends AbstractJwtAuth
                 'iat' => $time,
                 'exp' => $time + 60,
                 'jti' => $jti,
-            ], JSON_THROW_ON_ERROR);
+            ], \JSON_THROW_ON_ERROR);
 
         $jws = $this->getJwsBuilder()->create()
             ->withPayload($payload)

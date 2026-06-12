@@ -19,7 +19,7 @@ final class RemoteException extends RuntimeException
         parent::__construct(
             $message ?? $response->getReasonPhrase(),
             $response->getStatusCode(),
-            $previous
+            $previous,
         );
         $this->response = $response;
     }

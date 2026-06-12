@@ -39,7 +39,7 @@ class TLSClientAuthTest extends TestCase
         $result = $auth->createRequest(
             $request->reveal(),
             $client->reveal(),
-            ['foo' => 'bar']
+            ['foo' => 'bar'],
         );
 
         self::assertSame($request->reveal(), $result);

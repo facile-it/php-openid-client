@@ -31,7 +31,7 @@ class TestInfo
         private readonly string $profile,
         private readonly string $responseType = 'code',
         private readonly string $rpId = 'tmv_php-openid-client',
-        string $root = 'https://rp.certification.openid.net:8080/'
+        string $root = 'https://rp.certification.openid.net:8080/',
     ) {
         $this->root = rtrim($root, '/');
     }

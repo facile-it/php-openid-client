@@ -22,7 +22,6 @@ use Override;
 
 use function bin2hex;
 use function class_exists;
-use function is_array;
 use function json_decode;
 use function json_encode;
 use function random_bytes;
@@ -39,7 +38,7 @@ final readonly class SessionCookieMiddleware implements MiddlewareInterface
     public function __construct(
         private CacheInterface $cache,
         private string $cookieName = 'openid',
-        private int $ttl = 300
+        private int $ttl = 300,
     ) {}
 
     #[Override]
@@ -56,9 +55,9 @@ final readonly class SessionCookieMiddleware implements MiddlewareInterface
         /** @var string|null $sessionValue */
         $sessionValue = null !== $sessionId ? $this->cache->get($sessionId) : null;
         /** @var false|AuthSessionType $data */
-        $data = null !== $sessionValue ? json_decode($sessionValue, true, 512, JSON_THROW_ON_ERROR) : [];
+        $data = null !== $sessionValue ? json_decode($sessionValue, true, 512, \JSON_THROW_ON_ERROR) : [];
 
-        if (! is_array($data)) {
+        if (! \is_array($data)) {
             $data = [];
         }
 
@@ -68,7 +67,7 @@ final readonly class SessionCookieMiddleware implements MiddlewareInterface
 
         $sessionId ??= bin2hex(random_bytes(32));
 
-        $sessionValue = json_encode($authSession, JSON_THROW_ON_ERROR);
+        $sessionValue = json_encode($authSession, \JSON_THROW_ON_ERROR);
 
         if (false === $this->cache->set($sessionId, $sessionValue, $this->ttl)) {
             throw new RuntimeException('Unable to save session');

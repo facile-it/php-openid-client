@@ -37,7 +37,7 @@ class AggregatedClaimsTest extends TestCase
             $issuerBuilder->reveal(),
             new AlgorithmManager([]),
             $JWSVerifier->reveal(),
-            $JWSSerializer->reveal()
+            $JWSSerializer->reveal(),
         );
 
         $claims = [
@@ -62,7 +62,7 @@ class AggregatedClaimsTest extends TestCase
         $service = new AggregateParser(
             $issuerBuilder->reveal(),
             new AlgorithmManager([]),
-            $JWSVerifier->reveal()
+            $JWSVerifier->reveal(),
         );
 
         $claims = [
@@ -93,7 +93,7 @@ class AggregatedClaimsTest extends TestCase
         $service = new AggregateParser(
             $issuerBuilder->reveal(),
             new AlgorithmManager([]),
-            $JWSVerifier->reveal()
+            $JWSVerifier->reveal(),
         );
 
         $claims = [
@@ -145,7 +145,7 @@ class AggregatedClaimsTest extends TestCase
         $JWSVerifier->verifyWithKey(
             Argument::type(JWS::class),
             Argument::that(fn(JWK $key): bool => $jwkPublic->all() === $key->all()),
-            0
+            0,
         )
             ->willReturn(true);
 
@@ -162,7 +162,7 @@ class AggregatedClaimsTest extends TestCase
         $service = new AggregateParser(
             $issuerBuilder->reveal(),
             new AlgorithmManager([new RS256()]),
-            $JWSVerifier->reveal()
+            $JWSVerifier->reveal(),
         );
 
         $claims = [

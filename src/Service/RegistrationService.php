@@ -15,7 +15,6 @@ use Psr\Http\Message\RequestFactoryInterface;
 use function array_diff_key;
 use function array_flip;
 use function array_intersect_key;
-use function array_key_exists;
 use function array_merge;
 use function Facile\OpenIDClient\check_server_response;
 use function Facile\OpenIDClient\parse_metadata_response;
@@ -41,7 +40,7 @@ final class RegistrationService
 
     public function __construct(
         private readonly ClientInterface $client,
-        private readonly RequestFactoryInterface $requestFactory
+        private readonly RequestFactoryInterface $requestFactory,
     ) {}
 
     /**
@@ -52,7 +51,7 @@ final class RegistrationService
     public function register(
         IssuerInterface $issuer,
         array $metadata,
-        ?string $initialToken = null
+        ?string $initialToken = null,
     ): array {
         $registrationEndpoint = $issuer->getMetadata()->getRegistrationEndpoint();
 
@@ -61,7 +60,7 @@ final class RegistrationService
         }
 
         try {
-            $encodedMetadata = json_encode($metadata, JSON_THROW_ON_ERROR);
+            $encodedMetadata = json_encode($metadata, \JSON_THROW_ON_ERROR);
         } catch (JsonException $e) {
             throw new RuntimeException('Unable to encode client metadata', 0, $e);
         }
@@ -84,7 +83,7 @@ final class RegistrationService
 
         $data = parse_metadata_response($response, 201);
 
-        if (! array_key_exists('client_id', $data)) {
+        if (! \array_key_exists('client_id', $data)) {
             throw new RuntimeException('Registration response did not return a client_id field');
         }
 
@@ -108,7 +107,7 @@ final class RegistrationService
 
         $claims = parse_metadata_response($response, 200);
 
-        if (! array_key_exists('client_id', $claims)) {
+        if (! \array_key_exists('client_id', $claims)) {
             throw new RuntimeException('Registration response did not return a client_id field');
         }
 
@@ -123,13 +122,13 @@ final class RegistrationService
     public function update(
         string $clientUri,
         string $accessToken,
-        array $metadata
+        array $metadata,
     ): array {
         $clientRegistrationMetadata = array_intersect_key($metadata, array_flip(self::$registrationClaims));
         $metadata = array_diff_key($metadata, $clientRegistrationMetadata);
 
         try {
-            $encodedMetadata = json_encode($metadata, JSON_THROW_ON_ERROR);
+            $encodedMetadata = json_encode($metadata, \JSON_THROW_ON_ERROR);
         } catch (JsonException $e) {
             throw new RuntimeException('Unable to encode client metadata', 0, $e);
         }
@@ -149,7 +148,7 @@ final class RegistrationService
 
         $data = parse_metadata_response($response, 200);
 
-        if (! array_key_exists('client_id', $data)) {
+        if (! \array_key_exists('client_id', $data)) {
             throw new RuntimeException('Registration response did not return a client_id field');
         }
 

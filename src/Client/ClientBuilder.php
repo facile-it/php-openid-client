@@ -123,7 +123,7 @@ final class ClientBuilder
             $this->clientMetadata,
             $this->buildJwksProvider(),
             $this->buildAuthMethodFactory(),
-            $this->buildHttpClient()
+            $this->buildHttpClient(),
         );
     }
 }

@@ -15,7 +15,7 @@ final class RevocationServiceBuilder extends AbstractServiceBuilder
     {
         return new RevocationService(
             $this->getHttpClient(),
-            $this->getRequestFactory()
+            $this->getRequestFactory(),
         );
     }
 }

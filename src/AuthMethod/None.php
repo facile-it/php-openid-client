@@ -23,7 +23,7 @@ final class None implements AuthMethodInterface
     public function createRequest(
         RequestInterface $request,
         OpenIDClient $client,
-        array $claims
+        array $claims,
     ): RequestInterface {
         $params = array_merge(['client_id' => $client->getMetadata()->getClientId()], $claims);
         $request->getBody()->write(http_build_query($params));

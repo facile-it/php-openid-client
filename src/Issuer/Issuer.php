@@ -12,7 +12,7 @@ final readonly class Issuer implements IssuerInterface
 {
     public function __construct(
         private IssuerMetadataInterface $metadata,
-        private JwksProviderInterface $jwksProvider
+        private JwksProviderInterface $jwksProvider,
     ) {}
 
     #[Override]

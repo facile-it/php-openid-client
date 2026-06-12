@@ -36,7 +36,7 @@ class PrivateKeyJwtTest extends TestCase
             $jwsBuilder->reveal(),
             $serializer->reveal(),
             null,
-            60
+            60,
         );
         self::assertSame('private_key_jwt', $auth->getSupportedMethod());
     }
@@ -64,7 +64,7 @@ class PrivateKeyJwtTest extends TestCase
             $jwsBuilder->reveal(),
             $serializer->reveal(),
             $jwkAsDependency ? $jwk : null,
-            60
+            60,
         );
 
         $jwksProvider = $this->prophesize(JwksProviderInterface::class);
@@ -133,13 +133,13 @@ class PrivateKeyJwtTest extends TestCase
         $jwsBuilder3->addSignature(
             Argument::allOf(
                 Argument::type(JWK::class),
-                Argument::that(fn(JWK $key): bool => 'foo' === $key->get('kid'))
+                Argument::that(fn(JWK $key): bool => 'foo' === $key->get('kid')),
             ),
             Argument::allOf(
                 Argument::type('array'),
                 Argument::withEntry('alg', 'ALG'),
-                Argument::withKey('jti')
-            )
+                Argument::withKey('jti'),
+            ),
         )
             ->shouldBeCalled()
             ->willReturn($jwsBuilder4);
@@ -162,7 +162,7 @@ class PrivateKeyJwtTest extends TestCase
         $result = $auth->createRequest(
             $request->reveal(),
             $client->reveal(),
-            ['foo' => 'bar']
+            ['foo' => 'bar'],
         );
 
         self::assertSame($request->reveal(), $result);

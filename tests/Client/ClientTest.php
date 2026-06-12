@@ -20,7 +20,7 @@ class ClientTest extends TestCase
 
         $client = new Client(
             $issuer->reveal(),
-            $metadata->reveal()
+            $metadata->reveal(),
         );
 
         self::assertSame($issuer->reveal(), $client->getIssuer());
@@ -40,7 +40,7 @@ class ClientTest extends TestCase
             $issuer->reveal(),
             $metadata->reveal(),
             $jwksProvider->reveal(),
-            $authMethodFactory->reveal()
+            $authMethodFactory->reveal(),
         );
 
         self::assertSame($issuer->reveal(), $client->getIssuer());

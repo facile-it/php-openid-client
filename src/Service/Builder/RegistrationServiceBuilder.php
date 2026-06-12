@@ -15,7 +15,7 @@ final class RegistrationServiceBuilder extends AbstractServiceBuilder
     {
         return new RegistrationService(
             $this->getHttpClient(),
-            $this->getRequestFactory()
+            $this->getRequestFactory(),
         );
     }
 }

@@ -79,7 +79,7 @@ class DiscoveryProviderTest extends TestCase
         $provider = new DiscoveryProvider(
             $client->reveal(),
             $requestFactory->reveal(),
-            $uriFactory->reveal()
+            $uriFactory->reveal(),
         );
 
         $uri2 = $this->prophesize(UriInterface::class);
@@ -115,7 +115,7 @@ class DiscoveryProviderTest extends TestCase
         $provider = new DiscoveryProvider(
             $client->reveal(),
             $requestFactory->reveal(),
-            $uriFactory->reveal()
+            $uriFactory->reveal(),
         );
 
         $uri2 = $this->prophesize(UriInterface::class);
@@ -150,7 +150,7 @@ class DiscoveryProviderTest extends TestCase
         $provider = new DiscoveryProvider(
             $client->reveal(),
             $requestFactory->reveal(),
-            $uriFactory->reveal()
+            $uriFactory->reveal(),
         );
 
         $this->prepareForDiscovery('https://example.com/.well-known/openid-configuration');

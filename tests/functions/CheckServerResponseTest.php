@@ -18,7 +18,7 @@ class CheckServerResponseTest extends TestCase
     {
         $this->expectException(RemoteException::class);
         $this->expectExceptionCode(400);
-        $this->expectExceptionMessage('Error');
+        $this->expectExceptionMessage(\Error::class);
 
         $response = $this->prophesize(ResponseInterface::class);
         $stream = $this->prophesize(StreamInterface::class);
@@ -26,7 +26,7 @@ class CheckServerResponseTest extends TestCase
         $stream->__toString()->willReturn('');
         $response->getBody()->willReturn($stream->reveal());
         $response->getStatusCode()->willReturn(400);
-        $response->getReasonPhrase()->willReturn('Error');
+        $response->getReasonPhrase()->willReturn(\Error::class);
 
         check_server_response($response->reveal());
     }

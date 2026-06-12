@@ -17,16 +17,12 @@ use ReflectionFunction;
 use function array_map;
 use function array_pop;
 use function array_shift;
-use function array_slice;
 use function array_unshift;
 use function file;
 use function implode;
-use function is_callable;
 use function preg_match;
 use function preg_replace;
-use function sprintf;
 use function str_repeat;
-use function strlen;
 use function substr;
 
 class TestListener implements TestListenerInterface
@@ -119,13 +115,13 @@ class TestListener implements TestListenerInterface
 
     protected function getClosureDump(callable $closure, int $indent = 4): string
     {
-        if (is_callable($closure)) {
+        if (\is_callable($closure)) {
             $closure = Closure::fromCallable($closure);
         }
 
         $r = new ReflectionFunction($closure);
         $lines = file($r->getFileName());
-        $lines = array_slice($lines, $r->getStartLine(), $r->getEndLine() - $r->getStartLine());
+        $lines = \array_slice($lines, $r->getStartLine(), $r->getEndLine() - $r->getStartLine());
         if (preg_match('/^ *{ *$/', $lines[0] ?? '')) {
             unset($lines[0]);
         }
@@ -143,8 +139,8 @@ class TestListener implements TestListenerInterface
 
         // remove spaces based on first line
         if (preg_match('/^( +)/', $lines[0] ?? '', $matches)) {
-            $toTrim = strlen($matches[1]);
-            $lines = array_map(static fn(string $line): ?string => preg_replace(sprintf('/^ {0,%d}/', $toTrim), '', $line), $lines);
+            $toTrim = \strlen($matches[1]);
+            $lines = array_map(static fn(string $line): ?string => preg_replace(\sprintf('/^ {0,%d}/', $toTrim), '', $line), $lines);
         }
 
         if ($indent !== 0) {

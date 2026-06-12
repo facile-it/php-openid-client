@@ -24,7 +24,7 @@ class CallbackMiddleware implements MiddlewareInterface
         private readonly AuthorizationService $authorizationService,
         private readonly ?ClientInterface $client = null,
         private readonly ?string $redirectUri = null,
-        private readonly ?int $maxAge = null
+        private readonly ?int $maxAge = null,
     ) {}
 
     #[Override]
@@ -47,7 +47,7 @@ class CallbackMiddleware implements MiddlewareInterface
             $params,
             $this->redirectUri,
             $authSession,
-            $this->maxAge
+            $this->maxAge,
         );
 
         return $handler->handle($request->withAttribute(TokenSetInterface::class, $tokenSet));

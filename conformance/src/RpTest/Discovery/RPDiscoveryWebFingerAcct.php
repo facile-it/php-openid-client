@@ -11,7 +11,6 @@ use PHPUnit\Framework\Assert;
 
 use function parse_url;
 use function rtrim;
-use function sprintf;
 
 /**
  * Use WebFinger (RFC7033) and OpenID Provider Issuer Discovery to determine the location of the OpenID Provider.
@@ -32,11 +31,11 @@ class RPDiscoveryWebFingerAcct extends AbstractRpTest
         $parsed = parse_url($testInfo->getRoot());
         $issuerHostAndPort = rtrim($parsed['host'] . ':' . ($parsed['port'] ?? ''), ':');
 
-        $input = sprintf('acct:%s.%s@%s', $testInfo->getRpId(), $this->getTestId(), $issuerHostAndPort);
+        $input = \sprintf('acct:%s.%s@%s', $testInfo->getRpId(), $this->getTestId(), $issuerHostAndPort);
         $issuer = (new IssuerBuilder())
             ->build($input);
 
-        $expected = sprintf('%s/%s/%s', $testInfo->getRoot(), $testInfo->getRpId(), $this->getTestId());
+        $expected = \sprintf('%s/%s/%s', $testInfo->getRoot(), $testInfo->getRpId(), $this->getTestId());
         Assert::assertSame($expected, $issuer->getMetadata()->getIssuer());
     }
 }

@@ -26,7 +26,6 @@ use Psr\Http\Message\ServerRequestInterface;
 use function array_merge;
 use function json_decode;
 use function json_encode;
-use function sprintf;
 
 use const PHP_EOL;
 
@@ -35,7 +34,7 @@ abstract class AbstractRpTest implements RpTestInterface
     protected const REDIRECT_URI = 'https://rp.test/callback';
 
     public function __construct(
-        private readonly ContainerInterface $container
+        private readonly ContainerInterface $container,
     ) {}
 
     public function getContainer(): ContainerInterface
@@ -68,7 +67,7 @@ abstract class AbstractRpTest implements RpTestInterface
         try {
             $clientMetadata = ClientMetadata::fromArray($registrationService->register($issuer, $metadata));
         } catch (OAuth2Exception $e) {
-            echo sprintf('%s (%s)', $e->getMessage(), $e->getDescription()) . PHP_EOL;
+            echo \sprintf('%s (%s)', $e->getMessage(), $e->getDescription()) . PHP_EOL;
             throw $e;
         } catch (RemoteException $e) {
             echo $e->getResponse()->getBody() . PHP_EOL;

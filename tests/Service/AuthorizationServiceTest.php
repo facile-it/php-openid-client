@@ -39,7 +39,7 @@ class AuthorizationServiceTest extends TestCase
             $client->reveal(),
             $requestFactory->reveal(),
             $idTokenVerifierBuilder->reveal(),
-            $tokenVerifierBuilder->reveal()
+            $tokenVerifierBuilder->reveal(),
         );
 
         $openIdClient = $this->prophesize(OpenIDClient::class);
@@ -58,7 +58,7 @@ class AuthorizationServiceTest extends TestCase
 
         self::assertSame(
             'https://foo-endpoint?client_id=clientId&scope=openid&response_type=code&redirect_uri=redirect_uri_1',
-            $service->getAuthorizationUri($openIdClient->reveal())
+            $service->getAuthorizationUri($openIdClient->reveal()),
         );
     }
 
@@ -75,7 +75,7 @@ class AuthorizationServiceTest extends TestCase
             $client->reveal(),
             $requestFactory->reveal(),
             $idTokenVerifierBuilder->reveal(),
-            $tokenVerifierBuilder->reveal()
+            $tokenVerifierBuilder->reveal(),
         );
 
         $openIdClient = $this->prophesize(OpenIDClient::class);
@@ -94,7 +94,7 @@ class AuthorizationServiceTest extends TestCase
 
         self::assertSame(
             'https://foo-endpoint?param=value&client_id=clientId&scope=openid&response_type=code&redirect_uri=redirect_uri_1',
-            $service->getAuthorizationUri($openIdClient->reveal())
+            $service->getAuthorizationUri($openIdClient->reveal()),
         );
     }
 
@@ -111,7 +111,7 @@ class AuthorizationServiceTest extends TestCase
             $client->reveal(),
             $requestFactory->reveal(),
             $idTokenVerifierBuilder->reveal(),
-            $tokenVerifierBuilder->reveal()
+            $tokenVerifierBuilder->reveal(),
         );
 
         $openIdClient = $this->prophesize(OpenIDClient::class);
@@ -149,7 +149,7 @@ class AuthorizationServiceTest extends TestCase
         $authMethod->createRequest(
             $tokenRequest1->reveal(),
             $openIdClient->reveal(),
-            $claims
+            $claims,
         )
             ->willReturn($tokenRequest2->reveal());
 
@@ -178,7 +178,7 @@ class AuthorizationServiceTest extends TestCase
             $client->reveal(),
             $requestFactory->reveal(),
             $idTokenVerifierBuilder->reveal(),
-            $tokenVerifierBuilder->reveal()
+            $tokenVerifierBuilder->reveal(),
         );
 
         $issuer = $this->prophesize(IssuerInterface::class);
@@ -191,7 +191,7 @@ class AuthorizationServiceTest extends TestCase
         ]);
         $client = new Client(
             $issuer->reveal(),
-            $clientMetadata
+            $clientMetadata,
         );
 
         $tokenSet = $this->prophesize(TokenSetInterface::class);

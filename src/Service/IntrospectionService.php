@@ -24,7 +24,7 @@ final readonly class IntrospectionService
 {
     public function __construct(
         private ClientInterface $client,
-        private RequestFactoryInterface $requestFactory
+        private RequestFactoryInterface $requestFactory,
     ) {}
 
     /**

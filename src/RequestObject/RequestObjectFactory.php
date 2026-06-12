@@ -44,7 +44,7 @@ final readonly class RequestObjectFactory
         ?JWSBuilder $jwsBuilder = null,
         ?JWEBuilder $jweBuilder = null,
         private JWSSerializer $signatureSerializer = new SignatureCompactSerializer(),
-        private JWESerializer $encryptionSerializer = new EncryptionCompactSerializer()
+        private JWESerializer $encryptionSerializer = new EncryptionCompactSerializer(),
     ) {
         $this->algorithmManager = $algorithmManager ?? (new AlgorithmManagerBuilder())->build();
         $this->jwsBuilder = $jwsBuilder ?? new JWSBuilder($this->algorithmManager);
@@ -80,7 +80,7 @@ final readonly class RequestObjectFactory
         ]);
 
         try {
-            $payload = json_encode($payloadParams, JSON_THROW_ON_ERROR);
+            $payload = json_encode($payloadParams, \JSON_THROW_ON_ERROR);
         } catch (JsonException $e) {
             throw new RuntimeException('Unable to encode payload', 0, $e);
         }
@@ -97,7 +97,7 @@ final readonly class RequestObjectFactory
 
         if ('none' === $alg) {
             return implode('.', [
-                base64url_encode(json_encode(['alg' => $alg], JSON_THROW_ON_ERROR)),
+                base64url_encode(json_encode(['alg' => $alg], \JSON_THROW_ON_ERROR)),
                 base64url_encode($payload),
                 '',
             ]);
@@ -150,7 +150,7 @@ final readonly class RequestObjectFactory
         } else {
             $jwk = jose_secret_key(
                 $metadata->getClientSecret() ?? '',
-                'dir' === $alg ? $enc : $alg
+                'dir' === $alg ? $enc : $alg,
             );
         }
 

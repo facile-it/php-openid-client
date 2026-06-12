@@ -10,8 +10,6 @@ use Facile\OpenIDClient\Issuer\IssuerBuilder;
 use Facile\OpenIDClient\Service\RegistrationService;
 use PHPUnit\Framework\Assert;
 
-use function sprintf;
-
 /**
  * Use the client registration endpoint in order to dynamically register the Relying Party.
  *
@@ -28,7 +26,7 @@ class RPRegistrationDynamic extends AbstractRpTest
     {
         $clientRegistrationService = new RegistrationService();
 
-        $configUri = sprintf('%s/%s/%s/.well-known/openid-configuration', $testInfo->getRoot(), $testInfo->getRpId(), $this->getTestId());
+        $configUri = \sprintf('%s/%s/%s/.well-known/openid-configuration', $testInfo->getRoot(), $testInfo->getRpId(), $this->getTestId());
         $issuer = (new IssuerBuilder())
             ->build($configUri);
 

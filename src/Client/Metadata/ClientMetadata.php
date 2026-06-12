@@ -9,10 +9,8 @@ use Facile\OpenIDClient\Exception\InvalidArgumentException;
 use Override;
 
 use function array_diff;
-use function array_key_exists;
 use function array_keys;
 use function array_merge;
-use function count;
 use function implode;
 
 /**
@@ -63,9 +61,9 @@ final class ClientMetadata implements ClientMetadataInterface
     public static function fromArray(array $claims): self
     {
         $missingKeys = array_diff(self::$requiredKeys, array_keys($claims));
-        if (0 !== count($missingKeys)) {
+        if (0 !== \count($missingKeys)) {
             throw new InvalidArgumentException(
-                'Invalid client metadata. Missing keys: ' . implode(', ', $missingKeys)
+                'Invalid client metadata. Missing keys: ' . implode(', ', $missingKeys),
             );
         }
 
@@ -207,7 +205,7 @@ final class ClientMetadata implements ClientMetadataInterface
     #[Override]
     public function has(string $name): bool
     {
-        return array_key_exists($name, $this->metadata);
+        return \array_key_exists($name, $this->metadata);
     }
 
     /**

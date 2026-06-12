@@ -7,8 +7,6 @@ namespace Facile\OpenIDClient\Claims;
 use Facile\OpenIDClient\Client\ClientInterface;
 use Override;
 
-use function array_key_exists;
-
 /**
  * @psalm-api
  */
@@ -17,11 +15,11 @@ final class AggregateParser extends AbstractClaims implements AggregatedParserIn
     #[Override]
     public function unpack(ClientInterface $client, array $claims): array
     {
-        if (! array_key_exists('_claim_sources', $claims)) {
+        if (! \array_key_exists('_claim_sources', $claims)) {
             return $claims;
         }
 
-        if (! array_key_exists('_claim_names', $claims)) {
+        if (! \array_key_exists('_claim_names', $claims)) {
             return $claims;
         }
 

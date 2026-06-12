@@ -12,7 +12,6 @@ use Psr\Http\Message\RequestFactoryInterface;
 use Psr\Http\Message\UriFactoryInterface;
 use Override;
 
-use function array_key_exists;
 use function Facile\OpenIDClient\parse_metadata_response;
 use function preg_match;
 use function rtrim;
@@ -29,7 +28,7 @@ final readonly class DiscoveryProvider implements DiscoveryProviderInterface
     public function __construct(
         private ClientInterface $client,
         private RequestFactoryInterface $requestFactory,
-        private UriFactoryInterface $uriFactory
+        private UriFactoryInterface $uriFactory,
     ) {}
 
     #[Override]
@@ -89,7 +88,7 @@ final readonly class DiscoveryProvider implements DiscoveryProviderInterface
             throw new RuntimeException('Unable to fetch provider metadata', 0, $e);
         }
 
-        if (! array_key_exists('issuer', $data)) {
+        if (! \array_key_exists('issuer', $data)) {
             throw new RuntimeException('Invalid metadata content, no "issuer" key found');
         }
 

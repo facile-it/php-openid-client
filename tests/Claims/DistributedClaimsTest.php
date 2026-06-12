@@ -37,7 +37,7 @@ class DistributedClaimsTest extends TestCase
             $httpClient->reveal(),
             $requestFactory->reveal(),
             new AlgorithmManager([]),
-            $JWSVerifier->reveal()
+            $JWSVerifier->reveal(),
         );
 
         $claims = [
@@ -65,7 +65,7 @@ class DistributedClaimsTest extends TestCase
             $httpClient->reveal(),
             $requestFactory->reveal(),
             new AlgorithmManager([]),
-            $JWSVerifier->reveal()
+            $JWSVerifier->reveal(),
         );
 
         $claims = [
@@ -123,7 +123,7 @@ class DistributedClaimsTest extends TestCase
             $httpClient->reveal(),
             $requestFactory->reveal(),
             new AlgorithmManager([]),
-            $JWSVerifier->reveal()
+            $JWSVerifier->reveal(),
         );
 
         $claims = [
@@ -190,7 +190,7 @@ class DistributedClaimsTest extends TestCase
             $httpClient->reveal(),
             $requestFactory->reveal(),
             new AlgorithmManager([]),
-            $JWSVerifier->reveal()
+            $JWSVerifier->reveal(),
         );
 
         $claims = [

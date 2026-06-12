@@ -9,8 +9,6 @@ use Facile\OpenIDClient\ConformanceTest\TestInfo;
 use Facile\OpenIDClient\Issuer\IssuerBuilder;
 use PHPUnit\Framework\Assert;
 
-use function sprintf;
-
 /**
  * The webfinger response will contain a member that the client doesn't recognize.
  *
@@ -30,7 +28,7 @@ class RPDiscoveryWebFingerUnknownMember extends AbstractRpTest
         $issuer = (new IssuerBuilder())
             ->build($input);
 
-        $expected = sprintf('%s/%s/%s', $testInfo->getRoot(), $testInfo->getRpId(), $this->getTestId());
+        $expected = \sprintf('%s/%s/%s', $testInfo->getRoot(), $testInfo->getRpId(), $this->getTestId());
         Assert::assertSame($expected, $issuer->getMetadata()->getIssuer());
     }
 }

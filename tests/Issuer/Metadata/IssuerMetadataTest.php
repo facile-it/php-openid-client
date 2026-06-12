@@ -18,7 +18,7 @@ class IssuerMetadataTest extends TestCase
         $metadata = new IssuerMetadata(
             'foo-issuer',
             'foo-endpoint',
-            'foo-jwks'
+            'foo-jwks',
         );
 
         $expected = [
@@ -52,7 +52,7 @@ class IssuerMetadataTest extends TestCase
             'foo-jwks',
             [
                 'foo' => 'bar',
-            ]
+            ],
         );
 
         self::assertSame('foo-issuer', $metadata->get('issuer'));
@@ -68,7 +68,7 @@ class IssuerMetadataTest extends TestCase
             'foo-jwks',
             [
                 'foo' => 'bar',
-            ]
+            ],
         );
 
         self::assertTrue($metadata->has('issuer'));
@@ -85,7 +85,7 @@ class IssuerMetadataTest extends TestCase
             'foo',
             [
                 $claim => $value,
-            ]
+            ],
         );
 
         /** @var callable $callable */

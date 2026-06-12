@@ -9,7 +9,6 @@ use JsonException;
 use Psr\SimpleCache\CacheInterface;
 use Override;
 
-use function is_array;
 use function json_decode;
 use function json_encode;
 use function sha1;
@@ -34,7 +33,7 @@ final class CachedProviderDecorator implements RemoteProviderInterface
         private readonly RemoteProviderInterface $provider,
         private readonly CacheInterface $cache,
         private readonly ?int $cacheTtl = null,
-        ?callable $cacheIdGenerator = null
+        ?callable $cacheIdGenerator = null,
     ) {
         $this->cacheIdGenerator = $cacheIdGenerator ?? static fn(string $uri): string => substr(sha1($uri), 0, 65);
     }
@@ -56,19 +55,19 @@ final class CachedProviderDecorator implements RemoteProviderInterface
 
         try {
             /** @psalm-var null|string|IssuerRemoteMetadataType $data */
-            $data = json_decode($cached, true, 512, JSON_THROW_ON_ERROR);
+            $data = json_decode($cached, true, 512, \JSON_THROW_ON_ERROR);
         } catch (JsonException) {
             $data = null;
         }
 
-        if (is_array($data)) {
+        if (\is_array($data)) {
             /** @psalm-var IssuerRemoteMetadataType $data */
             return $data;
         }
 
         $data = $this->provider->fetch($uri);
 
-        $this->cache->set($cacheId, json_encode($data, JSON_THROW_ON_ERROR), $this->cacheTtl);
+        $this->cache->set($cacheId, json_encode($data, \JSON_THROW_ON_ERROR), $this->cacheTtl);
 
         return $data;
     }

@@ -13,12 +13,10 @@ use Psr\Http\Message\RequestFactoryInterface;
 use Psr\Http\Message\UriFactoryInterface;
 use Override;
 
-use function array_key_exists;
 use function array_pop;
 use function explode;
 use function Facile\OpenIDClient\parse_metadata_response;
 use function http_build_query;
-use function is_array;
 use function parse_url;
 use function preg_match;
 use function preg_replace;
@@ -38,7 +36,7 @@ final readonly class WebFingerProvider implements RemoteProviderInterface, WebFi
         private ClientInterface $client,
         private RequestFactoryInterface $requestFactory,
         private UriFactoryInterface $uriFactory,
-        private DiscoveryProviderInterface $discoveryProvider
+        private DiscoveryProviderInterface $discoveryProvider,
     ) {}
 
     #[Override]
@@ -56,7 +54,7 @@ final readonly class WebFingerProvider implements RemoteProviderInterface, WebFi
             ? parse_url('https://' . $parts[1])
             : parse_url($uri);
 
-        if (! is_array($parsedUrl) || ! array_key_exists('host', $parsedUrl)) {
+        if (! \is_array($parsedUrl) || ! \array_key_exists('host', $parsedUrl)) {
             throw new RuntimeException('Unable to parse resource');
         }
 
@@ -85,7 +83,7 @@ final readonly class WebFingerProvider implements RemoteProviderInterface, WebFi
         $links = $data['links'] ?? [];
         $href = '';
         foreach ($links as $link) {
-            if (! is_array($link)) {
+            if (! \is_array($link)) {
                 continue;
             }
 
@@ -93,7 +91,7 @@ final readonly class WebFingerProvider implements RemoteProviderInterface, WebFi
                 continue;
             }
 
-            if (! array_key_exists('href', $link)) {
+            if (! \array_key_exists('href', $link)) {
                 continue;
             }
 

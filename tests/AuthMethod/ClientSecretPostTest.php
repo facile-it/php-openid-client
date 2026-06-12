@@ -41,7 +41,7 @@ class ClientSecretPostTest extends TestCase
         $result = $auth->createRequest(
             $request->reveal(),
             $client->reveal(),
-            ['foo' => 'bar']
+            ['foo' => 'bar'],
         );
 
         self::assertSame($request->reveal(), $result);
@@ -63,7 +63,7 @@ class ClientSecretPostTest extends TestCase
         $auth->createRequest(
             $request->reveal(),
             $client->reveal(),
-            []
+            [],
         );
     }
 }

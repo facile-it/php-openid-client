@@ -18,7 +18,6 @@ use Psr\Http\Message\ResponseInterface;
 use Throwable;
 use Override;
 
-use function array_key_exists;
 use function Facile\OpenIDClient\check_server_response;
 
 /**
@@ -36,7 +35,7 @@ final class DistributedParser extends AbstractClaims implements DistributedParse
         ?RequestFactoryInterface $requestFactory = null,
         ?AlgorithmManager $algorithmManager = null,
         ?JWSVerifier $JWSVerifier = null,
-        ?JWSSerializer $serializer = null
+        ?JWSSerializer $serializer = null,
     ) {
         parent::__construct($issuerBuilder, $algorithmManager, $JWSVerifier, $serializer);
 
@@ -47,11 +46,11 @@ final class DistributedParser extends AbstractClaims implements DistributedParse
     #[Override]
     public function fetch(OpenIDClient $client, array $claims, array $accessTokens = []): array
     {
-        if (! array_key_exists('_claim_sources', $claims)) {
+        if (! \array_key_exists('_claim_sources', $claims)) {
             return $claims;
         }
 
-        if (! array_key_exists('_claim_names', $claims)) {
+        if (! \array_key_exists('_claim_names', $claims)) {
             return $claims;
         }
 

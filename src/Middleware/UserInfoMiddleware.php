@@ -24,7 +24,7 @@ final readonly class UserInfoMiddleware implements MiddlewareInterface
 
     public function __construct(
         private UserInfoService $userInfoService,
-        private ?ClientInterface $client = null
+        private ?ClientInterface $client = null,
     ) {}
 
     #[Override]

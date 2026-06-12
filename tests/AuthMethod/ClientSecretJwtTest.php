@@ -40,7 +40,7 @@ class ClientSecretJwtTest extends TestCase
 
         $auth = new ClientSecretJwt(
             $jwsBuilder->reveal(),
-            $serializer->reveal()
+            $serializer->reveal(),
         );
 
         $issuerMetadata = IssuerMetadata::fromArray([
@@ -102,11 +102,11 @@ class ClientSecretJwtTest extends TestCase
                 self::assertSame(base64url_encode('bar'), $jwk->get('k'));
 
                 return true;
-            })
+            }),
         ), Argument::allOf(
             Argument::type('array'),
             Argument::withEntry('alg', 'HS256'),
-            Argument::withKey('jti')
+            Argument::withKey('jti'),
         ))
             ->shouldBeCalled()
             ->willReturn($jwsBuilder4);
@@ -130,7 +130,7 @@ class ClientSecretJwtTest extends TestCase
         $result = $auth->createRequest(
             $request->reveal(),
             $client->reveal(),
-            ['foo' => 'bar']
+            ['foo' => 'bar'],
         );
 
         self::assertSame($request->reveal(), $result);
@@ -145,7 +145,7 @@ class ClientSecretJwtTest extends TestCase
 
         $auth = new ClientSecretJwt(
             $jwsBuilder->reveal(),
-            $serializer->reveal()
+            $serializer->reveal(),
         );
 
         $request = $this->prophesize(RequestInterface::class);
@@ -159,7 +159,7 @@ class ClientSecretJwtTest extends TestCase
         $auth->createRequest(
             $request->reveal(),
             $client->reveal(),
-            []
+            [],
         );
     }
 }

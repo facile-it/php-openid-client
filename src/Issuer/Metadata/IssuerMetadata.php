@@ -9,10 +9,8 @@ use Facile\OpenIDClient\Exception\InvalidArgumentException;
 use Override;
 
 use function array_diff;
-use function array_key_exists;
 use function array_keys;
 use function array_merge;
-use function count;
 use function implode;
 
 /**
@@ -43,7 +41,7 @@ final class IssuerMetadata implements IssuerMetadataInterface
         string $issuer,
         string $authorizationEndpoint,
         string $jwksUri,
-        array $claims = []
+        array $claims = [],
     ) {
         $requiredClaims = [
             'issuer' => $issuer,
@@ -64,15 +62,15 @@ final class IssuerMetadata implements IssuerMetadataInterface
     public static function fromArray(array $claims): self
     {
         $missingKeys = array_diff(self::$requiredKeys, array_keys($claims));
-        if (0 !== count($missingKeys)) {
+        if (0 !== \count($missingKeys)) {
             throw new InvalidArgumentException('Invalid issuer metadata. Missing keys: ' . implode(', ', $missingKeys));
         }
 
-        return new IssuerMetadata(
+        return new self(
             $claims['issuer'],
             $claims['authorization_endpoint'],
             $claims['jwks_uri'],
-            $claims
+            $claims,
         );
     }
 
@@ -436,7 +434,7 @@ final class IssuerMetadata implements IssuerMetadataInterface
     #[Override]
     public function has(string $name): bool
     {
-        return array_key_exists($name, $this->metadata);
+        return \array_key_exists($name, $this->metadata);
     }
 
     #[Override]

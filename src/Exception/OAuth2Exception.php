@@ -10,10 +10,7 @@ use Psr\Http\Message\ResponseInterface;
 use Throwable;
 use Override;
 
-use function array_key_exists;
-use function is_array;
 use function json_decode;
-use function sprintf;
 
 /**
  * @psalm-type OAuth2ErrorType = array{}&array{
@@ -36,7 +33,7 @@ final class OAuth2Exception extends RuntimeException implements JsonSerializable
      */
     public static function isOAuth2Error(array $data): bool
     {
-        return array_key_exists('error', $data);
+        return \array_key_exists('error', $data);
     }
 
     /**
@@ -46,12 +43,12 @@ final class OAuth2Exception extends RuntimeException implements JsonSerializable
     {
         try {
             /** @psalm-var false|array{error?: string, error_description?: string, error_uri?: string}  $data */
-            $data = json_decode((string) $response->getBody(), true, 512, JSON_THROW_ON_ERROR);
+            $data = json_decode((string) $response->getBody(), true, 512, \JSON_THROW_ON_ERROR);
         } catch (JsonException) {
             throw new RemoteException($response, $response->getReasonPhrase(), $previous);
         }
 
-        if (! is_array($data) || ! isset($data['error'])) {
+        if (! \is_array($data) || ! isset($data['error'])) {
             throw new RemoteException($response, $response->getReasonPhrase(), $previous);
         }
 
@@ -74,7 +71,7 @@ final class OAuth2Exception extends RuntimeException implements JsonSerializable
             $params['error_description'] ?? null,
             $params['error_uri'] ?? null,
             0,
-            $previous
+            $previous,
         );
     }
 
@@ -83,11 +80,11 @@ final class OAuth2Exception extends RuntimeException implements JsonSerializable
         ?string $description = null,
         private readonly ?string $errorUri = null,
         int $code = 0,
-        ?Throwable $previous = null
+        ?Throwable $previous = null,
     ) {
         $message = $error;
         if (null !== $description) {
-            $message = sprintf('%s (%s)', $description, $error);
+            $message = \sprintf('%s (%s)', $description, $error);
         }
 
         parent::__construct($message, $code, $previous);

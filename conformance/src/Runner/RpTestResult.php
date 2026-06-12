@@ -15,7 +15,7 @@ class RpTestResult
         private readonly TestInfo $testInfo,
         private readonly string $implementation,
         /** @var Throwable */
-        private ?Throwable $exception = null
+        private ?Throwable $exception = null,
     ) {}
 
     public function getTest(): RpTestInterface

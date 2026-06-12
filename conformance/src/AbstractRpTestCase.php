@@ -25,7 +25,6 @@ use Throwable;
 use ReflectionClass;
 
 use function array_merge;
-use function dirname;
 use function file;
 use function file_exists;
 use function file_put_contents;
@@ -34,7 +33,6 @@ use function is_dir;
 use function ltrim;
 use function mkdir;
 use function parse_str;
-use function sprintf;
 use function var_export;
 
 use const PHP_EOL;
@@ -188,10 +186,10 @@ abstract class AbstractRpTestCase extends TestCase
         $log = (string) $response->getBody();
 
         $logFilePath = __DIR__ . '/../log/' . ltrim($profile, '@') . '/' . $testName . '.txt';
-        $dirname = dirname($logFilePath);
+        $dirname = \dirname($logFilePath);
 
         if (! file_exists($dirname) && ! mkdir($concurrentDirectory = $dirname, 0o777, true) && ! is_dir($concurrentDirectory)) {
-            throw new RuntimeException(sprintf('Directory "%s" was not created', $concurrentDirectory));
+            throw new RuntimeException(\sprintf('Directory "%s" was not created', $concurrentDirectory));
         }
 
         file_put_contents($logFilePath, $log);

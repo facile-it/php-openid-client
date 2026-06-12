@@ -53,7 +53,7 @@ final class IssuerBuilder implements IssuerBuilderInterface
 
         return new Issuer(
             $metadata,
-            $jwksProvider
+            $jwksProvider,
         );
     }
 }

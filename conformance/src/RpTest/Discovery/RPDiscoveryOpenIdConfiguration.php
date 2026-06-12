@@ -9,8 +9,6 @@ use Facile\OpenIDClient\ConformanceTest\TestInfo;
 use Facile\OpenIDClient\Issuer\IssuerBuilder;
 use PHPUnit\Framework\Assert;
 
-use function sprintf;
-
 /**
  * Retrieve and use the OpenID Provider Configuration Information.
  *
@@ -25,11 +23,11 @@ class RPDiscoveryOpenIdConfiguration extends AbstractRpTest
 
     public function execute(TestInfo $testInfo): void
     {
-        $configUri = sprintf('%s/%s/%s/.well-known/openid-configuration', $testInfo->getRoot(), $testInfo->getRpId(), $this->getTestId());
+        $configUri = \sprintf('%s/%s/%s/.well-known/openid-configuration', $testInfo->getRoot(), $testInfo->getRpId(), $this->getTestId());
         $issuer = (new IssuerBuilder())
             ->build($configUri);
 
-        $expected = sprintf('%s/%s/%s', $testInfo->getRoot(), $testInfo->getRpId(), $this->getTestId());
+        $expected = \sprintf('%s/%s/%s', $testInfo->getRoot(), $testInfo->getRpId(), $this->getTestId());
         Assert::assertSame($expected, $issuer->getMetadata()->getIssuer());
     }
 }

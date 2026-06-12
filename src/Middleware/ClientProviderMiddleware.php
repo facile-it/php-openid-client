@@ -17,7 +17,7 @@ use Override;
 final readonly class ClientProviderMiddleware implements MiddlewareInterface
 {
     public function __construct(
-        private ClientInterface $client
+        private ClientInterface $client,
     ) {}
 
     #[Override]

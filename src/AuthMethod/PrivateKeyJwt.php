@@ -31,7 +31,7 @@ final class PrivateKeyJwt extends AbstractJwtAuth
         ?JWSBuilder $jwsBuilder = null,
         ?JWSSerializer $serializer = null,
         private readonly ?JWK $jwk = null,
-        private readonly int $tokenTTL = 60
+        private readonly int $tokenTTL = 60,
     ) {
         $this->jwsBuilder = $jwsBuilder ?? new JWSBuilder((new AlgorithmManagerBuilder())->build());
         $this->jwsSerializer = $serializer ?? new CompactSerializer();
@@ -69,12 +69,12 @@ final class PrivateKeyJwt extends AbstractJwtAuth
                 'iat' => $time,
                 'exp' => $time + $this->tokenTTL,
                 'jti' => $jti,
-            ]
-        ), JSON_THROW_ON_ERROR);
+            ],
+        ), \JSON_THROW_ON_ERROR);
 
         $jwkAlg = $jwk->get('alg');
 
-        if (! is_string($jwkAlg)) {
+        if (! \is_string($jwkAlg)) {
             throw new RuntimeException('Invalid JWK `alg` value');
         }
 

@@ -17,7 +17,7 @@ use Override;
 final readonly class AuthRequestProviderMiddleware implements MiddlewareInterface
 {
     public function __construct(
-        private AuthRequestInterface $authRequest
+        private AuthRequestInterface $authRequest,
     ) {}
 
     #[Override]

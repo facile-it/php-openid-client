@@ -109,7 +109,7 @@ final class MetadataProviderBuilder
         return $this->discoveryProvider ?? new DiscoveryProvider(
             $this->buildClient(),
             $this->buildRequestFactory(),
-            $this->buildUriFactory()
+            $this->buildUriFactory(),
         );
     }
 
@@ -119,7 +119,7 @@ final class MetadataProviderBuilder
             $this->buildClient(),
             $this->buildRequestFactory(),
             $this->buildUriFactory(),
-            $this->buildDiscoveryProvider()
+            $this->buildDiscoveryProvider(),
         );
     }
 

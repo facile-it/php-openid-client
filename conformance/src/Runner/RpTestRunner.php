@@ -14,7 +14,7 @@ use Throwable;
 class RpTestRunner
 {
     public function __construct(
-        private readonly ImplementationProvider $implementationProvider
+        private readonly ImplementationProvider $implementationProvider,
     ) {}
 
     public function run(RpTestInterface $test, TestInfo $testInfo): RpTestResult
@@ -22,7 +22,7 @@ class RpTestRunner
         $testResult = new RpTestResult(
             $test,
             $testInfo,
-            $this->implementationProvider->getCallableCode($test->execute(...))
+            $this->implementationProvider->getCallableCode($test->execute(...)),
         );
 
         try {

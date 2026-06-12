@@ -88,7 +88,7 @@ class RequestObjectFactoryTest extends TestCase
             $this->jwsBuilder->reveal(),
             $this->jweBuilder->reveal(),
             $this->jwsSerializer->reveal(),
-            $this->jweSerializer->reveal()
+            $this->jweSerializer->reveal(),
         );
     }
 
@@ -133,7 +133,7 @@ class RequestObjectFactoryTest extends TestCase
         $this->jwsBuilder->addSignature(Argument::allOf(
             Argument::type(JWK::class),
             Argument::that(fn(JWK $jwk): bool => $jwk->get('k') === base64url_encode('client-secret')),
-            Argument::that(fn(JWK $jwk): bool => $jwk->get('kty') === 'oct')
+            Argument::that(fn(JWK $jwk): bool => $jwk->get('kty') === 'oct'),
         ), [
             'alg' => 'HS256',
             'typ' => 'JWT',
@@ -204,7 +204,7 @@ class RequestObjectFactoryTest extends TestCase
         $this->jweBuilder->addRecipient(Argument::allOf(
             Argument::type(JWK::class),
             Argument::that(fn(JWK $jwk): bool => $jwk->get('k') === base64url_encode('client-secret')),
-            Argument::that(fn(JWK $jwk): bool => $jwk->get('kty') === 'oct')
+            Argument::that(fn(JWK $jwk): bool => $jwk->get('kty') === 'oct'),
         ))
             ->willReturn($this->jweBuilder->reveal());
         $this->jweBuilder->build()->willReturn($jwe->reveal());

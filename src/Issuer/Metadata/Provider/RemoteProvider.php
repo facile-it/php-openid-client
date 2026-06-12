@@ -15,7 +15,9 @@ final readonly class RemoteProvider implements RemoteProviderInterface
     /**
      * @param RemoteProviderInterface[] $providers
      */
-    public function __construct(private array $providers) {}
+    public function __construct(
+        private array $providers,
+    ) {}
 
     #[Override]
     public function isAllowedUri(string $uri): bool

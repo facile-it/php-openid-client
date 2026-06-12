@@ -19,7 +19,6 @@ use function is_dir;
 use function ltrim;
 use function mkdir;
 use function preg_match;
-use function sprintf;
 
 class RpTestUtil
 {
@@ -32,7 +31,7 @@ class RpTestUtil
     public function __construct(
         ?ClientInterface $client = null,
         ?RequestFactoryInterface $requestFactory = null,
-        private readonly string $logDir = __DIR__ . '/../log'
+        private readonly string $logDir = __DIR__ . '/../log',
     ) {
         $this->client = $client ?? Psr18ClientDiscovery::find();
         $this->requestFactory = $requestFactory ?? Psr17FactoryDiscovery::findRequestFactory();
@@ -41,7 +40,7 @@ class RpTestUtil
     private function mkdir(string $dirname): void
     {
         if (! file_exists($dirname) && ! mkdir($concurrentDirectory = $dirname, 0o777, true) && ! is_dir($concurrentDirectory)) {
-            throw new RuntimeException(sprintf('Directory "%s" was not created', $concurrentDirectory));
+            throw new RuntimeException(\sprintf('Directory "%s" was not created', $concurrentDirectory));
         }
     }
 

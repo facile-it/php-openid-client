@@ -35,7 +35,7 @@ final readonly class Client implements ClientInterface
             new TLSClientAuth(),
             new SelfSignedTLSClientAuth(),
         ]),
-        private ?HttpClient $httpClient = null
+        private ?HttpClient $httpClient = null,
     ) {}
 
     #[Override]
