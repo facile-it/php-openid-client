@@ -32,7 +32,6 @@
     ],
     "require": {
         "php": "^8.2",
-        "ext-json": "*",
         "facile-it/php-jose-verifier": "^1.0",
         "php-http/discovery": "^1.6",
         "psr/http-client": "^1.0",
