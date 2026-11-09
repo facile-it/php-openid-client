@@ -82,7 +82,7 @@
         "phpspec/prophecy-phpunit": "^2.0",
         "phpunit/phpunit": "^10.5.60 || ^11.5.46 || ^12.0.0",
         "symfony/console": "^4.3 || ^5.0 || ^6.0 || ^7.0 || ^8.0",
-        "vimeo/psalm": "^6.14.3"
+        "vimeo/psalm": "^6.14.3 || ^7.0.0"
     },
     "suggest": {
         "facile-it/php-oauth2-http-client": "To use a PSR HTTP client to interact with OAuth2/OpenID protected APIs",
